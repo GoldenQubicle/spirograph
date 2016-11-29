@@ -2,7 +2,7 @@
 TODO
  - start using GUI library!
  - adjustabele Radius, thickness & color
- - add secondary logic, which can be toggled, with switch cases?  
+ - toggle secundary / tertiary  
  
  */
 
@@ -30,7 +30,7 @@ void draw() {
 //  }
 //}
 
-void mouseWheel(MouseEvent event) {
-  float e = event.getCount();
-  Outer.RadiusX = Outer.RadiusX-e;
-}
+//void mouseWheel(MouseEvent event) {
+//  float e = event.getCount();
+//  Outer.RadiusX = Outer.RadiusX-e;
+//}
