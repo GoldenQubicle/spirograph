@@ -1,12 +1,13 @@
-class Logic {
+class LayerS {
   float RadiusX, RadiusY, Circumference;
   float RadiusX2, RadiusY2, Circumference2;
   float RadiusX3, RadiusY3, Circumference3;
   float RadiusX4, RadiusY4, Circumference4;
   float Petals, Petals2, Petals3, Ratio, Ratio2, Ratio3, Theta;
   PVector XY;  
+ 
 
-  Logic() {
+  LayerS() {
     Petals = 7;
     Petals2 = 49;
     Petals3 = 21;
@@ -31,23 +32,25 @@ class Logic {
   void display() {
     noStroke();
 
-    //primary();
-    //secundary();
-    //tertiary();
-    fourth();
+    Gear_0();
+    //Gear_1();
+    //Gear_2();
+    //Gear_3();
   }
 
-  void primary() {
+
+
+  void Gear_0() {
     fill(0);
     for (float i = 0; i < Circumference; i++) {
       Theta = (TAU/Circumference)*i;
-      XY.x = width/2 + cos(Theta) * RadiusX;
+      XY.x = width/2 + cos(Theta) * wut;
       XY.y = height/2 - sin(Theta) * RadiusY;
       ellipse(XY.x, XY.y, 2, 2);
     }
   }
 
-  void secundary() {
+  void Gear_1() {
     fill(255, 0, 0);
     for (float i = 0; i < Circumference + (Circumference2*Petals); i++) {
       Theta = (TAU/Circumference)*i;
@@ -57,7 +60,7 @@ class Logic {
     }
   }
 
-  void tertiary() {
+  void Gear_2() {
     fill(0, 255, 0);
     for (float i = 0; i < (Circumference + (Circumference2*Petals) + (Circumference3*Petals2))*2; i++) {
       Theta = (TAU/Circumference)*i;
@@ -67,8 +70,8 @@ class Logic {
     }
   }
 
-  void fourth() {
-    fill(0, 0,255);
+  void Gear_3() {
+    fill(0, 0, 255);
     for (float i = 0; i < (Circumference + (Circumference2*Petals) + (Circumference3*Petals2) + (Circumference4*Petals3))*2; i++) {
       Theta = (TAU/Circumference)*i;
       XY.x = width/2 + cos(Theta) * RadiusX + cos(Theta/Ratio)*RadiusX2 + cos(Theta/Ratio2)*RadiusX3 + cos(Theta/Ratio3)*RadiusX4;

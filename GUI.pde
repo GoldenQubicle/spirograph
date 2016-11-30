@@ -1,20 +1,34 @@
+
 class GUI {
-  String RadiusX, RadiusY;
+
 
   GUI() {
-    textSize(17);
-    RadiusX = new String();
-    RadiusY = new String();
+    Group g0 = cp5.addGroup("go")
+      .setPosition(250, 100)
+      //.setWidth(100)
+      //.activateEvent(true)
+      //.setBackgroundColor(color(255, 80))
+      //.setBackgroundHeight(100)
+      .setLabel("Gear 0")
+      ;
+    cp5.addSlider("wut")
+      .setPosition(0, 0)
+      .setGroup(g0)
+      .setMin(-width/2)
+      .setMax(width/2)
+      .setValue(layerS_1.RadiusX)
+      ;
+
+    cp5.addSlider("layerS_1.RadiusY")
+      .setPosition(0, 10)
+      .setMin(-width/2)
+      .setMax(width/2)
+      .setValue(layerS_1.RadiusY)
+      .setGroup(g0)
+      ;
   }
 
 
   void display() {
-    rectMode(CENTER);
-    fill(20);
-    rect(width/2, height/2-5, 50, 30);
-    fill(255);
-    textAlign(CENTER);
-    RadiusX = str(round(Outer.RadiusX));
-    text(RadiusX, width/2, height/2);
   }
 }
