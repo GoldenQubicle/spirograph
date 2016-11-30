@@ -5,7 +5,6 @@ class LayerS {
   float RadiusX4, RadiusY4, Circumference4;
   float Petals, Petals2, Petals3, Ratio, Ratio2, Ratio3, Theta;
   PVector XY;  
- 
 
   LayerS() {
     Petals = 7;
@@ -32,8 +31,8 @@ class LayerS {
   void display() {
     noStroke();
 
-    Gear_0();
-    //Gear_1();
+    //Gear_0();
+    Gear_1();
     //Gear_2();
     //Gear_3();
   }
@@ -44,7 +43,7 @@ class LayerS {
     fill(0);
     for (float i = 0; i < Circumference; i++) {
       Theta = (TAU/Circumference)*i;
-      XY.x = width/2 + cos(Theta) * wut;
+      XY.x = width/2 + cos(Theta) * RadiusX;
       XY.y = height/2 - sin(Theta) * RadiusY;
       ellipse(XY.x, XY.y, 2, 2);
     }
