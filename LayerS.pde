@@ -5,6 +5,8 @@ class LayerS {
   float RadiusX4, RadiusY4, Circumference4;
   float Petals, Petals2, Petals3, Ratio, Ratio2, Ratio3, Theta;
   PVector XY;  
+  int G;
+  FloatDict Gear_0;
 
   LayerS() {
     Petals = 7;
@@ -26,13 +28,22 @@ class LayerS {
     Circumference3 = RadiusX3 * TAU;
     Circumference4 = RadiusX4 * TAU;
     XY = new PVector();
+    G = 0;
+    Gear_0 = new FloatDict();
+    Gear_0.set("centerX", width/2);
+    Gear_0.set("centerY", height/2);
+    Gear_0.set("radiusX", 150);
+    Gear_0.set("radiusY", 150);
+    Gear_0.set("lineX", 2);
+    Gear_0.set("lineY", 2);
+    Gear_0.set("circumference", TAU*Gear_0.get("radiusX"));
   }
 
   void display() {
     noStroke();
 
-    //Gear_0();
-    Gear_1();
+    Gear_0();
+    //Gear_1();
     //Gear_2();
     //Gear_3();
   }
@@ -42,10 +53,10 @@ class LayerS {
   void Gear_0() {
     fill(0);
     for (float i = 0; i < Circumference; i++) {
-      Theta = (TAU/Circumference)*i;
-      XY.x = width/2 + cos(Theta) * RadiusX;
-      XY.y = height/2 - sin(Theta) * RadiusY;
-      ellipse(XY.x, XY.y, 2, 2);
+      Theta = (TAU/Gear_0.get("circumference"))*i;
+      XY.x =  Gear_0.get("centerX")+ cos(Theta) * Gear_0.get("radiusX");
+      XY.y = Gear_0.get("centerY") - sin(Theta) * Gear_0.get("radiusY");
+      ellipse(XY.x, XY.y, Gear_0.get("lineX"), Gear_0.get("lineY"));
     }
   }
 
