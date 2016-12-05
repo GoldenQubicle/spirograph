@@ -1,13 +1,13 @@
 /*
 CURRENT CONCERNS
-
-yeah I made bit of a mess now. . 
-atm LayerS is completetly bypassed which obviously is not good
-the biggest issue is how to dynamically add gears to a layer AND the ui
-  the latter is especially annoying - current thinking:
-    gears class: give each gear object the necesarry controls, put them in array
-    layer class: iterate over gear array to draw, and give layer controls for color and menu, put in array as well 
-    gui class: build the control menu by iterating over layer array, and then gear array?
+uhghghghg total deadlock atm - cant even pass simple gear0 values to layer - WTF?!
+contemplating going naive approach because either Im just blindsighted atm or more likely, trying something too complicated for my current skilllevel
+at least with naive approach I know roughly how to set it up again and how know, maybe itll start to make sense along the way
+SO navaive approach
+  - write out all gears with a hard limit on 5
+  - put those in a number of switch cases
+  - tie those switches into the UI toggle button
+  - write controls for all 5 gear sets, and a put those inside a layer group
  
  TODO - ADD CONTROLS FOR ONE! LAYER
  - toggle between Gear0 and Gear1
@@ -23,27 +23,25 @@ the biggest issue is how to dynamically add gears to a layer AND the ui
 
 import controlP5.*;
 
-LayerS layerS_1;
 GUI gui;
+LayerS Layer1;
 
 
 
 void setup() {
   size(640, 640, P2D);
   smooth(8);
-  layerS_1 = new LayerS(this);
+  Layer1 = new LayerS(this);
   gui = new GUI(this);
-
 }
 
 
 void draw() {
   background(128);
-  
-  layerS_1.display();
-  //gui.Controls();
-  
- 
+
+
+ Layer1.display();
+
 
   // below possible function for control points & drawing straight lines
   //for (float i = 0; i < layerS_1.Petals; i++) {
