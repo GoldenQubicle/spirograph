@@ -4,7 +4,9 @@ class GUI {
 
   GUI(PApplet theApplet) {
 
-    //cp5 = new ControlP5(theApplet);
+    cp5 = new ControlP5(theApplet);
+    
+    
     //Group L_1 = cp5.addGroup("L_1")
     //  .setLabel("Layer 1")
     //  .setPosition(250, 100)

@@ -1,13 +1,8 @@
 /*
 CURRENT CONCERNS
 
-yeah I made bit of a mess now. . 
-atm LayerS is completetly bypassed which obviously is not good
-the biggest issue is how to dynamically add gears to a layer AND the ui
-  the latter is especially annoying - current thinking:
-    gears class: give each gear object the necesarry controls, put them in array
-    layer class: iterate over gear array to draw, and give layer controls for color and menu, put in array as well 
-    gui class: build the control menu by iterating over layer array, and then gear array?
+right back to basics forget about controls for a moment
+also, it makes a lot more sense to set one controll object per layer!
  
  TODO - ADD CONTROLS FOR ONE! LAYER
  - toggle between Gear0 and Gear1
@@ -31,7 +26,7 @@ GUI gui;
 void setup() {
   size(640, 640, P2D);
   smooth(8);
-  layerS_1 = new LayerS(this);
+  layerS_1 = new LayerS();
   gui = new GUI(this);
 
 }
@@ -61,12 +56,13 @@ void draw() {
   //}
 }
 
-//void keyPressed() {
+void keyPressed() {
+  layerS_1.addGear();
 //  if (key == 's') {
 //    String image = "image" + 1 + ".png";
 //    save(image);
 //  }
-//}
+}
 
 //void mouseWheel(MouseEvent event) {
 //  float e = event.getCount();
