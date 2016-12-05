@@ -1,10 +1,14 @@
 /*
 CURRENT CONCERNS
-FOCUS ON ONE FULLY FUNCTIONAL LAYER FIRST, then and only then start work on refactoring
-  
-  - add toggle
-  - also started using floatdict for storing variables per Gear
 
+yeah I made bit of a mess now. . 
+atm LayerS is completetly bypassed which obviously is not good
+the biggest issue is how to dynamically add gears to a layer AND the ui
+  the latter is especially annoying - current thinking:
+    gears class: give each gear object the necesarry controls, put them in array
+    layer class: iterate over gear array to draw, and give layer controls for color and menu, put in array as well 
+    gui class: build the control menu by iterating over layer array, and then gear array?
+ 
  TODO - ADD CONTROLS FOR ONE! LAYER
  - toggle between Gear0 and Gear1
  - per Gear set: RadiusX, RadiusY, LineX, LineY, Petals
@@ -22,19 +26,25 @@ import controlP5.*;
 LayerS layerS_1;
 GUI gui;
 
+
+
 void setup() {
   size(640, 640, P2D);
   smooth(8);
-  layerS_1 = new LayerS();
+  layerS_1 = new LayerS(this);
   gui = new GUI(this);
+
 }
 
 
 void draw() {
   background(128);
-  layerS_1.display();
-  gui.Controls();
   
+  layerS_1.display();
+  //gui.Controls();
+  
+ 
+
   // below possible function for control points & drawing straight lines
   //for (float i = 0; i < layerS_1.Petals; i++) {
   //  float theta = TAU/(layerS_1.Petals) * i;
@@ -49,7 +59,6 @@ void draw() {
   //  stroke(0, 255, 0);
   //  line(width/2 + x, height/2 - y, width/2 + x2, height/2 - y2);
   //}
-   
 }
 
 //void keyPressed() {
