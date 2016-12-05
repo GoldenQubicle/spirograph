@@ -1,4 +1,5 @@
 class LayerS {
+<<<<<<< HEAD
 
   Gear gear0, gear1;
   float LX, LY, CX, CY;
@@ -14,11 +15,41 @@ class LayerS {
     CY = height/2;
     C = color (10, 127, 67);
     Shift = 0;
+=======
+  float RadiusX, RadiusY, Circumference;
+  float RadiusX2, RadiusY2, Circumference2;
+  float RadiusX3, RadiusY3, Circumference3;
+  float RadiusX4, RadiusY4, Circumference4;
+  float Petals, Petals2, Petals3, Ratio, Ratio2, Ratio3, Theta;
+  PVector XY;  
+
+  LayerS() {
+    Petals = 7;
+    Petals2 = 49;
+    Petals3 = 21;
+    Ratio = 1/(Petals-1);
+    Ratio2 = 1/(Petals2-1);
+    Ratio3 = 1/(Petals3-1);
+    RadiusX = 150;
+    RadiusY = 150;
+    RadiusX2 = 100;
+    RadiusY2 = 100;
+    RadiusX3 = 50;
+    RadiusY3 = 50;
+    RadiusX4 = 15;
+    RadiusY4 = 15;
+    Circumference = RadiusX * TAU;
+    Circumference2 = RadiusX2 * TAU;
+    Circumference3 = RadiusX3 * TAU;
+    Circumference4 = RadiusX4 * TAU;
+    XY = new PVector();
+>>>>>>> parent of 628746b... some streamlining
   }
 
   void display() {
     noStroke();
 
+<<<<<<< HEAD
     switch(Shift) {
     case 0:
       Gear_0();
@@ -27,17 +58,30 @@ class LayerS {
       Gear_1();
       break;
     }
+=======
+    //Gear_0();
+    Gear_1();
+>>>>>>> parent of 628746b... some streamlining
     //Gear_2();
     //Gear_3();
   }
 
 
   void Gear_0() {
+<<<<<<< HEAD
     fill(C);
     for (float i = 0; i < gear0.C; i++) {
       gear0.grinding();
       gear0.T = TAU/gear0.C * i;
       ellipse(CX + gear0.Grind.x, CY - gear0.Grind.y, LX, LY);
+=======
+    fill(0);
+    for (float i = 0; i < Circumference; i++) {
+      Theta = (TAU/Circumference)*i;
+      XY.x = width/2 + cos(Theta) * RadiusX;
+      XY.y = height/2 - sin(Theta) * RadiusY;
+      ellipse(XY.x, XY.y, 2, 2);
+>>>>>>> parent of 628746b... some streamlining
     }
   }
 
