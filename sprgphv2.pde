@@ -1,30 +1,24 @@
 /*
 CURRENT CONCERNS
-<<<<<<< HEAD
 
-right back to basics forget about controls for a moment
-also, it makes a lot more sense to set one controll object per layer!
+yeah I made bit of a mess now. . 
+atm LayerS is completetly bypassed which obviously is not good
+the biggest issue is how to dynamically add gears to a layer AND the ui
+  the latter is especially annoying - current thinking:
+    gears class: give each gear object the necesarry controls, put them in array
+    layer class: iterate over gear array to draw, and give layer controls for color and menu, put in array as well 
+    gui class: build the control menu by iterating over layer array, and then gear array?
  
  TODO - ADD CONTROLS FOR ONE! LAYER
  - toggle between Gear0 and Gear1
  - per Gear set: RadiusX, RadiusY, LineX, LineY, Petals
  - be able to set color and rotate & scale
-=======
-- really need restructering
-- one core loop in which to pass the parameters of the different layers, e.g. for LayerS myLayer: Layers, do stuff
-- be able to add / remove gears in realtime, i.e. pass additional arguments XY into object, i.e. add function (part of core?) 
-- also, need to be able to select layers, i.e. layer need to have its own menu, which brings forth the optionals 
- 
- TODO
- - per Gear set: RadiusX, RadiusY, LineX, LineY, Petals, Color
- - be able to rotate & scale individual layers
->>>>>>> parent of 628746b... some streamlining
  - save function without worry about naming, i.e. contineous numbering scheme
  
  ADDED VALUE
  - the for loop with TAU/ARG*i & subsequent theta is at the heart of operations, maybe isolate it in single function?
  - geometric layer
- - dare I say online implementation? 
+ - dare I say online implementation?
  */
 
 import controlP5.*;
@@ -37,7 +31,7 @@ GUI gui;
 void setup() {
   size(640, 640, P2D);
   smooth(8);
-  layerS_1 = new LayerS();
+  layerS_1 = new LayerS(this);
   gui = new GUI(this);
 
 }
@@ -47,8 +41,7 @@ void draw() {
   background(128);
   
   layerS_1.display();
-<<<<<<< HEAD
-  //gui.Controls();
+  gui.Controls();
   
  
 
@@ -66,33 +59,14 @@ void draw() {
   //  stroke(0, 255, 0);
   //  line(width/2 + x, height/2 - y, width/2 + x2, height/2 - y2);
   //}
-=======
-  gui.Controls();
-  // below possible function for control points & drawing straight lines
-  for (float i = 0; i < layerS_1.Petals; i++) {
-    float theta = TAU/(layerS_1.Petals) * i;
-    float theta2 = TAU/(layerS_1.Petals) * (i+5); // this term here needs to be max =  petals -1
-    float x = cos(theta) * (layerS_1.RadiusX); 
-    float y =  sin(theta) * (layerS_1.RadiusY); 
-    float x2 = cos(theta2) * (layerS_1.RadiusX); 
-    float y2 =  sin(theta2) * (layerS_1.RadiusY); 
-    //ellipse(width/2 + x, height/2 - y, 6, 6 );
-    strokeCap(ROUND);
-    strokeWeight(3);
-    stroke(0, 255, 0);
-    line(width/2 + x, height/2 - y, width/2 + x2, height/2 - y2);
-  }
-   
->>>>>>> parent of 628746b... some streamlining
 }
 
-void keyPressed() {
-  layerS_1.addGear();
+//void keyPressed() {
 //  if (key == 's') {
 //    String image = "image" + 1 + ".png";
 //    save(image);
 //  }
-}
+//}
 
 //void mouseWheel(MouseEvent event) {
 //  float e = event.getCount();
