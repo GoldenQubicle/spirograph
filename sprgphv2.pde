@@ -1,21 +1,17 @@
 /*
 CURRENT CONCERNS
 
-yeah I made bit of a mess now. . 
-atm LayerS is completetly bypassed which obviously is not good
-the biggest issue is how to dynamically add gears to a layer AND the ui
-  the latter is especially annoying - current thinking:
-    gears class: give each gear object the necesarry controls, put them in array
-    layer class: iterate over gear array to draw, and give layer controls for color and menu, put in array as well 
-    gui class: build the control menu by iterating over layer array, and then gear array?
+still wrestling with the simple fact I dont want to write a number of switch cases to even toggle between gear0 and gear1, for instance
+  so once again, how do I write a function which simple adds the cos/sin functions to the for loop?
  
  TODO - ADD CONTROLS FOR ONE! LAYER
- - toggle between Gear0 and Gear1
- - per Gear set: RadiusX, RadiusY, LineX, LineY, Petals
- - be able to set color and rotate & scale
+ - toggle between gears with switch cases
+ - per Gear: RadiusX, RadiusY, Petals
+ - per Layer: line width, color
  - save function without worry about naming, i.e. contineous numbering scheme
  
  ADDED VALUE
+ - scale & rotate layer
  - the for loop with TAU/ARG*i & subsequent theta is at the heart of operations, maybe isolate it in single function?
  - geometric layer
  - dare I say online implementation?
@@ -31,7 +27,7 @@ GUI gui;
 void setup() {
   size(640, 640, P2D);
   smooth(8);
-  layerS_1 = new LayerS(this);
+  layerS_1 = new LayerS();
   gui = new GUI(this);
 
 }
@@ -42,6 +38,7 @@ void draw() {
   
   layerS_1.display();
   gui.Controls();
+  
   
  
 
@@ -60,6 +57,15 @@ void draw() {
   //  line(width/2 + x, height/2 - y, width/2 + x2, height/2 - y2);
   //}
 }
+
+void Add(){
+ layerS_1.Shift = layerS_1.Shift + 1;
+}
+void Delete(){
+ layerS_1.Shift = layerS_1.Shift - 1;
+}
+
+
 
 //void keyPressed() {
 //  if (key == 's') {
