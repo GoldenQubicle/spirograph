@@ -1,14 +1,18 @@
 /*
 CURRENT CONCERNS
-
-still wrestling with the simple fact I dont want to write a number of switch cases to even toggle between gear0 and gear1, for instance
-  so once again, how do I write a function which simple adds the cos/sin functions to the for loop?
+ rrrrriiight
+ I know how to venture forward and make a complete layer, however, its gonna be messy. . 
+ still better than nothing I guess but honestly, there should deffo be a better method, i.e.
+ with dynamic controls per gear change. . ah well itll do for now
+ SO, here's a thought, maybe put the controls into a seperate window?! like how I did with the TTG 
+ OR - take a hard look at cp5 example control inside class, this is pretty much what I wanted to do with gear class
+ ALSO check out control frame example!!!
  
  TODO - ADD CONTROLS FOR ONE! LAYER
  - toggle between gears with switch cases
  - per Gear: RadiusX, RadiusY, Petals
  - per Layer: line width, color
- - save function without worry about naming, i.e. contineous numbering scheme
+ 
  
  ADDED VALUE
  - scale & rotate layer
@@ -18,29 +22,28 @@ still wrestling with the simple fact I dont want to write a number of switch cas
  */
 
 import controlP5.*;
+import dawesometoolkit.*;
 
 LayerS layerS_1;
 GUI gui;
-
+DawesomeToolkit ds;
 
 
 void setup() {
-  size(640, 640, P2D);
+  size(1000, 1000, P2D);
   smooth(8);
   layerS_1 = new LayerS();
   gui = new GUI(this);
-
+  ds = new DawesomeToolkit(this);
+  ds.enableLazySave();
 }
 
 
 void draw() {
   background(128);
-  
+
   layerS_1.display();
   gui.Controls();
-  
-  
- 
 
   // below possible function for control points & drawing straight lines
   //for (float i = 0; i < layerS_1.Petals; i++) {
@@ -58,13 +61,35 @@ void draw() {
   //}
 }
 
-void Add(){
- layerS_1.Shift = layerS_1.Shift + 1;
+void Add() {
+  if (layerS_1.Shift < 3) {
+    layerS_1.Shift = layerS_1.Shift + 1;
+  }
 }
-void Delete(){
- layerS_1.Shift = layerS_1.Shift - 1;
+void Delete() {
+  if (layerS_1.Shift > 0) {
+    layerS_1.Shift = layerS_1.Shift - 1;
+  }
 }
 
+
+void ColorPicker() {
+  //int r = int(gui.cp5.getController("ColorPicker").getArrayValue(0));
+  //int g = int(gui.cp5.getController("ColorPicker").getArrayValue(1));
+  //int b = int(gui.cp5.getController("ColorPicker").getArrayValue(2));
+  //int a = int(gui.cp5.getController("ColorPicker").getArrayValue(3));
+  //layerS_1.C = gui.cp.getColorValue();
+  println("check");
+}
+
+//public void controlEvent(ControlEvent c) {
+//    int r = int(c.getArrayValue(0));
+//    int g = int(c.getArrayValue(1));
+//    int b = int(c.getArrayValue(2));
+//    int a = int(c.getArrayValue(3));
+//    layerS_1.C = color(r,g,b,a);
+
+//}
 
 
 //void keyPressed() {

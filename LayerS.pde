@@ -1,19 +1,19 @@
 class LayerS {
   PVector XY;  
-  float Circumference, Theta, LX, LY;
+  float Theta, LX, LY;
   Gears gear0, gear1, gear2, gear3;
   color C;
   int Shift;
 
   LayerS() {
     XY = new PVector();
-    gear0 = new Gears(150, 150, 0);
-    gear1 = new Gears(100, 100, 7);
-    gear2 = new Gears(50, 50, 49);
-    gear3 = new Gears(15, 15, 21);
+    gear0 = new Gears(75, 75, 0);
+    gear1 = new Gears(75, 75, 4);
+    gear2 = new Gears(50, 50, 6);
+    gear3 = new Gears(25, 25, 4);
     LX = 2;
     LY = 2;
-    C = color(17, 167, 244);
+    C = color(255, 100, 244);
     Shift = 0;
   }
 
@@ -47,7 +47,7 @@ class LayerS {
   }
 
   void Gear_1() {
-    for (float i = 0; i < (gear0.C + (gear1.C*gear1.P)); i++) {
+    for (float i = 0; i < (gear0.C + (gear1.C*gear1.P)*2); i++) {
       Theta = (TAU/gear0.C)*i;
       XY.x = width/2 + cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX;
       XY.y = height/2 - sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY;
@@ -57,7 +57,7 @@ class LayerS {
   }
 
   void Gear_2() {
-    for (float i = 0; i < (gear0.C + (gear1.C*gear1.P) + (gear2.C*gear2.P)*2); i++) {
+    for (float i = 0; i < (gear0.C + (gear1.C*gear1.P)*2 + (gear2.C*gear2.P)*2); i++) {
       Theta = (TAU/gear0.C)*i;
       XY.x = width/2 + cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX;
       XY.y = height/2 - sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY;
