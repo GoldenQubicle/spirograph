@@ -1,20 +1,22 @@
 /*
 CURRENT CONCERNS
- rrrrriiight
- I know how to venture forward and make a complete layer, however, its gonna be messy. . 
- still better than nothing I guess but honestly, there should deffo be a better method, i.e.
- with dynamic controls per gear change. . ah well itll do for now
- SO, here's a thought, maybe put the controls into a seperate window?! like how I did with the TTG 
- OR - take a hard look at cp5 example control inside class, this is pretty much what I wanted to do with gear class
- ALSO check out control frame example!!!
+  right why bother with adding gears if its hard capped anyway, no need for switches. . 
+  just start with gear3 case, but set number of petals to zero at start. . tadaa!
+ 
  
  TODO - ADD CONTROLS FOR ONE! LAYER
- - toggle between gears with switch cases
- - per Gear: RadiusX, RadiusY, Petals
- - per Layer: line width, color
- 
+ - per Layer: line width?!
+
  
  ADDED VALUE
+ d00d, transitioning gifs!
+   basically make a function which describes point in a circle for min/max xy per gear, and feed that into the xy gear parameters
+   or, pick random values at start, 
+     , pcik another set of random values to lerp to
+ also random generator
+ 
+ 
+ // old
  - scale & rotate layer
  - the for loop with TAU/ARG*i & subsequent theta is at the heart of operations, maybe isolate it in single function?
  - geometric layer
@@ -27,15 +29,16 @@ import dawesometoolkit.*;
 LayerS layerS_1;
 GUI gui;
 DawesomeToolkit ds;
-
+boolean lock;
 
 void setup() {
-  size(1000, 1000, P2D);
+  size(1024, 1024, P2D);
   smooth(8);
   layerS_1 = new LayerS();
   gui = new GUI(this);
   ds = new DawesomeToolkit(this);
   ds.enableLazySave();
+  lock = false;
 }
 
 
@@ -61,43 +64,28 @@ void draw() {
   //}
 }
 
-void Add() {
-  if (layerS_1.Shift < 3) {
-    layerS_1.Shift = layerS_1.Shift + 1;
-  }
-}
-void Delete() {
-  if (layerS_1.Shift > 0) {
-    layerS_1.Shift = layerS_1.Shift - 1;
-  }
-}
-
-
-void ColorPicker() {
-  //int r = int(gui.cp5.getController("ColorPicker").getArrayValue(0));
-  //int g = int(gui.cp5.getController("ColorPicker").getArrayValue(1));
-  //int b = int(gui.cp5.getController("ColorPicker").getArrayValue(2));
-  //int a = int(gui.cp5.getController("ColorPicker").getArrayValue(3));
-  //layerS_1.C = gui.cp.getColorValue();
-  println("check");
-}
-
-//public void controlEvent(ControlEvent c) {
-//    int r = int(c.getArrayValue(0));
-//    int g = int(c.getArrayValue(1));
-//    int b = int(c.getArrayValue(2));
-//    int a = int(c.getArrayValue(3));
-//    layerS_1.C = color(r,g,b,a);
-
-//}
-
-
-//void keyPressed() {
-//  if (key == 's') {
-//    String image = "image" + 1 + ".png";
-//    save(image);
+//void Add() {
+//  if (layerS_1.Shift < 3) {
+//    layerS_1.Shift = layerS_1.Shift + 1;
 //  }
 //}
+//void Delete() {
+//  if (layerS_1.Shift > 0) {
+//    layerS_1.Shift = layerS_1.Shift - 1;
+//  }
+//}
+
+void keyPressed() {
+  if (key == 'l') {
+    if (lock == false) {
+      lock = true;
+      //println(lock);
+    }
+    //if (lock == true) {
+    //  lock = false;
+    //}
+  }
+}
 
 //void mouseWheel(MouseEvent event) {
 //  float e = event.getCount();

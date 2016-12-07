@@ -12,25 +12,25 @@ class GUI {
       .setSize(310, 350)
       .setBackgroundColor(color(255, 100));
 
-    cp5.addButton("Add")
-      .setGroup(L_1)
-      .setPosition(0, 0)  
-      .setLabel("Add Gear")
-      .setValue(layerS_1.Shift)
-      ;
-    cp5.addButton("Delete")
-      .setGroup(L_1)
-      .setPosition(70, 0)  
-      .setLabel("Remove Gear")
-      .setValue(layerS_1.Shift)
-      ;
+    //cp5.addButton("Add")
+    //  .setGroup(L_1)
+    //  .setPosition(0, 0)  
+    //  .setLabel("Add Gear")
+    //  .setValue(layerS_1.Shift)
+    //  ;
+    //cp5.addButton("Delete")
+    //  .setGroup(L_1)
+    //  .setPosition(70, 0)  
+    //  .setLabel("Remove Gear")
+    //  .setValue(layerS_1.Shift)
+    //  ;
     cp = cp5.addColorPicker("ColorPicker") 
       .setGroup(L_1)
       .setPosition(0, 20)
       .setWidth(140)
       .setColorValue(layerS_1.C)
       ;
-      
+
     // gear0
     Group G_0 = cp5.addGroup("G_0")
       .setLabel("Gear 0")
@@ -99,33 +99,42 @@ class GUI {
 
   void Controls() {
     layerS_1.C = cp.getColorValue();
-    
-// gear 0
+    println(lock); 
+    // gear 0
     Controller CG_0 = cp5.getController("Radius Gear0");
     layerS_1.gear0.RX = CG_0.getArrayValue(0);
     layerS_1.gear0.RY = CG_0.getArrayValue(1);
-    
-// gear 1
+    if (lock == true) {
+      layerS_1.gear0.RY = layerS_1.gear0.RX;
+    }
+
+    // gear 1
     Controller CG_1 = cp5.getController("Radius Gear1");
     layerS_1.gear1.RX = CG_1.getArrayValue(0); 
     layerS_1.gear1.RY = CG_1.getArrayValue(1);
-
+    if (lock == true) {
+      layerS_1.gear1.RY = layerS_1.gear1.RX;
+    }
     Controller Gear1_P = cp5.getController("Petals_1");
     layerS_1.gear1.P = int(Gear1_P.getValue());
-    
-// gear 2
+
+    // gear 2
     Controller CG_2 = cp5.getController("Radius Gear2");
     layerS_1.gear2.RX = CG_2.getArrayValue(0); 
     layerS_1.gear2.RY = CG_2.getArrayValue(1);
-
+    if (lock == true) {
+      layerS_1.gear2.RY = layerS_1.gear2.RX;
+    }
     Controller Gear2_P = cp5.getController("Petals_2");
     layerS_1.gear2.P = int(Gear2_P.getValue());
-    
-// gear 3
+
+    // gear 3
     Controller CG_3 = cp5.getController("Radius Gear3");
     layerS_1.gear3.RX = CG_3.getArrayValue(0); 
     layerS_1.gear3.RY = CG_3.getArrayValue(1);
-
+    if (lock == true) {
+      layerS_1.gear3.RY = layerS_1.gear3.RX;
+    }
     Controller Gear3_P = cp5.getController("Petals_3");
     layerS_1.gear3.P = int(Gear3_P.getValue());
   }
