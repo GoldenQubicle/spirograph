@@ -3,9 +3,9 @@ CURRENT CONCERNS
 
  
  TODO
- toggle Fill / noFill
- toggle noStroke / stroke (and add strokeWeight & strokeColor!)
- 
+ add strokeWeight 
+ button to set colors for stroke/fill
+ hook gear animation into controls & toggle playback
  
  ADDED VALUE
  d00d, transitioning gifs!
@@ -43,6 +43,8 @@ void draw() {
   layerS_1.display();
   gui.Controls();
 
+    
+
   // below possible function for control points & drawing straight lines
   //for (float i = 0; i < layerS_1.Petals; i++) {
   //  float theta = TAU/(layerS_1.Petals) * i;
@@ -59,17 +61,6 @@ void draw() {
   //}
 }
 
-//void Add() {
-//  if (layerS_1.Shift < 3) {
-//    layerS_1.Shift = layerS_1.Shift + 1;
-//  }
-//}
-//void Delete() {
-//  if (layerS_1.Shift > 0) {
-//    layerS_1.Shift = layerS_1.Shift - 1;
-//  }
-//}
-
 void keyPressed() {
   if (key == 'l') {
     if (lock == false) {
@@ -81,8 +72,3 @@ void keyPressed() {
     //}
   }
 }
-
-//void mouseWheel(MouseEvent event) {
-//  float e = event.getCount();
-//  Outer.RadiusX = Outer.RadiusX-e;
-//}

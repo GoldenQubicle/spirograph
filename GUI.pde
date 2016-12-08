@@ -5,39 +5,26 @@ class GUI {
   GUI(PApplet theApplet) {
 
     cp5 = new ControlP5(theApplet);
-    // layer1    
+    // LayerS    
     Group L_1 = cp5.addGroup("L_1")
       .setLabel("Layer 1")
       .setPosition(0, 0)
-      .setSize(310, 400)
+      .setSize(310, 420)
       .setBackgroundColor(color(255, 100));
-
-    //cp5.addButton("Add")
-    //  .setGroup(L_1)
-    //  .setPosition(0, 0)  
-    //  .setLabel("Add Gear")
-    //  .setValue(layerS_1.Shift)
-    //  ;
-    //cp5.addButton("Delete")
-    //  .setGroup(L_1)
-    //  .setPosition(70, 0)  
-    //  .setLabel("Remove Gear")
-    //  .setValue(layerS_1.Shift)
-    //  ;
-    cp = cp5.addColorPicker("ColorPicker") 
+   cp = cp5.addColorPicker("ColorPicker") 
       .setGroup(L_1)
       .setPosition(10, 10)
       .setWidth(140)
       .setColorValue(layerS_1.C)
       ;
     
-    cp5.addSlider("Density").setGroup(L_1).setPosition(120, 365).setSize(140,15).setRange(0,100000).setValue(10000); 
+    cp5.addSlider("Density").setGroup(L_1).setPosition(10, 400).setSize(260,15).setRange(0,100000).setValue(layerS_1.PlotDots); 
       
     cp5.addSlider("LineX").setGroup(L_1).setPosition(10, 350).setRange(0, 250).setValue(2);
     cp5.addSlider("LineY").setGroup(L_1).setPosition(160, 350).setRange(0, 250).setValue(2);
-
-    cp5.addToggle("Fill").setGroup(L_1).setPosition(10, 365).setSize(45, 15).setValue(true).setMode(ControlP5.SWITCH);
-    cp5.addToggle("Stroke").setGroup(L_1).setPosition(65, 365).setSize(45, 15).setValue(true).setMode(ControlP5.SWITCH);
+    cp5.addToggle("Outline").setGroup(L_1).setPosition(270, 10).setSize(20, 15).setValue(true).setState(false);
+    cp5.addToggle("Fill").setGroup(L_1).setPosition(10, 370).setSize(45, 15).setValue(true).setMode(ControlP5.SWITCH).setState(true);
+    cp5.addToggle("Stroke").setGroup(L_1).setPosition(65, 370).setSize(45, 15).setValue(true).setMode(ControlP5.SWITCH).setState(false);
 
     // gear0
     Group G_0 = cp5.addGroup("G_0")
@@ -106,7 +93,17 @@ class GUI {
   }
 
   void Controls() {
-    layerS_1.C = cp.getColorValue();
+    
+      if (cp5.getController("Outline").getValue() == 1) {
+        //cp.setColorValue(layerS_1.Cs);
+      layerS_1.Cs = cp.getColorValue();
+      }
+    
+
+     if (cp5.getController("Outline").getValue() == 0) {
+       //cp.setColorValue(layerS_1.C);
+      layerS_1.C = cp.getColorValue();
+      }
 
     Controller LineX = cp5.getController( "LineX");
     layerS_1.LX = LineX.getValue();
@@ -115,6 +112,8 @@ class GUI {
     
     Controller Density = cp5.getController("Density");
     layerS_1.PlotDots = Density.getValue();
+    
+   
     
     // gear 0
     Controller CG_0 = cp5.getController("Radius Gear0");
