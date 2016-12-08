@@ -1,26 +1,21 @@
 /*
 CURRENT CONCERNS
-  right why bother with adding gears if its hard capped anyway, no need for switches. . 
-  just start with gear3 case, but set number of petals to zero at start. . tadaa!
- 
- 
- TODO - ADD CONTROLS FOR ONE! LAYER
- - per Layer: line width?!
 
+ 
+ TODO
+ toggle Fill / noFill
+ toggle noStroke / stroke (and add strokeWeight & strokeColor!)
+ 
  
  ADDED VALUE
  d00d, transitioning gifs!
-   basically make a function which describes point in a circle for min/max xy per gear, and feed that into the xy gear parameters
-   or, pick random values at start, 
-     , pcik another set of random values to lerp to
+ basically make a function which describes point in a circle for min/max xy per gear, and feed that into the xy gear parameters
+ or, pick random values at start, 
+ , pcik another set of random values to lerp to
  also random generator
  
- 
- // old
- - scale & rotate layer
- - the for loop with TAU/ARG*i & subsequent theta is at the heart of operations, maybe isolate it in single function?
  - geometric layer
- - dare I say online implementation?
+ 
  */
 
 import controlP5.*;

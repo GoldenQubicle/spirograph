@@ -10,13 +10,11 @@ class Gears {
     P = p;
     R = 1/(P-1);
     C = RX * TAU;
-    Grind = new PVector(RX,RY);
-
+    Grind = new PVector(RX, RY);
   }
 
-  float Ratio(){
+  float Ratio() {
     R = 1/(P-1);
     return R;
   }
-
 }
