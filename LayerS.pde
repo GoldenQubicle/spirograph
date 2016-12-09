@@ -7,13 +7,14 @@ class LayerS {
   LayerS() {
     XY = new PVector();
     gear0 = new Gears(75, 75, 0);
-    gear1 = new Gears(75, 75, 6);
-    gear2 = new Gears(15, 15, 12);
+    gear1 = new Gears(75, 75, 8);
+    gear2 = new Gears(0, 0, 8);
     gear3 = new Gears(0, 0, 0);
     LX = 2;
     LY = 2;
     C = color(random(155, 255), random(155, 255), random(155, 255));
-    PlotDots = 10000;
+    Cs = color(random(155, 255), random(155, 255), random(155, 255));
+    PlotDots = 5000;
   }
 
   void display() {

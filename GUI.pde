@@ -20,12 +20,13 @@ class GUI {
     
     cp5.addSlider("Density").setGroup(L_1).setPosition(10, 400).setSize(260,15).setRange(0,100000).setValue(layerS_1.PlotDots); 
       
-    cp5.addSlider("LineX").setGroup(L_1).setPosition(10, 350).setRange(0, 250).setValue(2);
-    cp5.addSlider("LineY").setGroup(L_1).setPosition(160, 350).setRange(0, 250).setValue(2);
+    cp5.addSlider("LineX").setGroup(L_1).setPosition(10, 350).setRange(0, 250).setValue(layerS_1.LX);
+    cp5.addSlider("LineY").setGroup(L_1).setPosition(160, 350).setRange(0, 250).setValue(layerS_1.LY);
     cp5.addToggle("Outline").setGroup(L_1).setPosition(270, 10).setSize(20, 15).setValue(true).setState(false);
+    //cp5.addButton("Set").setGroup(L_1).setPosition(270,40).setSize(20,15);
     cp5.addToggle("Fill").setGroup(L_1).setPosition(10, 370).setSize(45, 15).setValue(true).setMode(ControlP5.SWITCH).setState(true);
     cp5.addToggle("Stroke").setGroup(L_1).setPosition(65, 370).setSize(45, 15).setValue(true).setMode(ControlP5.SWITCH).setState(false);
-
+      
     // gear0
     Group G_0 = cp5.addGroup("G_0")
       .setLabel("Gear 0")
@@ -109,11 +110,9 @@ class GUI {
     layerS_1.LX = LineX.getValue();
     Controller LineY = cp5.getController( "LineY");
     layerS_1.LY = LineY.getValue();
-    
     Controller Density = cp5.getController("Density");
     layerS_1.PlotDots = Density.getValue();
     
-   
     
     // gear 0
     Controller CG_0 = cp5.getController("Radius Gear0");
