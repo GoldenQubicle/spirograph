@@ -18,24 +18,25 @@ class LayerS {
   }
 
   void display() {
+    noStroke();
+    fill(C);
 
-  
-    if (gui.cp5.getController("Stroke").getValue() == 0) {
-      noStroke();
-    }
+    //if (gui.cp5.getController("Stroke").getValue() == 0) {
+    //  noStroke();
+    //}
 
-    if (gui.cp5.getController("Stroke").getValue() == 1) {
-      stroke(Cs);
-      //strokeWeight(5);
-    }
+    //if (gui.cp5.getController("Stroke").getValue() == 1) {
+    //  stroke(Cs);
+    //  //strokeWeight(5);
+    //}
 
-    if (gui.cp5.getController("Fill").getValue() == 0) {
-      noFill();
-    }
+    //if (gui.cp5.getController("Fill").getValue() == 0) {
+    //  noFill();
+    //}
 
-    if (gui.cp5.getController("Fill").getValue() == 1) {
-      fill(C);
-    }
+    //if (gui.cp5.getController("Fill").getValue() == 1) {
+    //  fill(C);
+    //}
     //gear1.animate();
     //gear2.animate();
     Gears();

@@ -1,20 +1,18 @@
 /*
 TODO
-- timing and scripting events, possibly with ani library and cp5 matrix controls
-- before than 
-    1) add geometry later and corresponding controls
-    2) load/save control properties 
-    3) move ui into seperate window
-    4) proper gif export
-
-ADDED VALUE
+ - timing and scripting events, possibly with ani library and cp5 matrix controls
+ - before than 
+ 1) add geometry later and corresponding controls
+ 2) load/save control properties 
+ 3) move ui into seperate window - DONE 
+ 4) proper gif export
+ 
+ ADDED VALUE
  d00d, transitioning gifs!
  basically make a function which describes point in a circle for min/max xy per gear, and feed that into the xy gear parameters
  or, pick random values at start, 
  , pcik another set of random values to lerp to - LERP between different controller properties settings over set amount of time
  also random generator
- 
- 
  */
 
 import controlP5.*;
@@ -25,14 +23,20 @@ GUI gui;
 DawesomeToolkit ds;
 boolean lock;
 
-void setup() {
+
+void settings() {
   size(1024, 1024, P2D);
   smooth(8);
-  layerS_1 = new LayerS();
+}
+
+
+void setup() {
+  
   gui = new GUI(this);
   ds = new DawesomeToolkit(this);
   ds.enableLazySave();
   lock = false;
+  layerS_1 = new LayerS();
 }
 
 
@@ -42,7 +46,7 @@ void draw() {
   layerS_1.display();
   gui.Controls();
 
-   
+
 
   // below possible function for control points & drawing straight lines
   //for (float i = 0; i < layerS_1.gear1.P; i++) {
