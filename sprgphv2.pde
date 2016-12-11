@@ -1,24 +1,23 @@
 /*
+CURRENT CONCERNS
+WTF DOES STROKEWEIGHT CAUSE SUCH HAVOC?!
 
-possibly extract gears from spirograph layer so the gui controls gears, and the layers are responsible for handling fill/color etc and which shapes to draw 
-i.e. lines, circles
-OR better yet, make a gui toggle so to switch between modes (eg lines mode, spiralmode, etc), so it becomes a property of layer (i.e. mode), long color, fill, etc
+~~~~~how to structure multiple layers with different settings~~~~
+
+- button to add new layer
+- dropdown menu to select layer
+- hide/show selected
+- delete selected layer
+
+each layers needs to have gears,stroke,color, etc etc retained
+HOWEVER
+gui needs to be generalised to work on selected layers
 
 TODO
- - timing and scripting events, possibly with ani library and cp5 matrix controls
- - before than 
- 1) add geometry later and corresponding controls
- 2) load/save control properties 
- 
- 4) proper gif export
- 
- ADDED VALUE
- d00d, transitioning gifs!
- basically make a function which describes point in a circle for min/max xy per gear, and feed that into the xy gear parameters
- or, pick random values at start, 
- , pcik another set of random values to lerp to - LERP between different controller properties settings over set amount of time
- also random generator
- */
+- add textfield input to radi / petals / density
+- add MODE to layer
+
+*/
 
 import controlP5.*;
 import dawesometoolkit.*;
@@ -48,7 +47,9 @@ void setup() {
 void draw() {
   background(BG);
 
+// for (Layer myLayer : layers){
   layer_1.display();
+//}
   
   
   gui.Controls();

@@ -19,7 +19,9 @@ class GUI extends PApplet {
     cp5 = new ControlP5(this);
     cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layer_1.Fill);
     cp5.addColorWheel("BackGround").setPosition(300, 10).setValue(128);
-    ;
+
+    cp5.addToggle("Mode").setPosition(300, 300).setSize(20, 20).setValue(false);  
+
     cp5.addToggle("Outline").setPosition(270, 10).setSize(20, 15).setValue(false).setState(false);
     cp5.addButton("Set").setPosition(270, 40).setSize(20, 15);
     cp5.addSlider("Density").setPosition(10, 490).setSize(450, 15).setRange(0, 100000).setValue(layer_1.PlotDots); 
@@ -52,6 +54,16 @@ class GUI extends PApplet {
   void Controls() {
     BG = int(cp5.getController("BackGround").getValue());
 
+    // pass layer number into here in order to retrieve active from array
+    // so, have a seperate dummy layer object for controls?
+    if (cp5.getController("Mode").getValue() == 0){    
+      layer_1.mode = false;
+    }
+    
+     if (cp5.getController("Mode").getValue() == 1){    
+      layer_1.mode = true;
+    }
+    
 
     if (cp5.getController("Outline").getValue() == 0) {
       layer_1.Fill = int(cp.getValue());
@@ -59,7 +71,6 @@ class GUI extends PApplet {
     if (cp5.getController("Outline").getValue() == 1) {
       layer_1.Stroke = int(cp.getValue());
     }
-
 
     if (cp5.getController("Fill").getValue() == 0) {
       layer_1.fill = false;
