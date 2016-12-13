@@ -1,4 +1,4 @@
-class GUI extends PApplet {
+class GUI extends PApplet { //<>//
   int w, h;
   PApplet parent;
   ControlP5 cp5;
@@ -20,7 +20,11 @@ class GUI extends PApplet {
     cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layer_1.Fill);
     cp5.addColorWheel("BackGround").setPosition(300, 10).setValue(128);
 
-    cp5.addToggle("Mode").setPosition(300, 300).setSize(20, 20).setValue(false);  
+    cp5.addToggle("Lines").setPosition(310, 295).setSize(20, 20).setValue(false);  
+    cp5.addSlider("StrokeWeight").setPosition(310, 350).setRange(0, 250).setValue(layer_1.Sw);
+    cp5.addSlider("Connect G1").setPosition(310, 220).setRange(0, 100).setValue(layer_1.gear1.Connect);
+    cp5.addSlider("Connect G2").setPosition(310, 240).setRange(0, 100).setValue(layer_1.gear2.Connect);
+    cp5.addSlider("Connect G3").setPosition(310, 260).setRange(0, 100).setValue(layer_1.gear3.Connect);
 
     cp5.addToggle("Outline").setPosition(270, 10).setSize(20, 15).setValue(false).setState(false);
     cp5.addButton("Set").setPosition(270, 40).setSize(20, 15);
@@ -56,14 +60,13 @@ class GUI extends PApplet {
 
     // pass layer number into here in order to retrieve active from array
     // so, have a seperate dummy layer object for controls?
-    if (cp5.getController("Mode").getValue() == 0){    
-      layer_1.mode = false;
+
+    if (cp5.getController("Lines").getValue() == 0) {    
+      layer_1.lines = false;
     }
-    
-     if (cp5.getController("Mode").getValue() == 1){    
-      layer_1.mode = true;
+    if (cp5.getController("Lines").getValue() == 1) {    
+      layer_1.lines = true;
     }
-    
 
     if (cp5.getController("Outline").getValue() == 0) {
       layer_1.Fill = int(cp.getValue());
@@ -85,10 +88,14 @@ class GUI extends PApplet {
       layer_1.stroke = true;
     }
 
-    layer_1.LX = cp5.getController( "LineX").getValue();
-    layer_1.LY = cp5.getController( "LineY").getValue();
+    layer_1.LX = cp5.getController("LineX").getValue();
+    layer_1.LY = cp5.getController("LineY").getValue();
     layer_1.PlotDots = cp5.getController("Density").getValue();
 
+    layer_1.Sw = cp5.getController("StrokeWeight").getValue();
+    layer_1.gear1.Connect = int(cp5.getController("Connect G1").getValue());
+    layer_1.gear2.Connect = int(cp5.getController("Connect G2").getValue());
+    layer_1.gear3.Connect = int(cp5.getController("Connect G3").getValue());
 
     // gear 0
     layer_1.gear0.RX = cp5.getController("Radius Gear0").getArrayValue(0);
@@ -119,12 +126,10 @@ class GUI extends PApplet {
     //// gear 3
     layer_1.gear3.RX = cp5.getController("Radius Gear3").getArrayValue(0); 
     layer_1.gear3.RY = cp5.getController("Radius Gear3").getArrayValue(1);
-    layer_1.gear3.P = int(cp5.getController("Petals_3").getValue()
+    layer_1.gear3.P = int(cp5.getController("Petals_3").getValue());
 
-      //if (lock == true) {
-      //  layerS_1.gear3.RY = layerS_1.gear3.RX;
-      //}
-
-      );
+    //if (lock == true) {
+    //  layerS_1.gear3.RY = layerS_1.gear3.RX;
+    //}
   }
 }

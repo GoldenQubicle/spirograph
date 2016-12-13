@@ -1,23 +1,23 @@
 /*
 CURRENT CONCERNS
-WTF DOES STROKEWEIGHT CAUSE SUCH HAVOC?!
-
-~~~~~how to structure multiple layers with different settings~~~~
-
-- button to add new layer
-- dropdown menu to select layer
-- hide/show selected
-- delete selected layer
-
-each layers needs to have gears,stroke,color, etc etc retained
-HOWEVER
-gui needs to be generalised to work on selected layers
-
-TODO
-- add textfield input to radi / petals / density
-- add MODE to layer
-
-*/
+ WTF DOES STROKEWEIGHT CAUSE SUCH HAVOC?! ok so it just massivly slow things down. . . :/ soo maybe only have this for ellipse layer
+ 
+ ~~~~~how to structure multiple layers with different settings~~~~
+ 
+ - button to add new layer
+ - dropdown menu to select layer
+ - hide/show selected
+ - delete selected layer
+ 
+ each layers needs to have gears,stroke,color, etc etc retained
+ HOWEVER
+ gui needs to be generalised to work on selected layers
+ 
+ TODO
+ - add textfield input to radi / petals / density
+ - add MODE to layer
+ 
+ */
 
 import controlP5.*;
 import dawesometoolkit.*;
@@ -35,23 +35,23 @@ void settings() {
 
 
 void setup() {
+  BG = 128;
   layer_1 = new Layer();
   gui = new GUI(this);
   ds = new DawesomeToolkit(this);
   ds.enableLazySave();
   lock = false;
-  BG = 128;
 }
 
 
 void draw() {
   background(BG);
 
-// for (Layer myLayer : layers){
+  // for (Layer myLayer : layers){
   layer_1.display();
-//}
-  
-  
+  //}
+
+
   gui.Controls();
 
 
@@ -69,17 +69,16 @@ void draw() {
   //  stroke(0, 255, 0);
   //  line(width/2 + x, height/2 - y, width/2 + x2, height/2 - y2);
   //}
-  
 }
 
-void keyPressed() {
-  if (key == 'l') {
-    if (lock == false) {
-      lock = true;
-      //println(lock);
-    }
-    //if (lock == true) {
-    //  lock = false;
-    //}
-  }
-}
+//void keyPressed() {
+//  if (key == 'l') {
+//    if (lock == false) {
+//      lock = true;
+//      //println(lock);
+//    }
+//    //if (lock == true) {
+//    //  lock = false;
+//    //}
+//  }
+//}
