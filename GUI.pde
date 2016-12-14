@@ -1,5 +1,5 @@
 class GUI extends PApplet { //<>//
-  int w, h;
+  int w, h, id;
   PApplet parent;
   ControlP5 cp5;
   ColorPicker cp;
@@ -17,14 +17,15 @@ class GUI extends PApplet { //<>//
   public void setup() {
 
     cp5 = new ControlP5(this);
-    cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layer_1.Fill);
-    cp5.addColorWheel("BackGround").setPosition(300, 10).setValue(128);
+    //cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layer_1.Fill);
+    cp5.addColorWheel("BackGround").setPosition(302, 10).setValue(128);
 
-    cp5.addToggle("Lines").setPosition(310, 295).setSize(20, 20).setValue(false);  
-    cp5.addSlider("StrokeWeight").setPosition(310, 350).setRange(0, 250).setValue(layer_1.Sw);
-    cp5.addSlider("Connect G1").setPosition(310, 220).setRange(0, 100).setValue(layer_1.gear1.Connect);
-    cp5.addSlider("Connect G2").setPosition(310, 240).setRange(0, 100).setValue(layer_1.gear2.Connect);
-    cp5.addSlider("Connect G3").setPosition(310, 260).setRange(0, 100).setValue(layer_1.gear3.Connect);
+    cp5.addToggle("Lines").setPosition(310, 290).setSize(20, 20).setValue(false);  
+    cp5.addToggle("Dots").setPosition(340, 290).setSize(20, 20).setValue(false);
+    cp5.addSlider("StrokeWeight").setPosition(310, 330).setRange(0, 250).setValue(layer_1.Sw);
+    cp5.addSlider("Connect G1").setPosition(310, 230).setRange(0, 100).setValue(layer_1.gear1.Connect);
+    cp5.addSlider("Connect G2").setPosition(310, 250).setRange(0, 100).setValue(layer_1.gear2.Connect);
+    cp5.addSlider("Connect G3").setPosition(310, 270).setRange(0, 100).setValue(layer_1.gear3.Connect);
 
     cp5.addToggle("Outline").setPosition(270, 10).setSize(20, 15).setValue(false).setState(false);
     cp5.addButton("Set").setPosition(270, 40).setSize(20, 15);
@@ -49,84 +50,103 @@ class GUI extends PApplet { //<>//
     Group G_3 = cp5.addGroup("G_3").setLabel("Gear 3").setPosition(160, 230);
     cp5.addSlider2D("Radius Gear3").setGroup(G_3).setMinMax(-150, -150, 150, 150).setValue(layer_1.gear3.RX, layer_1.gear3.RY);
     cp5.addSlider("Petals_3").setGroup(G_3).setPosition(0, -20).setRange(0, 200).setValue(layer_1.gear3.P);
+
+    cp5.addScrollableList("layers").setPosition(310, 370).setType(ScrollableList.DROPDOWN).addItem("Layer 1", layer_1);   
+    cp5.addButton("New Layer").setPosition(310, 350);
   }
 
   void draw() {
     background(190);
   }
 
+
+  void controlEvent(ControlEvent theEvent) {
+    if (theEvent.getController().getName() == "New Layer") {
+      Layer New = new Layer();
+      New.ID =  layers.size() + 1;
+      layers.add(New);
+      cp5.get(ScrollableList.class, "layers").addItem("Layer" + New.ID, New);
+    }
+  }
+
   void Controls() {
     BG = int(cp5.getController("BackGround").getValue());
+
+    id = int(cp5.get(ScrollableList.class, "layers").getValue());
 
     // pass layer number into here in order to retrieve active from array
     // so, have a seperate dummy layer object for controls?
 
     if (cp5.getController("Lines").getValue() == 0) {    
-      layer_1.lines = false;
+      layers.get(id).lines = false;
     }
     if (cp5.getController("Lines").getValue() == 1) {    
-      layer_1.lines = true;
+      layers.get(id).lines = true;
     }
-
-    if (cp5.getController("Outline").getValue() == 0) {
-      layer_1.Fill = int(cp.getValue());
+    if (cp5.getController("Dots").getValue() == 0) {    
+      layers.get(id).dots = false;
     }
-    if (cp5.getController("Outline").getValue() == 1) {
-      layer_1.Stroke = int(cp.getValue());
+    if (cp5.getController("Dots").getValue() == 1) {    
+      layers.get(id).dots = true;
     }
-
+    //if (cp5.getController("Outline").getValue() == 0) {
+    //  layer_1.Fill = int(cp.getValue());
+    //}
+    //if (cp5.getController("Outline").getValue() == 1) {
+    //  layer_1.Stroke = int(cp.getValue());
+    //}
     if (cp5.getController("Fill").getValue() == 0) {
-      layer_1.fill = false;
+      layers.get(id).fill = false;
     }
     if (cp5.getController("Fill").getValue() == 1) {
-      layer_1.fill = true;
+      layers.get(id).fill = true;
     }
     if (cp5.getController("Stroke").getValue() == 0) {
-      layer_1.stroke = false;
+      layers.get(id).stroke = false;
     }
     if (cp5.getController("Stroke").getValue() == 1) {
-      layer_1.stroke = true;
+      layers.get(id).stroke = true;
     }
 
-    layer_1.LX = cp5.getController("LineX").getValue();
-    layer_1.LY = cp5.getController("LineY").getValue();
-    layer_1.PlotDots = cp5.getController("Density").getValue();
+    layers.get(id).LX = cp5.getController("LineX").getValue();
+    layers.get(id).LY = cp5.getController("LineY").getValue();
+    layers.get(id).PlotDots = cp5.getController("Density").getValue();
 
-    layer_1.Sw = cp5.getController("StrokeWeight").getValue();
-    layer_1.gear1.Connect = int(cp5.getController("Connect G1").getValue());
-    layer_1.gear2.Connect = int(cp5.getController("Connect G2").getValue());
-    layer_1.gear3.Connect = int(cp5.getController("Connect G3").getValue());
+    layers.get(id).Sw = cp5.getController("StrokeWeight").getValue();
+    layers.get(id).gear1.Connect = int(cp5.getController("Connect G1").getValue());
+    layers.get(id).gear2.Connect = int(cp5.getController("Connect G2").getValue());
+    layers.get(id).gear3.Connect = int(cp5.getController("Connect G3").getValue());
 
     // gear 0
-    layer_1.gear0.RX = cp5.getController("Radius Gear0").getArrayValue(0);
-    layer_1.gear0.RY = cp5.getController("Radius Gear0").getArrayValue(1);
+    layers.get(id).gear0.RX = cp5.getController("Radius Gear0").getArrayValue(0);
+    layers.get(id).gear0.RY = cp5.getController("Radius Gear0").getArrayValue(1);
 
     //if (lock == true) {
     //  layerS_1.gear0.RY = layerS_1.gear0.RX;
     //}
 
     //// gear 1
-    layer_1.gear1.RX = cp5.getController("Radius Gear1").getArrayValue(0); 
-    layer_1.gear1.RY = cp5.getController("Radius Gear1").getArrayValue(1);
-    layer_1.gear1.P = int(cp5.getController("Petals_1").getValue());
+    layers.get(id).gear1.RX = cp5.getController("Radius Gear1").getArrayValue(0); 
+    layers.get(id).gear1.RY = cp5.getController("Radius Gear1").getArrayValue(1);
+    layers.get(id).gear1.P = int(cp5.getController("Petals_1").getValue());
 
     //if (lock == true) {
     //  layerS_1.gear1.RY = layerS_1.gear1.RX;
     //}
 
     // gear 2
-    layer_1.gear2.RX = cp5.getController("Radius Gear2").getArrayValue(0); 
-    layer_1.gear2.RY = cp5.getController("Radius Gear2").getArrayValue(1);
-    layer_1.gear2.P = int(cp5.getController("Petals_2").getValue());
+    layers.get(id).gear2.RX = cp5.getController("Radius Gear2").getArrayValue(0); 
+    layers.get(id).gear2.RY = cp5.getController("Radius Gear2").getArrayValue(1);
+    layers.get(id).gear2.P = int(cp5.getController("Petals_2").getValue());
 
     //if (lock == true) {
     //  layerS_1.gear2.RY = layerS_1.gear2.RX;
     //}
 
     //// gear 3
-    layer_1.gear3.RX = cp5.getController("Radius Gear3").getArrayValue(0); 
-    layer_1.gear3.RY = cp5.getController("Radius Gear3").getArrayValue(1);
-    layer_1.gear3.P = int(cp5.getController("Petals_3").getValue());
+    layers.get(id).gear3.RX = cp5.getController("Radius Gear3").getArrayValue(0); 
+    layers.get(id).gear3.RY = cp5.getController("Radius Gear3").getArrayValue(1);
+    layers.get(id).gear3.P = int(cp5.getController("Petals_3").getValue());
 
     //if (lock == true) {
     //  layerS_1.gear3.RY = layerS_1.gear3.RX;
