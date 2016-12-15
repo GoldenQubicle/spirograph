@@ -64,6 +64,7 @@ class Layer {
       Theta = (TAU/gear0.C)*i;
       XY.x = width/2 + cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
       XY.y = height/2 - sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
+      strokeWeight(1);
       ellipse(XY.x, XY.y, LX, LY);
     }
   }

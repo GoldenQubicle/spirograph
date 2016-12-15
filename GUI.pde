@@ -1,5 +1,5 @@
-class GUI extends PApplet { //<>//
-  int w, h, id;
+class GUI extends PApplet { //<>// //<>//
+  int w, h, id, set;
   PApplet parent;
   ControlP5 cp5;
   ColorPicker cp;
@@ -17,9 +17,9 @@ class GUI extends PApplet { //<>//
   public void setup() {
 
     cp5 = new ControlP5(this);
-    //cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layer_1.Fill);
+    cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layer_1.Fill);
     cp5.addColorWheel("BackGround").setPosition(302, 10).setValue(128);
-
+    //cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layer_1.Fill);
     cp5.addToggle("Lines").setPosition(310, 290).setSize(20, 20).setValue(false);  
     cp5.addToggle("Dots").setPosition(340, 290).setSize(20, 20).setValue(false);
     cp5.addSlider("StrokeWeight").setPosition(310, 330).setRange(0, 250).setValue(layer_1.Sw);
@@ -36,32 +36,37 @@ class GUI extends PApplet { //<>//
     cp5.addToggle("Stroke").setPosition(65, 370).setSize(45, 15).setMode(ControlP5.SWITCH).setValue(layer_1.stroke);
 
     // gear0
-    Group G_0 = cp5.addGroup("G_0").setLabel("Gear 0").setPosition(10, 90);
-    cp5.addSlider2D("Radius Gear0").setGroup(G_0).setMinMax(-512, -512, 512, 512) .setValue(layer_1.gear0.RX, layer_1.gear0.RY);
+    cp5.addSlider2D("Radius Gear0").setMinMax(-512, -512, 512, 512).setValue(layer_1.gear1.RX, layer_1.gear1.RY).setPosition(10, 90).setCaptionLabel("Radius Gear 0");
     //// gear1
-    Group G_1 = cp5.addGroup("G_1").setLabel("Gear 1").setPosition(160, 90);
-    cp5.addSlider2D("Radius Gear1").setGroup(G_1).setMinMax(-150, -150, 150, 150).setValue(layer_1.gear1.RX, layer_1.gear1.RY);
-    cp5.addSlider("Petals_1").setGroup(G_1).setPosition(0, -20).setRange(0, 50).setValue(layer_1.gear1.P);  
+    cp5.addSlider2D("Radius Gear1").setMinMax(-150, -150, 150, 150).setValue(layer_1.gear1.RX, layer_1.gear1.RY).setPosition(160, 90).setCaptionLabel("Radius Gear 1");
+    cp5.addSlider("Petals_1").setPosition(160, 80).setRange(0, 50).setValue(layer_1.gear1.P).setCaptionLabel("Petals");  
     //// gear2
-    Group G_2 = cp5.addGroup("G_2").setLabel("Gear 2").setPosition(10, 230);
-    cp5.addSlider2D("Radius Gear2").setGroup(G_2).setMinMax(-150, -150, 150, 150).setValue(layer_1.gear2.RX, layer_1.gear2.RY);
-    cp5.addSlider("Petals_2").setGroup(G_2).setPosition(0, -20).setRange(0, 100).setValue(layer_1.gear2.P);
+    cp5.addSlider2D("Radius Gear2").setMinMax(-150, -150, 150, 150).setValue(layer_1.gear2.RX, layer_1.gear2.RY).setPosition(10, 230).setCaptionLabel("Radius Gear 2");
+    cp5.addSlider("Petals_2").setPosition(0, -20).setRange(0, 100).setValue(layer_1.gear2.P).setPosition(10, 220).setCaptionLabel("Petals");
     //// gear3
-    Group G_3 = cp5.addGroup("G_3").setLabel("Gear 3").setPosition(160, 230);
-    cp5.addSlider2D("Radius Gear3").setGroup(G_3).setMinMax(-150, -150, 150, 150).setValue(layer_1.gear3.RX, layer_1.gear3.RY);
-    cp5.addSlider("Petals_3").setGroup(G_3).setPosition(0, -20).setRange(0, 200).setValue(layer_1.gear3.P);
+    cp5.addSlider2D("Radius Gear3").setMinMax(-150, -150, 150, 150).setValue(layer_1.gear3.RX, layer_1.gear3.RY).setPosition(160, 230).setCaptionLabel("Radius Gear 3");
+    cp5.addSlider("Petals_3").setPosition(0, -20).setRange(0, 200).setValue(layer_1.gear3.P).setPosition(160, 220).setCaptionLabel("Petals");
 
-    cp5.addScrollableList("layers").setPosition(310, 370).setType(ScrollableList.DROPDOWN).addItem("Layer 1", layer_1);   
-    cp5.addButton("New Layer").setPosition(310, 350);
+    // layers control
+    cp5.addScrollableList("layers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).addItem("Layer 1", layer_1);   
+    cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
+    cp5.addButton("Delete Layer").setPosition(380, 350).setSize(60, 15);
+    cp5.addButton("Save").setPosition(310, 370).setSize(60, 15);
+    cp5.addButton("Load").setPosition(380, 370).setSize(60, 15);
   }
 
   void draw() {
     background(190);
   }
 
+  void SaveLayer() {
+    if (cp5.getController("Save").isMousePressed() == true) {
+      cp5.getProperties().addSet("Layer 1").saveAs("C:/Users/Erik/Documents/Processing/sprgphv2/data/Layer" + id);
+    }
+  }
 
-  void controlEvent(ControlEvent theEvent) {
-    if (theEvent.getController().getName() == "New Layer") {
+  void NewLayer() {
+    if (cp5.getController("New Layer").isMousePressed() == true) {
       Layer New = new Layer();
       New.ID =  layers.size() + 1;
       layers.add(New);
@@ -69,14 +74,80 @@ class GUI extends PApplet { //<>//
     }
   }
 
+  void DeleteLayer() {
+    if (cp5.getController("Delete Layer").isMousePressed() == true) {
+      //layers.remove(int(cp5.get(ScrollableList.class, "layers").getValue()));
+    }
+  }
+
+  void SwitchLayer() {
+    if (id != int(cp5.get(ScrollableList.class, "layers").getValue())) {
+      set = int(cp5.get(ScrollableList.class, "layers").getValue());
+      //println(set, id);
+      if (layers.get(set).lines == false) {
+        cp5.getController("Lines").setValue(0);
+      }
+      if (layers.get(set).lines == true) {
+        cp5.getController("Lines").setValue(1);
+      }
+      if (layers.get(set).dots == false) {
+        cp5.getController("Dots").setValue(0);
+      }
+      if (layers.get(set).dots == true) {
+        cp5.getController("Dots").setValue(1);
+      }
+      if (layers.get(set).fill == false) {
+        cp5.getController("Fill").setValue(0);
+      }
+      if (layers.get(set).fill == true) {
+        cp5.getController("Fill").setValue(1);
+      }
+      if (layers.get(set).stroke == false) {
+        cp5.getController("Stroke").setValue(0);
+      }
+      if (layers.get(set).stroke == true) {
+        cp5.getController("Stroke").setValue(1);
+      }
+      cp5.getController("LineX").setValue(layers.get(set).LX);
+      cp5.getController("LineY").setValue(layers.get(set).LY);
+      cp5.getController("Density").setValue(layers.get(set).PlotDots);
+
+      cp5.getController("StrokeWeight").setValue(layers.get(set).Sw);
+      cp5.getController("Connect G1").setValue(layers.get(set).gear1.Connect);
+      cp5.getController("Connect G2").setValue(layers.get(set).gear2.Connect);
+      cp5.getController("Connect G3").setValue(layers.get(set).gear3.Connect);
+
+      cp5.getController("Radius Gear0").remove();
+      cp5.getController("Radius Gear1").remove();
+      cp5.getController("Radius Gear2").remove();
+      cp5.getController("Radius Gear3").remove();
+
+      cp5.addSlider2D("Radius Gear0").setMinMax(-512, -512, 512, 512).setValue(layers.get(set).gear0.RX, layers.get(set).gear0.RY).setPosition(10, 90).setCaptionLabel("Radius Gear 0");
+      cp5.addSlider2D("Radius Gear1").setMinMax(-512, -512, 512, 512).setValue(layers.get(set).gear1.RX, layers.get(set).gear1.RY).setPosition(160, 90).setCaptionLabel("Radius Gear 1");
+      cp5.addSlider2D("Radius Gear2").setMinMax(-512, -512, 512, 512).setValue(layers.get(set).gear2.RX, layers.get(set).gear2.RY).setPosition(10, 230).setCaptionLabel("Radius Gear 2");
+      cp5.addSlider2D("Radius Gear3").setMinMax(-512, -512, 512, 512).setValue(layers.get(set).gear3.RX, layers.get(set).gear3.RY).setPosition(160, 230).setCaptionLabel("Radius Gear 3");
+
+      cp5.getController("Petals_1").setValue(layers.get(set).gear1.P);
+      cp5.getController("Petals_2").setValue(layers.get(set).gear2.P);
+      cp5.getController("Petals_3").setValue(layers.get(set).gear3.P);
+    }
+  }
+
+
   void Controls() {
+    NewLayer();
+    //DeleteLayer();
+    //SaveLayer();
+    SwitchLayer();
+
+    // background color        
     BG = int(cp5.getController("BackGround").getValue());
 
+    // first get layer id from the dropdownmenu
     id = int(cp5.get(ScrollableList.class, "layers").getValue());
 
-    // pass layer number into here in order to retrieve active from array
-    // so, have a seperate dummy layer object for controls?
-
+    // ~~~~ below are controls for individual layers ~~~
+    // switch draw modes
     if (cp5.getController("Lines").getValue() == 0) {    
       layers.get(id).lines = false;
     }
@@ -89,12 +160,16 @@ class GUI extends PApplet { //<>//
     if (cp5.getController("Dots").getValue() == 1) {    
       layers.get(id).dots = true;
     }
-    //if (cp5.getController("Outline").getValue() == 0) {
-    //  layer_1.Fill = int(cp.getValue());
-    //}
-    //if (cp5.getController("Outline").getValue() == 1) {
-    //  layer_1.Stroke = int(cp.getValue());
-    //}
+
+    // set colors for fill & stroke !! HAVE TO CARRY OVER IN LAYER
+    if (cp5.getController("Outline").getValue() == 0) {
+      layers.get(id).Fill = int(cp.getValue());
+    }
+    if (cp5.getController("Outline").getValue() == 1) {
+      layers.get(id).Stroke = int(cp.getValue());
+    }
+
+    // toggle fill & stroke
     if (cp5.getController("Fill").getValue() == 0) {
       layers.get(id).fill = false;
     }
@@ -108,19 +183,22 @@ class GUI extends PApplet { //<>//
       layers.get(id).stroke = true;
     }
 
+    // controls for spiro & dot mode
     layers.get(id).LX = cp5.getController("LineX").getValue();
     layers.get(id).LY = cp5.getController("LineY").getValue();
     layers.get(id).PlotDots = cp5.getController("Density").getValue();
 
+    // controls for dot & line mode
     layers.get(id).Sw = cp5.getController("StrokeWeight").getValue();
     layers.get(id).gear1.Connect = int(cp5.getController("Connect G1").getValue());
     layers.get(id).gear2.Connect = int(cp5.getController("Connect G2").getValue());
     layers.get(id).gear3.Connect = int(cp5.getController("Connect G3").getValue());
 
+    // controls for gears below - lock currently not used but should be re-instated  
     // gear 0
+    //layers.get(id).gear0.RX = cp5.getGroup("G_0").getController("X Radius").getValue();
     layers.get(id).gear0.RX = cp5.getController("Radius Gear0").getArrayValue(0);
     layers.get(id).gear0.RY = cp5.getController("Radius Gear0").getArrayValue(1);
-
     //if (lock == true) {
     //  layerS_1.gear0.RY = layerS_1.gear0.RX;
     //}
@@ -129,7 +207,6 @@ class GUI extends PApplet { //<>//
     layers.get(id).gear1.RX = cp5.getController("Radius Gear1").getArrayValue(0); 
     layers.get(id).gear1.RY = cp5.getController("Radius Gear1").getArrayValue(1);
     layers.get(id).gear1.P = int(cp5.getController("Petals_1").getValue());
-
     //if (lock == true) {
     //  layerS_1.gear1.RY = layerS_1.gear1.RX;
     //}
@@ -138,7 +215,6 @@ class GUI extends PApplet { //<>//
     layers.get(id).gear2.RX = cp5.getController("Radius Gear2").getArrayValue(0); 
     layers.get(id).gear2.RY = cp5.getController("Radius Gear2").getArrayValue(1);
     layers.get(id).gear2.P = int(cp5.getController("Petals_2").getValue());
-
     //if (lock == true) {
     //  layerS_1.gear2.RY = layerS_1.gear2.RX;
     //}
@@ -147,7 +223,6 @@ class GUI extends PApplet { //<>//
     layers.get(id).gear3.RX = cp5.getController("Radius Gear3").getArrayValue(0); 
     layers.get(id).gear3.RY = cp5.getController("Radius Gear3").getArrayValue(1);
     layers.get(id).gear3.P = int(cp5.getController("Petals_3").getValue());
-
     //if (lock == true) {
     //  layerS_1.gear3.RY = layerS_1.gear3.RX;
     //}
