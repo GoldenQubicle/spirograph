@@ -1,15 +1,7 @@
 /*
 CURRENT CONCERNS
- 
- need to set/retrieve setting when switching layers!
- this sorta works for now tho few issues
 
-   2) colors are not picked up between layer and that is because
-   3) need to find a way to pick up fill/stroke color within individual layer
- 
- 
- delete layer
- toggle layer visibilty
+actually hide layer may be superfluos as well since its simply fill&stroke off. . hehehe
  
  TODO
  - finer controls, either by textfield input, or make a 2-staged control (for dotdensity, i.e. toggle ranges 0-1000, than slider per range). 
@@ -26,7 +18,7 @@ color BG;
 GUI gui;
 
 void settings() {
-  size(1024, 1024, P2D);
+  size(512, 512, P2D);
   smooth(8);
 }
 

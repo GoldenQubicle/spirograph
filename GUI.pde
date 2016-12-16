@@ -1,8 +1,9 @@
-class GUI extends PApplet { //<>// //<>//
+class GUI extends PApplet {  //<>// //<>// //<>//
   int w, h, id, set;
   PApplet parent;
   ControlP5 cp5;
   ColorPicker cp;
+  color dummy;
 
   public GUI(PApplet theApplet) {
     super();
@@ -19,7 +20,6 @@ class GUI extends PApplet { //<>// //<>//
     cp5 = new ControlP5(this);
     cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layer_1.Fill);
     cp5.addColorWheel("BackGround").setPosition(302, 10).setValue(128);
-    //cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layer_1.Fill);
     cp5.addToggle("Lines").setPosition(310, 290).setSize(20, 20).setValue(false);  
     cp5.addToggle("Dots").setPosition(340, 290).setSize(20, 20).setValue(false);
     cp5.addSlider("StrokeWeight").setPosition(310, 330).setRange(0, 250).setValue(layer_1.Sw);
@@ -27,8 +27,9 @@ class GUI extends PApplet { //<>// //<>//
     cp5.addSlider("Connect G2").setPosition(310, 250).setRange(0, 100).setValue(layer_1.gear2.Connect);
     cp5.addSlider("Connect G3").setPosition(310, 270).setRange(0, 100).setValue(layer_1.gear3.Connect);
 
-    cp5.addToggle("Outline").setPosition(270, 10).setSize(20, 15).setValue(false).setState(false);
-    cp5.addButton("Set").setPosition(270, 40).setSize(20, 15);
+    //cp5.addRadioButton("Switch").setPosition(270,10).setSize(25,25).addItem("CFill", 0).addItem("CStroke", 1);
+    cp5.addToggle("Switch").setPosition(270, 10).setSize(25, 25);
+
     cp5.addSlider("Density").setPosition(10, 490).setSize(450, 15).setRange(0, 100000).setValue(layer_1.PlotDots); 
     cp5.addSlider("LineX").setPosition(10, 350).setRange(0, 250).setValue(layer_1.LX);
     cp5.addSlider("LineY").setPosition(160, 350).setRange(0, 250).setValue(layer_1.LY);
@@ -50,7 +51,7 @@ class GUI extends PApplet { //<>// //<>//
     // layers control
     cp5.addScrollableList("layers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).addItem("Layer 1", layer_1);   
     cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
-    cp5.addButton("Delete Layer").setPosition(380, 350).setSize(60, 15);
+    cp5.addButton("Hide Layer").setPosition(380, 350).setSize(60, 15);
     cp5.addButton("Save").setPosition(310, 370).setSize(60, 15);
     cp5.addButton("Load").setPosition(380, 370).setSize(60, 15);
   }
@@ -74,16 +75,16 @@ class GUI extends PApplet { //<>// //<>//
     }
   }
 
-  void DeleteLayer() {
-    if (cp5.getController("Delete Layer").isMousePressed() == true) {
-      //layers.remove(int(cp5.get(ScrollableList.class, "layers").getValue()));
+  void HideLayer() {
+    if (cp5.getController("Hide Layer").isMousePressed() == true) {
+      cp5.getController("Fill").setValue(0);
+      cp5.getController("Stroke").setValue(0);
     }
   }
 
   void SwitchLayer() {
     if (id != int(cp5.get(ScrollableList.class, "layers").getValue())) {
       set = int(cp5.get(ScrollableList.class, "layers").getValue());
-      //println(set, id);
       if (layers.get(set).lines == false) {
         cp5.getController("Lines").setValue(0);
       }
@@ -108,6 +109,16 @@ class GUI extends PApplet { //<>// //<>//
       if (layers.get(set).stroke == true) {
         cp5.getController("Stroke").setValue(1);
       }
+      
+      if (layers.get(set).outline == false) {
+        cp.setColorValue( layers.get(set).Fill);
+        cp5.getController("Switch").setValue(0);
+      }
+      if (layers.get(set).outline == true) {
+        cp.setColorValue( layers.get(set).Stroke);
+        cp5.getController("Switch").setValue(1);
+      }
+      
       cp5.getController("LineX").setValue(layers.get(set).LX);
       cp5.getController("LineY").setValue(layers.get(set).LY);
       cp5.getController("Density").setValue(layers.get(set).PlotDots);
@@ -133,10 +144,19 @@ class GUI extends PApplet { //<>// //<>//
     }
   }
 
+  void SwitchColors() {
+    if (cp5.getController("Switch").isMousePressed() == true && cp5.getController("Switch").getValue() == 0) {
+      cp.setColorValue(layers.get(id).Fill);
+    };
+    if (cp5.getController("Switch").isMousePressed() == true && cp5.getController("Switch").getValue() == 1) {
+      cp.setColorValue(layers.get(id).Stroke);
+    };
+  }
 
   void Controls() {
+    SwitchColors();
     NewLayer();
-    //DeleteLayer();
+    HideLayer();
     //SaveLayer();
     SwitchLayer();
 
@@ -161,12 +181,14 @@ class GUI extends PApplet { //<>// //<>//
       layers.get(id).dots = true;
     }
 
-    // set colors for fill & stroke !! HAVE TO CARRY OVER IN LAYER
-    if (cp5.getController("Outline").getValue() == 0) {
+    // set colors for fill & stroke 
+    if (cp5.getController("Switch").getValue() == 0) {
       layers.get(id).Fill = int(cp.getValue());
+      layers.get(id).outline = false;
     }
-    if (cp5.getController("Outline").getValue() == 1) {
+    if ( cp5.getController("Switch").getValue() == 1) {
       layers.get(id).Stroke = int(cp.getValue());
+      layers.get(id).outline = true;
     }
 
     // toggle fill & stroke
