@@ -1,5 +1,5 @@
 class GUI extends PApplet {  //<>// //<>// //<>//
-  int w, h, id, set;
+  int w, h, id, set, lp;
   PApplet parent;
   ControlP5 cp5;
   ColorPicker cp;
@@ -12,11 +12,12 @@ class GUI extends PApplet {  //<>// //<>// //<>//
   }
 
   public void settings() {
-    size(512, 512);
+    size(512, 768);
   } 
 
   public void setup() {
 
+    lp = 1;
     cp5 = new ControlP5(this);
     cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layer_1.Fill);
     cp5.addColorWheel("BackGround").setPosition(302, 10).setValue(128);
@@ -52,13 +53,32 @@ class GUI extends PApplet {  //<>// //<>// //<>//
     cp5.addScrollableList("layers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).addItem("Layer 1", layer_1);   
     cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
     cp5.addButton("Hide Layer").setPosition(380, 350).setSize(60, 15);
-    cp5.addButton("Save").setPosition(310, 370).setSize(60, 15);
-    cp5.addButton("Load").setPosition(380, 370).setSize(60, 15);
+
+    //cp5.addButton("Load").setPosition(380, 370).setSize(60, 15);
+
+    // animation matrix
+    cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGrid(gif.Steps, lp).setInterval(gif.Interval).setMode(ControlP5.MULTIPLES).stop();
+
+    cp5.addButton("Save").setPosition(10, 525).setSize(60, 15);
   }
 
   void draw() {
     background(190);
   }
+
+  void Matrix(int x, int lp) {     
+    // here we check button toggle, i.e. active parameters per layer
+    // soooo always needs to have 1 button on to read data from it
+    if (cp5.get(Matrix.class, "Matrix").get(2, 0) == true) {
+      println("check");
+    } 
+
+    if (cp5.get(Matrix.class, "Matrix").get(2, 0) == false) {
+      println("really?!");
+    } 
+
+  }
+
 
   void SaveLayer() {
     if (cp5.getController("Save").isMousePressed() == true) {
@@ -109,7 +129,7 @@ class GUI extends PApplet {  //<>// //<>// //<>//
       if (layers.get(set).stroke == true) {
         cp5.getController("Stroke").setValue(1);
       }
-      
+
       if (layers.get(set).outline == false) {
         cp.setColorValue( layers.get(set).Fill);
         cp5.getController("Switch").setValue(0);
@@ -118,7 +138,7 @@ class GUI extends PApplet {  //<>// //<>// //<>//
         cp.setColorValue( layers.get(set).Stroke);
         cp5.getController("Switch").setValue(1);
       }
-      
+
       cp5.getController("LineX").setValue(layers.get(set).LX);
       cp5.getController("LineY").setValue(layers.get(set).LY);
       cp5.getController("Density").setValue(layers.get(set).PlotDots);
@@ -154,6 +174,7 @@ class GUI extends PApplet {  //<>// //<>// //<>//
   }
 
   void Controls() {
+
     SwitchColors();
     NewLayer();
     HideLayer();
