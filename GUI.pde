@@ -8,7 +8,7 @@ class GUI extends PApplet {    //<>// //<>// //<>//
   Slider P1, P2, P3, LX, LY, SW, D, G1c, G2c, G3c;
   Toggle Fill, Stroke, Lines, Dots, CS;
   ColorPicker cp;
-  
+
   public GUI(PApplet theApplet) {
     super();
     parent = theApplet;
@@ -30,21 +30,13 @@ class GUI extends PApplet {    //<>// //<>// //<>//
     G0 = cp5.addSlider2D("Radius Gear 0").setMinMax(-512, -512, 512, 512).setPosition(10, 90).setCaptionLabel("Radius Gear 0").plugTo(this, "Controls").setValue(layers.get(id).gear0.RX, layers.get(id).gear0.RY);
     //// gear1
     G1 = cp5.addSlider2D("Radius Gear1").setMinMax(-150, -150, 150, 150).setPosition(160, 90).setCaptionLabel("Radius Gear 1").plugTo(this, "Controls").setValue(layers.get(id).gear1.RX, layers.get(id).gear1.RY);
-    ;
-    ;//.setValue(layers.get(id).gear1.RX, layers.get(id).gear1.RY)
     P1 = cp5.addSlider("Petals_1").setRange(0, 50).setPosition(160, 80).setCaptionLabel("Petals").plugTo(this, "Controls").setValue(layers.get(id).gear1.P);
     // gear2
     G2 = cp5.addSlider2D("Radius Gear2").setMinMax(-150, -150, 150, 150).setPosition(10, 230).setCaptionLabel("Radius Gear 2").plugTo(this, "Controls").setValue(layers.get(id).gear2.RX, layers.get(id).gear2.RY);
-    ;
-    ;//.setValue(layers.get(id).gear2.RX, layers.get(id).gear2.RY)
     P2 = cp5.addSlider("Petals_2").setRange(0, 100).setPosition(10, 220).setCaptionLabel("Petals").plugTo(this, "Controls").setValue(layers.get(id).gear2.P);
-    ;
-    ;//.setValue(layers.get(id).gear2.P)
     //// gear3
     G3 = cp5.addSlider2D("Radius Gear3").setMinMax(-150, -150, 150, 150).setPosition(160, 230).setCaptionLabel("Radius Gear 3").plugTo(this, "Controls").setValue(layers.get(id).gear3.RX, layers.get(id).gear3.RY);
-    ;
     P3 = cp5.addSlider("Petals_3").setRange(0, 200).setPosition(160, 220).setCaptionLabel("Petals").plugTo(this, "Controls").setValue(layers.get(id).gear3.P);
-    ;
     // fill stroke width for all modes
     Fill = cp5.addToggle("Fill").setPosition(10, 370).setSize(45, 15).setMode(ControlP5.SWITCH).setState(true).plugTo(this, "Controls");
     Stroke = cp5.addToggle("Stroke").setPosition(65, 370).setSize(45, 15).setMode(ControlP5.SWITCH).setState(false).plugTo(this, "Controls");
@@ -60,7 +52,7 @@ class GUI extends PApplet {    //<>// //<>// //<>//
     G2c = cp5.addSlider("Connect G2").setPosition(310, 250).setRange(0, 100).plugTo(this, "Controls");
     G3c = cp5.addSlider("Connect G3").setPosition(310, 270).setRange(0, 100).plugTo(this, "Controls");
     // layers control
-    cp5.addScrollableList("SwitchLayers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers");//.addItem("Layer 1", layer_1).addItem("Layer 2", layer_2).addItem("Layer 3", layer_3);   
+    cp5.addScrollableList("SwitchLayers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers");
     cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
     cp5.addButton("Hide Layer").setPosition(380, 350).setSize(60, 15);
     // animation matrix
@@ -103,6 +95,7 @@ class GUI extends PApplet {    //<>// //<>// //<>//
       myLayer.gear3.Connect = int(G3c.getValue());
       myLayer.Fill = cp.getColorValue();
       
+     
     }
   }
 }

@@ -1,7 +1,6 @@
 /*
 CURRENT CONCERNS
 
-AAARG keyframes are cycling backwards relative to matrix - staring to really become ffing annoyed with matrix. . .
  
  
  BRAINDUMP with regard to animation ~  all things are ideally speaking ofc
@@ -12,22 +11,7 @@ AAARG keyframes are cycling backwards relative to matrix - staring to really bec
  - layer settings on each control point are automatically stored when tweaked
  - being able to loop between individual control points (i.e. not only over start/stop) and tweak settings in realtime
  - save/load animation scripts so I can work on and off 
- 
- parameters per layer
- - 8 : 4 gears with x&ypos (reduced to 4 if using PVectors)
- - 3 : petal
- - 2 : color fill&stroke
- - 2 : toggle fill&stroke
- - 1 : outline, toggle active color in picker
- - 2 : line x&y
- - 2 : toggle line&dots
- - 3 : gears connect
- - 1 : strokeweight
- - 1 : Density
- 
- SO, 25 parameters per layer
- HOWEVER, do I really need to, or want to, pass all of them into an 'animation' class, if the settings
- can be saved per layer / time point
+
  
  need to pass  2 layer objects to animation, i.e. start/stop to lerp over settings
  matrix toggles which parameter is iterated over
@@ -62,7 +46,7 @@ GUI gui;
 
 
 void settings() {
-  size(1024, 1024, P2D);
+  size(512, 512, P2D);
   smooth(8);
 }
 
@@ -93,36 +77,5 @@ for(Layer myLayer : layers){
 
   gui.BG(BG);  
   
-  //gif.Loop();
- //gui.Matrix();
-  //gui.Controls();
 
-  //println(frameRate);
 }
-
-
-void keyPressed() {
-
-  if (key=='p') {
-   //pause = true; 
-   //gui.cp5.get(Matrix.class, "Matrix").pause();
-    //gui.Matrix();
-  }
-  if(key == ' '){
-   //pause = false; 
-   //gui.cp5.get(Matrix.class, "Matrix").play();
-  
-   //gui.Matrix();
-  }
- 
-    //if (gui.cp5.get(Matrix.class, "Matrix").isPlaying()) {
-    //  gui.cp5.get(Matrix.class, "Matrix").pause();
-    //  pause = true;
-    //} else {
-    //  gui.cp5.get(Matrix.class, "Matrix").play();
-    //  pause = false;
-    //}
-   //else if (key=='0') {
-    //gui.cp5.get(Matrix.class, "Matrix").clear();
-  }
-//}
