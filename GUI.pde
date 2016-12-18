@@ -1,4 +1,4 @@
-class GUI extends PApplet {  //<>// //<>// //<>//
+class GUI extends PApplet {   //<>// //<>// //<>//
   int w, h, id, set, lp;
   PApplet parent;
   ControlP5 cp5;
@@ -16,73 +16,77 @@ class GUI extends PApplet {  //<>// //<>// //<>//
   } 
 
   public void setup() {
-
+    id = 0;
     lp = 1;
     cp5 = new ControlP5(this);
-    cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layer_1.Fill);
+    cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layers.get(id).Fill);
     cp5.addColorWheel("BackGround").setPosition(302, 10).setValue(128);
-    cp5.addToggle("Lines").setPosition(310, 290).setSize(20, 20).setValue(false);  
-    cp5.addToggle("Dots").setPosition(340, 290).setSize(20, 20).setValue(false);
-    cp5.addSlider("StrokeWeight").setPosition(310, 330).setRange(0, 250).setValue(layer_1.Sw);
-    cp5.addSlider("Connect G1").setPosition(310, 230).setRange(0, 100).setValue(layer_1.gear1.Connect);
-    cp5.addSlider("Connect G2").setPosition(310, 250).setRange(0, 100).setValue(layer_1.gear2.Connect);
-    cp5.addSlider("Connect G3").setPosition(310, 270).setRange(0, 100).setValue(layer_1.gear3.Connect);
+    cp5.addToggle("Lines").setPosition(310, 290).setSize(20, 20).setState(false);  
+    cp5.addToggle("Dots").setPosition(340, 290).setSize(20, 20).setState(false);
+    cp5.addSlider("StrokeWeight").setPosition(310, 330).setRange(0, 250);//.setValue(layer_1.Sw);
+    cp5.addSlider("Connect G1").setPosition(310, 230).setRange(0, 100);//.setValue(layers.get(id).gear1.Connect);
+    cp5.addSlider("Connect G2").setPosition(310, 250).setRange(0, 100);//.setValue(layers.get(id).gear2.Connect);
+    cp5.addSlider("Connect G3").setPosition(310, 270).setRange(0, 100);//.setValue(layers.get(id).gear3.Connect);
 
     //cp5.addRadioButton("Switch").setPosition(270,10).setSize(25,25).addItem("CFill", 0).addItem("CStroke", 1);
     cp5.addToggle("Switch").setPosition(270, 10).setSize(25, 25);
 
-    cp5.addSlider("Density").setPosition(10, 490).setSize(450, 15).setRange(0, 100000).setValue(layer_1.PlotDots); 
-    cp5.addSlider("LineX").setPosition(10, 350).setRange(0, 250).setValue(layer_1.LX);
-    cp5.addSlider("LineY").setPosition(160, 350).setRange(0, 250).setValue(layer_1.LY);
-    cp5.addToggle("Fill").setPosition(10, 370).setSize(45, 15).setMode(ControlP5.SWITCH).setValue(layer_1.fill);
-    cp5.addToggle("Stroke").setPosition(65, 370).setSize(45, 15).setMode(ControlP5.SWITCH).setValue(layer_1.stroke);
+    cp5.addSlider("Density").setPosition(10, 490).setSize(450, 15).setRange(0, 100000);//.setValue(layers.get(id).PlotDots); 
+    cp5.addSlider("LineX").setPosition(10, 350).setRange(0, 250);//.setValue(layers.get(id).LX);
+    cp5.addSlider("LineY").setPosition(160, 350).setRange(0, 250);//.setValue(layers.get(id).LY);
+    cp5.addToggle("Fill").setPosition(10, 370).setSize(45, 15).setMode(ControlP5.SWITCH).setState(true);//.setValue(layers.get(id).fill);
+    cp5.addToggle("Stroke").setPosition(65, 370).setSize(45, 15).setMode(ControlP5.SWITCH).setState(false);//.setValue(layers.get(id).stroke);
 
     // gear0
-    cp5.addSlider2D("Radius Gear0").setMinMax(-512, -512, 512, 512).setValue(layer_1.gear1.RX, layer_1.gear1.RY).setPosition(10, 90).setCaptionLabel("Radius Gear 0");
+    cp5.addSlider2D("Radius Gear0").setMinMax(-512, -512, 512, 512).setPosition(10, 90).setCaptionLabel("Radius Gear 0");//.setValue(layers.get(id).gear1.RX, layers.get(id).gear1.RY);
     //// gear1
-    cp5.addSlider2D("Radius Gear1").setMinMax(-150, -150, 150, 150).setValue(layer_1.gear1.RX, layer_1.gear1.RY).setPosition(160, 90).setCaptionLabel("Radius Gear 1");
-    cp5.addSlider("Petals_1").setPosition(160, 80).setRange(0, 50).setValue(layer_1.gear1.P).setCaptionLabel("Petals");  
+    cp5.addSlider2D("Radius Gear1").setMinMax(-150, -150, 150, 150).setPosition(160, 90).setCaptionLabel("Radius Gear 1");
+    ;//.setValue(layers.get(id).gear1.RX, layers.get(id).gear1.RY)
+    cp5.addSlider("Petals_1").setRange(0, 50).setPosition(160, 80).setCaptionLabel("Petals"); 
+    ;//.setValue(layers.get(id).gear1.P) 
     //// gear2
-    cp5.addSlider2D("Radius Gear2").setMinMax(-150, -150, 150, 150).setValue(layer_1.gear2.RX, layer_1.gear2.RY).setPosition(10, 230).setCaptionLabel("Radius Gear 2");
-    cp5.addSlider("Petals_2").setPosition(0, -20).setRange(0, 100).setValue(layer_1.gear2.P).setPosition(10, 220).setCaptionLabel("Petals");
+    cp5.addSlider2D("Radius Gear2").setMinMax(-150, -150, 150, 150).setPosition(10, 230).setCaptionLabel("Radius Gear 2");
+    ;//.setValue(layers.get(id).gear2.RX, layers.get(id).gear2.RY)
+    cp5.addSlider("Petals_2").setRange(0, 100).setPosition(10, 220).setCaptionLabel("Petals");
+    ;//.setValue(layers.get(id).gear2.P)
     //// gear3
-    cp5.addSlider2D("Radius Gear3").setMinMax(-150, -150, 150, 150).setValue(layer_1.gear3.RX, layer_1.gear3.RY).setPosition(160, 230).setCaptionLabel("Radius Gear 3");
-    cp5.addSlider("Petals_3").setPosition(0, -20).setRange(0, 200).setValue(layer_1.gear3.P).setPosition(160, 220).setCaptionLabel("Petals");
+    cp5.addSlider2D("Radius Gear3").setMinMax(-150, -150, 150, 150).setPosition(160, 230).setCaptionLabel("Radius Gear 3");//.setValue(layers.get(id).gear3.RX, layers.get(id).gear3.RY);
+    cp5.addSlider("Petals_3").setRange(0, 200).setPosition(160, 220).setCaptionLabel("Petals");//.setValue(layers.get(id).gear3.P);
 
     // layers control
-    cp5.addScrollableList("layers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).addItem("Layer 1", layer_1);   
+    cp5.addScrollableList("layers").setPosition(310, 390).setType(ScrollableList.DROPDOWN);//.addItem("Layer 1", layer_1).addItem("Layer 2", layer_2).addItem("Layer 3", layer_3);   
     cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
     cp5.addButton("Hide Layer").setPosition(380, 350).setSize(60, 15);
 
     //cp5.addButton("Load").setPosition(380, 370).setSize(60, 15);
 
     // animation matrix
-    cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGrid(gif.Steps, lp).setInterval(gif.Interval).setMode(ControlP5.MULTIPLES).stop();
+    cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGrid(gif.keyFrames, lp).setInterval(gif.Interval).setMode(ControlP5.MULTIPLES).stop().setGap(10, 0)
+      .set(0, 0, false).isPlaying();
 
-    cp5.addButton("Save").setPosition(10, 525).setSize(60, 15);
+    cp5.addButton("Add").setPosition(10, 525).setSize(60, 15);
   }
 
   void draw() {
     background(190);
   }
 
-  void Matrix(int x, int lp) {     
-    // here we check button toggle, i.e. active parameters per layer
-    // soooo always needs to have 1 button on to read data from it
-    if (cp5.get(Matrix.class, "Matrix").get(2, 0) == true) {
-      println("check");
-    } 
+  //void Matrix() {     
+  //  // here we check button toggle, i.e. active parameters per layer
+  //  // soooo always needs to have 1 button on to read data from it
+  //  if (cp5.get(Matrix.class, "Matrix").get(3, 0) == true) {
+  //    //println("check");
+  //  } 
 
-    if (cp5.get(Matrix.class, "Matrix").get(2, 0) == false) {
-      println("really?!");
-    } 
+  //  if (cp5.get(Matrix.class, "Matrix").get(3, 0) == false) {
+  //    //println("really?!");
+  //  }
+  //}
 
-  }
 
-
-  void SaveLayer() {
-    if (cp5.getController("Save").isMousePressed() == true) {
-      cp5.getProperties().addSet("Layer 1").saveAs("C:/Users/Erik/Documents/Processing/sprgphv2/data/Layer" + id);
+  void Add() {  
+    for (int i = 1; i <= gif.keyFrames; i++) {
+      gui.cp5.get(ScrollableList.class, "layers").addItem("Key Frame " + i, layers.get(i));
     }
   }
 
@@ -174,8 +178,9 @@ class GUI extends PApplet {  //<>// //<>// //<>//
   }
 
   void Controls() {
-
-    SwitchColors();
+    if (cp5.getController("Switch").isMousePressed() == true) {
+      SwitchColors();
+    }
     NewLayer();
     HideLayer();
     //SaveLayer();

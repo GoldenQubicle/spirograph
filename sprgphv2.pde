@@ -1,5 +1,11 @@
 /*
-BRAINDUMP with regard to animation ~  all things are ideally speaking ofc
+CURRENT CONCERNS
+
+ - want to setup number of layers corresponding to keyframes
+ - resume after pause is bit wonky
+ 
+ 
+ BRAINDUMP with regard to animation ~  all things are ideally speaking ofc
  - set length of animation, e.g. 2 seconds
  - set x number of control points with 2 being the minimum, i.e. start / stop
  - being able to set different kind of transitions inbetween control points, that is:
@@ -32,10 +38,9 @@ BRAINDUMP with regard to animation ~  all things are ideally speaking ofc
  layers are only on display for tweaking
  
  STRATEGY
- - top row of matrix will lock/unlock layer, i.e. be called on main loop or not
  - attach (multiple) layer object(s) to steps, i.e. when playing it toggles between the two
  - write current display into pixel array / PIMage
-
+ 
  
  
  CONSIDERATIONS
@@ -49,12 +54,13 @@ import controlP5.*;
 import dawesometoolkit.*;
 
 //GifMaker gifExport;
-Layer layer_1;
+Layer layer_1, layer_2, layer_3;
 ArrayList<Layer> layers;
 DawesomeToolkit ds;
 color BG;
 GUI gui;
 Animation gif;
+boolean pause, tick, tock;
 
 void settings() {
   size(512, 512, P2D);
@@ -62,11 +68,16 @@ void settings() {
 }
 
 void setup() {
-
+    pause = true;
+    tick = true;
   BG = 128;  
   layers = new ArrayList();
-  layer_1 = new Layer();
-  layers.add(layer_1);
+  //layer_1 = new Layer();
+  //layer_2 = new Layer();
+  //layer_3 = new Layer();
+  //layers.add(layer_1);
+  //layers.add(layer_2);
+  //layers.add(layer_3);
   ds = new DawesomeToolkit(this);
   ds.enableLazySave();
   gui = new GUI(this);
@@ -76,14 +87,17 @@ void setup() {
 
 void draw() {
   background(BG);
+
+  //only valid when layers are unlocked 
+  //for (int i = 0; i < layers.size(); i++) {
+  //  layers.get(i).display();
+  //  }
   
- // only valid when layers are unlocked 
-  for (int i = 0; i < layers.size(); i++) {
-    layers.get(i).display();
-  }
+  gif.Loop();
+
   gui.Controls();
 
-//println(frameRate);
+  //println(frameRate);
 }
 
 
@@ -92,8 +106,10 @@ void keyPressed() {
   if (key=='p') {
     if (gui.cp5.get(Matrix.class, "Matrix").isPlaying()) {
       gui.cp5.get(Matrix.class, "Matrix").pause();
+      pause = true;
     } else {
       gui.cp5.get(Matrix.class, "Matrix").play();
+      pause = false;
     }
   } else if (key=='0') {
     gui.cp5.get(Matrix.class, "Matrix").clear();
