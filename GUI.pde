@@ -1,4 +1,4 @@
-class GUI extends PApplet {    //<>// //<>// //<>//
+class GUI extends PApplet {    //<>//
 
   int w, h, id, set, lp;
   PApplet parent;
@@ -8,6 +8,8 @@ class GUI extends PApplet {    //<>// //<>// //<>//
   Slider P1, P2, P3, LX, LY, SW, D, G1c, G2c, G3c;
   Toggle Fill, Stroke, Lines, Dots, CS;
   ColorPicker cp;
+  ScrollableList LayerList;
+  Button New;
 
   public GUI(PApplet theApplet) {
     super();
@@ -22,10 +24,12 @@ class GUI extends PApplet {    //<>// //<>// //<>//
   public void setup() {
     id = 0;
     cp5 = new ControlP5(this);
+
     // color
     cp5.addColorWheel("BackGround").setPosition(302, 10).setValue(128).plugTo(this, "BG");
-    cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layers.get(id).Fill).plugTo(this, "Controls");
-    CS = cp5.addToggle("Switch").setPosition(270, 10).setSize(25, 25).plugTo(this, "Controls");
+    cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layers.get(id).Fill);
+    CS = cp5.addToggle("Switch").setPosition(270, 10).setSize(25, 25).setState(false).plugTo(this, "Controls");
+
     // gear0
     G0 = cp5.addSlider2D("Radius Gear 0").setMinMax(-512, -512, 512, 512).setPosition(10, 90).setCaptionLabel("Radius Gear 0").plugTo(this, "Controls").setValue(layers.get(id).gear0.RX, layers.get(id).gear0.RY);
     //// gear1
@@ -52,8 +56,8 @@ class GUI extends PApplet {    //<>// //<>// //<>//
     G2c = cp5.addSlider("Connect G2").setPosition(310, 250).setRange(0, 100).plugTo(this, "Controls");
     G3c = cp5.addSlider("Connect G3").setPosition(310, 270).setRange(0, 100).plugTo(this, "Controls");
     // layers control
-    cp5.addScrollableList("SwitchLayers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers");
-    cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
+    LayerList = cp5.addScrollableList("SwitchLayers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").plugTo(this, "LayerList");
+    New = cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15).plugTo(this, "Controls");
     cp5.addButton("Hide Layer").setPosition(380, 350).setSize(60, 15);
     // animation matrix
     //cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGrid(5, lp).setInterval(500).setMode(ControlP5.MULTIPLES).stop().setGap(10, 0)
@@ -67,6 +71,17 @@ class GUI extends PApplet {    //<>// //<>// //<>//
 
   void BG(color bg) {
     BG = bg;
+  }
+
+
+
+  void ColorFillStroke() {
+    if (CS.getState() == false) {
+      layer_1.Fill =  cp.getColorValue() ;
+    }
+    if (CS.getState() == true) {
+      layer_1.Stroke =  cp.getColorValue();
+    }
   }
 
   void Controls() {
@@ -93,9 +108,7 @@ class GUI extends PApplet {    //<>// //<>// //<>//
       myLayer.gear1.Connect = int(G1c.getValue());
       myLayer.gear2.Connect = int(G2c.getValue());
       myLayer.gear3.Connect = int(G3c.getValue());
-      myLayer.Fill = cp.getColorValue();
       
-     
     }
   }
 }

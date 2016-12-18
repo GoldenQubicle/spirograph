@@ -27,7 +27,8 @@ CURRENT CONCERNS
  
  
  CONSIDERATIONS
- - would be kinda nice if I could copy gear/petal settings from one layer to a new one (e.g. if press copy, grab settings from id-1).
+ - unique stokeweight for lines and dots
+ - !!would be kinda nice if I could copy gear/petal settings from one layer to a new one (e.g. if press copy, grab settings from id-1).
  - finer controls, either by textfield input, or make a 2-staged control (for dotdensity, i.e. toggle ranges 0-1000, than slider per range). 
  - to combat the noticable lag with multiple taxing layers, maybe see if layer can be drawn once, than stored as PImage / pixel array or somehting
  
@@ -46,7 +47,7 @@ GUI gui;
 
 
 void settings() {
-  size(512, 512, P2D);
+  size(1024, 1024, P2D);
   smooth(8);
 }
 
@@ -70,12 +71,13 @@ void setup() {
 void draw() {
   background(BG);
   
-
+println(frameRate);
 for(Layer myLayer : layers){
   myLayer.display();
+  gui.ColorFillStroke();
 }
 
   gui.BG(BG);  
-  
+  //gui.Controls();
 
 }
