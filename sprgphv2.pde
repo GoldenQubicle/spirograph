@@ -1,8 +1,7 @@
 /*
 CURRENT CONCERNS
 
- - want to setup number of layers corresponding to keyframes
- - resume after pause is bit wonky
+AAARG keyframes are cycling backwards relative to matrix - staring to really become ffing annoyed with matrix. . .
  
  
  BRAINDUMP with regard to animation ~  all things are ideally speaking ofc
@@ -59,43 +58,44 @@ ArrayList<Layer> layers;
 DawesomeToolkit ds;
 color BG;
 GUI gui;
-Animation gif;
-boolean pause, tick, tock;
+
+
 
 void settings() {
-  size(512, 512, P2D);
+  size(1024, 1024, P2D);
   smooth(8);
 }
 
 void setup() {
-    pause = true;
-    tick = true;
+
   BG = 128;  
   layers = new ArrayList();
-  //layer_1 = new Layer();
+  layer_1 = new Layer();
   //layer_2 = new Layer();
   //layer_3 = new Layer();
-  //layers.add(layer_1);
+  layers.add(layer_1);
   //layers.add(layer_2);
   //layers.add(layer_3);
   ds = new DawesomeToolkit(this);
   ds.enableLazySave();
   gui = new GUI(this);
-  gif = new Animation();
+  //gif = new Animation();
   //gifExport = new GifMaker(this, "export.gif");
 }
 
 void draw() {
   background(BG);
-
-  //only valid when layers are unlocked 
-  //for (int i = 0; i < layers.size(); i++) {
-  //  layers.get(i).display();
-  //  }
   
-  gif.Loop();
 
-  gui.Controls();
+for(Layer myLayer : layers){
+  myLayer.display();
+}
+
+  gui.BG(BG);  
+  
+  //gif.Loop();
+ //gui.Matrix();
+  //gui.Controls();
 
   //println(frameRate);
 }
@@ -104,14 +104,25 @@ void draw() {
 void keyPressed() {
 
   if (key=='p') {
-    if (gui.cp5.get(Matrix.class, "Matrix").isPlaying()) {
-      gui.cp5.get(Matrix.class, "Matrix").pause();
-      pause = true;
-    } else {
-      gui.cp5.get(Matrix.class, "Matrix").play();
-      pause = false;
-    }
-  } else if (key=='0') {
-    gui.cp5.get(Matrix.class, "Matrix").clear();
+   //pause = true; 
+   //gui.cp5.get(Matrix.class, "Matrix").pause();
+    //gui.Matrix();
   }
-}
+  if(key == ' '){
+   //pause = false; 
+   //gui.cp5.get(Matrix.class, "Matrix").play();
+  
+   //gui.Matrix();
+  }
+ 
+    //if (gui.cp5.get(Matrix.class, "Matrix").isPlaying()) {
+    //  gui.cp5.get(Matrix.class, "Matrix").pause();
+    //  pause = true;
+    //} else {
+    //  gui.cp5.get(Matrix.class, "Matrix").play();
+    //  pause = false;
+    //}
+   //else if (key=='0') {
+    //gui.cp5.get(Matrix.class, "Matrix").clear();
+  }
+//}
