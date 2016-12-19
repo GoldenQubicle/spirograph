@@ -1,7 +1,6 @@
 class Gears {
 
-  float RX, RY, C, R, GX, GY, Connect;
-  float P;
+  float RX, RY, C, R, Connect, P;
 
   Gears(float rx, float ry, float p) {
     RX = rx;

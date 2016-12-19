@@ -1,7 +1,6 @@
 class Animation { //<>//
   int Interval, keyFrames, index;
-  int start, delta, pdelta;
-  float TotalTime, Start;
+  float TotalTime;
 
   Animation() {
     TotalTime = 5000;

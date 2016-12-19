@@ -1,6 +1,5 @@
 /*
-CURRENT CONCERNS
-
+TODO BEFORE ANIMATION
  
  
  BRAINDUMP with regard to animation ~  all things are ideally speaking ofc
@@ -11,7 +10,7 @@ CURRENT CONCERNS
  - layer settings on each control point are automatically stored when tweaked
  - being able to loop between individual control points (i.e. not only over start/stop) and tweak settings in realtime
  - save/load animation scripts so I can work on and off 
-
+ 
  
  need to pass  2 layer objects to animation, i.e. start/stop to lerp over settings
  matrix toggles which parameter is iterated over
@@ -27,8 +26,7 @@ CURRENT CONCERNS
  
  
  CONSIDERATIONS
- - unique stokeweight for lines and dots
- - !!would be kinda nice if I could copy gear/petal settings from one layer to a new one (e.g. if press copy, grab settings from id-1).
+
  - finer controls, either by textfield input, or make a 2-staged control (for dotdensity, i.e. toggle ranges 0-1000, than slider per range). 
  - to combat the noticable lag with multiple taxing layers, maybe see if layer can be drawn once, than stored as PImage / pixel array or somehting
  
@@ -70,14 +68,12 @@ void setup() {
 
 void draw() {
   background(BG);
-  
-//println(frameRate);
-for (int i = 0; i < layers.size();i++){
-  layers.get(i).display();
- 
-}
- 
-  gui.BG(BG);  
- gui.ColorFillStroke();
 
+  //println(frameRate);
+  for (int i = 0; i < layers.size(); i++) {
+    layers.get(i).display();
+  }
+
+  gui.BG(BG);  
+  gui.ColorFillStroke();
 }

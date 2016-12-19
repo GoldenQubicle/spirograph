@@ -1,15 +1,15 @@
 class GUI extends PApplet {    //<>//
 
-  int w, h, id, set, prev, bg;
+  int id, set, bg;
   boolean layerlock;
   PApplet parent;
   ControlP5 cp5;
   Slider2D G0, G1, G2, G3;
   Slider P1, P2, P3, LX, LY, SW, D, G1c, G2c, G3c;
-  Toggle Fill, Stroke, Lines, Dots, CS;
+  Toggle Fill, Stroke, Lines, Dots, CS, Cast;
   ColorPicker cp;
   ScrollableList LayerList;
-  Button New, Add;
+  Button New, Copy;
 
   public GUI(PApplet theApplet) {
     super();
@@ -48,6 +48,7 @@ class GUI extends PApplet {    //<>//
     SW = cp5.addSlider("StrokeWeight").setPosition(310, 330).setRange(0, 250).setValue(2).plugTo(this, "Controls").setValue(layers.get(id).Sw);    
     Lines = cp5.addToggle("Lines").setPosition(310, 290).setSize(20, 20).setState(false).plugTo(this, "Controls");  
     Dots = cp5.addToggle("Dots").setPosition(340, 290).setSize(20, 20).setState(false).plugTo(this, "Controls");
+    Cast = cp5.addToggle("Cast").setPosition(370, 290).setSize(20, 20).setState(false).plugTo(this, "Controls");
     // line density for spiro mode
     D = cp5.addSlider("Density").setPosition(10, 490).setSize(450, 15).setRange(0, 100000).plugTo(this, "Controls").setValue(layers.get(id).PlotDots);
     // gear connectors for line & dot mode
@@ -57,7 +58,7 @@ class GUI extends PApplet {    //<>//
     // layers control
     LayerList = cp5.addScrollableList("SwitchLayers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").addItem("Layer 1", layer_1);
     New = cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
-    //cp5.addButton("Hide Layer").setPosition(380, 350).setSize(60, 15);
+    Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15);
     // animation matrix
     //cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGrid(5, lp).setInterval(500).setMode(ControlP5.MULTIPLES).stop().setGap(10, 0)
     //  .set(0, 0, false).isPlaying();
@@ -73,6 +74,35 @@ class GUI extends PApplet {    //<>//
   }
 
   void controlEvent(CallbackEvent theEvent) {
+    if (theEvent.getController().equals(Copy)) {
+      if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
+        Layer New = new Layer();
+        New.gear0.RX = layers.get(id).gear0.RX;
+        New.gear0.RY = layers.get(id).gear0.RY;
+        New.gear1.RX = layers.get(id).gear1.RX;
+        New.gear1.RY = layers.get(id).gear1.RY;
+        New.gear2.RX = layers.get(id).gear2.RX;
+        New.gear2.RY = layers.get(id).gear2.RY;
+        New.gear3.RX = layers.get(id).gear3.RX;
+        New.gear3.RY = layers.get(id).gear3.RY;
+        New.gear1.P = layers.get(id).gear1.P;
+        New.gear2.P = layers.get(id).gear2.P;
+        New.gear3.P = layers.get(id).gear3.P;
+        New.LX = layers.get(id).LX;
+        New.LY = layers.get(id).LY;
+        New.Fill = layers.get(id).Fill;
+        New.Stroke = layers.get(id).Stroke;
+        New.lines = layers.get(id).lines;
+        New.dots = layers.get(id).dots;
+        New.PlotDots = layers.get(id).PlotDots;
+        New.gear1.Connect = layers.get(id).gear1.Connect;
+        New.gear2.Connect = layers.get(id).gear2.Connect;
+        New.gear3.Connect = layers.get(id).gear3.Connect;
+        layers.add(New);
+        LayerList.addItem("Copy " + (id+1), New);
+      }
+    }
+
     if (theEvent.getController().equals(New)) {
       if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
         Layer New = new Layer();
@@ -142,29 +172,41 @@ class GUI extends PApplet {    //<>//
 
   void Controls() {
     if (layerlock == false) {
-      for (int i = 0; i < layers.size(); i++) {
-        layers.get(id).gear0.RX = G0.getArrayValue(0);
-        layers.get(id).gear0.RY = G0.getArrayValue(1);
-        layers.get(id).gear1.RX = G1.getArrayValue(0);
-        layers.get(id).gear1.RY = G1.getArrayValue(1);
-        layers.get(id).gear2.RX = G2.getArrayValue(0);
-        layers.get(id).gear2.RY = G2.getArrayValue(1);
-        layers.get(id).gear3.RX = G3.getArrayValue(0);
-        layers.get(id).gear3.RY = G3.getArrayValue(1);
-        layers.get(id).gear1.P = int(P1.getValue()); // note to self NOT casting to int produces interesting results! 
+      layers.get(id).gear0.RX = G0.getArrayValue(0);
+      layers.get(id).gear0.RY = G0.getArrayValue(1);
+      layers.get(id).gear1.RX = G1.getArrayValue(0);
+      layers.get(id).gear1.RY = G1.getArrayValue(1);
+      layers.get(id).gear2.RX = G2.getArrayValue(0);
+      layers.get(id).gear2.RY = G2.getArrayValue(1);
+      layers.get(id).gear3.RX = G3.getArrayValue(0);
+      layers.get(id).gear3.RY = G3.getArrayValue(1);
+      if (Cast.getState() == false) {
+        layers.get(id).gear1.P = int(P1.getValue()); 
         layers.get(id).gear2.P = int(P2.getValue());
         layers.get(id).gear3.P = int(P3.getValue());
-        layers.get(id).LX = LX.getValue();
-        layers.get(id).LY = LY.getValue();
-        layers.get(id).fill = Fill.getState();
-        layers.get(id).stroke = Stroke.getState();
-        layers.get(id).Sw = SW.getValue();
-        layers.get(id).lines = Lines.getState();
-        layers.get(id).dots = Dots.getState();
-        layers.get(id).PlotDots = D.getValue();
+      }
+      if (Cast.getState() == true) {
+        layers.get(id).gear1.P = (P1.getValue()); 
+        layers.get(id).gear2.P = (P2.getValue());
+        layers.get(id).gear3.P = (P3.getValue());
+      }
+      layers.get(id).LX = LX.getValue();
+      layers.get(id).LY = LY.getValue();
+      layers.get(id).fill = Fill.getState();
+      layers.get(id).stroke = Stroke.getState();
+      layers.get(id).Sw = SW.getValue();
+      layers.get(id).lines = Lines.getState();
+      layers.get(id).dots = Dots.getState();
+      layers.get(id).PlotDots = D.getValue();
+      if (Cast.getState() == false) {
         layers.get(id).gear1.Connect = int(G1c.getValue());
         layers.get(id).gear2.Connect = int(G2c.getValue());
         layers.get(id).gear3.Connect = int(G3c.getValue());
+      }
+      if (Cast.getState() == true) {
+        layers.get(id).gear1.Connect = (G1c.getValue());
+        layers.get(id).gear2.Connect = (G2c.getValue());
+        layers.get(id).gear3.Connect = (G3c.getValue());
       }
     }
   }
