@@ -1,5 +1,12 @@
+import controlP5.*;
+import dawesometoolkit.*;
+import de.looksgood.ani.*;
+import de.looksgood.ani.easing.*;
+//import gifAnimation.*;
 /*
-TODO BEFORE ANIMATION
+RIGHT
+  so the ani works
+  current thinking is to use to matrix the trigger the ani with length of interval
  
  
  BRAINDUMP with regard to animation ~  all things are ideally speaking ofc
@@ -26,14 +33,12 @@ TODO BEFORE ANIMATION
  
  
  CONSIDERATIONS
-
+ 
  - finer controls, either by textfield input, or make a 2-staged control (for dotdensity, i.e. toggle ranges 0-1000, than slider per range). 
  - to combat the noticable lag with multiple taxing layers, maybe see if layer can be drawn once, than stored as PImage / pixel array or somehting
  
  */
-//import gifAnimation.*;
-import controlP5.*;
-import dawesometoolkit.*;
+
 
 //GifMaker gifExport;
 Layer layer_1, layer_2, layer_3;
@@ -41,7 +46,7 @@ ArrayList<Layer> layers;
 DawesomeToolkit ds;
 color BG;
 GUI gui;
-
+Animation gif;
 
 
 void settings() {
@@ -50,6 +55,7 @@ void settings() {
 }
 
 void setup() {
+  Ani.init(this);
 
   BG = 128;  
   layers = new ArrayList();
@@ -62,7 +68,7 @@ void setup() {
   ds = new DawesomeToolkit(this);
   ds.enableLazySave();
   gui = new GUI(this);
-  //gif = new Animation();
+  gif = new Animation();
   //gifExport = new GifMaker(this, "export.gif");
 }
 
@@ -73,7 +79,17 @@ void draw() {
   for (int i = 0; i < layers.size(); i++) {
     layers.get(i).display();
   }
-
+  //gif.display();
   gui.BG(BG);  
   gui.ColorFillStroke();
+}
+
+void keyPressed() {
+  if (key=='p') {
+    if (gui.cp5.get(Matrix.class, "Matrix").isPlaying()) {
+      gui.cp5.get(Matrix.class, "Matrix").pause();
+    } else {
+      gui.cp5.get(Matrix.class, "Matrix").play();
+    }
+  }
 }

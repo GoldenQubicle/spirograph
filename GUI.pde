@@ -6,11 +6,11 @@ class GUI extends PApplet {    //<>//
   ControlP5 cp5;
   Slider2D G0, G1, G2, G3;
   Slider P1, P2, P3, LX, LY, SW, D, G1c, G2c, G3c;
-  Toggle Fill, Stroke, Lines, Dots, CS, Cast;
+  Toggle Fill, Stroke, Lines, Dots, CS, Cast, Pause;
   ColorPicker cp;
   ScrollableList LayerList;
   Button New, Copy;
-
+  Matrix Ani;
   public GUI(PApplet theApplet) {
     super();
     parent = theApplet;
@@ -60,18 +60,21 @@ class GUI extends PApplet {    //<>//
     New = cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
     Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15);
     // animation matrix
-    //cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGrid(5, lp).setInterval(500).setMode(ControlP5.MULTIPLES).stop().setGap(10, 0)
-    //  .set(0, 0, false).isPlaying();
-    //Add = cp5.addButton("Add").setPosition(10, 525).setSize(60, 15).plugTo(this, "Controls");
+    Pause = cp5.addToggle("Play/Pause").setPosition(10,520).setSize(30,15).plugTo(this, "Controls");
+    cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGap(10, 0).setMode(ControlP5.MULTIPLES)
+    .setInterval(gif.Interval).setGrid(gif.keyFrames, 1);
   }
 
   void draw() {
     background(190);
   }
 
-  void BG(color bg) {
-    BG = bg;
+  void Matrix(int theX, int theY) {
+    
+    //layers.get(id).gear0.RX = gif.am[theX][theY];
+    
   }
+
 
   void controlEvent(CallbackEvent theEvent) {
     if (theEvent.getController().equals(Copy)) {
@@ -102,7 +105,6 @@ class GUI extends PApplet {    //<>//
         LayerList.addItem("Copy " + (id+1), New);
       }
     }
-
     if (theEvent.getController().equals(New)) {
       if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
         Layer New = new Layer();
@@ -209,5 +211,9 @@ class GUI extends PApplet {    //<>//
         layers.get(id).gear3.Connect = (G3c.getValue());
       }
     }
+  }
+
+  void BG(color bg) {
+    BG = bg;
   }
 }
