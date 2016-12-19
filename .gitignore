@@ -1,5 +1,7 @@
 *.png
 *.psd
+*.gif
+*.pdf
 
 # Windows image file caches
 Thumbs.db

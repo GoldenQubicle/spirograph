@@ -72,12 +72,12 @@ void draw() {
   background(BG);
   
 //println(frameRate);
-for(Layer myLayer : layers){
-  myLayer.display();
-  gui.ColorFillStroke();
+for (int i = 0; i < layers.size();i++){
+  layers.get(i).display();
+ 
 }
-
+ 
   gui.BG(BG);  
-
+ gui.ColorFillStroke();
 
 }
