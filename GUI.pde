@@ -1,6 +1,6 @@
 class GUI extends PApplet {    //<>//
 
-  int id, set, bg;
+  int id, set, bg, trigger;
   boolean layerlock;
   PApplet parent;
   ControlP5 cp5;
@@ -11,6 +11,7 @@ class GUI extends PApplet {    //<>//
   ScrollableList LayerList;
   Button New, Copy;
   Matrix Ani;
+  Ani Trigger;
   public GUI(PApplet theApplet) {
     super();
     parent = theApplet;
@@ -70,9 +71,13 @@ class GUI extends PApplet {    //<>//
   }
 
   void Matrix(int theX, int theY) {
-    
-    //layers.get(id).gear0.RX = gif.am[theX][theY];
-    
+   
+    if(theX == 3){
+
+     gif.Trigger();
+
+    }
+  
   }
 
 

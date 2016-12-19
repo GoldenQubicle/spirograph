@@ -1,13 +1,11 @@
-import controlP5.*;
-import dawesometoolkit.*;
-import de.looksgood.ani.*;
-import de.looksgood.ani.easing.*;
-//import gifAnimation.*;
 /*
 RIGHT
   so the ani works
   current thinking is to use to matrix the trigger the ani with length of interval
- 
+  also, when 'lock' is active (e.g. top row) than settings are funneled to respective ani
+ ALSO
+ tie start/stop ani to matrix
+ also repeat
  
  BRAINDUMP with regard to animation ~  all things are ideally speaking ofc
  - set length of animation, e.g. 2 seconds
@@ -19,26 +17,15 @@ RIGHT
  - save/load animation scripts so I can work on and off 
  
  
- need to pass  2 layer objects to animation, i.e. start/stop to lerp over settings
- matrix toggles which parameter is iterated over
- 
- instead of calling on the layer objects to draw continously, I need to write each 'lerp frame' to a pixel array / PIamge
- than itterate over that array for the animation
- layers are only on display for tweaking
- 
- STRATEGY
- - attach (multiple) layer object(s) to steps, i.e. when playing it toggles between the two
- - write current display into pixel array / PIMage
- 
- 
- 
- CONSIDERATIONS
- 
+ CONSIDERATIONS 
  - finer controls, either by textfield input, or make a 2-staged control (for dotdensity, i.e. toggle ranges 0-1000, than slider per range). 
  - to combat the noticable lag with multiple taxing layers, maybe see if layer can be drawn once, than stored as PImage / pixel array or somehting
- 
- */
-
+  */
+import controlP5.*;
+import dawesometoolkit.*;
+import de.looksgood.ani.*;
+import de.looksgood.ani.easing.*;
+//import gifAnimation.*;
 
 //GifMaker gifExport;
 Layer layer_1, layer_2, layer_3;
@@ -56,7 +43,6 @@ void settings() {
 
 void setup() {
   Ani.init(this);
-
   BG = 128;  
   layers = new ArrayList();
   layer_1 = new Layer();
@@ -70,16 +56,16 @@ void setup() {
   gui = new GUI(this);
   gif = new Animation();
   //gifExport = new GifMaker(this, "export.gif");
+  
 }
 
 void draw() {
   background(BG);
+ //println(frameRate);
 
-  //println(frameRate);
   for (int i = 0; i < layers.size(); i++) {
     layers.get(i).display();
   }
-  //gif.display();
   gui.BG(BG);  
   gui.ColorFillStroke();
 }
