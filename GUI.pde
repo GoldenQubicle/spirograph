@@ -73,12 +73,24 @@ class GUI extends PApplet {    //<>//
     BG = bg;
   }
 
-
+  void controlEvent(CallbackEvent theEvent) {
+    if (theEvent.getController().equals(CS)) {
+      if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
+        if (CS.getState() == false) {
+          cp.setColorValue(layer_1.Fill);
+        }          
+        if (CS.getState() == true) {
+          cp.setColorValue(layer_1.Stroke);
+        }
+      }
+    }
+  }
 
   void ColorFillStroke() {
     if (CS.getState() == false) {
       layer_1.Fill =  cp.getColorValue() ;
     }
+
     if (CS.getState() == true) {
       layer_1.Stroke =  cp.getColorValue();
     }
@@ -108,7 +120,6 @@ class GUI extends PApplet {    //<>//
       myLayer.gear1.Connect = int(G1c.getValue());
       myLayer.gear2.Connect = int(G2c.getValue());
       myLayer.gear3.Connect = int(G3c.getValue());
-      
     }
   }
 }

@@ -47,7 +47,7 @@ GUI gui;
 
 
 void settings() {
-  size(1024, 1024, P2D);
+  size(512, 512, P2D);
   smooth(8);
 }
 
@@ -71,13 +71,13 @@ void setup() {
 void draw() {
   background(BG);
   
-println(frameRate);
+//println(frameRate);
 for(Layer myLayer : layers){
   myLayer.display();
   gui.ColorFillStroke();
 }
 
   gui.BG(BG);  
-  //gui.Controls();
+
 
 }
