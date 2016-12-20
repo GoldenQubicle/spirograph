@@ -57,7 +57,8 @@ class GUI extends PApplet {    //<>//
     G2c = cp5.addSlider("Connect G2").setPosition(310, 250).setRange(0, 100).plugTo(this, "Controls");
     G3c = cp5.addSlider("Connect G3").setPosition(310, 270).setRange(0, 100).plugTo(this, "Controls");
     // layers control
-    LayerList = cp5.addScrollableList("SwitchLayers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").addItem("Layer 1", layer_1);
+    LayerList = cp5.addScrollableList("SwitchLayers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers");
+        for(int i = 0;i<layers.size();i++){LayerList.addItem("Layer" + (i+1), layers.get(i));}
     New = cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
     Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15);
     // animation matrix
@@ -71,8 +72,8 @@ class GUI extends PApplet {    //<>//
   }
 
   void Matrix(int theX, int theY) {
-
-    gif.Trigger(theX);
+    gif.triggerState(theX);
+    gif.layerState(theX);
   }
 
 
