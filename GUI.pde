@@ -61,9 +61,9 @@ class GUI extends PApplet {    //<>//
     New = cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
     Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15);
     // animation matrix
-    Pause = cp5.addToggle("Play/Pause").setPosition(10,520).setSize(30,15).plugTo(this, "Controls");
+    Pause = cp5.addToggle("Play/Pause").setPosition(10, 520).setSize(30, 15).plugTo(this, "Controls");
     cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGap(10, 0).setMode(ControlP5.MULTIPLES)
-    .setInterval(gif.Interval).setGrid(gif.keyFrames, 1);
+      .setInterval(gif.Interval).setGrid(gif.Triggers, 1);
   }
 
   void draw() {
@@ -71,14 +71,10 @@ class GUI extends PApplet {    //<>//
   }
 
   void Matrix(int theX, int theY) {
-   
-    if(theX == 3){
 
-     gif.Trigger();
-
-    }
-  
+    gif.Trigger(theX);
   }
+
 
 
   void controlEvent(CallbackEvent theEvent) {

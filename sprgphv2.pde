@@ -1,23 +1,11 @@
 /*
-RIGHT
-  so the ani works
-  current thinking is to use to matrix the trigger the ani with length of interval
-  also, when 'lock' is active (e.g. top row) than settings are funneled to respective ani
- ALSO
- tie start/stop ani to matrix
- also repeat
- 
- BRAINDUMP with regard to animation ~  all things are ideally speaking ofc
- - set length of animation, e.g. 2 seconds
- - set x number of control points with 2 being the minimum, i.e. start / stop
- - being able to set different kind of transitions inbetween control points, that is:
- if simply do go from 0 - 60 over 60 frames, than each frame is a difference of 1, i.e. liniear transition
- - layer settings on each control point are automatically stored when tweaked
- - being able to loop between individual control points (i.e. not only over start/stop) and tweak settings in realtime
- - save/load animation scripts so I can work on and off 
- 
+ CURRENT THINKIN with regard to animation 
+ make a trigger object class, which holds an id, in addition to variable values for ani, the ani themselves and additional info like toggles and which layers its associated with
+ then in the animation class, set up for loop which constructs the triggers based on keyframes
+ the big issue is, how to handle tweaking, i.e. store and load settings of triggers
  
  CONSIDERATIONS 
+ - save/load animation scripts so I can work on and off 
  - finer controls, either by textfield input, or make a 2-staged control (for dotdensity, i.e. toggle ranges 0-1000, than slider per range). 
  - to combat the noticable lag with multiple taxing layers, maybe see if layer can be drawn once, than stored as PImage / pixel array or somehting
   */

@@ -1,12 +1,12 @@
 class Layer {
   PVector XY, XY2;  
   float Theta, LX, LY, PlotDots, thelta, Sw, Connect;
+  Gears[] gears;
   Gears gear0, gear1, gear2, gear3;
   color Fill, Stroke;
   boolean stroke, fill, lines, dots;
-  Gears[] gears;
   int ID;
-  
+
   Layer() {
     XY = new PVector();
     XY2 = new PVector();
