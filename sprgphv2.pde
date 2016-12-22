@@ -19,7 +19,8 @@
 
           
 TODO
- - make cast mode boolean in GEAR!object  
+ - make cast mode boolean in GEAR!object
+ - add lerp mode to lines so can achieve dotted lines, akin to plotdot density
        
  CONSIDERATIONS 
  - finer controls, either by textfield input, or make a 2-staged control (for dotdensity, i.e. toggle ranges 0-1000, than slider per range). 
