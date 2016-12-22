@@ -15,8 +15,11 @@
   : trigger.state
   : array numeric values for layer parameters (possibly read from cp5 snapshots?)
   : array ani objects for layer parameters ! gui gives acces to these
+  
+
           
-        
+TODO
+ - make cast mode boolean in GEAR!object  
        
  CONSIDERATIONS 
  - finer controls, either by textfield input, or make a 2-staged control (for dotdensity, i.e. toggle ranges 0-1000, than slider per range). 

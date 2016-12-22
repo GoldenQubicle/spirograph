@@ -1,8 +1,8 @@
 class Gears {
 
-  float RX, RY, C, R, Connect, P;
-
-  Gears(float rx, float ry, float p) {
+  float RX, RY, C, R, Connect;//, P;
+  int P;
+  Gears(float rx, float ry, int p) {
     RX = rx;
     RY = ry;
     P = p;
@@ -11,7 +11,7 @@ class Gears {
   }
 
   float Ratio() {
-    R = 1/(P-1);
+    R = 1/float((P-1));
     return R;
   }
 }
