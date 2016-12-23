@@ -1,6 +1,6 @@
 class Gears {
-
-  float RX, RY, C, R, Connect;//, P;
+  boolean cast;
+  float RX, RY, C, R, Connect, fP;
   int P;
   Gears(float rx, float ry, int p) {
     RX = rx;
@@ -8,10 +8,17 @@ class Gears {
     P = p;
     R = 1/(P-1);
     C = RX * TAU;
+    cast = false;
   }
 
   float Ratio() {
+    if(cast == false){
     R = 1/float((P-1));
+    }
+    if(cast == true){
+        fP = float(P);
+      R = 1/((fP-1));
+    }
     return R;
   }
 }

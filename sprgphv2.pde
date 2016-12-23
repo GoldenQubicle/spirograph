@@ -5,28 +5,28 @@
  then in the animation class, set up for loop which constructs the triggers based on keyframes
  the big issue is, how to handle tweaking, i.e. store and load settings of triggers
  
-     strategy 
-       - cp5 snapshots, possible for layerstates?
-       - if yes, cp5 properties save/load as json - including matrix et al
-       - and custom json for triggerstates (composed of trigger objects)
+ strategy 
+ - cp5 snapshots, possible for layerstates?
+ - if yes, cp5 properties save/load as json - including matrix et al
+ - and custom json for triggerstates (composed of trigger objects)
  
  trigger object
-  : layer.id
-  : trigger.state
-  : array numeric values for layer parameters (possibly read from cp5 snapshots?)
-  : array ani objects for layer parameters ! gui gives acces to these
-  
-
-          
-TODO
+ : layer.id
+ : trigger.state
+ : array numeric values for layer parameters (possibly read from cp5 snapshots?)
+ : array ani objects for layer parameters ! gui gives acces to these
+ 
+ 
+ 
+ TODO
  - make cast mode boolean in GEAR!object
  - add lerp mode to lines so can achieve dotted lines, akin to plotdot density
-       
+ 
  CONSIDERATIONS 
  - finer controls, either by textfield input, or make a 2-staged control (for dotdensity, i.e. toggle ranges 0-1000, than slider per range). 
  - if its becoming laggy with multiple taxing layers, maybe see if layer can be drawn once, than stored as PImage / pixel array or somehting
  - for possible release, make a welcome screen where to choose mode (drawing or animation) and set size (and length & #triggers if applicable)
-  */
+ */
 import controlP5.*;
 import dawesometoolkit.*;
 import de.looksgood.ani.*;
@@ -68,13 +68,13 @@ void setup() {
 
 void draw() {
   background(BG);
- //println(frameRate);
+  //println(frameRate);
 
 
-   for (int i = 0; i < layers.size(); i++) {
+  for (int i = 0; i < layers.size(); i++) {
     layers.get(i).display();
   }
-  
+
   gui.BG(BG);  
   gui.ColorFillStroke();
 }
@@ -83,6 +83,14 @@ void draw() {
 
 
 void keyPressed() {
+  if (key==' ') {
+    if (gui.cp5.get(Matrix.class, "Matrix").isPlaying()) {
+      gui.cp5.get(Matrix.class, "Matrix").stop();
+    } else {
+      gui.cp5.get(Matrix.class, "Matrix").play();
+    }
+  }
+
   if (key=='p') {
     if (gui.cp5.get(Matrix.class, "Matrix").isPlaying()) {
       gui.cp5.get(Matrix.class, "Matrix").pause();
