@@ -91,11 +91,16 @@ void keyPressed() {
     if (play == false) {
       gui.cp5.get(Matrix.class, "Matrix").play();
       play = true;
-     
     } else {
-      gui.cp5.get(Matrix.class, "Matrix").stop();
+      gui.cp5.get(Matrix.class, "Matrix").pause();
       play = false;
     }
-    gui.cp5.get(Toggle.class, "Play/Pause").setState(play); 
+    gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
+  }
+  if (key == 'r') {
+    gui.cp5.get(Matrix.class, "Matrix").stop();
+    if (play == true) {
+      gui.cp5.get(Matrix.class, "Matrix").play();
+    }
   }
 }

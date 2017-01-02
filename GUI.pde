@@ -64,9 +64,9 @@ class GUI extends PApplet {    //<>//
     New = cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
     Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15);
     // animation matrix
-    Pause = cp5.addToggle("Play/Pause").setPosition(10, 520).setSize(30, 15).setState(true);
+    Pause = cp5.addToggle("Play/Pause").setPosition(10, 520).setSize(30, 15).setState(play);
     Ani = cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGap(10, 20).setMode(ControlP5.MULTIPLES)
-      .setInterval(gif.Interval).setGrid(gif.Triggers, gif.Variables).set(0, 0, true);
+      .setInterval(gif.Interval).setGrid(gif.Triggers, gif.Variables).stop();// .set(0, 0, true);
     //Easing = cp5.addScrollableList("Easing Styles").setPosition(50, 580).setType(ScrollableList.DROPDOWN).addItem("test 1", gif.test1).addItem("test 2", gif.test2);
   }
 
@@ -273,17 +273,22 @@ class GUI extends PApplet {    //<>//
     BG = bg;
   }
 
-  void keyPressed() {
-    if (key==' ') {
-      //println(play);
-      if (play == false) {
-        gui.cp5.get(Matrix.class, "Matrix").play();
-        play = true;
-      } else {
-        gui.cp5.get(Matrix.class, "Matrix").stop();
-        play = false;
-      }
-      gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
+void keyPressed() {
+  if (key==' ') {
+    if (play == false) {
+      gui.cp5.get(Matrix.class, "Matrix").play();
+      play = true;
+    } else {
+      gui.cp5.get(Matrix.class, "Matrix").pause();
+      play = false;
+    }
+    gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
+  }
+  if (key == 'r') {
+    gui.cp5.get(Matrix.class, "Matrix").stop();
+    if (play == true) {
+      gui.cp5.get(Matrix.class, "Matrix").play();
     }
   }
+}
 }
