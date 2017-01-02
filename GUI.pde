@@ -1,6 +1,7 @@
 class GUI extends PApplet {    //<>//
 
   int id, set, bg, trigger;
+  float duration;
   boolean layerlock;
   PApplet parent;
   ControlP5 cp5;
@@ -86,9 +87,11 @@ class GUI extends PApplet {    //<>//
     // if and only if there's at least one! active cell in the first column
     // this will perform check on the entire matrix
     // and could thus be used to update the triggers
+
+    // checks which cells in matrix are activated
     for (int x = 0; x < gif.Triggers; x++) {
       for (int y = 0; y < gif.Variables; y++) {
-        //println(Ani.get(x, y), x, y);
+        println(Ani.get(x, y), x, y);
       }
     }
 
@@ -103,8 +106,9 @@ class GUI extends PApplet {    //<>//
       if (forward == 0) {
         //println("hard stop");
       }
-      for (int i =0; i<=forward; i++) {
+      for (int i = 0; i<=forward; i++) {
         if (Ani.get((theX + i), theY) == true) {
+          duration = i * gif.ms; 
           //println(theX +  i + " are active");
         }
       }
@@ -112,6 +116,8 @@ class GUI extends PApplet {    //<>//
       int backward = (gif.Triggers-1) - forward;
       //println(backward);
     }
+
+
 
     //if (Ani.get((theX+1), theY) == true) {
     //  //println(gif.Triggers - theX); 
@@ -121,7 +127,7 @@ class GUI extends PApplet {    //<>//
 
 
     // at the end here I want to pass int start,int end & int theY to gif class to construct trigger 
-    //  gif.triggerState(theX);
+      gif.triggerState(theX, theY, duration);
     //  //gif.layerState(theX);
   }
 
@@ -273,22 +279,22 @@ class GUI extends PApplet {    //<>//
     BG = bg;
   }
 
-void keyPressed() {
-  if (key==' ') {
-    if (play == false) {
-      gui.cp5.get(Matrix.class, "Matrix").play();
-      play = true;
-    } else {
-      gui.cp5.get(Matrix.class, "Matrix").pause();
-      play = false;
+  void keyPressed() {
+    if (key==' ') {
+      if (play == false) {
+        gui.cp5.get(Matrix.class, "Matrix").play();
+        play = true;
+      } else {
+        gui.cp5.get(Matrix.class, "Matrix").pause();
+        play = false;
+      }
+      gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
-    gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
-  }
-  if (key == 'r') {
-    gui.cp5.get(Matrix.class, "Matrix").stop();
-    if (play == true) {
-      gui.cp5.get(Matrix.class, "Matrix").play();
+    if (key == 'r') {
+      gui.cp5.get(Matrix.class, "Matrix").stop();
+      if (play == true) {
+        gui.cp5.get(Matrix.class, "Matrix").play();
+      }
     }
   }
-}
 }

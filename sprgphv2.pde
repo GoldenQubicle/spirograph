@@ -1,34 +1,15 @@
 /*
- CURRENT THINKIN with regard to animation 
- OKAY - unless I find a way to get indiviual layers to act as keyframes, as initially proposed, i.e. pass theX of matrix between the two windows, thats not happening 
- make a trigger object class, which holds an id, in addition to variable values for ani, the ani themselves and which layer its associated with
- then in the animation class, set up for loop which constructs the triggers based on keyframes
- the big issue is, how to handle tweaking, i.e. store and load settings of triggers
- 
- strategy 
- - cp5 snapshots, possible for layerstates?
- - if yes, cp5 properties save/load as json - including matrix et al
- - and custom json for triggerstates (composed of trigger objects)
- 
- trigger object
- : layer.id
- : trigger.state
- : array numeric values for layer parameters (possibly read from cp5 snapshots?)
- : array ani objects for layer parameters ! gui gives acces to these
+Hot Topic Issue
+currently triggers are constructed staticly in Anination, 
+HOWEVER, 
+the constructor itself is already has proper parameters setup,
+as are parameters setup in anit(), and triggerState();
+SO
+question is; how do I pass the appropriate values along the proper variable, 
+while maintaining sorta realtime editting capability?
+*/
  
  
- 
- TODO
- - see of I can rotate the entire drawing 90 degrees to origin is at top / bottom
- - look into lines mode layer sometimes losing its settings when switching back from another layer
- - make cast mode boolean in GEAR!object
- - add lerp mode to lines so can achieve dotted lines, akin to plotdot density
- 
- CONSIDERATIONS 
- - finer controls, either by textfield input, or make a 2-staged control (for dotdensity, i.e. toggle ranges 0-1000, than slider per range). 
- - if its becoming laggy with multiple taxing layers, maybe see if layer can be drawn once, than stored as PImage / pixel array or somehting
- - for possible release, make a welcome screen where to choose mode (drawing or animation) and set size (and length & #triggers if applicable)
- */
 import controlP5.*;
 import dawesometoolkit.*;
 import de.looksgood.ani.*;
