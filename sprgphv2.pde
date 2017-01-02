@@ -19,6 +19,8 @@
  
  
  TODO
+ - see of I can rotate the entire drawing 90 degrees to origin is at top / bottom
+ - look into lines mode layer sometimes losing its settings when switching back from another layer
  - make cast mode boolean in GEAR!object
  - add lerp mode to lines so can achieve dotted lines, akin to plotdot density
  
@@ -41,6 +43,7 @@ color BG;
 GUI gui;
 Animation gif;
 int trigger;
+boolean play;
 
 
 void settings() {
@@ -49,6 +52,7 @@ void settings() {
 }
 
 void setup() {
+  play = false;
   Ani.init(this);
   BG = 128;  
   layers = new ArrayList();
@@ -84,18 +88,14 @@ void draw() {
 
 void keyPressed() {
   if (key==' ') {
-    if (gui.cp5.get(Matrix.class, "Matrix").isPlaying()) {
+    if (play == false) {
+      gui.cp5.get(Matrix.class, "Matrix").play();
+      play = true;
+     
+    } else {
       gui.cp5.get(Matrix.class, "Matrix").stop();
-    } else {
-      gui.cp5.get(Matrix.class, "Matrix").play();
+      play = false;
     }
-  }
-
-  if (key=='p') {
-    if (gui.cp5.get(Matrix.class, "Matrix").isPlaying()) {
-      gui.cp5.get(Matrix.class, "Matrix").pause();
-    } else {
-      gui.cp5.get(Matrix.class, "Matrix").play();
-    }
+    gui.cp5.get(Toggle.class, "Play/Pause").setState(play); 
   }
 }

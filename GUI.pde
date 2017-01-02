@@ -64,7 +64,7 @@ class GUI extends PApplet {    //<>//
     New = cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
     Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15);
     // animation matrix
-    Pause = cp5.addToggle("Play/Pause").setPosition(10, 520).setSize(30, 15).plugTo(this, "Controls");
+    Pause = cp5.addToggle("Play/Pause").setPosition(10, 520).setSize(30, 15).setState(true);
     Ani = cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGap(10, 20).setMode(ControlP5.MULTIPLES)
       .setInterval(gif.Interval).setGrid(gif.Triggers, gif.Variables).set(0, 0, true);
     //Easing = cp5.addScrollableList("Easing Styles").setPosition(50, 580).setType(ScrollableList.DROPDOWN).addItem("test 1", gif.test1).addItem("test 2", gif.test2);
@@ -73,6 +73,7 @@ class GUI extends PApplet {    //<>//
   void draw() {
     background(190);
   }
+
 
   void Matrix(int theX, int theY) {
 
@@ -214,8 +215,8 @@ class GUI extends PApplet {    //<>//
       Dots.setState(layers.get(set).dots);
       D.setValue(layers.get(set).PlotDots);
       G1c.setValue(layers.get(set).gear1.Connect);
-      G3c.setValue(layers.get(set).gear2.Connect);
-      G2c.setValue(layers.get(set).gear3.Connect);
+      G2c.setValue(layers.get(set).gear2.Connect);
+      G3c.setValue(layers.get(set).gear3.Connect);
       if (CS.getState() == false) {
         cp.setColorValue(layers.get(set).Fill);
       }
@@ -270,5 +271,19 @@ class GUI extends PApplet {    //<>//
 
   void BG(color bg) {
     BG = bg;
+  }
+
+  void keyPressed() {
+    if (key==' ') {
+      //println(play);
+      if (play == false) {
+        gui.cp5.get(Matrix.class, "Matrix").play();
+        play = true;
+      } else {
+        gui.cp5.get(Matrix.class, "Matrix").stop();
+        play = false;
+      }
+      gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
+    }
   }
 }
