@@ -12,7 +12,7 @@ class GUI extends PApplet {    //<>//
   ScrollableList LayerList, Easing;
   Button New, Copy;
   Matrix Ani;
-  Ani Trigger;
+
   public GUI(PApplet theApplet) {
     super();
     parent = theApplet;
@@ -77,57 +77,9 @@ class GUI extends PApplet {    //<>//
 
 
   void Matrix(int theX, int theY) {
-
-    // for each theX, need to check to left and right
-    // whether neighbors are active
-    // the number of consequetive active cells need to funneled to ani
-    // so first of all need to calculate number of cells to left & right of current theX
-    // than feed those numbers into for loop which checks
-
-    // if and only if there's at least one! active cell in the first column
-    // this will perform check on the entire matrix
-    // and could thus be used to update the triggers
-
-    // checks which cells in matrix are activated
-    for (int x = 0; x < gif.Triggers; x++) {
-      for (int y = 0; y < gif.Variables; y++) {
-        println(Ani.get(x, y), x, y);
-      }
-    }
-
-    if (theX == 0) {
-      //println("hard start");
-    }
-    //if (theX == gif.Triggers-1){
-    // println("hard stop"); 
-    //}
-    if (theX > 0) {
-      int forward = (gif.Triggers-1) - theX;
-      if (forward == 0) {
-        //println("hard stop");
-      }
-      for (int i = 0; i<=forward; i++) {
-        if (Ani.get((theX + i), theY) == true) {
-          duration = i * gif.ms; 
-          //println(theX +  i + " are active");
-        }
-      }
-
-      int backward = (gif.Triggers-1) - forward;
-      //println(backward);
-    }
-
-
-
-    //if (Ani.get((theX+1), theY) == true) {
-    //  //println(gif.Triggers - theX); 
-    //  } else {
-    //    println("false " + (theX+1));
-    //  };
-
-
-    // at the end here I want to pass int start,int end & int theY to gif class to construct trigger 
-      gif.triggerState(theX, theY, duration);
+    // so when playing, this here passes along theX to the triggers
+    gif.triggerState(theX);
+    
     //  //gif.layerState(theX);
   }
 
@@ -290,7 +242,8 @@ class GUI extends PApplet {    //<>//
       }
       gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
-    if (key == 'r') {
+  if (key == 'r') {
+    gif.TriggerArray();
       gui.cp5.get(Matrix.class, "Matrix").stop();
       if (play == true) {
         gui.cp5.get(Matrix.class, "Matrix").play();

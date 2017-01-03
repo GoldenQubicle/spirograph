@@ -4,38 +4,50 @@ class Animation { //<>//
   float values[];
   Trigger [] triggers;
   Trigger test1, test2;
+  boolean Matrix[][];
 
   Animation() {
-    TotalTime = 2000;
-    Triggers = 4 ;
+    Triggers = 8;
     Variables = 3;
-    
+    Matrix = new boolean[Triggers][Variables];
+
+    TotalTime = 2000;
     Interval = int(TotalTime/Triggers);
     ms = Interval/1000;
-    
+
     triggers = new Trigger[2];
-    test1 = new Trigger(3,1,2);
-    test2 = new Trigger(3,1,2);
+    test1 = new Trigger(3, 1, 2);
+    test2 = new Trigger(3, 1, 2);
     triggers[0] = test1;
     triggers[1] = test2;
 
 
     Ani.setDefaultTimeMode(Ani.SECONDS);
-
   }
 
+  void TriggerArray() {
+    // construct boolean array for triggers
+    for (int x = 0; x < gif.Triggers; x++) {
+      for (int y = 0; y < gif.Variables; y++) {
+        Matrix[x][y] =  gui.Ani.get(x, y);
+        //println(gui.Ani.get(x, y), x, y);
+        //println(Matrix.length);
+      }
+    }
+  }
 
+  // so what I need in here is a function which creates an array of triggers based on the info send from pressing r
 
   void layerState(int trigger) {
     layer_1.gear0.RX = values[trigger];
   }
 
-  void triggerState(int trigger, int variable, float duration) {          
+  void triggerState(int trigger) {
+    // gets passed theX from matrix and checks if its the trigger ID
     for (Trigger myTrigger : triggers) {
       if (trigger == myTrigger.Start) {
-        myTrigger.anit(duration);
+        myTrigger.anit();
       }
-      //Ani.to(layer_1.gear0, ms, "RX", values[trigger], Ani.LINEAR);
     }
   }
 }
@@ -58,19 +70,19 @@ class Trigger {
     Stop = thexstop;
     Var = var;
     // in here want to calculate duration
-    // also, need to make an update function 
+    // also, need to make an update function
   }
 
 
 
-  void anit(float duration) {
-          //first 3 are passed via matrix, last two via yet to constructed gui elements 
-          // Ani.to(
-          
+  void anit() {
+    //first 3 are passed via matrix, last two via yet to constructed gui elements 
+    // Ani.to(
+
     Ani.to(layer_1.gear0, duration, "RX", random(-100, 100), easings[index]); //  easing index needs to be set with gui
     //Ani.to(layer_1.gear0, duration, "RY", random(-100, 100), easings[index]); //  value via snapshot gui - hopefully
     //Ani.to(layer_1.gear1, duration, "P", random(5, 25), easings[index]);      //  which parameter to act on comes in via theY matrix
-                                                                            //  the layer id is going to be passed via trigger object
+    //  the layer id is going to be passed via trigger object
     //println(index);                                                         //  finally length is set by calculating active cells in matrix
   }
 }

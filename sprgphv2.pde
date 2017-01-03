@@ -7,6 +7,14 @@ as are parameters setup in anit(), and triggerState();
 SO
 question is; how do I pass the appropriate values along the proper variable, 
 while maintaining sorta realtime editting capability?
+
+ANSWER:
+
+when I press r, the matrix state is passed! So, based on which cells are active I can construct triggers
+so prolly also want to clear the trigger array upon pressing r
+this saves the hassle of checking whether or not a particular cell is part of existing trigger or not
+SO, at least now I have a way of reliable passing the matrix state along
+OUT OF WHICH i can dynamically construct triggers
 */
  
  
@@ -79,6 +87,8 @@ void keyPressed() {
     gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
   }
   if (key == 'r') {
+    gif.TriggerArray();
+
     gui.cp5.get(Matrix.class, "Matrix").stop();
     if (play == true) {
       gui.cp5.get(Matrix.class, "Matrix").play();
