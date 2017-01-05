@@ -5,6 +5,7 @@ class Animation { //<>//
   Trigger [] triggers;
   Trigger test1, test2;
   boolean Matrix[][];
+  int start, intervals, end, check_fwd, check_bwd;
 
   Animation() {
     Triggers = 8;
@@ -26,12 +27,32 @@ class Animation { //<>//
   }
 
   void TriggerArray() {
-    // construct boolean array for triggers
-    for (int x = 0; x < gif.Triggers; x++) {
-      for (int y = 0; y < gif.Variables; y++) {
+    // construct boolean array 
+    for (int x = 0; x < Triggers; x++) {
+      for (int y = 0; y < Variables; y++) {
         Matrix[x][y] =  gui.Ani.get(x, y);
-        //println(gui.Ani.get(x, y), x, y);
-        //println(Matrix.length);
+      }
+    }
+    for (int y = 0; y < Variables; y++) {
+      for (int x = 0; x < Triggers; x++) {
+        if (Matrix[x][y] == true) {
+          start = x;
+          check_fwd = (Triggers-1)-start;
+
+          for (int i=0; i <= check_fwd; i++) {
+            if (Matrix[start+i][y] == true) {
+              intervals = i+1;
+              }
+          }
+          for(int i = 0;i <= check_fwd;i++){
+           if(Matrix[start+i][y] == false){
+             end = (start+i)-1;
+             break;
+           }
+          }
+          println(start,intervals,end);
+          break;
+        }
       }
     }
   }
