@@ -42,25 +42,24 @@ class Animation { //<>//
           for (int i=0; i <= check_fwd; i++) {
             if (Matrix[start+i][y] == true) {
               intervals = i+1;
-              }
+            }
           }
-          for(int i = 0;i <= check_fwd;i++){
-           if(Matrix[start+i][y] == false){
-             end = (start+i)-1;
-             break;
-           }
+          for (int i = 0; i <= check_fwd; i++) {
+            if (Matrix[start+i][y] == false) {
+              end = (start+i)-1;
+              break;
+            }
           }
-     
           break;
         }
       }
     }
-    test1 = new Trigger(start,intervals);
+    // so this is here temporary, prolly want to move this? 
+    test1 = new Trigger(start, intervals);
     triggers[0] = test1;
-         println(start,intervals,end);
+    //println(start, intervals, end);
   }
 
-  // so what I need in here is a function which creates an array of triggers based on the info send from pressing r
 
   void layerState(int trigger) {
     layer_1.gear0.RX = values[trigger];
@@ -70,7 +69,7 @@ class Animation { //<>//
     // gets passed theX from matrix and checks if its the trigger ID
     for (Trigger myTrigger : triggers) {
       if (trigger == myTrigger.Start) {
-        myTrigger.anit();       
+        myTrigger.anit();
       }
     }
   }
@@ -92,20 +91,11 @@ class Trigger {
   Trigger(int thex, int intervals) {
     Start = thex;
     duration = (float(intervals) * gif.ms);
-
-
   }
 
 
-
   void anit() {
-    //first 3 are passed via matrix, last two via yet to constructed gui elements 
-
-
-    Ani.to(layer_1.gear0, duration, "RX", 200, Ani.LINEAR); //  easing index needs to be set with gui
-    //Ani.to(layer_1.gear0, duration, "RY", random(-100, 100), easings[index]); //  value via snapshot gui - hopefully
-    //Ani.to(layer_1.gear1, duration, "P", random(5, 25), easings[index]);      //  which parameter to act on comes in via theY matrix
-    //  the layer id is going to be passed via trigger object
-                                                        //  finally length is set by calculating active cells in matrix
+   Ani.to(layer_1.gear0, duration, "RX", 100, Ani.LINEAR);                     
+  
   }
 }

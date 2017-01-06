@@ -12,6 +12,7 @@ class GUI extends PApplet {    //<>//
   ScrollableList LayerList, Easing;
   Button New, Copy;
   Matrix Ani;
+  ControllerProperties Layer;
 
   public GUI(PApplet theApplet) {
     super();
@@ -69,6 +70,38 @@ class GUI extends PApplet {    //<>//
     Ani = cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGap(10, 20).setMode(ControlP5.MULTIPLES)
       .setInterval(gif.Interval).setGrid(gif.Triggers, gif.Variables).stop();// .set(0, 0, true);
     //Easing = cp5.addScrollableList("Easing Styles").setPosition(50, 580).setType(ScrollableList.DROPDOWN).addItem("test 1", gif.test1).addItem("test 2", gif.test2);
+
+
+    cp5.getProperties().addSet("controls");
+
+    Layer = cp5.getProperties();
+    // temporary stripping
+    //Layer.remove(G1);
+    //Layer.remove(G2);
+    //Layer.remove(G3);
+    //P1, P2, P3, LX, LY, SW, D, G1c, G2c, G3c;
+    Layer.remove(P1);
+    Layer.remove(P2);
+    Layer.remove(P3);
+    Layer.remove(LX);
+    Layer.remove(LY);
+    Layer.remove(SW);
+    Layer.remove(D);
+    Layer.remove(G1c);
+    Layer.remove(G2c);
+    Layer.remove(G3c);
+    //Fill, Stroke, Lines, Dots, CS, Cast, Pause;
+    Layer.remove(Fill);
+    Layer.remove(Stroke);
+    Layer.remove(Lines);
+    Layer.remove(Dots);
+    Layer.remove(CS);
+    Layer.remove(Cast);
+    Layer.remove(Pause);
+    Layer.remove(cp);
+    Layer.remove(Ani);
+    Layer.remove(LayerList);
+    //Layer.copy(cp5.getController("Radius Gear 0"), "default", "controls");
   }
 
   void draw() {
@@ -79,7 +112,7 @@ class GUI extends PApplet {    //<>//
   void Matrix(int theX, int theY) {
     // so when playing, this here passes along theX to the triggers
     gif.triggerState(theX);
-    
+
     //  //gif.layerState(theX);
   }
 
@@ -187,6 +220,7 @@ class GUI extends PApplet {    //<>//
   }
 
   void Controls() {
+
     if (layerlock == false) {
       layers.get(id).gear0.RX = G0.getArrayValue(0);
       layers.get(id).gear0.RY = G0.getArrayValue(1);
@@ -232,21 +266,25 @@ class GUI extends PApplet {    //<>//
   }
 
   void keyPressed() {
+    if (key == 's') {
+      Layer.saveAs("C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\Layer");
+    }
+
     if (key==' ') {
       if (play == false) {
-        gui.cp5.get(Matrix.class, "Matrix").play();
+        cp5.get(Matrix.class, "Matrix").play();
         play = true;
       } else {
-        gui.cp5.get(Matrix.class, "Matrix").pause();
+        cp5.get(Matrix.class, "Matrix").pause();
         play = false;
       }
       gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
-  if (key == 'r') {
-    gif.TriggerArray();
-      gui.cp5.get(Matrix.class, "Matrix").stop();
+    if (key == 'q') {
+      gif.TriggerArray();
+      cp5.get(Matrix.class, "Matrix").stop();
       if (play == true) {
-        gui.cp5.get(Matrix.class, "Matrix").play();
+        cp5.get(Matrix.class, "Matrix").play();
       }
     }
   }

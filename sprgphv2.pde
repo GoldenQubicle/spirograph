@@ -1,23 +1,16 @@
 /*
-Hot Topic Issue
-currently triggers are constructed staticly in Anination, 
-HOWEVER, 
-the constructor itself is already has proper parameters setup,
-as are parameters setup in anit(), and triggerState();
-SO
-question is; how do I pass the appropriate values along the proper variable, 
-while maintaining sorta realtime editting capability?
 
-ANSWER:
+ ani duration tied to matrix
+ next item is to have the layer reset to initial values when looping
+ i.e. time to start looking into snapshots for layerstates
+ 
+ ALSO
+ multiple triggers per parameter should deffo be a thing
+ question also still is how to actually set trigger on different parameters
+ 
+ */
 
-when I press r, the matrix state is passed! So, based on which cells are active I can construct triggers
-so prolly also want to clear the trigger array upon pressing r
-this saves the hassle of checking whether or not a particular cell is part of existing trigger or not
-SO, at least now I have a way of reliable passing the matrix state along
-OUT OF WHICH i can dynamically construct triggers
-*/
- 
- 
+
 import controlP5.*;
 import dawesometoolkit.*;
 import de.looksgood.ani.*;
@@ -41,6 +34,7 @@ void settings() {
 }
 
 void setup() {
+
   play = false;
   Ani.init(this);
   BG = 128;  
@@ -52,7 +46,7 @@ void setup() {
   //layers.add(layer_2);
   //layers.add(layer_3);
   ds = new DawesomeToolkit(this);
-  ds.enableLazySave();
+  ds.enableLazySave('i',".png");
   gui = new GUI(this);
   gif = new Animation();
   //gifExport = new GifMaker(this, "export.gif");
@@ -76,6 +70,7 @@ void draw() {
 
 
 void keyPressed() {
+  
   if (key==' ') {
     if (play == false) {
       gui.cp5.get(Matrix.class, "Matrix").play();
@@ -86,7 +81,7 @@ void keyPressed() {
     }
     gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
   }
-  if (key == 'r') {
+  if (key == 'q') {
     gif.TriggerArray();
 
     gui.cp5.get(Matrix.class, "Matrix").stop();
