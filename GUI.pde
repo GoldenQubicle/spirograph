@@ -66,13 +66,18 @@ class GUI extends PApplet {    //<>//
     New = cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
     Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15);
     // animation matrix
-    Pause = cp5.addToggle("Play/Pause").setPosition(10, 520).setSize(30, 15).setState(play);
+    Pause = cp5.addToggle("Play/Pause").setPosition(10, 450).setSize(30, 15).setState(play);
     Ani = cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGap(10, 20).setMode(ControlP5.MULTIPLES)
-      .setInterval(gif.Interval).setGrid(gif.Triggers, gif.Variables).stop();// .set(0, 0, true);
+      .setInterval(gif.Interval).setGrid(gif.Triggers, gif.Variables).stop();
+      for(int i = 0; i < gif.Triggers;i++){
+       Ani.set(i,0,true); 
+      }
+      
+      
     //Easing = cp5.addScrollableList("Easing Styles").setPosition(50, 580).setType(ScrollableList.DROPDOWN).addItem("test 1", gif.test1).addItem("test 2", gif.test2);
 
 
-    cp5.getProperties().addSet("controls");
+    //cp5.getProperties().addSet("controls");
 
     Layer = cp5.getProperties();
     // temporary stripping
@@ -101,7 +106,6 @@ class GUI extends PApplet {    //<>//
     Layer.remove(cp);
     Layer.remove(Ani);
     Layer.remove(LayerList);
-    //Layer.copy(cp5.getController("Radius Gear 0"), "default", "controls");
   }
 
   void draw() {
@@ -111,9 +115,9 @@ class GUI extends PApplet {    //<>//
 
   void Matrix(int theX, int theY) {
     // so when playing, this here passes along theX to the triggers
-    gif.triggerState(theX);
+    gif.triggerState(theX, theY);
 
-    //  //gif.layerState(theX);
+      gif.layerState(theX);
   }
 
 
@@ -268,6 +272,7 @@ class GUI extends PApplet {    //<>//
   void keyPressed() {
     if (key == 's') {
       Layer.saveAs("C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\Layer");
+      Layer.saveSnapshotAs("trigger0","layer_1");
     }
 
     if (key==' ') {
@@ -281,6 +286,7 @@ class GUI extends PApplet {    //<>//
       gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
     if (key == 'q') {
+      layer_1.gear0.RX = 75;
       gif.TriggerArray();
       cp5.get(Matrix.class, "Matrix").stop();
       if (play == true) {

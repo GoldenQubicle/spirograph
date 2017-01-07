@@ -1,8 +1,10 @@
 /*
 
- ani duration tied to matrix
- next item is to have the layer reset to initial values when looping
- i.e. time to start looking into snapshots for layerstates
+right, read/write from JSON files works
+question now is, how to handle the layer states
+basically, need a number of buttons to save different states into JSON files
+than, write a function inside trigger class which figures out the different between 2 states
+i.e. take initial value, take end value (based on how many intervals) and subtract
  
  ALSO
  multiple triggers per parameter should deffo be a thing

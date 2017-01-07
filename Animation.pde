@@ -6,12 +6,14 @@ class Animation { //<>//
   Trigger test1, test2;
   boolean Matrix[][];
   int start, intervals, end, check_fwd, check_bwd;
+  JSONObject LayerState;
 
   Animation() {
     Triggers = 8;
     Variables = 3;
     Matrix = new boolean[Triggers][Variables];
-
+    LayerState = loadJSONObject("Layer_state2.json");
+    
     TotalTime = 2000;
     Interval = int(TotalTime/Triggers);
     ms = float(Interval)/1000;
@@ -62,14 +64,20 @@ class Animation { //<>//
 
 
   void layerState(int trigger) {
-    layer_1.gear0.RX = values[trigger];
+
+    if (trigger == 0) {
+      layer_1.gear0.RX = LayerState.getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0);
+    }
   }
 
-  void triggerState(int trigger) {
+
+  void triggerState(int trigger, int variable) {
     // gets passed theX from matrix and checks if its the trigger ID
-    for (Trigger myTrigger : triggers) {
-      if (trigger == myTrigger.Start) {
-        myTrigger.anit();
+    if (variable > 0) { 
+      for (Trigger myTrigger : triggers) {
+        if (trigger == myTrigger.Start) {
+          myTrigger.anit();
+        }
       }
     }
   }
@@ -95,7 +103,6 @@ class Trigger {
 
 
   void anit() {
-   Ani.to(layer_1.gear0, duration, "RX", 100, Ani.LINEAR);                     
-  
+    Ani.to(layer_1.gear0, duration, "RX", 100, Ani.LINEAR);
   }
 }
