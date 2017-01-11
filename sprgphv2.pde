@@ -1,14 +1,31 @@
 /*
+quick braindump
+gear0 is default, i.e. present on matrix
+beyond that, make variable selector, i.e. simply construct new matrix everytime variable is added or deleted
+
+on play
+  - save layerstates into json
+  - construct trigger array
+on pause/stop
+  - clear trigger array
+
+ALSO
+ - first cell trigger doesnt work ~ welp this appears a bug with Matrix, even example sketch doesnt print 0 when stop/start is used
+ - reset doesnt work when last cell active ~ this is a timing issue, i.e. ani is still accessing parameter when reset occurs quit and dirty solution is to substract x value from duration if cell = 7 or something like that
+ - how to deselect buttonbar, i.e. is it actually usefull?
+ - wouldnt it make more sense to use ani from? 
+    
 
 right, read/write from JSON files works
 question now is, how to handle the layer states
 basically, need a number of buttons to save different states into JSON files
 than, write a function inside trigger class which figures out the different between 2 states
 i.e. take initial value, take end value (based on how many intervals) and subtract
+
  
- ALSO
- multiple triggers per parameter should deffo be a thing
- question also still is how to actually set trigger on different parameters
+ 
+ todo
+ cast toggle mode per individual gear / gear connector
  
  */
 
@@ -65,7 +82,7 @@ void draw() {
   }
 
   gui.BG(BG);  
-  gui.ColorFillStroke();
+  //gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
 }
 
 

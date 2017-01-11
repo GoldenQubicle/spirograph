@@ -1,31 +1,26 @@
 class Animation { //<>//
   int Interval, Triggers, Variables;
-  float TotalTime, temp, ms;
+  float TotalTime, temp, aniInterval;
   float values[];
   Trigger [] triggers;
   Trigger test1, test2;
   boolean Matrix[][];
   int start, intervals, end, check_fwd, check_bwd;
-  JSONObject LayerState;
 
   Animation() {
+    Ani.setDefaultTimeMode(Ani.SECONDS);
+    TotalTime = 2000;
     Triggers = 8;
+    Interval = int(TotalTime/Triggers);
+    aniInterval = float(Interval)/1000;
     Variables = 3;
     Matrix = new boolean[Triggers][Variables];
-    LayerState = loadJSONObject("Layer_state2.json");
-    
-    TotalTime = 2000;
-    Interval = int(TotalTime/Triggers);
-    ms = float(Interval)/1000;
-
     triggers = new Trigger[1];
-    //test1 = new Trigger(3, 4);
-    //test2 = new Trigger(3, 1, 2);
-    //triggers[0] = test1;
-    //triggers[1] = test2;
+    
+  }
 
-
-    Ani.setDefaultTimeMode(Ani.SECONDS);
+  void setLayerState() {
+    //layer_1.gear0.RX = LayerState.getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0);
   }
 
   void TriggerArray() {
@@ -35,20 +30,23 @@ class Animation { //<>//
         Matrix[x][y] =  gui.Ani.get(x, y);
       }
     }
-    for (int y = 0; y < Variables; y++) {
+    for (int y = 1; y < Variables; y++) {
       for (int x = 0; x < Triggers; x++) {
         if (Matrix[x][y] == true) {
           start = x;
           check_fwd = (Triggers-1)-start;
+          //println("start = " + start);
 
           for (int i=0; i <= check_fwd; i++) {
             if (Matrix[start+i][y] == true) {
               intervals = i+1;
+              //println("intervals = " + intervals);
             }
           }
           for (int i = 0; i <= check_fwd; i++) {
             if (Matrix[start+i][y] == false) {
               end = (start+i)-1;
+              //println("end = " + end);
               break;
             }
           }
@@ -64,9 +62,11 @@ class Animation { //<>//
 
 
   void layerState(int trigger) {
-
+    // this is reset when looped
     if (trigger == 0) {
-      layer_1.gear0.RX = LayerState.getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0);
+      JSONObject LayerState1;
+      LayerState1 = loadJSONObject("LayerState1.json");
+      layer_1.gear0.RX = LayerState1.getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0);
     }
   }
 
@@ -98,7 +98,7 @@ class Trigger {
 
   Trigger(int thex, int intervals) {
     Start = thex;
-    duration = (float(intervals) * gif.ms);
+    duration = (float(intervals) * gif.aniInterval);
   }
 
 

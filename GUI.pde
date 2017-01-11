@@ -13,6 +13,7 @@ class GUI extends PApplet {    //<>//
   Button New, Copy;
   Matrix Ani;
   ControllerProperties Layer;
+  ButtonBar LayerStates;
 
   public GUI(PApplet theApplet) {
     super();
@@ -65,25 +66,59 @@ class GUI extends PApplet {    //<>//
     }
     New = cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
     Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15);
-    // animation matrix
+    // merely an indicator atm
     Pause = cp5.addToggle("Play/Pause").setPosition(10, 450).setSize(30, 15).setState(play);
+    // animation matrix
     Ani = cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGap(10, 20).setMode(ControlP5.MULTIPLES)
       .setInterval(gif.Interval).setGrid(gif.Triggers, gif.Variables).stop();
-      for(int i = 0; i < gif.Triggers;i++){
-       Ani.set(i,0,true); 
+    for (int i = 0; i < gif.Triggers; i++) {
+      Ani.set(i, 0, true);
+    }
+    // buttonbar to save layerstates
+    LayerStates = cp5.addButtonBar("ls").setPosition(10, 520).setSize(400, 20);
+    String [] button;
+    button = new String[gif.Triggers];
+    for (int i = 0; i < gif.Triggers; i++) {       
+      button[i] = "LS" + (i+1);
+    }
+    LayerStates.addItems(button);
+    LayerStates.onClick(new CallbackListener() {
+      public void controlEvent(CallbackEvent ev) {
+        ButtonBar LayerStates = (ButtonBar)ev.getController();
+        //println(LayerStates.getValue());
+        //    print(Layer.getSnapshotIndices());
+        if (LayerStates.getValue() == 3) {
+          Layer.getSnapshot("LayerState3").get(G0);
+          println(Layer.getSnapshot("LayerState3"));
+          //println(Layer.getSnapshot("LayerState3").get(G0));
+          //println(Layer.getSnapshot("LayerState3").getProperty(G0,"arrayValue(1)"));
+          //G0.setArrayValue() = Layer.getSnapshot("LayerState3").getProperty(G0, "arrayValue");
+        };
       }
-      
-      
+    }
+    );
+    //LayerStates.onMove(new CallbackListener() {
+    //  public void controlEvent(CallbackEvent ev) {
+    //    ButtonBar LayerStates = (ButtonBar)ev.getController();
+    //    if (LayerStates.hover() == 5) {
+    //      gif.setLayerState();
+    //    }
+    //println("hello ", LayerStates.hover());
+    // function which automatically loads JSON on hoover?
+
+
+
     //Easing = cp5.addScrollableList("Easing Styles").setPosition(50, 580).setType(ScrollableList.DROPDOWN).addItem("test 1", gif.test1).addItem("test 2", gif.test2);
 
-
-    //cp5.getProperties().addSet("controls");
-
     Layer = cp5.getProperties();
-    // temporary stripping
-    //Layer.remove(G1);
-    //Layer.remove(G2);
-    //Layer.remove(G3);
+    //temporary stripping
+    Layer.remove(G0, "setMinY", "getMinY"); 
+    Layer.remove(G0, "setMinX", "getMinX"); 
+    Layer.remove(G0, "setMaxY", "getMaxY"); 
+    Layer.remove(G0, "setMaxX", "getMaxX"); 
+    Layer.remove(G1);
+    Layer.remove(G2);
+    Layer.remove(G3);
     //P1, P2, P3, LX, LY, SW, D, G1c, G2c, G3c;
     Layer.remove(P1);
     Layer.remove(P2);
@@ -106,28 +141,61 @@ class GUI extends PApplet {    //<>//
     Layer.remove(cp);
     Layer.remove(Ani);
     Layer.remove(LayerList);
+    Layer.remove(Copy);
+    Layer.remove(New);
+    Layer.remove(LayerStates);
+
+
+    // saves new JSON for each layerstate, i.e. triggers, disabled for now
+    String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
+    for (int i=0; i < gif.Triggers; i++) {
+      //Layer.saveAs(JSON+(i+1));
+      //Layer.saveSnapshotAs(JSON, "i");
+      Layer.setSnapshot("LayerState" + i);
+      Layer.saveSnapshotAs(JSON + i, "LayerState" + i);
+    }
+    // so I need to now LOAD these new JSON in order to put them into jsonarray?!
+    print(Layer.getSnapshotIndices());
+    //Layer.getSnapshot("LayerState" + 3).get(G0).get(1);
   }
 
   void draw() {
     background(190);
   }
 
+  void keyPressed() {
+    if (key == 's') {
+      Layer = cp5.getProperties();
+      //Layer.saveAs("C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\Layer");
+    }
+
+    if (key==' ') {
+      if (play == false) {
+        gif.TriggerArray();
+        cp5.get(Matrix.class, "Matrix").play();
+        play = true;
+      } else {
+        cp5.get(Matrix.class, "Matrix").pause();
+        play = false;
+      }
+      gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
+    }
+    if (key == 'q') {
+      layer_1.gear0.RX = 75;
+      cp5.get(Matrix.class, "Matrix").stop();
+      if (play == true) {
+        cp5.get(Matrix.class, "Matrix").play();
+      }
+    }
+  }
 
   void Matrix(int theX, int theY) {
     // so when playing, this here passes along theX to the triggers
     gif.triggerState(theX, theY);
-
-      gif.layerState(theX);
+    gif.layerState(theX);
   }
 
-
-
   void controlEvent(CallbackEvent theEvent) {
-    if (theEvent.getController().equals(Ani)) {
-      //println((Ani.get(theX,theY)));
-    }
-
-
     if (theEvent.getController().equals(Copy)) {
       if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
         Layer New = new Layer();
@@ -224,7 +292,6 @@ class GUI extends PApplet {    //<>//
   }
 
   void Controls() {
-
     if (layerlock == false) {
       layers.get(id).gear0.RX = G0.getArrayValue(0);
       layers.get(id).gear0.RY = G0.getArrayValue(1);
@@ -267,31 +334,5 @@ class GUI extends PApplet {    //<>//
 
   void BG(color bg) {
     BG = bg;
-  }
-
-  void keyPressed() {
-    if (key == 's') {
-      Layer.saveAs("C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\Layer");
-      Layer.saveSnapshotAs("trigger0","layer_1");
-    }
-
-    if (key==' ') {
-      if (play == false) {
-        cp5.get(Matrix.class, "Matrix").play();
-        play = true;
-      } else {
-        cp5.get(Matrix.class, "Matrix").pause();
-        play = false;
-      }
-      gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
-    }
-    if (key == 'q') {
-      layer_1.gear0.RX = 75;
-      gif.TriggerArray();
-      cp5.get(Matrix.class, "Matrix").stop();
-      if (play == true) {
-        cp5.get(Matrix.class, "Matrix").play();
-      }
-    }
   }
 }
