@@ -1,29 +1,18 @@
 /*
-quick braindump
-gear0 is default, i.e. present on matrix
-beyond that, make variable selector, i.e. simply construct new matrix everytime variable is added or deleted
+so lets seee. . 
+however convoluted, it seems like reading/writing JSON files to act as layerstates is working
+HOWEVER
+atm if I continue in current structure Id end up with 4x the more-or-less the same code for loading the JSON values, namely in
+  - gif setLayerState
+  - gif LayerState
+  - gui keyPressed
+  - trigger value
+MOREOVER
+Id also want the controls to update between layerstates, so Id have to made another function similar to switchlayers, which would be another duplicate
 
-on play
-  - save layerstates into json
-  - construct trigger array
-on pause/stop
-  - clear trigger array
 
-ALSO
- - first cell trigger doesnt work ~ welp this appears a bug with Matrix, even example sketch doesnt print 0 when stop/start is used
- - reset doesnt work when last cell active ~ this is a timing issue, i.e. ani is still accessing parameter when reset occurs quit and dirty solution is to substract x value from duration if cell = 7 or something like that
- - how to deselect buttonbar, i.e. is it actually usefull?
- - wouldnt it make more sense to use ani from? 
+
     
-
-right, read/write from JSON files works
-question now is, how to handle the layer states
-basically, need a number of buttons to save different states into JSON files
-than, write a function inside trigger class which figures out the different between 2 states
-i.e. take initial value, take end value (based on how many intervals) and subtract
-
- 
- 
  todo
  cast toggle mode per individual gear / gear connector
  

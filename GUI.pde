@@ -9,11 +9,13 @@ class GUI extends PApplet {    //<>//
   Slider P1, P2, P3, LX, LY, SW, D, G1c, G2c, G3c;
   Toggle Fill, Stroke, Lines, Dots, CS, Cast, Pause;
   ColorPicker cp;
+  ColorWheel cw;
   ScrollableList LayerList, Easing;
-  Button New, Copy;
+  Button New, Copy, Save;
   Matrix Ani;
   ControllerProperties Layer;
-  ButtonBar LayerStates;
+  ButtonBar LayerState;
+  JSONArray LayerStates;
 
   public GUI(PApplet theApplet) {
     super();
@@ -30,7 +32,7 @@ class GUI extends PApplet {    //<>//
     set = 0;
     cp5 = new ControlP5(this);
     // color
-    cp5.addColorWheel("BackGround").setPosition(302, 10).setValue(128).plugTo(this, "BG");
+    cw = cp5.addColorWheel("BackGround").setPosition(302, 10).setValue(128).plugTo(this, "BG");
     cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layers.get(id).Fill);
     CS = cp5.addToggle("Switch").setPosition(270, 10).setSize(25, 25).setState(false);
     // gear0
@@ -66,49 +68,24 @@ class GUI extends PApplet {    //<>//
     }
     New = cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
     Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15);
+
     // merely an indicator atm
     Pause = cp5.addToggle("Play/Pause").setPosition(10, 450).setSize(30, 15).setState(play);
+    Save = cp5.addButton("Save").setPosition(50, 450).setSize(60, 15);
     // animation matrix
     Ani = cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGap(10, 20).setMode(ControlP5.MULTIPLES)
       .setInterval(gif.Interval).setGrid(gif.Triggers, gif.Variables).stop();
     for (int i = 0; i < gif.Triggers; i++) {
       Ani.set(i, 0, true);
     }
-    // buttonbar to save layerstates
-    LayerStates = cp5.addButtonBar("ls").setPosition(10, 520).setSize(400, 20);
+    // buttonbar to toggle between layerstates
+    LayerState = cp5.addButtonBar("ls").setPosition(10, 520).setSize(400, 20);
     String [] button;
     button = new String[gif.Triggers];
     for (int i = 0; i < gif.Triggers; i++) {       
       button[i] = "LS" + (i+1);
     }
-    LayerStates.addItems(button);
-    LayerStates.onClick(new CallbackListener() {
-      public void controlEvent(CallbackEvent ev) {
-        ButtonBar LayerStates = (ButtonBar)ev.getController();
-        //println(LayerStates.getValue());
-        //    print(Layer.getSnapshotIndices());
-        if (LayerStates.getValue() == 3) {
-          Layer.getSnapshot("LayerState3").get(G0);
-          println(Layer.getSnapshot("LayerState3"));
-          //println(Layer.getSnapshot("LayerState3").get(G0));
-          //println(Layer.getSnapshot("LayerState3").getProperty(G0,"arrayValue(1)"));
-          //G0.setArrayValue() = Layer.getSnapshot("LayerState3").getProperty(G0, "arrayValue");
-        };
-      }
-    }
-    );
-    //LayerStates.onMove(new CallbackListener() {
-    //  public void controlEvent(CallbackEvent ev) {
-    //    ButtonBar LayerStates = (ButtonBar)ev.getController();
-    //    if (LayerStates.hover() == 5) {
-    //      gif.setLayerState();
-    //    }
-    //println("hello ", LayerStates.hover());
-    // function which automatically loads JSON on hoover?
-
-
-
-    //Easing = cp5.addScrollableList("Easing Styles").setPosition(50, 580).setType(ScrollableList.DROPDOWN).addItem("test 1", gif.test1).addItem("test 2", gif.test2);
+    LayerState.addItems(button);
 
     Layer = cp5.getProperties();
     //temporary stripping
@@ -139,24 +116,26 @@ class GUI extends PApplet {    //<>//
     Layer.remove(Cast);
     Layer.remove(Pause);
     Layer.remove(cp);
+    Layer.remove(cw);
     Layer.remove(Ani);
     Layer.remove(LayerList);
     Layer.remove(Copy);
     Layer.remove(New);
-    Layer.remove(LayerStates);
+    Layer.remove(LayerState);
 
 
-    // saves new JSON for each layerstate, i.e. triggers, disabled for now
+    // saves new JSON for each layerstate, i.e. triggers
+    LayerStates = new JSONArray();
+    JSONObject ls;
     String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
     for (int i=0; i < gif.Triggers; i++) {
-      //Layer.saveAs(JSON+(i+1));
-      //Layer.saveSnapshotAs(JSON, "i");
-      Layer.setSnapshot("LayerState" + i);
-      Layer.saveSnapshotAs(JSON + i, "LayerState" + i);
+      Layer.saveAs(JSON+i);
+      ls = new JSONObject();
+      ls = loadJSONObject(JSON + i + ".json");
+      LayerStates.setJSONObject(i, ls);
     }
-    // so I need to now LOAD these new JSON in order to put them into jsonarray?!
-    print(Layer.getSnapshotIndices());
-    //Layer.getSnapshot("LayerState" + 3).get(G0).get(1);
+    saveJSONArray(LayerStates, "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerStates.json");
+    LayerStates = loadJSONArray("C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerStates.json");
   }
 
   void draw() {
@@ -164,11 +143,6 @@ class GUI extends PApplet {    //<>//
   }
 
   void keyPressed() {
-    if (key == 's') {
-      Layer = cp5.getProperties();
-      //Layer.saveAs("C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\Layer");
-    }
-
     if (key==' ') {
       if (play == false) {
         gif.TriggerArray();
@@ -181,7 +155,8 @@ class GUI extends PApplet {    //<>//
       gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
     if (key == 'q') {
-      layer_1.gear0.RX = 75;
+      layer_1.gear0.RX = LayerStates.getJSONObject(0).getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0);
+      layer_1.gear0.RY = LayerStates.getJSONObject(0).getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(1);
       cp5.get(Matrix.class, "Matrix").stop();
       if (play == true) {
         cp5.get(Matrix.class, "Matrix").play();
@@ -196,6 +171,28 @@ class GUI extends PApplet {    //<>//
   }
 
   void controlEvent(CallbackEvent theEvent) {
+    if (theEvent.getController().equals(Save)) {
+      if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
+        JSONObject ls;
+        String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
+        int i;
+        i = int(LayerState.getValue());
+        Layer.saveAs(JSON+i);
+        ls = new JSONObject();
+        ls = loadJSONObject(JSON + i + ".json");
+        LayerStates.setJSONObject(i, ls);
+        saveJSONArray(LayerStates, "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerStates.json");
+        LayerStates = loadJSONArray("C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerStates.json");
+      }
+    }
+
+    if (theEvent.getController().equals(LayerState)) {
+      if (theEvent.getAction() == ControlP5.ACTION_CLICK) {
+        gif.LayerState = LayerState.getValue();
+        gif.setLayerState(gif.LayerState);
+      }
+    }
+
     if (theEvent.getController().equals(Copy)) {
       if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
         Layer New = new Layer();

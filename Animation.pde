@@ -1,6 +1,6 @@
 class Animation { //<>//
   int Interval, Triggers, Variables;
-  float TotalTime, temp, aniInterval;
+  float TotalTime, temp, aniInterval, LayerState;
   float values[];
   Trigger [] triggers;
   Trigger test1, test2;
@@ -19,8 +19,11 @@ class Animation { //<>//
     
   }
 
-  void setLayerState() {
-    //layer_1.gear0.RX = LayerState.getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0);
+  void setLayerState(float buttonbar){
+   int layerstate;
+   layerstate = int(buttonbar);
+ layer_1.gear0.RX = gui.LayerStates.getJSONObject(layerstate).getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0);
+
   }
 
   void TriggerArray() {
@@ -55,7 +58,7 @@ class Animation { //<>//
       }
     }
     // so this is here temporary, prolly want to move this? 
-    test1 = new Trigger(start, intervals);
+    test1 = new Trigger(start, intervals, end);
     triggers[0] = test1;
     //println(start, intervals, end);
   }
@@ -64,9 +67,7 @@ class Animation { //<>//
   void layerState(int trigger) {
     // this is reset when looped
     if (trigger == 0) {
-      JSONObject LayerState1;
-      LayerState1 = loadJSONObject("LayerState1.json");
-      layer_1.gear0.RX = LayerState1.getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0);
+      layer_1.gear0.RX = gui.LayerStates.getJSONObject(trigger).getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0);
     }
   }
 
@@ -96,13 +97,18 @@ class Trigger {
   int index;
   Easing currentEasing = easings[index];
 
-  Trigger(int thex, int intervals) {
-    Start = thex;
+  Trigger(int start, int intervals, int end) {
+    Start = start;
+    Stop = end;
     duration = (float(intervals) * gif.aniInterval);
+    value = gui.LayerStates.getJSONObject(end).getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0);
+ 
   }
 
 
   void anit() {
-    Ani.to(layer_1.gear0, duration, "RX", 100, Ani.LINEAR);
+    Ani.to(layer_1.gear0, duration, "RX", value, Ani.LINEAR);
+    println(value);
   }
+
 }
