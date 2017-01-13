@@ -14,6 +14,7 @@ class GUI extends PApplet {    //<>//
   Button New, Copy, Save;
   Matrix Ani;
   ControllerProperties Layer;
+  ControllerProperty test;
   ButtonBar LayerState;
   JSONArray LayerStates;
 
@@ -36,7 +37,7 @@ class GUI extends PApplet {    //<>//
     cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layers.get(id).Fill);
     CS = cp5.addToggle("Switch").setPosition(270, 10).setSize(25, 25).setState(false);
     // gear0
-    G0 = cp5.addSlider2D("Radius Gear 0").setMinMax(-512, -512, 512, 512).setPosition(10, 90).setCaptionLabel("Radius Gear 0").plugTo(this, "Controls").setValue(layers.get(id).gear0.RX, layers.get(id).gear0.RY);
+    G0 = cp5.addSlider2D("Radius Gear 0").setMinMax(0, 0, 1024, 1024).setPosition(10, 90).setCaptionLabel("Radius Gear 0").plugTo(this, "Controls").setValue(layers.get(id).gear0.RX, layers.get(id).gear0.RY);
     //// gear1
     G1 = cp5.addSlider2D("Radius Gear1").setMinMax(-150, -150, 150, 150).setPosition(160, 90).setCaptionLabel("Radius Gear 1").plugTo(this, "Controls").setValue(layers.get(id).gear1.RX, layers.get(id).gear1.RY);
     P1 = cp5.addSlider("Petals_1").setRange(0, 50).setPosition(160, 80).setCaptionLabel("Petals").plugTo(this, "Controls").setValue(layers.get(id).gear1.P);
@@ -68,7 +69,6 @@ class GUI extends PApplet {    //<>//
     }
     New = cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15);
     Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15);
-
     // merely an indicator atm
     Pause = cp5.addToggle("Play/Pause").setPosition(10, 450).setSize(30, 15).setState(play);
     Save = cp5.addButton("Save").setPosition(50, 450).setSize(60, 15);
@@ -122,20 +122,15 @@ class GUI extends PApplet {    //<>//
     Layer.remove(Copy);
     Layer.remove(New);
     Layer.remove(LayerState);
+    Layer.remove(Save);
 
-
-    // saves new JSON for each layerstate, i.e. triggers
-    LayerStates = new JSONArray();
-    JSONObject ls;
+    // saves new JSON for each layerstate
     String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
     for (int i=0; i < gif.Triggers; i++) {
-      Layer.saveAs(JSON+i);
-      ls = new JSONObject();
-      ls = loadJSONObject(JSON + i + ".json");
-      LayerStates.setJSONObject(i, ls);
+      Layer.setSnapshot("LayerState" + i);
+      Layer.saveAs(JSON + i);
     }
-    saveJSONArray(LayerStates, "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerStates.json");
-    LayerStates = loadJSONArray("C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerStates.json");
+    println(Layer.getSnapshotIndices());
   }
 
   void draw() {
@@ -155,8 +150,8 @@ class GUI extends PApplet {    //<>//
       gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
     if (key == 'q') {
-      layer_1.gear0.RX = LayerStates.getJSONObject(0).getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0);
-      layer_1.gear0.RY = LayerStates.getJSONObject(0).getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(1);
+    String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState0";
+    Layer.load(JSON);
       cp5.get(Matrix.class, "Matrix").stop();
       if (play == true) {
         cp5.get(Matrix.class, "Matrix").play();
@@ -173,26 +168,25 @@ class GUI extends PApplet {    //<>//
   void controlEvent(CallbackEvent theEvent) {
     if (theEvent.getController().equals(Save)) {
       if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
-        JSONObject ls;
         String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
         int i;
         i = int(LayerState.getValue());
-        Layer.saveAs(JSON+i);
-        ls = new JSONObject();
-        ls = loadJSONObject(JSON + i + ".json");
-        LayerStates.setJSONObject(i, ls);
-        saveJSONArray(LayerStates, "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerStates.json");
-        LayerStates = loadJSONArray("C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerStates.json");
+        Layer.setSnapshot("LayerState" + i);
+        Layer.saveAs(JSON + i);
       }
     }
 
     if (theEvent.getController().equals(LayerState)) {
       if (theEvent.getAction() == ControlP5.ACTION_CLICK) {
-        gif.LayerState = LayerState.getValue();
-        gif.setLayerState(gif.LayerState);
+        String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
+        int i;
+        i = int(LayerState.getValue());
+        Layer.load(JSON + i);
+
+        //gif.LayerState = LayerState.getValue();
+        //gif.setLayerState(gif.LayerState);
       }
     }
-
     if (theEvent.getController().equals(Copy)) {
       if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
         Layer New = new Layer();
@@ -290,8 +284,9 @@ class GUI extends PApplet {    //<>//
 
   void Controls() {
     if (layerlock == false) {
-      layers.get(id).gear0.RX = G0.getArrayValue(0);
-      layers.get(id).gear0.RY = G0.getArrayValue(1);
+      layers.get(id).gear0.RX = map(G0.getArrayValue(0), 0, 1024, -512, 512);
+      layers.get(id).gear0.RY = map(G0.getArrayValue(1), 0, 1024, -512, 512);
+      ;
       layers.get(id).gear1.RX = G1.getArrayValue(0);
       layers.get(id).gear1.RY = G1.getArrayValue(1);
       layers.get(id).gear2.RX = G2.getArrayValue(0);

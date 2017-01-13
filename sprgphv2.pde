@@ -1,18 +1,15 @@
 /*
-so lets seee. . 
-however convoluted, it seems like reading/writing JSON files to act as layerstates is working
-HOWEVER
-atm if I continue in current structure Id end up with 4x the more-or-less the same code for loading the JSON values, namely in
-  - gif setLayerState
-  - gif LayerState
-  - gui keyPressed
-  - trigger value
-MOREOVER
-Id also want the controls to update between layerstates, so Id have to made another function similar to switchlayers, which would be another duplicate
-
-
-
-    
+okay layerstates seem to be working for real now, 
+HOWEVER - need to work out how to do the remapping of slider2d values properly, i.e. how to do remapping for the ani - argueably quite important =)
+ 
+also if I continue in current structure Id end up with 4x the more-or-less the same code for loading the JSON values, namely in
+ - gif setLayerState
+ - gif LayerState
+ - gui keyPressed
+ - trigger value
+and I'd also want to changes made to say, layerstate 4 to propegate throughout 5 and onwards BUT ONLY on one paramater? - is that even possible. . ?
+ 
+ 
  todo
  cast toggle mode per individual gear / gear connector
  
@@ -32,7 +29,6 @@ DawesomeToolkit ds;
 color BG;
 GUI gui;
 Animation gif;
-int trigger;
 boolean play;
 
 
@@ -54,11 +50,10 @@ void setup() {
   //layers.add(layer_2);
   //layers.add(layer_3);
   ds = new DawesomeToolkit(this);
-  ds.enableLazySave('i',".png");
+  ds.enableLazySave('i', ".png");
   gui = new GUI(this);
   gif = new Animation();
   //gifExport = new GifMaker(this, "export.gif");
-  trigger = 0;
 }
 
 void draw() {
@@ -78,7 +73,7 @@ void draw() {
 
 
 void keyPressed() {
-  
+
   if (key==' ') {
     if (play == false) {
       gui.cp5.get(Matrix.class, "Matrix").play();

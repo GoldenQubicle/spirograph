@@ -16,16 +16,8 @@ class Animation { //<>//
     Variables = 3;
     Matrix = new boolean[Triggers][Variables];
     triggers = new Trigger[1];
-    
   }
-
-  void setLayerState(float buttonbar){
-   int layerstate;
-   layerstate = int(buttonbar);
- layer_1.gear0.RX = gui.LayerStates.getJSONObject(layerstate).getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0);
-
-  }
-
+  
   void TriggerArray() {
     // construct boolean array 
     for (int x = 0; x < Triggers; x++) {
@@ -67,7 +59,8 @@ class Animation { //<>//
   void layerState(int trigger) {
     // this is reset when looped
     if (trigger == 0) {
-      layer_1.gear0.RX = gui.LayerStates.getJSONObject(trigger).getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0);
+      String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState0";
+      gui.Layer.load(JSON);
     }
   }
 
@@ -84,13 +77,12 @@ class Animation { //<>//
   }
 }
 
-
-
 class Trigger {
 
   int LayerID;//
   int Start, Stop, Var; 
   float value, duration;
+  JSONObject LayerStateStart, LayerStateEnd;
 
   Easing[] easings = { Ani.LINEAR, Ani.QUAD_IN, Ani.QUAD_OUT, Ani.QUAD_IN_OUT, Ani.CUBIC_IN, Ani.CUBIC_IN_OUT, Ani.CUBIC_OUT, Ani.QUART_IN, Ani.QUART_OUT, Ani.QUART_IN_OUT, Ani.QUINT_IN, Ani.QUINT_OUT, Ani.QUINT_IN_OUT, Ani.SINE_IN, Ani.SINE_OUT, Ani.SINE_IN_OUT, Ani.CIRC_IN, Ani.CIRC_OUT, Ani.CIRC_IN_OUT, Ani.EXPO_IN, Ani.EXPO_OUT, Ani.EXPO_IN_OUT, Ani.BACK_IN, Ani.BACK_OUT, Ani.BACK_IN_OUT, Ani.BOUNCE_IN, Ani.BOUNCE_OUT, Ani.BOUNCE_IN_OUT, Ani.ELASTIC_IN, Ani.ELASTIC_OUT, Ani.ELASTIC_IN_OUT};
   String[] easingsVariableNames = {"Ani.LINEAR", "Ani.QUAD_IN", "Ani.QUAD_OUT", "Ani.QUAD_IN_OUT", "Ani.CUBIC_IN", "Ani.CUBIC_IN_OUT", "Ani.CUBIC_OUT", "Ani.QUART_IN", "Ani.QUART_OUT", "Ani.QUART_IN_OUT", "Ani.QUINT_IN", "Ani.QUINT_OUT", "Ani.QUINT_IN_OUT", "Ani.SINE_IN", "Ani.SINE_OUT", "Ani.SINE_IN_OUT", "Ani.CIRC_IN", "Ani.CIRC_OUT", "Ani.CIRC_IN_OUT", "Ani.EXPO_IN", "Ani.EXPO_OUT", "Ani.EXPO_IN_OUT", "Ani.BACK_IN", "Ani.BACK_OUT", "Ani.BACK_IN_OUT", "Ani.BOUNCE_IN", "Ani.BOUNCE_OUT", "Ani.BOUNCE_IN_OUT", "Ani.ELASTIC_IN", "Ani.ELASTIC_OUT", "Ani.ELASTIC_IN_OUT"};
@@ -101,14 +93,18 @@ class Trigger {
     Start = start;
     Stop = end;
     duration = (float(intervals) * gif.aniInterval);
-    value = gui.LayerStates.getJSONObject(end).getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0);
- 
-  }
+    String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
+    LayerStateStart = loadJSONObject(JSON + start + ".json");
+    LayerStateEnd = loadJSONObject(JSON + end + ".json");
+    value = map(LayerStateEnd.getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0),0,1024,-512,512)- map(LayerStateStart.getJSONObject("/Radius Gear 0").getJSONArray("arrayValue").getFloat(0),0,1024,-512,512);
+// soo I probably first write aniStart / aniEnd value into parameter
+// then check if they're  < 512 > and then do remapping for 0,512,-512,0 and 513,1024,0,512 or something similar, and finally calculate delta
+
+}
 
 
   void anit() {
     Ani.to(layer_1.gear0, duration, "RX", value, Ani.LINEAR);
     println(value);
   }
-
 }

@@ -11,7 +11,7 @@ class Layer {
     XY = new PVector();
     XY2 = new PVector();
     gears = new Gears[3];
-    gear0 = new Gears(75, 75, 0);
+    gear0 = new Gears(400, 400, 0);
     gear1 = new Gears(0, 0, 0);
     gear2 = new Gears(0, 0, 0);
     gear3 = new Gears(0, 0, 0);
@@ -33,7 +33,6 @@ class Layer {
   }
 
   void display() {
-
     if (fill == true) {
       fill(Fill);
     }
@@ -46,7 +45,6 @@ class Layer {
     if (stroke == false) {
       noStroke();
     }
-
     if (dots == true && lines == true) {
       Dots();
       Lines();
