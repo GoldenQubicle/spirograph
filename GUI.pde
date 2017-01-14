@@ -16,7 +16,6 @@ class GUI extends PApplet {    //<>//
   ControllerProperties Layer;
   ControllerProperty test;
   ButtonBar LayerState;
-  JSONArray LayerStates;
 
   public GUI(PApplet theApplet) {
     super();
@@ -73,8 +72,8 @@ class GUI extends PApplet {    //<>//
     Pause = cp5.addToggle("Play/Pause").setPosition(10, 450).setSize(30, 15).setState(play);
     Save = cp5.addButton("Save").setPosition(50, 450).setSize(60, 15);
     // animation matrix
-    Ani = cp5.addMatrix("Matrix").setPosition(10, 550).setSize(400, 100).setGap(10, 20).setMode(ControlP5.MULTIPLES)
-      .setInterval(gif.Interval).setGrid(gif.Triggers, gif.Variables).stop();
+    Ani = cp5.addMatrix("Matrix").setPosition(10, -20).setSize(1, 1).setGap(10, 20).setMode(ControlP5.MULTIPLES)
+      .setInterval(gif.Interval).setGrid(gif.Triggers, 1).stop();
     for (int i = 0; i < gif.Triggers; i++) {
       Ani.set(i, 0, true);
     }
@@ -130,7 +129,7 @@ class GUI extends PApplet {    //<>//
       Layer.setSnapshot("LayerState" + i);
       Layer.saveAs(JSON + i);
     }
-    println(Layer.getSnapshotIndices());
+    //println(Layer.getSnapshotIndices());
   }
 
   void draw() {
@@ -138,23 +137,38 @@ class GUI extends PApplet {    //<>//
   }
 
   void keyPressed() {
+    if (key == 't') {
+      gif.test1 = new Trigger(3, 5, gif.TriggerID); 
+      gif.triggers.add(gif.test1);
+      //println("check");
+      gif.TriggerID = gif.TriggerID+1;
+    }
+    if (key == 'y') {
+      gif.test2 = new Trigger(1, 5, 6); 
+      //println("check");
+    }
+
     if (key==' ') {
       if (play == false) {
-        gif.TriggerArray();
+        //gif.TriggerArray();
+        gif.test1.triggerMatrix.play();        
         cp5.get(Matrix.class, "Matrix").play();
         play = true;
       } else {
         cp5.get(Matrix.class, "Matrix").pause();
+        gif.test1.triggerMatrix.pause();
         play = false;
       }
       gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
     if (key == 'q') {
-    String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState0";
-    Layer.load(JSON);
+      String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState0";
+      Layer.load(JSON);
       cp5.get(Matrix.class, "Matrix").stop();
+      gif.test1.triggerMatrix.stop();
       if (play == true) {
         cp5.get(Matrix.class, "Matrix").play();
+        gif.test1.triggerMatrix.play();
       }
     }
   }
@@ -162,7 +176,8 @@ class GUI extends PApplet {    //<>//
   void Matrix(int theX, int theY) {
     // so when playing, this here passes along theX to the triggers
     gif.triggerState(theX, theY);
-    gif.layerState(theX);
+    //println(theX);
+    //gif.layerState(theX);
   }
 
   void controlEvent(CallbackEvent theEvent) {
