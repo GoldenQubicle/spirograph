@@ -11,7 +11,7 @@ class GUI extends PApplet {    //<>//
   ColorPicker cp;
   ColorWheel cw;
   ScrollableList LayerList, Easing;
-  Button New, Copy, Save;
+  Button New, Copy, NewAni;
   Matrix Ani;
   ControllerProperties Layer;
   ControllerProperty test;
@@ -70,18 +70,18 @@ class GUI extends PApplet {    //<>//
     Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15);
     // merely an indicator atm
     Pause = cp5.addToggle("Play/Pause").setPosition(10, 450).setSize(30, 15).setState(play);
-    Save = cp5.addButton("Save").setPosition(50, 450).setSize(60, 15);
+    NewAni = cp5.addButton("Add Trigger").setPosition(50, 450).setSize(60, 15);
     // animation matrix
     Ani = cp5.addMatrix("Matrix").setPosition(10, -20).setSize(1, 1).setGap(10, 20).setMode(ControlP5.MULTIPLES)
-      .setInterval(gif.Interval).setGrid(gif.Triggers, 1).stop();
-    for (int i = 0; i < gif.Triggers; i++) {
+      .setInterval(gif.Interval).setGrid(gif.Segments, 1).stop();
+    for (int i = 0; i < gif.Segments; i++) {
       Ani.set(i, 0, true);
     }
     // buttonbar to toggle between layerstates
     LayerState = cp5.addButtonBar("ls").setPosition(10, 520).setSize(400, 20);
     String [] button;
-    button = new String[gif.Triggers];
-    for (int i = 0; i < gif.Triggers; i++) {       
+    button = new String[gif.Segments];
+    for (int i = 0; i < gif.Segments; i++) {       
       button[i] = "LS" + (i+1);
     }
     LayerState.addItems(button);
@@ -121,11 +121,11 @@ class GUI extends PApplet {    //<>//
     Layer.remove(Copy);
     Layer.remove(New);
     Layer.remove(LayerState);
-    Layer.remove(Save);
+    Layer.remove(NewAni);
 
     // saves new JSON for each layerstate
     String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
-    for (int i=0; i < gif.Triggers; i++) {
+    for (int i=0; i < gif.Segments; i++) {
       Layer.setSnapshot("LayerState" + i);
       Layer.saveAs(JSON + i);
     }
@@ -137,26 +137,26 @@ class GUI extends PApplet {    //<>//
   }
 
   void keyPressed() {
-    if (key == 't') {
-      gif.test1 = new Trigger(3, 5, gif.TriggerID); 
-      gif.triggers.add(gif.test1);
-      //println("check");
-      gif.TriggerID = gif.TriggerID+1;
+    if (key == 's') {
+      String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
+      int i;
+      i = int(LayerState.getValue());
+      Layer.setSnapshot("LayerState" + i);
+      Layer.saveAs(JSON + i);
     }
-    if (key == 'y') {
-      gif.test2 = new Trigger(1, 5, 6); 
-      //println("check");
-    }
-
     if (key==' ') {
       if (play == false) {
-        //gif.TriggerArray();
-        gif.test1.triggerMatrix.play();        
+        gif.triggerTiming();
+        for (Trigger myTrigger : gif.triggers) {
+          myTrigger.matrix.play();
+        }
         cp5.get(Matrix.class, "Matrix").play();
         play = true;
       } else {
         cp5.get(Matrix.class, "Matrix").pause();
-        gif.test1.triggerMatrix.pause();
+        for (Trigger myTrigger : gif.triggers) {
+          myTrigger.matrix.pause();
+        }
         play = false;
       }
       gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
@@ -165,29 +165,40 @@ class GUI extends PApplet {    //<>//
       String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState0";
       Layer.load(JSON);
       cp5.get(Matrix.class, "Matrix").stop();
-      gif.test1.triggerMatrix.stop();
+      for (Trigger myTrigger : gif.triggers) {
+        myTrigger.matrix.stop();
+      }
       if (play == true) {
         cp5.get(Matrix.class, "Matrix").play();
-        gif.test1.triggerMatrix.play();
+        for (Trigger myTrigger : gif.triggers) {
+          myTrigger.matrix.play();
+        }
       }
     }
   }
 
   void Matrix(int theX, int theY) {
-    // so when playing, this here passes along theX to the triggers
-    gif.triggerState(theX, theY);
+    // actual matrix itself is hidden, it merely acts as master timekeeper for passing along theX to the triggers
+    gif.triggerFire(theX);
     //println(theX);
     //gif.layerState(theX);
   }
 
   void controlEvent(CallbackEvent theEvent) {
-    if (theEvent.getController().equals(Save)) {
+    for (Trigger myTrigger : gif.triggers) {
+      if (theEvent.getController().equals(myTrigger.Easing)) {
+        if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
+          myTrigger.Easing.bringToFront(myTrigger.Easing);
+        }
+      }
+    }
+
+    if (theEvent.getController().equals(NewAni)) {
       if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
-        String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
-        int i;
-        i = int(LayerState.getValue());
-        Layer.setSnapshot("LayerState" + i);
-        Layer.saveAs(JSON + i);
+        Trigger NewTrigger;
+        NewTrigger = new Trigger(gif.TriggerID);
+        gif.triggers.add(NewTrigger);
+        gif.TriggerID += 1;
       }
     }
 

@@ -1,6 +1,4 @@
 /*
-okay layerstates seem to be working for real now, 
-HOWEVER - need to work out how to do the remapping of slider2d values properly, i.e. how to do remapping for the ani - argueably quite important =)
  
 also if I continue in current structure Id end up with 4x the more-or-less the same code for loading the JSON values, namely in
  - gif setLayerState

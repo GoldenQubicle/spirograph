@@ -1,5 +1,5 @@
 class Animation { //<>//
-  int Interval, Triggers, Variables, TriggerID;
+  int Interval, Segments, Variables, TriggerID;
   float TotalTime, temp, aniInterval, LayerState;
   float values[];
   ArrayList <Trigger> triggers = new ArrayList<Trigger>();
@@ -9,65 +9,67 @@ class Animation { //<>//
   int start, intervals, end, check_fwd, check_bwd;
 
   Animation() {
+    TriggerID = 1;
     Ani.setDefaultTimeMode(Ani.SECONDS);
     TotalTime = 2000;
-    Triggers = 8;
-    Interval = int(TotalTime/Triggers);
+    Segments = 8;
+    Interval = int(TotalTime/Segments);
     aniInterval = float(Interval)/1000;
     Variables = 3;
-    Matrix = new boolean[Triggers][Variables];
+    Matrix = new boolean[Segments][1];
     //test1 = new Trigger(1,5,6);
     //triggers = new Trigger[0]; 
     //triggers = new Trigger[1];
   }
 
-  void triggerState(int trigger, int variable) {
-    // gets passed theX from matrix and checks if its the trigger ID
+  void triggerFire(int trigger) {
+    // gets passed theX from hidden master matrix and checks if its trigger start
+    for (Trigger myTrigger : triggers) {
+      if (trigger == myTrigger.Start) {
+        myTrigger.anit();
+      }
+    }
+  }
+
+  void triggerTiming() {
+    
+    for (int x = 0; x < Segments; x++) {
       for (Trigger myTrigger : triggers) {
-        if (trigger == myTrigger.Start) {
-          myTrigger.anit();
+         if (myTrigger.matrix.get(x, 0) == true) {
+          myTrigger.Start = x; 
+          println(myTrigger.Start);
+          return;
         }
       }
-    println(trigger);
+    }
   }
+
+  //for (int y = 1; y < Variables; y++) {
+  //  for (int x = 0; x < Triggers; x++) {
+  //    if (Matrix[x][y] == true) {
+  //      start = x;
+  //      check_fwd = (Triggers-1)-start;
+  //      //println("start = " + start);
+
+  //      for (int i=0; i <= check_fwd; i++) {
+  //        if (Matrix[start+i][y] == true) {
+  //          intervals = i+1;
+  //          //println("intervals = " + intervals);
+  //        }
+  //      }
+  //      for (int i = 0; i <= check_fwd; i++) {
+  //        if (Matrix[start+i][y] == false) {
+  //          end = (start+i)-1;
+  //          //println("end = " + end);
+  //          break;
+  //        }
+  //      }
+  //      break;
+  //    }
+  //  }
+  //}
 }
 
-
-
-
-
-//void TriggerArray() {
-//  // construct boolean array 
-//  for (int x = 0; x < Triggers; x++) {
-//    for (int y = 0; y < Variables; y++) {
-//      Matrix[x][y] =  gui.Ani.get(x, y);
-//    }
-//  }
-
-//for (int y = 1; y < Variables; y++) {
-//  for (int x = 0; x < Triggers; x++) {
-//    if (Matrix[x][y] == true) {
-//      start = x;
-//      check_fwd = (Triggers-1)-start;
-//      //println("start = " + start);
-
-//      for (int i=0; i <= check_fwd; i++) {
-//        if (Matrix[start+i][y] == true) {
-//          intervals = i+1;
-//          //println("intervals = " + intervals);
-//        }
-//      }
-//      for (int i = 0; i <= check_fwd; i++) {
-//        if (Matrix[start+i][y] == false) {
-//          end = (start+i)-1;
-//          //println("end = " + end);
-//          break;
-//        }
-//      }
-//      break;
-//    }
-//  }
-//}
 //// so this is here temporary, prolly want to move this? 
 //test1 = new Trigger(start, intervals, end);
 //triggers[0] = test1;
