@@ -1,14 +1,13 @@
 /*
- 
-also if I continue in current structure Id end up with 4x the more-or-less the same code for loading the JSON values, namely in
- - gif setLayerState
- - gif LayerState
- - gui keyPressed
- - trigger value
-and I'd also want to changes made to say, layerstate 4 to propegate throughout 5 and onwards BUT ONLY on one paramater? - is that even possible. . ?
- 
+CURRENT CONCERNS
+  since I was so supersmart to simply clear the trigger array and construct new triggers everytime. . the easying style menu is obviously also gonna be reset everytime.. hehe
+  soooooooooo need to write an update trigger function, eg trigger.update(start,intervals)
+  single interval trigger does not work
+  
+
  
  todo
+ line mode is borked, prolly due to some weird conversion error in var Connect and subsequent thelta, doesnt really matter atm since Cast mode per gear needs to be redone anyway
  cast toggle mode per individual gear / gear connector
  
  */
@@ -28,7 +27,7 @@ color BG;
 GUI gui;
 Animation gif;
 boolean play;
-
+String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
 
 void settings() {
   size(512, 512, P2D);
@@ -64,6 +63,7 @@ void draw() {
   }
 
   gui.BG(BG);  
+ 
   //gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
 }
 
@@ -83,7 +83,7 @@ void keyPressed() {
     gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
   }
   if (key == 'q') {
-    //gif.TriggerArray();
+    gif.TriggerArray();
 
     gui.cp5.get(Matrix.class, "Matrix").stop();
     if (play == true) {

@@ -67,7 +67,7 @@ class Layer {
     }
   }
 
-  void Lines() {
+  void Lines() { //<>//
     for (int G = 0; G < gears.length; G++) {
       for (float i = 0; i < gears[G].P; i++) {
         Theta = (TAU/gears[G].P)*i; 
@@ -80,6 +80,7 @@ class Layer {
         strokeJoin(ROUND);
         strokeWeight(Sw);
         line(XY.x, XY.y, XY2.x, XY2.y);
+     
       }
     }
   }
@@ -99,7 +100,7 @@ class Layer {
 
 class Gears {
   boolean cast;
-  float RX, RY, C, R, Connect, fP;
+  float RX, RY, C, R, fP, Connect;
   int P;
   Gears(float rx, float ry, int p) {
     RX = rx;
