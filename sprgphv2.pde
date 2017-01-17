@@ -1,21 +1,11 @@
 /*
-CURRENT CONCERNS
-hmmm yeah
-  actually having multiple triggers per parameters is bit of an issue, let alone how to handle two triggers back-to-back (so to speak)
-  or how to handle change in timing of particular triggers, while still having the correct ani style
-  so in other words, there has to be somekind of data structure which keeps track of triggers
-  the boolean lock array once again comes to mind, however, thats not quite sufficient
-  the problem is:
-  for each trigger, only needs to have 1 menu associated with it
-  while still being able to change the start/stop respectivly
-  
-so yeah, probably want to decouple dropdown from trigger
-instead what if each parameter has 1 dropdown menu associated with it by default 
-and then, in the easing tab, also have a button to add additional dropdown / triggers to the parameter timeline
-still.. how do I differentiate between triggers, i.e. how to tell if two adjecent matrix cells are 1 trigger, or two?
-
- ouch, now its a real mess aaaaaaaand now only one ani plays at a time. . this is just great :/
-  update method is erm.. wonky
+take time aspect out of matrix, i.e. only serves to trigger
+ move duration ani into easing style tab, makes more sense anyway
+ 
+ yeah okay, ani tab is nicely set up, still. . first priority is really getting two ani back-to-back
+ 
+ 
+ 
  
  todo
  cast toggle mode per individual gear / gear connector
@@ -74,30 +64,27 @@ void draw() {
 
   gui.BG(BG);  
 
-  gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
+  //gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
 }
 
 
 
 
-void keyPressed() {
-
-  if (key==' ') {
-    if (play == false) {
-      gui.cp5.get(Matrix.class, "Matrix").play();
-      play = true;
-    } else {
-      gui.cp5.get(Matrix.class, "Matrix").pause();
-      play = false;
+ void keyPressed() {
+    if (key==' ') {     
+      if (play == false) {
+        gui.cp5.get(Matrix.class, "Matrix").play();
+        play = true;
+      } else {
+        gui.cp5.get(Matrix.class, "Matrix").pause();
+        play = false;
+      }
+      gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
-    gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
-  }
-  if (key == 'q') {
-    gif.TriggerArray();
-
-    gui.cp5.get(Matrix.class, "Matrix").stop();
-    if (play == true) {
-      gui.cp5.get(Matrix.class, "Matrix").play();
+    if (key == 'q') {
+      gui.cp5.get(Matrix.class, "Matrix").stop();
+      if (play == true) {
+        gui.cp5.get(Matrix.class, "Matrix").play();
+      }
     }
   }
-}

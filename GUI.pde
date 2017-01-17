@@ -2,9 +2,9 @@ class GUI extends PApplet {    //<>//
   int id, set, mWidth, mHeight;
   boolean layerlock;
   PApplet parent;
-  ControlP5 cp5;
+  ControlP5 cp5, layer;
   Slider2D G0, G1, G2, G3;
-  Slider P1, P2, P3, LX, LY, SW, D, G1c, G2c, G3c;
+  Slider P1, P2, P3, LX, LY, SW, D, G1c, G2c, G3c, Duration;
   Toggle Fill, Stroke, Lines, Dots, CS, Cast, Pause;
   ColorPicker cp;
   ColorWheel cw;
@@ -14,8 +14,8 @@ class GUI extends PApplet {    //<>//
   ControllerProperties Layer;
   ControllerProperty test;
   ButtonBar LayerState;
-  JSONArray LayerStates;
-  String[] easingsVariableNames = {"Ani.LINEAR", "Ani.QUAD_IN", "Ani.QUAD_OUT", "Ani.QUAD_IN_OUT", "Ani.CUBIC_IN", "Ani.CUBIC_IN_OUT", "Ani.CUBIC_OUT", "Ani.QUART_IN", "Ani.QUART_OUT", "Ani.QUART_IN_OUT", "Ani.QUINT_IN", "Ani.QUINT_OUT", "Ani.QUINT_IN_OUT", "Ani.SINE_IN", "Ani.SINE_OUT", "Ani.SINE_IN_OUT", "Ani.CIRC_IN", "Ani.CIRC_OUT", "Ani.CIRC_IN_OUT", "Ani.EXPO_IN", "Ani.EXPO_OUT", "Ani.EXPO_IN_OUT", "Ani.BACK_IN", "Ani.BACK_OUT", "Ani.BACK_IN_OUT", "Ani.BOUNCE_IN", "Ani.BOUNCE_OUT", "Ani.BOUNCE_IN_OUT", "Ani.ELASTIC_IN", "Ani.ELASTIC_OUT", "Ani.ELASTIC_IN_OUT"};
+  Textlabel Label, Label_t;
+  String [] Labels = {"", "Gear 0 X", "Gear 0 Y", "Gear 1 Petals", "Gear 1 X", "Gear 1 Y", "Gear 2 Petals", "Gear 2 X", "Gear 2 Y", "Gear 3 Petals", "Gear 3 X", "Gear 3 Y"}; 
 
   public GUI(PApplet theApplet) {
     super();
@@ -73,9 +73,9 @@ class GUI extends PApplet {    //<>//
     cp5.getController("Dots").moveTo("global");
     Cast = cp5.addToggle("Cast").setPosition(370, 290).setSize(20, 20).setState(false).plugTo(this, "Controls");
     cp5.getController("Cast").moveTo("global");
-    // line density for spiro mode ~ !!!! temporary disabled, need to be reworked with range buttons
-    D = cp5.addSlider("Density").setPosition(10, 490).setSize(450, 15).setRange(0, 100000).plugTo(this, "Controls").setValue(layers.get(id).PlotDots);
-    cp5.getController("Density").moveTo("global");
+    //// line density for spiro mode ~ !!!! temporary disabled, need to be reworked with range buttons
+    //D = cp5.addSlider("Density").setPosition(10, 490).setSize(450, 15).setRange(0, 100000).plugTo(this, "Controls").setValue(layers.get(id).PlotDots);
+    //cp5.getController("Density").moveTo("global");
     // gear connectors for line & dot mode
     G1c = cp5.addSlider("Connect G1").setPosition(310, 230).setRange(0, 100).plugTo(this, "Controls");
     cp5.getController("Connect G1").moveTo("global");
@@ -83,7 +83,7 @@ class GUI extends PApplet {    //<>//
     cp5.getController("Connect G2").moveTo("global");
     G3c = cp5.addSlider("Connect G3").setPosition(310, 270).setRange(0, 100).plugTo(this, "Controls");
     cp5.getController("Connect G3").moveTo("global");
-    
+
     // layers control
     LayerList = cp5.addScrollableList("SwitchLayers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers");
     for (int i = 0; i<layers.size(); i++) {
@@ -94,55 +94,58 @@ class GUI extends PApplet {    //<>//
     cp5.getController("New Layer").moveTo("global");
     Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15);
     cp5.getController("Copy Layer").moveTo("global");
+
     // merely an indicator atm
-    Pause = cp5.addToggle("Play/Pause").setPosition(10, 450).setSize(30, 15).setState(play);
+    Pause = cp5.addToggle("Play/Pause").setPosition(10, 400).setSize(30, 15).setState(play);
     cp5.getController("Play/Pause").moveTo("global");
-    Save = cp5.addButton("Save").setPosition(50, 450).setSize(60, 15);
+    Save = cp5.addButton("Save").setPosition(50, 400).setSize(60, 15);
     cp5.getController("Save").moveTo("global");
 
-
-    // animation matrix
-    mWidth = 400;
-    mHeight = 100;
-    Ani = cp5.addMatrix("Matrix").setPosition(10, 550).setSize(mWidth, mHeight).setGap(10, 20).setMode(ControlP5.MULTIPLES)
-      .setInterval(gif.Interval).setGrid(gif.Triggers, gif.Variables).stop();
-    for (int i = 0; i < gif.Triggers; i++) {
-      Ani.set(i, 0, true);
-    }
-
-       
-    cp5.getTab("default").setCaptionLabel("Animation Matrix");
-    cp5.addTab("Easing Styles");
-    cp5.getWindow().setPositionOfTabs(10, 530);
-    
-    Easing = cp5.addScrollableList("Easing").setPosition(10, 600).setWidth(200).setHeight(140).close(); 
-        Easing.addItems(easingsVariableNames);
-        gui.cp5.getController("Easing").moveTo("Easing Styles");
-  
-
-    // buttonbar to toggle between layerstates
-    LayerState = cp5.addButtonBar("ls").setPosition(10, 500).setSize(400, 20);
+    // setup tabs for animation ui
+    cp5.getTab("default").setCaptionLabel("Matrix");
+    cp5.addTab("Ani Easing");
+    cp5.getWindow().setPositionOfTabs(10, 450);
+    //button bar layerstates
+    LayerState = cp5.addButtonBar("ls").setPosition(10, 475).setSize(400, 20);
     String [] button;
     button = new String[gif.Triggers];
     for (int i = 0; i < gif.Triggers; i++) {       
       button[i] = "LS" + (i+1);
     }
     LayerState.addItems(button);
-    cp5.getController("ls").moveTo("global");
+    cp5.getController("ls").moveTo("default");
+    // actual matrix
+    mWidth = 400;
+    mHeight = 240;
+    Ani = cp5.addMatrix("Matrix").setPosition(10, 500).setSize(mWidth, mHeight).setGap(5, 5).setMode(ControlP5.MULTIPLES)
+      .setInterval(gif.Interval).setGrid(gif.Triggers, gif.Cells).stop();
+    for (int i = 0; i < gif.Triggers; i++) {
+      Ani.set(i, 0, true);
+    }
+    // labels
+    int lHeight = 20; 
+    for (int i = 0; i < Labels.length; i++) {
+      Label =  cp5.addTextlabel("Label" + i).setPosition(420, 505 + (lHeight*i)).setText(Labels[i]);
+      //cp5.getController("Label" + i).moveTo("global");
+      cp5.getController("Label" + i).moveTo("default");
+    }
+
+    for (int i = 1; i < gif.Cells; i++) {
+      Duration = cp5.addSlider(Labels[i]).setPosition(10, 505+(lHeight*i));
+      cp5.getController(Labels[i]).moveTo("Ani Easing");
+    }
+
+
+    //Easing = cp5.addScrollableList("Easing").setPosition(10, 600).setWidth(200).setHeight(140).close(); 
+    //    Easing.addItems(easingsVariableNames);
+    //    gui.cp5.getController("Easing").moveTo("Easing Styles");
+
+
+
+
 
     Layer = cp5.getProperties();
     //temporary stripping
-    Layer.remove(G0, "setMinY", "getMinY"); 
-    Layer.remove(G0, "setMinX", "getMinX"); 
-    Layer.remove(G0, "setMaxY", "getMaxY"); 
-    Layer.remove(G0, "setMaxX", "getMaxX"); 
-    Layer.remove(G1);
-    Layer.remove(G2);
-    Layer.remove(G3);
-    //P1, P2, P3, LX, LY, SW, D, G1c, G2c, G3c;
-    Layer.remove(P1);
-    Layer.remove(P2);
-    Layer.remove(P3);
     Layer.remove(LX);
     Layer.remove(LY);
     Layer.remove(SW);
@@ -167,8 +170,8 @@ class GUI extends PApplet {    //<>//
     Layer.remove(LayerState);
     Layer.remove(Save);
 
+
     // saves new JSON for each layerstate
-    String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
     for (int i=0; i < gif.Triggers; i++) {
       Layer.setSnapshot("LayerState" + i);
       Layer.saveAs(JSON + i);
@@ -178,26 +181,21 @@ class GUI extends PApplet {    //<>//
 
   void draw() {
     background(190);
+    gif.toggle();
   }
 
   void keyPressed() {
     if (key==' ') {     
       if (play == false) {
-        //gif.triggers.clear();
-        gif.TriggerArray();
         cp5.get(Matrix.class, "Matrix").play();
         play = true;
       } else {
         cp5.get(Matrix.class, "Matrix").pause();
-
         play = false;
       }
       gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
     if (key == 'q') {
-      //gif.triggers.clear();
-      gif.TriggerArray();
-      Layer.load(JSON+0);
       cp5.get(Matrix.class, "Matrix").stop();
       if (play == true) {
         cp5.get(Matrix.class, "Matrix").play();
@@ -207,8 +205,7 @@ class GUI extends PApplet {    //<>//
 
   void Matrix(int theX, int theY) {
     // so when playing, this here passes along theX to the triggers & layerstate reset on loop
-    gif.triggerState(theX, theY);
-    gif.layerState(theX);
+    gif.AniStart(theX, theY);
   }
 
   void controlEvent(CallbackEvent theEvent) {
@@ -348,11 +345,11 @@ class GUI extends PApplet {    //<>//
       layers.get(id).lines = Lines.getState();
       layers.get(id).dots = Dots.getState();
       layers.get(id).PlotDots = D.getValue();
-    if (Cast.getState() == false) {
+      if (Cast.getState() == false) {
         layers.get(id).gear1.Connect = int(G1c.getValue());
         layers.get(id).gear2.Connect = int(G2c.getValue());
         layers.get(id).gear3.Connect = int(G3c.getValue());
-    }
+      }
       //if (Cast.getState() == true) {
       //  layers.get(id).gear1.Connect = (G1c.getValue());
       //  layers.get(id).gear2.Connect = (G2c.getValue());
