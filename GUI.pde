@@ -15,6 +15,7 @@ class GUI extends PApplet {    //<>//
   ControllerProperty test;
   ButtonBar LayerState;
   JSONArray LayerStates;
+  String[] easingsVariableNames = {"Ani.LINEAR", "Ani.QUAD_IN", "Ani.QUAD_OUT", "Ani.QUAD_IN_OUT", "Ani.CUBIC_IN", "Ani.CUBIC_IN_OUT", "Ani.CUBIC_OUT", "Ani.QUART_IN", "Ani.QUART_OUT", "Ani.QUART_IN_OUT", "Ani.QUINT_IN", "Ani.QUINT_OUT", "Ani.QUINT_IN_OUT", "Ani.SINE_IN", "Ani.SINE_OUT", "Ani.SINE_IN_OUT", "Ani.CIRC_IN", "Ani.CIRC_OUT", "Ani.CIRC_IN_OUT", "Ani.EXPO_IN", "Ani.EXPO_OUT", "Ani.EXPO_IN_OUT", "Ani.BACK_IN", "Ani.BACK_OUT", "Ani.BACK_IN_OUT", "Ani.BOUNCE_IN", "Ani.BOUNCE_OUT", "Ani.BOUNCE_IN_OUT", "Ani.ELASTIC_IN", "Ani.ELASTIC_OUT", "Ani.ELASTIC_IN_OUT"};
 
   public GUI(PApplet theApplet) {
     super();
@@ -108,9 +109,16 @@ class GUI extends PApplet {    //<>//
     for (int i = 0; i < gif.Triggers; i++) {
       Ani.set(i, 0, true);
     }
+
+       
     cp5.getTab("default").setCaptionLabel("Animation Matrix");
     cp5.addTab("Easing Styles");
     cp5.getWindow().setPositionOfTabs(10, 530);
+    
+    Easing = cp5.addScrollableList("Easing").setPosition(10, 600).setWidth(200).setHeight(140).close(); 
+        Easing.addItems(easingsVariableNames);
+        gui.cp5.getController("Easing").moveTo("Easing Styles");
+  
 
     // buttonbar to toggle between layerstates
     LayerState = cp5.addButtonBar("ls").setPosition(10, 500).setSize(400, 20);
@@ -174,9 +182,8 @@ class GUI extends PApplet {    //<>//
 
   void keyPressed() {
     if (key==' ') {     
-
       if (play == false) {
-        gif.triggers.clear();
+        //gif.triggers.clear();
         gif.TriggerArray();
         cp5.get(Matrix.class, "Matrix").play();
         play = true;
@@ -188,7 +195,7 @@ class GUI extends PApplet {    //<>//
       gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
     if (key == 'q') {
-      gif.triggers.clear();
+      //gif.triggers.clear();
       gif.TriggerArray();
       Layer.load(JSON+0);
       cp5.get(Matrix.class, "Matrix").stop();

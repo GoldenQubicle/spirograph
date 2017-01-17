@@ -1,13 +1,23 @@
 /*
 CURRENT CONCERNS
-  since I was so supersmart to simply clear the trigger array and construct new triggers everytime. . the easying style menu is obviously also gonna be reset everytime.. hehe
-  soooooooooo need to write an update trigger function, eg trigger.update(start,intervals)
-  single interval trigger does not work
+hmmm yeah
+  actually having multiple triggers per parameters is bit of an issue, let alone how to handle two triggers back-to-back (so to speak)
+  or how to handle change in timing of particular triggers, while still having the correct ani style
+  so in other words, there has to be somekind of data structure which keeps track of triggers
+  the boolean lock array once again comes to mind, however, thats not quite sufficient
+  the problem is:
+  for each trigger, only needs to have 1 menu associated with it
+  while still being able to change the start/stop respectivly
   
+so yeah, probably want to decouple dropdown from trigger
+instead what if each parameter has 1 dropdown menu associated with it by default 
+and then, in the easing tab, also have a button to add additional dropdown / triggers to the parameter timeline
+still.. how do I differentiate between triggers, i.e. how to tell if two adjecent matrix cells are 1 trigger, or two?
 
+ ouch, now its a real mess aaaaaaaand now only one ani plays at a time. . this is just great :/
+  update method is erm.. wonky
  
  todo
- line mode is borked, prolly due to some weird conversion error in var Connect and subsequent thelta, doesnt really matter atm since Cast mode per gear needs to be redone anyway
  cast toggle mode per individual gear / gear connector
  
  */
@@ -63,8 +73,8 @@ void draw() {
   }
 
   gui.BG(BG);  
- 
-  //gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
+
+  gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
 }
 
 
