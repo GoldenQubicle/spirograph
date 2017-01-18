@@ -2,7 +2,7 @@ class GUI extends PApplet {    //<>//
   int id, set, mWidth, mHeight;
   boolean layerlock;
   PApplet parent;
-  ControlP5 cp5, layer;
+  ControlP5 cp5;
   Slider2D G0, G1, G2, G3;
   Slider P1, P2, P3, LX, LY, SW, D, G1c, G2c, G3c, Duration;
   Toggle Fill, Stroke, Lines, Dots, CS, Cast, Pause;
@@ -12,9 +12,8 @@ class GUI extends PApplet {    //<>//
   Button New, Copy, Save;
   Matrix Ani;
   ControllerProperties Layer;
-  ControllerProperty test;
   ButtonBar LayerState;
-  Textlabel Label, Label_t;
+  Textlabel Label;
   String [] Labels = {"", "Gear 0 X", "Gear 0 Y", "Gear 1 Petals", "Gear 1 X", "Gear 1 Y", "Gear 2 Petals", "Gear 2 X", "Gear 2 Y", "Gear 3 Petals", "Gear 3 X", "Gear 3 Y"}; 
 
   public GUI(PApplet theApplet) {
@@ -73,9 +72,9 @@ class GUI extends PApplet {    //<>//
     cp5.getController("Dots").moveTo("global");
     Cast = cp5.addToggle("Cast").setPosition(370, 290).setSize(20, 20).setState(false).plugTo(this, "Controls");
     cp5.getController("Cast").moveTo("global");
-    //// line density for spiro mode ~ !!!! temporary disabled, need to be reworked with range buttons
-    //D = cp5.addSlider("Density").setPosition(10, 490).setSize(450, 15).setRange(0, 100000).plugTo(this, "Controls").setValue(layers.get(id).PlotDots);
-    //cp5.getController("Density").moveTo("global");
+    // line density for spiro mode ~ !!!! temporary disabled, need to be reworked with range buttons
+    D = cp5.addSlider("Density").setPosition(10, 430).setSize(450, 15).setRange(0, 100000).plugTo(this, "Controls").setValue(layers.get(id).PlotDots);
+    cp5.getController("Density").moveTo("global");
     // gear connectors for line & dot mode
     G1c = cp5.addSlider("Connect G1").setPosition(310, 230).setRange(0, 100).plugTo(this, "Controls");
     cp5.getController("Connect G1").moveTo("global");
@@ -83,7 +82,6 @@ class GUI extends PApplet {    //<>//
     cp5.getController("Connect G2").moveTo("global");
     G3c = cp5.addSlider("Connect G3").setPosition(310, 270).setRange(0, 100).plugTo(this, "Controls");
     cp5.getController("Connect G3").moveTo("global");
-
     // layers control
     LayerList = cp5.addScrollableList("SwitchLayers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers");
     for (int i = 0; i<layers.size(); i++) {
@@ -94,8 +92,6 @@ class GUI extends PApplet {    //<>//
     cp5.getController("New Layer").moveTo("global");
     Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15);
     cp5.getController("Copy Layer").moveTo("global");
-
-    // merely an indicator atm
     Pause = cp5.addToggle("Play/Pause").setPosition(10, 400).setSize(30, 15).setState(play);
     cp5.getController("Play/Pause").moveTo("global");
     Save = cp5.addButton("Save").setPosition(50, 400).setSize(60, 15);
@@ -104,12 +100,13 @@ class GUI extends PApplet {    //<>//
     // setup tabs for animation ui
     cp5.getTab("default").setCaptionLabel("Matrix");
     cp5.addTab("Ani Easing");
+    cp5.getTab("Ani Easing").activateEvent(true);
     cp5.getWindow().setPositionOfTabs(10, 450);
     //button bar layerstates
     LayerState = cp5.addButtonBar("ls").setPosition(10, 475).setSize(400, 20);
     String [] button;
-    button = new String[gif.Triggers];
-    for (int i = 0; i < gif.Triggers; i++) {       
+    button = new String[gif.LayerStates];
+    for (int i = 0; i < gif.LayerStates; i++) {       
       button[i] = "LS" + (i+1);
     }
     LayerState.addItems(button);
@@ -118,34 +115,30 @@ class GUI extends PApplet {    //<>//
     mWidth = 400;
     mHeight = 240;
     Ani = cp5.addMatrix("Matrix").setPosition(10, 500).setSize(mWidth, mHeight).setGap(5, 5).setMode(ControlP5.MULTIPLES)
-      .setInterval(gif.Interval).setGrid(gif.Triggers, gif.Cells).stop();
-    for (int i = 0; i < gif.Triggers; i++) {
+      .setInterval(gif.Interval).setGrid(gif.LayerStates, gif.Variables).stop();
+    for (int i = 0; i < gif.LayerStates; i++) {
       Ani.set(i, 0, true);
     }
     // labels
     int lHeight = 20; 
     for (int i = 0; i < Labels.length; i++) {
       Label =  cp5.addTextlabel("Label" + i).setPosition(420, 505 + (lHeight*i)).setText(Labels[i]);
-      //cp5.getController("Label" + i).moveTo("global");
-      cp5.getController("Label" + i).moveTo("default");
+      cp5.getController("Label" + i).moveTo("global");
+      //cp5.getController("Label" + i).moveTo("default");
     }
 
-    for (int i = 1; i < gif.Cells; i++) {
-      Duration = cp5.addSlider(Labels[i]).setPosition(10, 505+(lHeight*i));
+    for (int i = 1; i < gif.Variables; i++) {
+      Duration = cp5.addSlider(Labels[i]).setPosition(10, 505+(lHeight*i)).setSize(50, 20);
+      cp5.getController(Labels[i]).setVisible(false);
       cp5.getController(Labels[i]).moveTo("Ani Easing");
     }
 
-
     //Easing = cp5.addScrollableList("Easing").setPosition(10, 600).setWidth(200).setHeight(140).close(); 
-    //    Easing.addItems(easingsVariableNames);
-    //    gui.cp5.getController("Easing").moveTo("Easing Styles");
+    //Easing.addItems(easingsVariableNames);
+    //gui.cp5.getController("Easing").moveTo("Easing Styles");
 
-
-
-
-
+    // Controller for layerstates, temporary stripping 
     Layer = cp5.getProperties();
-    //temporary stripping
     Layer.remove(LX);
     Layer.remove(LY);
     Layer.remove(SW);
@@ -170,9 +163,8 @@ class GUI extends PApplet {    //<>//
     Layer.remove(LayerState);
     Layer.remove(Save);
 
-
-    // saves new JSON for each layerstate
-    for (int i=0; i < gif.Triggers; i++) {
+    // saves JSON for each layerstate
+    for (int i=0; i < gif.LayerStates; i++) {
       Layer.setSnapshot("LayerState" + i);
       Layer.saveAs(JSON + i);
     }
@@ -181,7 +173,6 @@ class GUI extends PApplet {    //<>//
 
   void draw() {
     background(190);
-    gif.toggle();
   }
 
   void keyPressed() {
@@ -206,6 +197,12 @@ class GUI extends PApplet {    //<>//
   void Matrix(int theX, int theY) {
     // so when playing, this here passes along theX to the triggers & layerstate reset on loop
     gif.AniStart(theX, theY);
+  }
+
+  void controlEvent(ControlEvent theControlEvent) {
+    if (theControlEvent.isTab()) {
+      gif.toggle();
+    }
   }
 
   void controlEvent(CallbackEvent theEvent) {
@@ -254,7 +251,7 @@ class GUI extends PApplet {    //<>//
       if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
         Layer New = new Layer();
         layers.add(New);
-        LayerList.addItem("Layer " + layers.size(), New);
+        LayerList.addItem("Layer" + layers.size(), New);
       }
     }
     if (theEvent.getController().equals(CS)) {
