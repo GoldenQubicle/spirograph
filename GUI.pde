@@ -1,5 +1,5 @@
 class GUI extends PApplet {    //<>//
-  int id, set, mWidth, mHeight;
+  int id, set;
   boolean layerlock;
   PApplet parent;
   ControlP5 cp5;
@@ -15,6 +15,7 @@ class GUI extends PApplet {    //<>//
   ButtonBar LayerState;
   Textlabel Label;
   String [] Labels = {"", "Gear 0 X", "Gear 0 Y", "Gear 1 Petals", "Gear 1 X", "Gear 1 Y", "Gear 2 Petals", "Gear 2 X", "Gear 2 Y", "Gear 3 Petals", "Gear 3 X", "Gear 3 Y"}; 
+  String[] EasingNames = {"LINEAR", "QUAD_IN", "QUAD_OUT", "QUAD_IN_OUT", "CUBIC_IN", "CUBIC_IN_OUT", "CUBIC_OUT", "QUART_IN", "QUART_OUT", "QUART_IN_OUT", "QUINT_IN", "QUINT_OUT", "QUINT_IN_OUT", "SINE_IN", "SINE_OUT", "SINE_IN_OUT", "CIRC_IN", "CIRC_OUT", "CIRC_IN_OUT", "EXPO_IN", "EXPO_OUT", "EXPO_IN_OUT", "BACK_IN", "BACK_OUT", "BACK_IN_OUT", "BOUNCE_IN", "BOUNCE_OUT", "BOUNCE_IN_OUT", "ELASTIC_IN", "ELASTIC_OUT", "ELASTIC_IN_OUT"};
 
   public GUI(PApplet theApplet) {
     super();
@@ -38,20 +39,20 @@ class GUI extends PApplet {    //<>//
     CS = cp5.addToggle("Switch").setPosition(270, 10).setSize(25, 25).setState(false);
     cp5.getController("Switch").moveTo("global");
     // gear0
-    G0 = cp5.addSlider2D("Radius Gear 0").setMinMax(0, 0, 1024, 1024).setPosition(10, 90).setCaptionLabel("Radius Gear 0").plugTo(this, "Controls").setValue(layers.get(id).gear0.RX, layers.get(id).gear0.RY);
+    G0 = cp5.addSlider2D("Radius Gear 0").setMinMax(0, 0, 512, 512).setPosition(10, 90).setCaptionLabel("Radius Gear 0").plugTo(this, "Controls").setValue(128, 128);
     cp5.getController("Radius Gear 0").moveTo("global");
     //// gear1
-    G1 = cp5.addSlider2D("Radius Gear1").setMinMax(-150, -150, 150, 150).setPosition(160, 90).setCaptionLabel("Radius Gear 1").plugTo(this, "Controls").setValue(layers.get(id).gear1.RX, layers.get(id).gear1.RY);
+    G1 = cp5.addSlider2D("Radius Gear1").setMinMax(0, 0, 256, 256).setPosition(160, 90).setCaptionLabel("Radius Gear 1").plugTo(this, "Controls").setValue(128, 128);
     cp5.getController("Radius Gear1").moveTo("global");
     P1 = cp5.addSlider("Petals_1").setRange(0, 50).setPosition(160, 80).setCaptionLabel("Petals").plugTo(this, "Controls").setValue(layers.get(id).gear1.P);
     cp5.getController("Petals_1").moveTo("global");
     // gear2
-    G2 = cp5.addSlider2D("Radius Gear2").setMinMax(-150, -150, 150, 150).setPosition(10, 230).setCaptionLabel("Radius Gear 2").plugTo(this, "Controls").setValue(layers.get(id).gear2.RX, layers.get(id).gear2.RY);
+    G2 = cp5.addSlider2D("Radius Gear2").setMinMax(0, 0, 256, 256).setPosition(10, 230).setCaptionLabel("Radius Gear 2").plugTo(this, "Controls").setValue(128, 128);
     cp5.getController("Radius Gear2").moveTo("global");
     P2 = cp5.addSlider("Petals_2").setRange(0, 100).setPosition(10, 220).setCaptionLabel("Petals").plugTo(this, "Controls").setValue(layers.get(id).gear2.P);
     cp5.getController("Petals_2").moveTo("global");
     //// gear3
-    G3 = cp5.addSlider2D("Radius Gear3").setMinMax(-150, -150, 150, 150).setPosition(160, 230).setCaptionLabel("Radius Gear 3").plugTo(this, "Controls").setValue(layers.get(id).gear3.RX, layers.get(id).gear3.RY);
+    G3 = cp5.addSlider2D("Radius Gear3").setMinMax(0, 0, 256, 256).setPosition(160, 230).setCaptionLabel("Radius Gear 3").plugTo(this, "Controls").setValue(128, 128);
     cp5.getController("Radius Gear3").moveTo("global");
     P3 = cp5.addSlider("Petals_3").setRange(0, 200).setPosition(160, 220).setCaptionLabel("Petals").plugTo(this, "Controls").setValue(layers.get(id).gear3.P);
     cp5.getController("Petals_3").moveTo("global");
@@ -111,32 +112,6 @@ class GUI extends PApplet {    //<>//
     }
     LayerState.addItems(button);
     cp5.getController("ls").moveTo("default");
-    // actual matrix
-    mWidth = 400;
-    mHeight = 240;
-    Ani = cp5.addMatrix("Matrix").setPosition(10, 500).setSize(mWidth, mHeight).setGap(5, 5).setMode(ControlP5.MULTIPLES)
-      .setInterval(gif.Interval).setGrid(gif.LayerStates, gif.Variables).stop();
-    for (int i = 0; i < gif.LayerStates; i++) {
-      Ani.set(i, 0, true);
-    }
-    // labels
-    int lHeight = 20; 
-    for (int i = 0; i < Labels.length; i++) {
-      Label =  cp5.addTextlabel("Label" + i).setPosition(420, 505 + (lHeight*i)).setText(Labels[i]);
-      cp5.getController("Label" + i).moveTo("global");
-      //cp5.getController("Label" + i).moveTo("default");
-    }
-
-    for (int i = 1; i < gif.Variables; i++) {
-      Duration = cp5.addSlider(Labels[i]).setPosition(10, 505+(lHeight*i)).setSize(50, 20);
-      cp5.getController(Labels[i]).setVisible(false);
-      cp5.getController(Labels[i]).moveTo("Ani Easing");
-    }
-
-    //Easing = cp5.addScrollableList("Easing").setPosition(10, 600).setWidth(200).setHeight(140).close(); 
-    //Easing.addItems(easingsVariableNames);
-    //gui.cp5.getController("Easing").moveTo("Easing Styles");
-
     // Controller for layerstates, temporary stripping 
     Layer = cp5.getProperties();
     Layer.remove(LX);
@@ -169,6 +144,34 @@ class GUI extends PApplet {    //<>//
       Layer.saveAs(JSON + i);
     }
     //println(Layer.getSnapshotIndices());
+
+    // actual matrix
+    Ani = cp5.addMatrix("Matrix").setPosition(10, 500).setSize(gif.MatrixWidth, gif.MatrixHeight). setGap(5, 5).setMode(ControlP5.MULTIPLES)
+      .setInterval(gif.Interval).setGrid(gif.LayerStates, gif.Variables).stop();
+    for (int i = 0; i < gif.LayerStates; i++) {
+      Ani.set(i, 0, true);
+    }
+
+    // labels
+    int lHeight = 20; 
+    for (int i = 0; i < Labels.length; i++) {
+      Label =  cp5.addTextlabel("Label" + i).setPosition(420, 505 + (lHeight*i)).setText(Labels[i]);
+      cp5.getController("Label" + i).moveTo("global");
+      //cp5.getController("Label" + i).moveTo("default");
+    }
+    // easing dropdown menu
+    for (int x = 0; x< gif.LayerStates; x++) {
+      for (int y = 1; y < gif.Variables; y++) {
+        Easing = cp5.addScrollableList("Easing" + x + y).setPosition(10 + (x*gif.CellWidth), 500 + (y*gif.CellHeight)).setWidth(gif.CellWidth).setHeight(100).setBarHeight(gif.CellHeight).setType(ScrollableList.DROPDOWN).close(); 
+        Easing.addItems(EasingNames);
+        cp5.getController("Easing" + x + y).setVisible(false);
+        cp5.getController("Easing" + x + y).moveTo("Ani Easing");
+      }
+    }
+    //
+    //    Easing = cp5.addScrollableList("Easing").setPosition(10, 600).setWidth(200).setHeight(140).close(); 
+    //    Easing.addItems(gif.Easing);
+    //gui.cp5.getController("Easing").moveTo("Ani Easing");
   }
 
   void draw() {
@@ -206,6 +209,22 @@ class GUI extends PApplet {    //<>//
   }
 
   void controlEvent(CallbackEvent theEvent) {
+
+    for (int x = 0; x< gif.LayerStates; x++) {
+      for (int y = 1; y < gif.Variables; y++) {
+        if (theEvent.getController().equals("Easing" + x + y)) {
+          if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
+            cp5.getController("Easing" + x + y).bringToFront();
+            //Easing.bringToFront();
+            println("check");
+          }
+        }
+      }
+    }
+
+
+
+
     if (theEvent.getController().equals(Save)) {
       if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
         int i = int(LayerState.getValue());
@@ -285,10 +304,14 @@ class GUI extends PApplet {    //<>//
       G1.remove();
       G2.remove();
       G3.remove();
-      G0 = cp5.addSlider2D("Radius Gear0").setMinMax(-512, -512, 512, 512).setPosition(10, 90).setCaptionLabel("Radius Gear 0").plugTo(this, "Controls").setValue(layers.get(set).gear0.RX, layers.get(set).gear0.RY);
-      G1 = cp5.addSlider2D("Radius Gear1").setMinMax(-150, -150, 150, 150).setPosition(160, 90).setCaptionLabel("Radius Gear 1").plugTo(this, "Controls").setValue(layers.get(set).gear1.RX, layers.get(set).gear1.RY);
-      G2 = cp5.addSlider2D("Radius Gear2").setMinMax(-150, -150, 150, 150).setPosition(10, 230).setCaptionLabel("Radius Gear 2").plugTo(this, "Controls").setValue(layers.get(set).gear2.RX, layers.get(set).gear2.RY);
-      G3 = cp5.addSlider2D("Radius Gear3").setMinMax(-150, -150, 150, 150).setPosition(160, 230).setCaptionLabel("Radius Gear 3").plugTo(this, "Controls").setValue(layers.get(set).gear3.RX, layers.get(set).gear3.RY);
+      G0 = cp5.addSlider2D("Radius Gear 0").setMinMax(0, 0, 512, 512).setPosition(10, 90).setCaptionLabel("Radius Gear 0").plugTo(this, "Controls").setValue(map(layers.get(set).gear0.RX, -256, 256, 0, 512), map(layers.get(set).gear0.RY, -256, 256, 0, 512));
+      cp5.getController("Radius Gear 0").moveTo("global");
+      G1 = cp5.addSlider2D("Radius Gear1").setMinMax(0, 0, 256, 256).setPosition(160, 90).setCaptionLabel("Radius Gear 1").plugTo(this, "Controls").setValue(map(layers.get(set).gear1.RX, -128, 128, 0, 256), map(layers.get(set).gear1.RY, -128, 128, 0, 256));
+      cp5.getController("Radius Gear1").moveTo("global");
+      G2 = cp5.addSlider2D("Radius Gear2").setMinMax(0, 0, 256, 256).setPosition(10, 230).setCaptionLabel("Radius Gear 2").plugTo(this, "Controls").setValue(map(layers.get(set).gear2.RX, -128, 128, 0, 256), map(layers.get(set).gear2.RY, -128, 128, 0, 256));
+      cp5.getController("Radius Gear2").moveTo("global");
+      G3 = cp5.addSlider2D("Radius Gear3").setMinMax(0, 0, 256, 256).setPosition(160, 230).setCaptionLabel("Radius Gear 3").plugTo(this, "Controls").setValue(map(layers.get(set).gear3.RX, -128, 128, 0, 256), map(layers.get(set).gear3.RY, -128, 128, 0, 256));
+      cp5.getController("Radius Gear3").moveTo("global");
       P1.setValue(layers.get(set).gear1.P);
       P2.setValue(layers.get(set).gear2.P);
       P3.setValue(layers.get(set).gear3.P);
@@ -316,14 +339,14 @@ class GUI extends PApplet {    //<>//
 
   void Controls() {
     if (layerlock == false) {
-      layers.get(id).gear0.RX = map(G0.getArrayValue(0), 0, 1024, -512, 512);
-      layers.get(id).gear0.RY = map(G0.getArrayValue(1), 0, 1024, -512, 512);
-      layers.get(id).gear1.RX = G1.getArrayValue(0);
-      layers.get(id).gear1.RY = G1.getArrayValue(1);
-      layers.get(id).gear2.RX = G2.getArrayValue(0);
-      layers.get(id).gear2.RY = G2.getArrayValue(1);
-      layers.get(id).gear3.RX = G3.getArrayValue(0);
-      layers.get(id).gear3.RY = G3.getArrayValue(1);
+      layers.get(id).gear0.RX = map(G0.getArrayValue(0), 0, 512, -256, 256);
+      layers.get(id).gear0.RY = map(G0.getArrayValue(1), 0, 512, -256, 256);
+      layers.get(id).gear1.RX = map(G1.getArrayValue(0), 0, 256, -128, 128);
+      layers.get(id).gear1.RY = map(G1.getArrayValue(1), 0, 256, -128, 128);
+      layers.get(id).gear2.RX = map(G2.getArrayValue(0), 0, 256, -128, 128);
+      layers.get(id).gear2.RY = map(G2.getArrayValue(1), 0, 256, -128, 128);
+      layers.get(id).gear3.RX = map(G3.getArrayValue(0), 0, 256, -128, 128);
+      layers.get(id).gear3.RY = map(G3.getArrayValue(1), 0, 256, -128, 128);
       if (Cast.getState() == false) {
         layers.get(id).gear1.P = int(P1.getValue()); 
         layers.get(id).gear2.P = int(P2.getValue());

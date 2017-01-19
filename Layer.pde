@@ -10,16 +10,17 @@ class Layer {
   Layer() {
     XY = new PVector();
     XY2 = new PVector();
-    gears = new Gears[3];
-    gear0 = new Gears(400, 400, 0);
+    gears = new Gears[4];
+    gear0 = new Gears(128, 128, 0);
     gear1 = new Gears(0, 0, 0);
     gear2 = new Gears(0, 0, 0);
     gear3 = new Gears(0, 0, 0);
-    gears[0] = gear1;
-    gears[1] = gear2;
-    gears[2] = gear3;
-    LX = 2;
-    LY = 2;
+    gears[0] = gear0;
+    gears[1] = gear1;
+    gears[2] = gear2;
+    gears[3] = gear3;
+    LX = 2.5;
+    LY = 2.5;
     Fill = color(random(155, 255), random(155, 255), random(155, 255));
     Stroke = color(random(155, 255), random(155, 255), random(155, 255));
     PlotDots = 5000;
@@ -107,7 +108,7 @@ class Gears {
     RY = ry;
     P = p;
     R = 1/(P-1);
-    C = RX * TAU;
+    C = ((RX+RY)/2) * TAU;
     cast = false;
   }
 

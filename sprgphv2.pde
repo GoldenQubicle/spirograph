@@ -42,6 +42,7 @@ void setup() {
 
   play = false;
   Ani.init(this);
+  //Ani.noAutostart();
   BG = 128;  
   layers = new ArrayList();
   layer_1 = new Layer();
