@@ -21,11 +21,19 @@ class Animation { //<>//
     MatrixHeight = 240;
     CellWidth = MatrixWidth/LayerStates;    
     CellHeight = MatrixHeight/Variables;
-    AniEnd = new int[LayerStates][(Variables-1)];
+    AniEnd = new int[LayerStates][Variables];
+    for (int x = 0; x < LayerStates; x++) {
+      for (int y = 0; y < Variables; y++) {
+        AniEnd[x][y] = x;
+      }
+    }
   }
 
   void AniStart(int trigger, int variable) {
     Trigger = trigger;
+ 
+      
+ 
     // gets passed theX & theY from Matrix
     if (variable > 0 ) {
       if (variable == 1) {
@@ -80,15 +88,15 @@ class Animation { //<>//
         GV = 1;
         XY = 1;
       }
-
-      Ani.to(layer_1.gears[G], duration(), GearVars[GV], LoadLayerValue(Trigger, variable), easings[int(gui.cp5.getController("Easing" + Trigger + variable).getValue())]);
+      //aniDuration = aniInterval * (AniEnd[Trigger][variable]-Trigger);
+      Ani.to(layer_1.gears[G], duration(Trigger, AniEnd[Trigger][variable]), GearVars[GV], LoadLayerValue(Trigger, variable), easings[int(gui.cp5.getController("Easing" + Trigger + variable).getValue())]);
     }
   }
 
   float LoadLayerValue(int theX, int theY) {
 
     LayerState = loadJSONObject(JSON + AniEnd[theX][theY] + ".json");
-    println(AniEnd[theX][theY]);
+    //println(AniEnd[theX][theY]);
     //LayerState = loadJSONObject(JSON + theX + ".json");
 
     if (theY == 1 || theY == 2) {
@@ -116,8 +124,8 @@ class Animation { //<>//
     return aniValue;
   }
 
-  float duration() {
-    aniDuration = aniInterval * interval;
+  float duration(int trigger, int end) {
+    aniDuration = aniInterval * (end-trigger);
     return aniDuration;
   }
 

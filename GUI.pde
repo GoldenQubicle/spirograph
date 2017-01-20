@@ -142,31 +142,32 @@ class GUI extends PApplet {    //<>//
     // easing tab
     for (int x = 0; x< gif.LayerStates; x++) {
       for (int y = 1; y < gif.Variables; y++) {
+        
         Easing = cp5.addScrollableList("Easing" + x + y).setPosition(10 + (x*gif.CellWidth), 500 + (y*gif.CellHeight)).setWidth(gif.CellWidth).setHeight(100).setBarHeight(gif.CellHeight).setType(ScrollableList.DROPDOWN).close(); 
         Easing.addItems(EasingNames);
         cp5.getController("Easing" + x + y).setVisible(false);
         cp5.getController("Easing" + x + y).moveTo("Ani Easing");
-        Increase = cp5.addButton("add" + x + y).setPosition(gif.CellWidth + (x*gif.CellWidth), 500+ (y*gif.CellHeight)).setWidth(15).setCaptionLabel("+");
-          cp5.getController("add" + x + y).addCallback(new CallbackListener(){
-             public void controlEvent(CallbackEvent theEvent) {
-               if (theEvent.getAction()==ControlP5.ACTION_CLICK){
-                 int x = int(theEvent.getController().toString().substring(3,4));
-                 int y = int(theEvent.getController().toString().substring(4,5));
-                 gif.AniEnd[x][y] = gif.AniEnd[x][y] + int(theEvent.getController().getValue());
-                  cp5.getController("Easing" + x + y).setWidth(gif.AniEnd[x][y]*gif.CellWidth);
-                  theEvent.getController().setPosition(gif.CellWidth + ((gif.AniEnd[x][y])*gif.CellWidth), 500+ (y*gif.CellHeight));
-                  println(x,y, gif.AniEnd[x][y]);  
-              
-               }
-             }
-          }
-          );
-          
-          
-       cp5.getController("add" + x + y).setVisible(false);
-        cp5.getController("add" + x + y).moveTo("Ani Easing");
         
-        Layer.remove(Easing, "Easing" + x + y);
+        Increase = cp5.addButton("add" + x + y).setPosition((10+gif.CellWidth) + (x*gif.CellWidth), 500 + (y*gif.CellHeight)).setWidth(15).setCaptionLabel("+");
+        cp5.getController("add" + x + y).addCallback(new CallbackListener() {
+          public void controlEvent(CallbackEvent theEvent) {
+            if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
+              int x = int(theEvent.getController().toString().substring(3, 4));
+              int y = int(theEvent.getController().toString().substring(4, 5));
+              gif.AniEnd[x][y] = gif.AniEnd[x][y] + int(theEvent.getController().getValue());
+              int i = gif.AniEnd[x][y]-x;
+              cp5.getController("Easing" + x + y).setWidth(i*gif.CellWidth);
+              theEvent.getController().setPosition( ((10+gif.CellWidth) + (x*gif.CellWidth) + ((i-1)*gif.CellWidth)), 500 + (y*gif.CellHeight));
+              println(x, y, gif.AniEnd[x][y], i);
+            }
+          }
+        }
+        );
+        cp5.getController("add" + x + y).setVisible(false);
+        cp5.getController("add" + x + y).moveTo("Ani Easing");
+        //Layer.remove(Easing, "Easing" + x + y);
+        Layer.remove(Easing, "add" + x + y);
+        
       }
     }
   }
@@ -178,6 +179,8 @@ class GUI extends PApplet {    //<>//
   void keyPressed() {
     if (key==' ') {     
       if (play == false) {
+        //gui.cp5.get(Matrix.class, "Matrix").trigger(0);
+        //gif.Trigger = 0;
         cp5.get(Matrix.class, "Matrix").play();
         play = true;
       } else {
@@ -187,6 +190,7 @@ class GUI extends PApplet {    //<>//
       gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
     if (key == 'q') {
+      println(gif.AniEnd[3][1]);
       Layer.load(JSON+0);
       cp5.get(Matrix.class, "Matrix").stop();
       if (play == true) {
