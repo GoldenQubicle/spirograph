@@ -1,18 +1,7 @@
 /*
-take time aspect out of matrix, i.e. only serves to trigger
- move duration ani into easing style tab, makes more sense anyway
- 
- yeah okay, ani tab is nicely set up, still. . first priority is really getting two ani back-to-back
- okay so per active matrix cell, make a group which contains length & style for ani
- NOPE
- what if instead ani dropdown menu on cell toggle, than add a + in ani tab to set the length
- i.e. default length of ani is 1 interval, when + is pressed it increases to the next layerstate
- visually this is represented by increasing width of dropdown menu
- this means than ani could potentially overlap in duration, which could be done by puttin them inside a parameter group?
- at any rate, also means each matrix cell has a dropdown menu associated with it, i.e. can be setup beforehand
  
  todo
- remap gear values!
+
  cast toggle mode per individual gear / gear connector
  rework density with radiobutton for value ranges
  
@@ -63,7 +52,7 @@ void draw() {
   }
   
   gui.BG(BG);  
-  //gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
+  gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
 }
 
  void keyPressed() {
