@@ -52,7 +52,7 @@ void draw() {
   }
   
   gui.BG(BG);  
-  gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
+  //gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
 }
 
  void keyPressed() {

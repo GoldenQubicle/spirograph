@@ -9,7 +9,7 @@ class GUI extends PApplet {    //<>//
   ColorPicker cp;
   ColorWheel cw;
   ScrollableList LayerList, Easing;
-  Button New, Copy, Save;
+  Button New, Copy, Save, Increase, Decrease;
   Matrix Ani;
   ControllerProperties Layer;
   ButtonBar LayerState, TriggerState;
@@ -139,13 +139,33 @@ class GUI extends PApplet {    //<>//
       Layer.remove(Label, "Label" + i);
     }
 
-    // easing dropdown menu
+    // easing tab
     for (int x = 0; x< gif.LayerStates; x++) {
       for (int y = 1; y < gif.Variables; y++) {
         Easing = cp5.addScrollableList("Easing" + x + y).setPosition(10 + (x*gif.CellWidth), 500 + (y*gif.CellHeight)).setWidth(gif.CellWidth).setHeight(100).setBarHeight(gif.CellHeight).setType(ScrollableList.DROPDOWN).close(); 
         Easing.addItems(EasingNames);
         cp5.getController("Easing" + x + y).setVisible(false);
         cp5.getController("Easing" + x + y).moveTo("Ani Easing");
+        Increase = cp5.addButton("add" + x + y).setPosition(gif.CellWidth + (x*gif.CellWidth), 500+ (y*gif.CellHeight)).setWidth(15).setCaptionLabel("+");
+          cp5.getController("add" + x + y).addCallback(new CallbackListener(){
+             public void controlEvent(CallbackEvent theEvent) {
+               if (theEvent.getAction()==ControlP5.ACTION_CLICK){
+                 int x = int(theEvent.getController().toString().substring(3,4));
+                 int y = int(theEvent.getController().toString().substring(4,5));
+                 gif.AniEnd[x][y] = gif.AniEnd[x][y] + int(theEvent.getController().getValue());
+                  cp5.getController("Easing" + x + y).setWidth(gif.AniEnd[x][y]*gif.CellWidth);
+                  theEvent.getController().setPosition(gif.CellWidth + ((gif.AniEnd[x][y])*gif.CellWidth), 500+ (y*gif.CellHeight));
+                  println(x,y, gif.AniEnd[x][y]);  
+              
+               }
+             }
+          }
+          );
+          
+          
+       cp5.getController("add" + x + y).setVisible(false);
+        cp5.getController("add" + x + y).moveTo("Ani Easing");
+        
         Layer.remove(Easing, "Easing" + x + y);
       }
     }
@@ -179,6 +199,10 @@ class GUI extends PApplet {    //<>//
     // so when playing, this here passes along theX to the triggers & layerstate reset on loop
     gif.AniStart(theX, theY);
     gif.LoadLayerValue(theX, theY);
+    // reset layerstate on loop
+    if (theX == 0) {
+      Layer.load(JSON+0);
+    }
   }
 
   void controlEvent(ControlEvent theControlEvent) {

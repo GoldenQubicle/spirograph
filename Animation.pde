@@ -7,6 +7,7 @@ class Animation { //<>//
   String [] GearVars = {"RX", "RY", "P"};
   JSONObject LayerState;
   int XY;
+  int [][] AniEnd;
 
   Animation() {
     Ani.setDefaultTimeMode(Ani.SECONDS);
@@ -20,6 +21,7 @@ class Animation { //<>//
     MatrixHeight = 240;
     CellWidth = MatrixWidth/LayerStates;    
     CellHeight = MatrixHeight/Variables;
+    AniEnd = new int[LayerStates][(Variables-1)];
   }
 
   void AniStart(int trigger, int variable) {
@@ -79,12 +81,15 @@ class Animation { //<>//
         XY = 1;
       }
 
-      Ani.to(layer_1.gears[G], duration(), GearVars[GV], LoadLayerValue(Trigger,variable), easings[int(gui.cp5.getController("Easing" + Trigger + variable).getValue())]);
+      Ani.to(layer_1.gears[G], duration(), GearVars[GV], LoadLayerValue(Trigger, variable), easings[int(gui.cp5.getController("Easing" + Trigger + variable).getValue())]);
     }
   }
 
   float LoadLayerValue(int theX, int theY) {
-    LayerState = loadJSONObject(JSON + theX + ".json");
+
+    LayerState = loadJSONObject(JSON + AniEnd[theX][theY] + ".json");
+    println(AniEnd[theX][theY]);
+    //LayerState = loadJSONObject(JSON + theX + ".json");
 
     if (theY == 1 || theY == 2) {
       aniValue = map(LayerState.getJSONObject(Parameter[0]).getJSONArray("arrayValue").getFloat(XY), 0, 512, -256, 256);
@@ -121,10 +126,12 @@ class Animation { //<>//
     for (int y = 1; y < Variables; y++) {
       for (int x = 0; x < LayerStates; x++) {
         if (gui.Ani.get(x, y) == true) {
-          gui.cp5.getController("Easing" + x + y).setVisible(true);
+          gui.cp5.getController("Easing" + x + y).setVisible(true); 
+          gui.cp5.getController("add" + x + y).setVisible(true);
         }  
         if (gui.Ani.get(x, y) == false) {
           gui.cp5.getController("Easing" + x + y).setVisible(false);
+          gui.cp5.getController("add" + x + y).setVisible(false);
         }
       }
     }
