@@ -1,18 +1,17 @@
 /*
  BUGS
- phewww. .. right, finally it pretty much is getting along just fine, though there a number of well weird bugs
- notably, half the time the ani tab seemingly just doesnt load - which is strange because everything happens in setup
- so.. probably it could be related to the toggle instead?
-  - gear3xy addition doesnt quite work, probably because gif.Variables is one too many
-  - AniEnd actually needs to be -1 somewhere, i.e. loads from one trigger ahead, also one trigger itself requires additional click, i.e. initial value is 0
+  
+one trigger itself requires additional click, i.e. initial value is 0
  
  TODO
  - add callbacks to easing dropdown to bring to front, along with add/sub
- - add sub button, obviously
  - be able to save the result of interacting ani to layerstate, grab the value from layer, write to cp5 and save json
- - retain easing settings upon looping
+ - retain easing settings upon looping, i.e. safe the easing meny / matrix settings as sort of animation script
  - have last first & layerstate sync 
  - have the option to load a complete layerstate on a trigger, so to switch between settings while retaining the same visual design
+       come to think of this, could put this on 1st row of matrix, and ALWAYS set 1st cell, so that it acts as reset on loop?
+       however, think that's gonne be tricky with regards to timing ani, i.e. first need to load the json into layer, only THEN ani can acces layer
+ - option to save individual layerstate, rather than safe forword over every laterstate everytime 
  
  TO CONSIDER
  actually reintroduce trigger class, i.e. 
@@ -79,9 +78,9 @@ void draw() {
 }
 
 void keyPressed() {
+ 
   if (key==' ') {     
     if (play == false) {
-      //gui.cp5.get(Matrix.class, "Matrix").trigger(0);
       gui.cp5.get(Matrix.class, "Matrix").play();
       play = true;
     } else {

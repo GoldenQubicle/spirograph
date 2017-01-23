@@ -24,7 +24,7 @@ class GUI extends PApplet {    //<>//
   }
 
   public void settings() {
-    size(768, 1024);
+    size(512, 768);
   } 
 
   public void setup() {
@@ -79,10 +79,11 @@ class GUI extends PApplet {    //<>//
     G3c = cp5.addSlider("Connect G3").setPosition(310, 270).setRange(0, 100).plugTo(this, "Controls").moveTo("global");
 
     // layers control
-    LayerList = cp5.addScrollableList("SwitchLayers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").moveTo("global");
+    LayerList = cp5.addScrollableList("SwitchLayers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").moveTo("global").setOpen(false);
     for (int i = 0; i<layers.size(); i++) {
       LayerList.addItem("Layer" + (i+1), layers.get(i));
     }
+
     New = cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15).moveTo("global");
     New.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
@@ -94,6 +95,7 @@ class GUI extends PApplet {    //<>//
       }
     }
     );
+
     Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15).moveTo("global");
     Copy.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
@@ -127,7 +129,6 @@ class GUI extends PApplet {    //<>//
     }
     );
 
-    Pause = cp5.addToggle("Play/Pause").setPosition(10, 400).setSize(30, 15).setState(play).moveTo("global");
     Save = cp5.addButton("Save").setPosition(50, 400).setSize(60, 15).moveTo("global");
     Save.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
@@ -142,6 +143,9 @@ class GUI extends PApplet {    //<>//
     }
     );
 
+    // play pause, just an indicator atm
+    Pause = cp5.addToggle("Play/Pause").setPosition(10, 400).setSize(30, 15).setState(play).moveTo("global");
+    
     // setup tabs for animation ui
     cp5.getTab("default").setCaptionLabel("Matrix");
     cp5.addTab("Ani Easing");
@@ -199,7 +203,6 @@ class GUI extends PApplet {    //<>//
       Layer.setSnapshot("LayerState" + i);
       Layer.saveAs(JSON + i);
     }
-    //println(Layer.getSnapshotIndices());
 
     // actual matrix
     Ani = cp5.addMatrix("Matrix").setPosition(10, 500).setSize(gif.MatrixWidth, gif.MatrixHeight). setGap(5, 5).setMode(ControlP5.MULTIPLES)
@@ -207,40 +210,61 @@ class GUI extends PApplet {    //<>//
     for (int i = 0; i < gif.LayerStates; i++) {
       Ani.set(i, 0, true);
     }
-
+    // labels
     for (int i = 0; i < Labels.length; i++) {
       Label =  cp5.addTextlabel("Label" + i).setPosition(gif.MatrixWidth + 10, 505 + (gif.CellHeight*i)).setText(Labels[i]).moveTo("global");
       Layer.remove(Label, "Label" + i);
     }
 
-    // easing tab
-    for (int x = 0; x< gif.LayerStates; x++) {
-      for (int y = 1; y < gif.Variables; y++) {
+    // ani easing tab
+    for (int x = 00; x< gif.LayerStates; x++) {
+      for (int y = 01; y < gif.Variables; y++) {
 
         Easing = cp5.addScrollableList("Easing" + x + y).setPosition(10 + (x*gif.CellWidth), 500 + (y*gif.CellHeight)).setWidth(gif.CellWidth).setHeight(100).setBarHeight(gif.CellHeight).setType(ScrollableList.DROPDOWN).close(); 
         Easing.addItems(EasingNames);
         cp5.getController("Easing" + x + y).setVisible(false);
         cp5.getController("Easing" + x + y).moveTo("Ani Easing");
 
-        Increase = cp5.addButton("add" + x + y).setPosition((10+gif.CellWidth) + (x*gif.CellWidth), 500 + (y*gif.CellHeight)).setWidth(15).setCaptionLabel("+");
+        Increase = cp5.addButton("add" + x + y).setPosition((10+gif.CellWidth) + (x*gif.CellWidth), 500 + (y*gif.CellHeight)).setWidth(15).setCaptionLabel("+").setId(x);
         cp5.getController("add" + x + y).addCallback(new CallbackListener() {
-          public void controlEvent(CallbackEvent theEvent) {
-            if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
-              int x = int(theEvent.getController().toString().substring(3, 4));
-              int y = int(theEvent.getController().toString().substring(4, 5));
+          public void controlEvent(CallbackEvent theEvent) { 
+            if (theEvent.getAction()==ControlP5.ACTION_CLICK) {        
+              int x = theEvent.getController().getId();
+              int y = (int(theEvent.getController().getPosition()[1]) - 500)/gif.CellHeight;        
               gif.AniEnd[x][y] = gif.AniEnd[x][y] + int(theEvent.getController().getValue());
-              int i = gif.AniEnd[x][y]-x;
-              cp5.getController("Easing" + x + y).setWidth(i*gif.CellWidth);
-              theEvent.getController().setPosition( ((10+gif.CellWidth) + (x*gif.CellWidth) + ((i-1)*gif.CellWidth)), 500 + (y*gif.CellHeight));
-              println(x, y, gif.AniEnd[x][y], i);
+              int interval = gif.AniEnd[x][y] - x;              
+              cp5.getController("Easing" + x + y).setWidth(interval*gif.CellWidth);
+              theEvent.getController().setPosition( ((10+gif.CellWidth) + (x*gif.CellWidth) + ((interval-1)*gif.CellWidth)), 500 + (y*gif.CellHeight));
+              //println(x, y,  gif.AniEnd[x][y],interval);
             }
           }
         }
         );
+
+        Decrease = cp5.addButton("minus" + x + y).setPosition((x*gif.CellWidth)-5, 500 + (y*gif.CellHeight)).setWidth(15).setCaptionLabel("-").setId(x);
+        cp5.getController("minus" + x + y).addCallback(new CallbackListener() {
+          public void controlEvent(CallbackEvent theEvent) { 
+            if (theEvent.getAction()==ControlP5.ACTION_CLICK) {        
+              int x = theEvent.getController().getId();
+              int y = (int(theEvent.getController().getPosition()[1]) - 500)/gif.CellHeight;        
+              gif.AniEnd[x][y] = gif.AniEnd[x][y] - int(theEvent.getController().getValue());
+              int interval = gif.AniEnd[x][y] - x;              
+              cp5.getController("Easing" + x + y).setWidth(interval*gif.CellWidth);
+              int tempx = int(cp5.getController("add" + x + y).getPosition()[0]);
+              cp5.getController("add" + x + y).setPosition( (tempx - gif.CellWidth), 500 + (y*gif.CellHeight));
+              //println(x, y,  gif.AniEnd[x][y],interval, tempx);
+            }
+          }
+        }
+        );
+
+        cp5.getController("minus" + x + y).setVisible(false);
+        cp5.getController("minus" + x + y).moveTo("Ani Easing");
         cp5.getController("add" + x + y).setVisible(false);
         cp5.getController("add" + x + y).moveTo("Ani Easing");
-        //Layer.remove(Easing, "Easing" + x + y);
+        Layer.remove(Easing, "Easing" + x + y); //temporary stripped as well
         Layer.remove(Easing, "add" + x + y);
+        Layer.remove(Easing, "minus" + x + y);
       }
     }
   }
@@ -252,9 +276,8 @@ class GUI extends PApplet {    //<>//
   void keyPressed() {
     if (key==' ') {     
       if (play == false) {
-        //gui.cp5.get(Matrix.class, "Matrix").trigger(0);
-        //gif.Trigger = 0;
         cp5.get(Matrix.class, "Matrix").play();
+        cp5.get(Matrix.class, "Matrix").trigger(0);
         play = true;
       } else {
         cp5.get(Matrix.class, "Matrix").pause();
@@ -263,7 +286,6 @@ class GUI extends PApplet {    //<>//
       gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
     if (key == 'q') {
-      println(gif.AniEnd[3][1]);
       Layer.load(JSON+0);
       cp5.get(Matrix.class, "Matrix").stop();
       if (play == true) {
@@ -275,7 +297,7 @@ class GUI extends PApplet {    //<>//
   void Matrix(int theX, int theY) {
     // so when playing, this here passes along theX to the triggers & layerstate reset on loop
     gif.AniStart(theX, theY);
-    gif.LoadLayerValue(theX, theY);
+    //gif.LoadLayerValue(theX, theY);
     // reset layerstate on loop
     if (theX == 0) {
       Layer.load(JSON+0);
@@ -284,7 +306,6 @@ class GUI extends PApplet {    //<>//
 
   void controlEvent(ControlEvent theControlEvent) {
     if (theControlEvent.isTab()) {
-      println("checktab");
       gif.toggle();
     }
   }
