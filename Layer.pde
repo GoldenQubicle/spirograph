@@ -11,7 +11,7 @@ class Layer {
     XY = new PVector();
     XY2 = new PVector();
     gears = new Gears[4];
-    gear0 = new Gears(128, 128, 0);
+    gear0 = new Gears(130, 130, 0);
     gear1 = new Gears(0, 0, 0);
     gear2 = new Gears(0, 0, 0);
     gear3 = new Gears(0, 0, 0);

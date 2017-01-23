@@ -6,7 +6,6 @@ one trigger itself requires additional click, i.e. initial value is 0
  TODO
  - add callbacks to easing dropdown to bring to front, along with add/sub
  - be able to save the result of interacting ani to layerstate, grab the value from layer, write to cp5 and save json
- - retain easing settings upon looping, i.e. safe the easing meny / matrix settings as sort of animation script
  - have last first & layerstate sync 
  - have the option to load a complete layerstate on a trigger, so to switch between settings while retaining the same visual design
        come to think of this, could put this on 1st row of matrix, and ALWAYS set 1st cell, so that it acts as reset on loop?
@@ -53,7 +52,7 @@ void setup() {
   gif = new Animation();
   play = false;
   Ani.init(this);
-  //Ani.noAutostart();
+  Ani.noAutostart();
   BG = 128;  
   layers = new ArrayList();
   layer_1 = new Layer();
