@@ -11,14 +11,14 @@ class Animation { //<>//
 
   Animation() {
     Ani.setDefaultTimeMode(Ani.SECONDS);
-    TotalTime = 2000;
-    LayerStates = 8;
+    TotalTime = 5000;
+    LayerStates = 10;
     Variables = 12; // one too many for top row matrix which needs to be active at all time
     Interval = int(TotalTime/LayerStates);
     aniInterval = float(Interval)/1000;
     interval = 1;
-    MatrixWidth = 400;
-    MatrixHeight = 240;
+    MatrixWidth = 600;
+    MatrixHeight = 512;
     CellWidth = MatrixWidth/LayerStates;    
     CellHeight = MatrixHeight/Variables;
     AniEnd = new int[LayerStates][Variables];
@@ -29,67 +29,67 @@ class Animation { //<>//
     }
   }
 
-  void AniStart(int trigger, int variable) {
-    Trigger = trigger;
- 
+  void AniStart(int theX, int theY) {
+    Trigger = theX;
+    LayerParameter = theY;
       
  
     // gets passed theX & theY from Matrix
-    if (variable > 0 ) {
-      if (variable == 1) {
+    if (LayerParameter > 0 ) {
+      if (LayerParameter == 1) {
         G = 0;
         GV = 0;
         XY = 0;
       }
-      if (variable == 2) {
+      if (LayerParameter == 2) {
         G = 0;
         GV = 1;
         XY = 1;
       }
-      if (variable == 3) {
+      if (LayerParameter == 3) {
         G = 1;
         GV = 2;
       }
-      if (variable == 4) {
+      if (LayerParameter == 4) {
         G = 1;
         GV = 0;
         XY = 0;
       }
-      if (variable == 5) {
+      if (LayerParameter == 5) {
         G = 1;
         GV = 1;
         XY = 1;
       }
-      if (variable == 6) {
+      if (LayerParameter == 6) {
         G = 2;
         GV = 2;
       }
-      if (variable == 7) {
+      if (LayerParameter == 7) {
         G = 2;
         GV = 0;
         XY = 0;
       }
-      if (variable == 8) {
+      if (LayerParameter == 8) {
         G = 2;
         GV = 1;
         XY = 1;
       }
-      if (variable == 9) {
+      if (LayerParameter == 9) {
         G = 3;
         GV = 2;
       }
-      if (variable == 10) {
+      if (LayerParameter == 10) {
         G = 3;
         GV = 0;
         XY = 0;
       }
-      if (variable == 11) {
+      if (LayerParameter == 11) {
         G = 3;
         GV = 1;
         XY = 1;
       }
       //aniDuration = aniInterval * (AniEnd[Trigger][variable]-Trigger);
-      Ani.to(layer_1.gears[G], duration(Trigger, AniEnd[Trigger][variable]), GearVars[GV], LoadLayerValue(Trigger, variable), easings[int(gui.cp5.getController("Easing" + Trigger + variable).getValue())]);
+      Ani.to(layer_1.gears[G], duration(Trigger, AniEnd[Trigger][LayerParameter]), GearVars[GV], LoadLayerValue(Trigger, LayerParameter), easings[int(gui.cp5.getController("Easing" + Trigger + LayerParameter).getValue())]);
     }
   }
 
@@ -131,6 +131,7 @@ class Animation { //<>//
 
 
   void toggle() {
+    //println("check");
     for (int y = 1; y < Variables; y++) {
       for (int x = 0; x < LayerStates; x++) {
         if (gui.Ani.get(x, y) == true) {

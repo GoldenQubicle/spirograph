@@ -24,7 +24,7 @@ class GUI extends PApplet {    //<>//
   }
 
   public void settings() {
-    size(512, 768);
+    size(768, 1024);
   } 
 
   public void setup() {
@@ -36,6 +36,19 @@ class GUI extends PApplet {    //<>//
     cw = cp5.addColorWheel("BackGround").setPosition(302, 10).setValue(128).plugTo(this, "BG").moveTo("global");
     cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layers.get(id).Fill).moveTo("global");
     CS = cp5.addToggle("Switch").setPosition(270, 10).setSize(25, 25).setState(false).moveTo("global");
+    CS.addCallback(new CallbackListener() {
+      public void controlEvent(CallbackEvent theEvent) {
+        if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
+          if (CS.getState() == false) {
+            cp.setColorValue(layers.get(id).Fill);
+          }          
+          if (CS.getState() == true) {
+            cp.setColorValue(layers.get(id).Stroke);
+          }
+        }
+      }
+    }
+    );
 
     // gear 0
     G0 = cp5.addSlider2D("Radius Gear 0").setMinMax(0, 0, 512, 512).setPosition(10, 90).setCaptionLabel("Radius Gear 0").plugTo(this, "Controls").setValue(128, 128).moveTo("global");
@@ -71,30 +84,91 @@ class GUI extends PApplet {    //<>//
       LayerList.addItem("Layer" + (i+1), layers.get(i));
     }
     New = cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15).moveTo("global");
+    New.addCallback(new CallbackListener() {
+      public void controlEvent(CallbackEvent theEvent) {
+        if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
+          Layer New = new Layer();
+          layers.add(New);
+          LayerList.addItem("Layer" + layers.size(), New);
+        }
+      }
+    }
+    );
     Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15).moveTo("global");
+    Copy.addCallback(new CallbackListener() {
+      public void controlEvent(CallbackEvent theEvent) {
+        if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
+          Layer New = new Layer();
+          New.gear0.RX = layers.get(id).gear0.RX;
+          New.gear0.RY = layers.get(id).gear0.RY;
+          New.gear1.RX = layers.get(id).gear1.RX;
+          New.gear1.RY = layers.get(id).gear1.RY;
+          New.gear2.RX = layers.get(id).gear2.RX;
+          New.gear2.RY = layers.get(id).gear2.RY;
+          New.gear3.RX = layers.get(id).gear3.RX;
+          New.gear3.RY = layers.get(id).gear3.RY;
+          New.gear1.P = layers.get(id).gear1.P;
+          New.gear2.P = layers.get(id).gear2.P;
+          New.gear3.P = layers.get(id).gear3.P;
+          New.LX = layers.get(id).LX;
+          New.LY = layers.get(id).LY;
+          New.Fill = layers.get(id).Fill;
+          New.Stroke = layers.get(id).Stroke;
+          New.lines = layers.get(id).lines;
+          New.dots = layers.get(id).dots;
+          New.PlotDots = layers.get(id).PlotDots;
+          New.gear1.Connect = layers.get(id).gear1.Connect;
+          New.gear2.Connect = layers.get(id).gear2.Connect;
+          New.gear3.Connect = layers.get(id).gear3.Connect;
+          layers.add(New);
+          LayerList.addItem("Copy " + (id+1), New);
+        }
+      }
+    }
+    );
+
     Pause = cp5.addToggle("Play/Pause").setPosition(10, 400).setSize(30, 15).setState(play).moveTo("global");
     Save = cp5.addButton("Save").setPosition(50, 400).setSize(60, 15).moveTo("global");
+    Save.addCallback(new CallbackListener() {
+      public void controlEvent(CallbackEvent theEvent) {
+        if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
+          int LS = int(LayerState.getValue());
+          for (int i = LS; i < gif.LayerStates; i++) {
+            Layer.setSnapshot("LayerState" + i);
+            Layer.saveAs(JSON + i);
+          }
+        }
+      }
+    }
+    );
 
     // setup tabs for animation ui
     cp5.getTab("default").setCaptionLabel("Matrix");
     cp5.addTab("Ani Easing");
     cp5.getTab("Ani Easing").activateEvent(true);
+    cp5.getTab("default").activateEvent(true);
+    cp5.getTab("Ani Easing");
     cp5.getWindow().setPositionOfTabs(10, 450);
+
     //button bar layerstates
-    LayerState = cp5.addButtonBar("ls").setPosition(10, 498).setSize(400, 20);
-    TriggerState = cp5.addButtonBar("ts").setPosition(10, 498).setSize(400, 20);
+    LayerState = cp5.addButtonBar("ls").setPosition(10, 498).setSize(gif.MatrixWidth, gif.CellHeight);
     String [] buttonL;
-    String [] buttonT;
     buttonL = new String[gif.LayerStates];
-    buttonT = new String[gif.LayerStates];
     for (int i = 0; i < gif.LayerStates; i++) {       
       buttonL[i] = "LS" + (i+1);
-      buttonT[i] = "TS" + (i+1);
     }
     LayerState.addItems(buttonL);
-    TriggerState.addItems(buttonT);
+    LayerState.addCallback(new CallbackListener() {
+      public void controlEvent(CallbackEvent theEvent) {
+        if (theEvent.getAction() == ControlP5.ACTION_CLICK) {
+          int i = int(LayerState.getValue());
+          Layer.load(JSON + i);
+        }
+      }
+    }
+    );
     cp5.getController("ls").moveTo("global");
-    cp5.getController("ts").moveTo("Ani Easing");
+
     // Controller for layerstates, temporary stripping 
     Layer = cp5.getProperties();
     Layer.remove(LX);
@@ -135,19 +209,19 @@ class GUI extends PApplet {    //<>//
     }
 
     for (int i = 0; i < Labels.length; i++) {
-      Label =  cp5.addTextlabel("Label" + i).setPosition(420, 505 + (gif.CellHeight*i)).setText(Labels[i]).moveTo("global");
+      Label =  cp5.addTextlabel("Label" + i).setPosition(gif.MatrixWidth + 10, 505 + (gif.CellHeight*i)).setText(Labels[i]).moveTo("global");
       Layer.remove(Label, "Label" + i);
     }
 
     // easing tab
     for (int x = 0; x< gif.LayerStates; x++) {
       for (int y = 1; y < gif.Variables; y++) {
-        
+
         Easing = cp5.addScrollableList("Easing" + x + y).setPosition(10 + (x*gif.CellWidth), 500 + (y*gif.CellHeight)).setWidth(gif.CellWidth).setHeight(100).setBarHeight(gif.CellHeight).setType(ScrollableList.DROPDOWN).close(); 
         Easing.addItems(EasingNames);
         cp5.getController("Easing" + x + y).setVisible(false);
         cp5.getController("Easing" + x + y).moveTo("Ani Easing");
-        
+
         Increase = cp5.addButton("add" + x + y).setPosition((10+gif.CellWidth) + (x*gif.CellWidth), 500 + (y*gif.CellHeight)).setWidth(15).setCaptionLabel("+");
         cp5.getController("add" + x + y).addCallback(new CallbackListener() {
           public void controlEvent(CallbackEvent theEvent) {
@@ -167,7 +241,6 @@ class GUI extends PApplet {    //<>//
         cp5.getController("add" + x + y).moveTo("Ani Easing");
         //Layer.remove(Easing, "Easing" + x + y);
         Layer.remove(Easing, "add" + x + y);
-        
       }
     }
   }
@@ -211,70 +284,8 @@ class GUI extends PApplet {    //<>//
 
   void controlEvent(ControlEvent theControlEvent) {
     if (theControlEvent.isTab()) {
+      println("checktab");
       gif.toggle();
-    }
-  }
-
-  void controlEvent(CallbackEvent theEvent) {
-    if (theEvent.getController().equals(Save)) {
-      if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
-        int LS = int(LayerState.getValue());
-        for (int i = LS; i < gif.LayerStates; i++) {
-          Layer.setSnapshot("LayerState" + i);
-          Layer.saveAs(JSON + i);
-        }
-      }
-    }
-    if (theEvent.getController().equals(LayerState)) {
-      if (theEvent.getAction() == ControlP5.ACTION_CLICK) {
-        int i = int(LayerState.getValue());
-        Layer.load(JSON + i);
-      }
-    }
-    if (theEvent.getController().equals(Copy)) {
-      if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
-        Layer New = new Layer();
-        New.gear0.RX = layers.get(id).gear0.RX;
-        New.gear0.RY = layers.get(id).gear0.RY;
-        New.gear1.RX = layers.get(id).gear1.RX;
-        New.gear1.RY = layers.get(id).gear1.RY;
-        New.gear2.RX = layers.get(id).gear2.RX;
-        New.gear2.RY = layers.get(id).gear2.RY;
-        New.gear3.RX = layers.get(id).gear3.RX;
-        New.gear3.RY = layers.get(id).gear3.RY;
-        New.gear1.P = layers.get(id).gear1.P;
-        New.gear2.P = layers.get(id).gear2.P;
-        New.gear3.P = layers.get(id).gear3.P;
-        New.LX = layers.get(id).LX;
-        New.LY = layers.get(id).LY;
-        New.Fill = layers.get(id).Fill;
-        New.Stroke = layers.get(id).Stroke;
-        New.lines = layers.get(id).lines;
-        New.dots = layers.get(id).dots;
-        New.PlotDots = layers.get(id).PlotDots;
-        New.gear1.Connect = layers.get(id).gear1.Connect;
-        New.gear2.Connect = layers.get(id).gear2.Connect;
-        New.gear3.Connect = layers.get(id).gear3.Connect;
-        layers.add(New);
-        LayerList.addItem("Copy " + (id+1), New);
-      }
-    }
-    if (theEvent.getController().equals(New)) {
-      if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
-        Layer New = new Layer();
-        layers.add(New);
-        LayerList.addItem("Layer" + layers.size(), New);
-      }
-    }
-    if (theEvent.getController().equals(CS)) {
-      if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
-        if (CS.getState() == false) {
-          cp.setColorValue(layers.get(id).Fill);
-        }          
-        if (CS.getState() == true) {
-          cp.setColorValue(layers.get(id).Stroke);
-        }
-      }
     }
   }
 

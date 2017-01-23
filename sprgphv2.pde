@@ -1,12 +1,30 @@
 /*
+ BUGS
  phewww. .. right, finally it pretty much is getting along just fine, though there a number of well weird bugs
  notably, half the time the ani tab seemingly just doesnt load - which is strange because everything happens in setup
  so.. probably it could be related to the toggle instead?
+  - gear3xy addition doesnt quite work, probably because gif.Variables is one too many
+  - AniEnd actually needs to be -1 somewhere, i.e. loads from one trigger ahead, also one trigger itself requires additional click, i.e. initial value is 0
  
- also, gear3xy addition doesnt quite work, probably because gif.Variables is one too many
+ TODO
+ - add callbacks to easing dropdown to bring to front, along with add/sub
+ - add sub button, obviously
+ - be able to save the result of interacting ani to layerstate, grab the value from layer, write to cp5 and save json
+ - retain easing settings upon looping
+ - have last first & layerstate sync 
+ - have the option to load a complete layerstate on a trigger, so to switch between settings while retaining the same visual design
  
- AND, the AniEnd actually needs to be -1 somewhere, i.e. loads from one trigger ahead
+ TO CONSIDER
+ actually reintroduce trigger class, i.e. 
+   animation pulls in xy array from ani.get
+   based on this array, pull in AniEnd
+   calculate duration
+   send x, y, end & duration to trigger class, with if statements in constructor to arrive at proper configuration
+   trigger object has .ani() and .update() function
+   the main thing here is this will allow to call .pause/.play on the trigger objects, thus potentially allowing for frame-by-frame rendering
  
+ 
+ low prio
  cast toggle mode per individual gear / gear connector
  rework density with radiobutton for value ranges
  
@@ -57,7 +75,7 @@ void draw() {
   }
 
   gui.BG(BG);  
-  //gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
+  gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
 }
 
 void keyPressed() {
