@@ -5,7 +5,9 @@ class Animation { //<>//
   int [][] AniEnd, AniInt;
   ArrayList<Trigger> triggers;
   String TriggerID;
+  boolean trigger;
 
+  int start = 0;
   Animation() {
     Ani.setDefaultTimeMode(Ani.SECONDS);
     TotalTime = 4000;
@@ -29,16 +31,16 @@ class Animation { //<>//
   }
 
   void AniStart(int theX, int theY) {
+    //println(theX, theY);
     if (theY > 0) {
-      TriggerID = 0 + str(theX) + 0 + str(theY);
       for (Trigger myTrigger : triggers) {
-        if (TriggerID.equals(myTrigger.ID)) {
-          println(myTrigger.LayerState);
+        if (theX == myTrigger.Start) {
           myTrigger.ani();
         }
       }
     }
   }
+
   void triggerArray() {
     triggers.clear();
     for (int y = 1; y < Variables; y++) {
@@ -47,7 +49,6 @@ class Animation { //<>//
           Trigger Animate;
           Animate = new Trigger(x, y, AniEnd[x][y], AniInt[x][y]);
           triggers.add(Animate);
-          //println(x, y, AniEnd[x][y], AniInt[x][y], triggers.size());
         }
       }
     }

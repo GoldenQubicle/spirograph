@@ -15,7 +15,7 @@ class Trigger {
     Start = thex;
     End = end;
     aniDuration = gif.aniInterval*interval;
-    LayerState = loadJSONObject(JSON + End + ".json");
+    LayerState = loadJSONObject(JSON + gif.AniEnd[Start][LayerParameter]  + ".json");
     ID = 0 + str(Start) + 0 + str(LayerParameter);
 
     if (LayerParameter == 1) {
@@ -73,11 +73,10 @@ class Trigger {
       GV = 1;
       aniValue = map(LayerState.getJSONObject(Parameter[3]).getJSONArray("arrayValue").getFloat(1), 0, 256, -128, 128);
     }
-    ani = Ani.to(layer_1.gears[G], aniDuration, GearVars[GV], aniValue, easings[int(gui.cp5.getController("Easing"+"0"+Start+"0"+LayerParameter).getValue())]);
-    //println(thex,they, End, interval, aniDuration, aniValue);
   }
 
   void ani() {
+    ani = Ani.to(layer_1.gears[G], aniDuration, GearVars[GV], aniValue, easings[int(gui.cp5.getController("Easing"+"0"+Start+"0"+LayerParameter).getValue())]);
     ani.start();
   }
 }

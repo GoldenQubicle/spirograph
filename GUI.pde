@@ -231,7 +231,7 @@ class GUI extends PApplet {    //<>//
     // ani easing tab
     for (int x = 00; x< gif.LayerStates; x++) {
       for (int y = 1; y < gif.Variables; y++) {
-        println(x, y);
+        //println(x, y);
         Easing = cp5.addScrollableList("Easing"+"0"+x+"0"+y).setPosition(10 + (x*gif.CellWidth), 500 + (y*gif.CellHeight)).setWidth(gif.CellWidth).setHeight(100).setBarHeight(gif.CellHeight).setType(ScrollableList.DROPDOWN).close(); 
         Easing.addItems(EasingNames);
         cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false);
@@ -248,7 +248,7 @@ class GUI extends PApplet {    //<>//
               gif.AniInt[x][y] = interval;
               cp5.getController("Easing"+"0"+x+"0"+y).setWidth(interval*gif.CellWidth);
               theEvent.getController().setPosition( ((10+gif.CellWidth) + (x*gif.CellWidth) + ((interval-1)*gif.CellWidth)), 500 + (y*gif.CellHeight));
-              //println(x, y,  gif.AniEnd[x][y],interval);
+              println(x, y,  gif.AniEnd[x][y],interval);
             }
           }
         }

@@ -2,7 +2,7 @@
 
   
 ERM WELP
-  still cannot have two suqsequent triggers on the same layer parameter. . =)  
+   cannot have two suqsequent triggers on the same layer parameter. . =)  
   huh, for some reason it seems the ani reading the wrong value?!
  
  TODO
