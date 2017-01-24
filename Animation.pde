@@ -4,15 +4,12 @@ class Animation { //<>//
   float TotalTime, aniInterval;
   int [][] AniEnd, AniInt;
   ArrayList<Trigger> triggers;
-  String TriggerID;
-  boolean trigger;
 
-  int start = 0;
   Animation() {
     Ani.setDefaultTimeMode(Ani.SECONDS);
-    TotalTime = 4000;
-    LayerStates = 8;
-    Variables = 12; // one too many for top row matrix which needs to be active at all time
+    TotalTime = 8000;
+    LayerStates = 16;
+    Variables = 14; // one too many for top row matrix which needs to be active at all time
     Interval = int(TotalTime/LayerStates);
     aniInterval = float(Interval)/1000;
     MatrixWidth = 400;

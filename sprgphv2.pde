@@ -1,10 +1,4 @@
 /*
-
-  
-ERM WELP
-   cannot have two suqsequent triggers on the same layer parameter. . =)  
-  huh, for some reason it seems the ani reading the wrong value?!
- 
  TODO
  - add callbacks to easing dropdown to bring to front, along with add/sub
  - be able to save the result of interacting ani to layerstate, grab the value from layer, write to cp5 and save json
@@ -12,15 +6,15 @@ ERM WELP
  - have the option to load a complete layerstate on a trigger, so to switch between settings while retaining the same visual design
        come to think of this, could put this on 1st row of matrix, and ALWAYS set 1st cell, so that it acts as reset on loop?
        however, think that's gonne be tricky with regards to timing ani, i.e. first need to load the json into layer, only THEN ani can acces layer
- - option to save individual layerstate, rather than safe forword over every laterstate everytime 
- 
- 
+ - new controller property object for easing styles, because now when I switch layerstates it loads easing from those
+     i.e. probably need to have 1 json for the matrix / ani easing which serves as script of sorts 
  
  low prio
  cast toggle mode per individual gear / gear connector
- rework density with radiobutton for value ranges
+ rework density with radiobutton for value ranges 
  
  */
+ 
 import controlP5.*;
 import dawesometoolkit.*;
 import de.looksgood.ani.*;

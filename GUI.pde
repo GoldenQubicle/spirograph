@@ -14,7 +14,7 @@ class GUI extends PApplet {    //<>//
   ControllerProperties Layer;
   ButtonBar LayerState, TriggerState;
   Textlabel Label;
-  String [] Labels = {"", "Gear 0 X", "Gear 0 Y", "Gear 1 Petals", "Gear 1 X", "Gear 1 Y", "Gear 2 Petals", "Gear 2 X", "Gear 2 Y", "Gear 3 Petals", "Gear 3 X", "Gear 3 Y"}; 
+  String [] Labels = {"", "Gear 0 X", "Gear 0 Y", "Gear 1 Petals", "Gear 1 X", "Gear 1 Y", "Gear 2 Petals", "Gear 2 X", "Gear 2 Y", "Gear 3 Petals", "Gear 3 X", "Gear 3 Y", "Line X", "Line Y"}; 
   String[] EasingNames = {"LINEAR", "QUAD_IN", "QUAD_OUT", "QUAD_IN_OUT", "CUBIC_IN", "CUBIC_IN_OUT", "CUBIC_OUT", "QUART_IN", "QUART_OUT", "QUART_IN_OUT", "QUINT_IN", "QUINT_OUT", "QUINT_IN_OUT", "SINE_IN", "SINE_OUT", "SINE_IN_OUT", "CIRC_IN", "CIRC_OUT", "CIRC_IN_OUT", "EXPO_IN", "EXPO_OUT", "EXPO_IN_OUT", "BACK_IN", "BACK_OUT", "BACK_IN_OUT", "BOUNCE_IN", "BOUNCE_OUT", "BOUNCE_IN_OUT", "ELASTIC_IN", "ELASTIC_OUT", "ELASTIC_IN_OUT"};
 
   public GUI(PApplet theApplet) {
@@ -71,7 +71,7 @@ class GUI extends PApplet {    //<>//
     Dots = cp5.addToggle("Dots").setPosition(340, 290).setSize(20, 20).setState(false).plugTo(this, "Controls").moveTo("global");
     Cast = cp5.addToggle("Cast").setPosition(370, 290).setSize(20, 20).setState(false).plugTo(this, "Controls").moveTo("global");
 
-    // line density for spiro mode ~ !!!! temporary disabled, need to be reworked with range buttons
+    // line density for spiro mode
     D = cp5.addSlider("Density").setPosition(10, 430).setSize(450, 15).setRange(0, 100000).plugTo(this, "Controls").setValue(layers.get(id).PlotDots).moveTo("global");
     // gear connectors for line & dot mode
     G1c = cp5.addSlider("Connect G1").setPosition(310, 230).setRange(0, 100).plugTo(this, "Controls").moveTo("global");
@@ -155,7 +155,7 @@ class GUI extends PApplet {    //<>//
     }
     );
 
-    // play pause, just an indicator atm
+    // not functional button, i.e. just visual indicator 
     Pause = cp5.addToggle("Play/Pause").setPosition(10, 400).setSize(30, 15).setState(play).moveTo("global");
 
     // setup tabs for animation ui
@@ -187,8 +187,8 @@ class GUI extends PApplet {    //<>//
 
     // Controller for layerstates, temporary stripping 
     Layer = cp5.getProperties();
-    Layer.remove(LX);
-    Layer.remove(LY);
+    //Layer.remove(LX);
+    //Layer.remove(LY);
     Layer.remove(SW);
     Layer.remove(D);
     Layer.remove(G1c);
@@ -248,7 +248,7 @@ class GUI extends PApplet {    //<>//
               gif.AniInt[x][y] = interval;
               cp5.getController("Easing"+"0"+x+"0"+y).setWidth(interval*gif.CellWidth);
               theEvent.getController().setPosition( ((10+gif.CellWidth) + (x*gif.CellWidth) + ((interval-1)*gif.CellWidth)), 500 + (y*gif.CellHeight));
-              println(x, y,  gif.AniEnd[x][y],interval);
+              println(x, y, gif.AniEnd[x][y],interval);
             }
           }
         }
@@ -278,7 +278,7 @@ class GUI extends PApplet {    //<>//
         cp5.getController("add"+"0"+x+"0"+y).moveTo("Ani Easing");
         Layer.remove(Increase, "add"+"0"+x+"0"+y); 
         Layer.remove(Decrease, "minus"+"0"+x+"0"+y);
-        Layer.remove(Easing, "Easing"+"0"+x+"0"+y);
+        //Layer.remove(Easing, "Easing"+"0"+x+"0"+y);
       }
     }
   }
