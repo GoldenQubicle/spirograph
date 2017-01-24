@@ -230,15 +230,15 @@ class GUI extends PApplet {    //<>//
 
     // ani easing tab
     for (int x = 00; x< gif.LayerStates; x++) {
-      for (int y = 01; y < gif.Variables; y++) {
-
-        Easing = cp5.addScrollableList("Easing" + x + y).setPosition(10 + (x*gif.CellWidth), 500 + (y*gif.CellHeight)).setWidth(gif.CellWidth).setHeight(100).setBarHeight(gif.CellHeight).setType(ScrollableList.DROPDOWN).close(); 
+      for (int y = 1; y < gif.Variables; y++) {
+        println(x, y);
+        Easing = cp5.addScrollableList("Easing"+"0"+x+"0"+y).setPosition(10 + (x*gif.CellWidth), 500 + (y*gif.CellHeight)).setWidth(gif.CellWidth).setHeight(100).setBarHeight(gif.CellHeight).setType(ScrollableList.DROPDOWN).close(); 
         Easing.addItems(EasingNames);
-        cp5.getController("Easing" + x + y).setVisible(false);
-        cp5.getController("Easing" + x + y).moveTo("Ani Easing");
+        cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false);
+        cp5.getController("Easing"+"0"+x+"0"+y).moveTo("Ani Easing");
 
-        Increase = cp5.addButton("add" + x + y).setPosition((10+gif.CellWidth) + (x*gif.CellWidth), 500 + (y*gif.CellHeight)).setWidth(15).setCaptionLabel("+").setId(x);
-        cp5.getController("add" + x + y).addCallback(new CallbackListener() {
+        Increase = cp5.addButton("add"+"0"+x+"0"+y).setPosition((10+gif.CellWidth) + (x*gif.CellWidth), 500 + (y*gif.CellHeight)).setWidth(15).setCaptionLabel("+").setId(x);
+        cp5.getController("add"+"0"+x+"0"+y).addCallback(new CallbackListener() {
           public void controlEvent(CallbackEvent theEvent) { 
             if (theEvent.getAction()==ControlP5.ACTION_CLICK) {        
               int x = theEvent.getController().getId();
@@ -246,7 +246,7 @@ class GUI extends PApplet {    //<>//
               gif.AniEnd[x][y] = gif.AniEnd[x][y] + int(theEvent.getController().getValue());
               int interval = gif.AniEnd[x][y] - x; 
               gif.AniInt[x][y] = interval;
-              cp5.getController("Easing" + x + y).setWidth(interval*gif.CellWidth);
+              cp5.getController("Easing"+"0"+x+"0"+y).setWidth(interval*gif.CellWidth);
               theEvent.getController().setPosition( ((10+gif.CellWidth) + (x*gif.CellWidth) + ((interval-1)*gif.CellWidth)), 500 + (y*gif.CellHeight));
               //println(x, y,  gif.AniEnd[x][y],interval);
             }
@@ -254,8 +254,8 @@ class GUI extends PApplet {    //<>//
         }
         );
 
-        Decrease = cp5.addButton("minus" + x + y).setPosition((x*gif.CellWidth)-5, 500 + (y*gif.CellHeight)).setWidth(15).setCaptionLabel("-").setId(x);
-        cp5.getController("minus" + x + y).addCallback(new CallbackListener() {
+        Decrease = cp5.addButton("minus"+"0"+x+"0"+y).setPosition((x*gif.CellWidth)-5, 500 + (y*gif.CellHeight)).setWidth(15).setCaptionLabel("-").setId(x);
+        cp5.getController("minus"+"0"+x+"0"+y).addCallback(new CallbackListener() {
           public void controlEvent(CallbackEvent theEvent) { 
             if (theEvent.getAction()==ControlP5.ACTION_CLICK) {        
               int x = theEvent.getController().getId();
@@ -263,21 +263,22 @@ class GUI extends PApplet {    //<>//
               gif.AniEnd[x][y] = gif.AniEnd[x][y] - int(theEvent.getController().getValue());
               int interval = gif.AniEnd[x][y] - x;   
               gif.AniInt[x][y] = interval;
-              cp5.getController("Easing" + x + y).setWidth(interval*gif.CellWidth);
-              int tempx = int(cp5.getController("add" + x + y).getPosition()[0]);
-              cp5.getController("add" + x + y).setPosition( (tempx - gif.CellWidth), 500 + (y*gif.CellHeight));
+              cp5.getController("Easing"+"0"+x+"0"+y).setWidth(interval*gif.CellWidth);
+              int tempx = int(cp5.getController("add"+"0"+x+"0"+y).getPosition()[0]);
+              cp5.getController("add"+"0"+x+"0"+y).setPosition( (tempx - gif.CellWidth), 500 + (y*gif.CellHeight));
               //println(x, y,  gif.AniEnd[x][y],interval);
             }
           }
         }
         );
 
-        cp5.getController("minus" + x + y).setVisible(false);
-        cp5.getController("minus" + x + y).moveTo("Ani Easing");
-        cp5.getController("add" + x + y).setVisible(false);
-        cp5.getController("add" + x + y).moveTo("Ani Easing");
-        Layer.remove(Easing, "add" + x + y); 
-        Layer.remove(Easing, "minus" + x + y);
+        cp5.getController("minus"+"0"+x+"0"+y).setVisible(false);
+        cp5.getController("minus"+"0"+x+"0"+y).moveTo("Ani Easing");
+        cp5.getController("add"+"0"+x+"0"+y).setVisible(false);
+        cp5.getController("add"+"0"+x+"0"+y).moveTo("Ani Easing");
+        Layer.remove(Increase, "add"+"0"+x+"0"+y); 
+        Layer.remove(Decrease, "minus"+"0"+x+"0"+y);
+        Layer.remove(Easing, "Easing"+"0"+x+"0"+y);
       }
     }
   }
@@ -311,7 +312,7 @@ class GUI extends PApplet {    //<>//
   }
 
   void Matrix(int theX, int theY) {
-    gif.AniStart(theX);
+    gif.AniStart(theX, theY);
     if (theX == 0) {
       Layer.load(JSON+0);
     }

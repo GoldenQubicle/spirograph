@@ -1,14 +1,15 @@
 class Animation { //<>//
 
   int Interval, LayerStates, Variables, MatrixWidth, MatrixHeight, CellWidth, CellHeight ;
-  float TotalTime,aniInterval;
+  float TotalTime, aniInterval;
   int [][] AniEnd, AniInt;
   ArrayList<Trigger> triggers;
+  String TriggerID;
 
   Animation() {
     Ani.setDefaultTimeMode(Ani.SECONDS);
-    TotalTime = 3000;
-    LayerStates = 9;
+    TotalTime = 4000;
+    LayerStates = 8;
     Variables = 12; // one too many for top row matrix which needs to be active at all time
     Interval = int(TotalTime/LayerStates);
     aniInterval = float(Interval)/1000;
@@ -27,14 +28,17 @@ class Animation { //<>//
     triggers = new ArrayList();
   }
 
-  void AniStart(int theX) {
-    for (Trigger myTrigger : triggers) {
-      if (theX == myTrigger.Start) {
-        myTrigger.ani();
+  void AniStart(int theX, int theY) {
+    if (theY > 0) {
+      TriggerID = 0 + str(theX) + 0 + str(theY);
+      for (Trigger myTrigger : triggers) {
+        if (TriggerID.equals(myTrigger.ID)) {
+          println(myTrigger.LayerState);
+          myTrigger.ani();
+        }
       }
     }
   }
-  
   void triggerArray() {
     triggers.clear();
     for (int y = 1; y < Variables; y++) {
@@ -43,7 +47,7 @@ class Animation { //<>//
           Trigger Animate;
           Animate = new Trigger(x, y, AniEnd[x][y], AniInt[x][y]);
           triggers.add(Animate);
-          println(x, y, AniEnd[x][y], AniInt[x][y]);
+          //println(x, y, AniEnd[x][y], AniInt[x][y], triggers.size());
         }
       }
     }
@@ -53,14 +57,14 @@ class Animation { //<>//
     for (int y = 1; y < Variables; y++) {
       for (int x = 0; x < LayerStates; x++) {
         if (gui.Ani.get(x, y) == true) {
-          gui.cp5.getController("Easing" + x + y).setVisible(true); 
-          gui.cp5.getController("add" + x + y).setVisible(true);
-          gui.cp5.getController("minus" + x + y).setVisible(true);
+          gui.cp5.getController("Easing"+"0"+x+"0"+y).setVisible(true); 
+          gui.cp5.getController("add"+"0"+x+"0"+y).setVisible(true);
+          gui.cp5.getController("minus"+"0"+x+"0"+y).setVisible(true);
         }  
         if (gui.Ani.get(x, y) == false) {
-          gui.cp5.getController("Easing" + x + y).setVisible(false);
-          gui.cp5.getController("add" + x + y).setVisible(false);
-          gui.cp5.getController("minus" + x + y).setVisible(false);
+          gui.cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false);
+          gui.cp5.getController("add"+"0"+x+"0"+y).setVisible(false);
+          gui.cp5.getController("minus"+"0"+x+"0"+y).setVisible(false);
         }
       }
     }

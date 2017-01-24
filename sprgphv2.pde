@@ -1,7 +1,9 @@
 /*
- BUGS
+
   
-one trigger itself requires additional click, i.e. initial value is 0
+ERM WELP
+  still cannot have two suqsequent triggers on the same layer parameter. . =)  
+  huh, for some reason it seems the ani reading the wrong value?!
  
  TODO
  - add callbacks to easing dropdown to bring to front, along with add/sub
@@ -12,14 +14,6 @@ one trigger itself requires additional click, i.e. initial value is 0
        however, think that's gonne be tricky with regards to timing ani, i.e. first need to load the json into layer, only THEN ani can acces layer
  - option to save individual layerstate, rather than safe forword over every laterstate everytime 
  
- TO CONSIDER
- actually reintroduce trigger class, i.e. 
-   animation pulls in xy array from ani.get
-   based on this array, pull in AniEnd
-   calculate duration
-   send x, y, end & duration to trigger class, with if statements in constructor to arrive at proper configuration
-   trigger object has .ani() and .update() function
-   the main thing here is this will allow to call .pause/.play on the trigger objects, thus potentially allowing for frame-by-frame rendering
  
  
  low prio
