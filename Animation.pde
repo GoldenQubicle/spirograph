@@ -7,13 +7,13 @@ class Animation { //<>//
 
   Animation() {
     Ani.setDefaultTimeMode(Ani.SECONDS);
-    TotalTime = 8000;
-    LayerStates = 16;
-    Variables = 14; // one too many for top row matrix which needs to be active at all time
+    TotalTime = 4000;
+    LayerStates = 8;
+    Variables = 15; // one too many for top row matrix which needs to be active at all time
     Interval = int(TotalTime/LayerStates);
     aniInterval = float(Interval)/1000;
-    MatrixWidth = 400;
-    MatrixHeight = 240;
+    MatrixWidth = 500;
+    MatrixHeight = 300;
     CellWidth = MatrixWidth/LayerStates;    
     CellHeight = MatrixHeight/Variables;
     AniEnd = new int[LayerStates][Variables];
@@ -29,6 +29,10 @@ class Animation { //<>//
 
   void AniStart(int theX, int theY) {
     //println(theX, theY);
+    if(theY == 0){
+        gui.Layer.load(JSON+theX);
+    }
+    
     if (theY > 0) {
       for (Trigger myTrigger : triggers) {
         if (theX == myTrigger.Start) {

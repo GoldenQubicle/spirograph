@@ -1,6 +1,6 @@
-class Layer {
+class Layer { //<>//
   PVector XY, XY2;  
-  float Theta, LX, LY, PlotDots, thelta, Sw, Connect;
+  float Theta, LX, LY, PlotDots, thelta, SW, Connect;
   Gears[] gears;
   Gears gear0, gear1, gear2, gear3;
   color Fill, Stroke;
@@ -28,7 +28,7 @@ class Layer {
     fill = true;
     lines = false;
     dots = false;
-    Sw = 2;
+    SW = 2;
     Connect = 2;
     ID = 1;
   }
@@ -55,7 +55,27 @@ class Layer {
       Dots();
     } else {
       Spiro();
+      //experimental();
+      //sphere3d();
     }
+  }
+
+  void sphere3d() {
+
+    noStroke();
+    lights();
+    translate(gear1.RX, gear1.RY, gear2.RX);
+    sphere(SW);
+  }
+
+  void experimental() {
+    XY.x = gear0.RX;
+    XY.y =  gear0.RY;
+    LX = gear1.RX;
+    LY = gear1.RY;
+    rectMode(CENTER);
+    strokeWeight(SW);
+    rect(XY.x, XY.y, LX, LY);
   }
 
   void Spiro() {
@@ -68,7 +88,7 @@ class Layer {
     }
   }
 
-  void Lines() { //<>//
+  void Lines() {
     for (int G = 0; G < gears.length; G++) {
       for (float i = 0; i < gears[G].P; i++) {
         Theta = (TAU/gears[G].P)*i; 
@@ -79,9 +99,8 @@ class Layer {
         XY2.y = height/2 - sin(thelta)*gear0.RY + sin(thelta/gear1.Ratio())*gear1.RY + sin(thelta/gear2.Ratio())*gear2.RY  + sin(thelta/gear3.Ratio())*gear3.RY;
         strokeCap(ROUND);
         strokeJoin(ROUND);
-        strokeWeight(Sw);
+        strokeWeight(SW);
         line(XY.x, XY.y, XY2.x, XY2.y);
-     
       }
     }
   }
@@ -92,7 +111,7 @@ class Layer {
         Theta = (TAU/gears[G].P)*(i);
         XY.x = width/2 + cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
         XY.y = height/2 - sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
-        strokeWeight(Sw);
+        strokeWeight(SW);
         ellipse(XY.x, XY.y, LX, LY);
       }
     }
@@ -113,11 +132,11 @@ class Gears {
   }
 
   float Ratio() {
-    if(cast == false){
-    R = 1/float((P-1));
+    if (cast == false) {
+      R = 1/float((P-1));
     }
-    if(cast == true){
-        fP = float(P);
+    if (cast == true) {
+      fP = float(P);
       R = 1/((fP-1));
     }
     return R;

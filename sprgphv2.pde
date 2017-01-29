@@ -1,13 +1,30 @@
 /*
+BIG IDEA: TRY 3D!
+so yeah, deffo gonna do this =) 
+current thinking
+ add z dimension to gear
+ add z calculation to formulas
+ since theta is based on circumference, gear0.C needs to be replaced with surface area sphere
+ plot the outcome to translate
+ 
+ also, prolly want to make a new class for this . .
+
+ROADMAP GOING FORWARD
+  - ani easing / matrix tab as seperate controller property object
+  - multiple layer support!
+  - full control implementation
+  - save/load above & layerstates into one single JSON file
+  - start renderer seperate from timing matrix
+
  TODO
+ - sort saving colors
+     adding color picker to layer properties result in nullpointer on load, even though it's saved in json
+     however, doesnt matter because I want to save both fill & stroke color, i.e. two variables instead of one     
  - add callbacks to easing dropdown to bring to front, along with add/sub
  - be able to save the result of interacting ani to layerstate, grab the value from layer, write to cp5 and save json
- - have last first & layerstate sync 
- - have the option to load a complete layerstate on a trigger, so to switch between settings while retaining the same visual design
-       come to think of this, could put this on 1st row of matrix, and ALWAYS set 1st cell, so that it acts as reset on loop?
-       however, think that's gonne be tricky with regards to timing ani, i.e. first need to load the json into layer, only THEN ani can acces layer
- - new controller property object for easing styles, because now when I switch layerstates it loads easing from those
-     i.e. probably need to have 1 json for the matrix / ani easing which serves as script of sorts 
+ - textfields to enter gear radii
+ - toggle to save forward for individual layer parameter
+ - individual matrix trigger, ie .trigger(N), somekind of dial? i.e. selected trigger fires on spacebar 
  
  low prio
  cast toggle mode per individual gear / gear connector
@@ -32,7 +49,7 @@ boolean play;
 String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
 
 void settings() {
-  size(512, 512, P2D);
+  size(512, 512, P3D);
   smooth(8);
 }
 
@@ -61,7 +78,7 @@ void draw() {
   }
 
   gui.BG(BG);  
-  gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
+  gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >| //<>//
 }
 
 void keyPressed() {

@@ -1,4 +1,4 @@
-class GUI extends PApplet {    //<>//
+class GUI extends PApplet {     //<>//
   int id, set;
   boolean layerlock;
   PApplet parent;
@@ -12,9 +12,9 @@ class GUI extends PApplet {    //<>//
   Button New, Copy, SaveAll, Save, Increase, Decrease;
   Matrix Ani;
   ControllerProperties Layer;
-  ButtonBar LayerState, TriggerState;
+  ButtonBar LayerState;
   Textlabel Label;
-  String [] Labels = {"", "Gear 0 X", "Gear 0 Y", "Gear 1 Petals", "Gear 1 X", "Gear 1 Y", "Gear 2 Petals", "Gear 2 X", "Gear 2 Y", "Gear 3 Petals", "Gear 3 X", "Gear 3 Y", "Line X", "Line Y"}; 
+  String [] Labels = {"", "Gear 0 X", "Gear 0 Y", "Gear 1 Petals", "Gear 1 X", "Gear 1 Y", "Gear 2 Petals", "Gear 2 X", "Gear 2 Y", "Gear 3 Petals", "Gear 3 X", "Gear 3 Y", "Line X", "Line Y", "StrokeWeight"}; 
   String[] EasingNames = {"LINEAR", "QUAD_IN", "QUAD_OUT", "QUAD_IN_OUT", "CUBIC_IN", "CUBIC_IN_OUT", "CUBIC_OUT", "QUART_IN", "QUART_OUT", "QUART_IN_OUT", "QUINT_IN", "QUINT_OUT", "QUINT_IN_OUT", "SINE_IN", "SINE_OUT", "SINE_IN_OUT", "CIRC_IN", "CIRC_OUT", "CIRC_IN_OUT", "EXPO_IN", "EXPO_OUT", "EXPO_IN_OUT", "BACK_IN", "BACK_OUT", "BACK_IN_OUT", "BOUNCE_IN", "BOUNCE_OUT", "BOUNCE_IN_OUT", "ELASTIC_IN", "ELASTIC_OUT", "ELASTIC_IN_OUT"};
 
   public GUI(PApplet theApplet) {
@@ -24,7 +24,7 @@ class GUI extends PApplet {    //<>//
   }
 
   public void settings() {
-    size(512, 768);
+    size(648, 824);
   } 
 
   public void setup() {
@@ -66,7 +66,7 @@ class GUI extends PApplet {    //<>//
     Stroke = cp5.addToggle("Stroke").setPosition(65, 370).setSize(45, 15).setMode(ControlP5.SWITCH).setState(false).plugTo(this, "Controls").moveTo("global");
     LX = cp5.addSlider("LineX").setPosition(10, 350).setRange(0, 250).plugTo(this, "Controls").setValue(layers.get(id).LX).moveTo("global");
     LY = cp5.addSlider("LineY").setPosition(160, 350).setRange(0, 250).plugTo(this, "Controls").setValue(layers.get(id).LY).moveTo("global");
-    SW = cp5.addSlider("StrokeWeight").setPosition(310, 330).setRange(0, 250).setValue(2).plugTo(this, "Controls").setValue(layers.get(id).Sw).moveTo("global");
+    SW = cp5.addSlider("StrokeWeight").setPosition(310, 330).setRange(0, 250).setValue(2).plugTo(this, "Controls").setValue(layers.get(id).SW).moveTo("global");
     Lines = cp5.addToggle("Lines").setPosition(310, 290).setSize(20, 20).setState(false).plugTo(this, "Controls").moveTo("global");
     Dots = cp5.addToggle("Dots").setPosition(340, 290).setSize(20, 20).setState(false).plugTo(this, "Controls").moveTo("global");
     Cast = cp5.addToggle("Cast").setPosition(370, 290).setSize(20, 20).setState(false).plugTo(this, "Controls").moveTo("global");
@@ -167,7 +167,7 @@ class GUI extends PApplet {    //<>//
     cp5.getWindow().setPositionOfTabs(10, 450);
 
     //button bar layerstates
-    LayerState = cp5.addButtonBar("ls").setPosition(10, 498).setSize(gif.MatrixWidth, gif.CellHeight);
+    LayerState = cp5.addButtonBar("ls").setPosition(10, 475).setSize(gif.MatrixWidth, gif.CellHeight);
     String [] buttonL;
     buttonL = new String[gif.LayerStates];
     for (int i = 0; i < gif.LayerStates; i++) {       
@@ -189,15 +189,15 @@ class GUI extends PApplet {    //<>//
     Layer = cp5.getProperties();
     //Layer.remove(LX);
     //Layer.remove(LY);
-    Layer.remove(SW);
-    Layer.remove(D);
+    //Layer.remove(SW);
+    //Layer.remove(D);
     Layer.remove(G1c);
     Layer.remove(G2c);
     Layer.remove(G3c);
-    Layer.remove(Fill);
-    Layer.remove(Stroke);
-    Layer.remove(Lines);
-    Layer.remove(Dots);
+    //Layer.remove(Fill);
+    //Layer.remove(Stroke);
+    //Layer.remove(Lines);
+    //Layer.remove(Dots);
     Layer.remove(CS);
     Layer.remove(Cast);
     Layer.remove(Pause);
@@ -207,8 +207,9 @@ class GUI extends PApplet {    //<>//
     Layer.remove(LayerList);
     Layer.remove(Copy);
     Layer.remove(New);
-    Layer.remove(LayerState);
+    //Layer.remove(LayerState);
     Layer.remove(SaveAll);
+    Layer.remove(Save);
 
     // saves JSON for each layerstate
     for (int i=0; i < gif.LayerStates; i++) {
@@ -218,11 +219,11 @@ class GUI extends PApplet {    //<>//
 
     // actual matrix
     Ani = cp5.addMatrix("Matrix").setPosition(10, 500).setSize(gif.MatrixWidth, gif.MatrixHeight). setGap(5, 5).setMode(ControlP5.MULTIPLES)
-      .setInterval(gif.Interval).setGrid(gif.LayerStates, gif.Variables).stop();
-    for (int i = 0; i < gif.LayerStates; i++) {
-      Ani.set(i, 0, true);
-    }
-    // labels
+      .setInterval(gif.Interval).setGrid(gif.LayerStates, gif.Variables).set(0, 0, true).stop();
+    //for (int i = 0; i < gif.LayerStates; i++) {
+    //  Ani.set(i, 0, true);
+    //}
+    //// labels
     for (int i = 0; i < Labels.length; i++) {
       Label =  cp5.addTextlabel("Label" + i).setPosition(gif.MatrixWidth + 10, 505 + (gif.CellHeight*i)).setText(Labels[i]).moveTo("global");
       Layer.remove(Label, "Label" + i);
@@ -246,9 +247,9 @@ class GUI extends PApplet {    //<>//
               gif.AniEnd[x][y] = gif.AniEnd[x][y] + int(theEvent.getController().getValue());
               int interval = gif.AniEnd[x][y] - x; 
               gif.AniInt[x][y] = interval;
-              cp5.getController("Easing"+"0"+x+"0"+y).setWidth(interval*gif.CellWidth);
-              theEvent.getController().setPosition( ((10+gif.CellWidth) + (x*gif.CellWidth) + ((interval-1)*gif.CellWidth)), 500 + (y*gif.CellHeight));
-              println(x, y, gif.AniEnd[x][y],interval);
+              cp5.getController("Easing"+"0"+x+"0"+y).setWidth(gif.CellWidth + interval*gif.CellWidth);
+              theEvent.getController().setPosition( ((10+gif.CellWidth) + (x*gif.CellWidth) + ((interval)*gif.CellWidth)), 500 + (y*gif.CellHeight));
+              //println(gif.AniEnd[x][y],interval);
             }
           }
         }
@@ -263,7 +264,7 @@ class GUI extends PApplet {    //<>//
               gif.AniEnd[x][y] = gif.AniEnd[x][y] - int(theEvent.getController().getValue());
               int interval = gif.AniEnd[x][y] - x;   
               gif.AniInt[x][y] = interval;
-              cp5.getController("Easing"+"0"+x+"0"+y).setWidth(interval*gif.CellWidth);
+              cp5.getController("Easing"+"0"+x+"0"+y).setWidth(gif.CellWidth + interval*gif.CellWidth);
               int tempx = int(cp5.getController("add"+"0"+x+"0"+y).getPosition()[0]);
               cp5.getController("add"+"0"+x+"0"+y).setPosition( (tempx - gif.CellWidth), 500 + (y*gif.CellHeight));
               //println(x, y,  gif.AniEnd[x][y],interval);
@@ -358,7 +359,7 @@ class GUI extends PApplet {    //<>//
       LY.setValue(layers.get(set).LY);
       Fill.setState(layers.get(set).fill);
       Stroke.setState(layers.get(set).stroke);
-      SW.setValue(layers.get(set).Sw);
+      SW.setValue(layers.get(set).SW);
       Lines.setState(layers.get(set).lines);
       Dots.setState(layers.get(set).dots);
       D.setValue(layers.get(set).PlotDots);
@@ -400,7 +401,7 @@ class GUI extends PApplet {    //<>//
       layers.get(id).LY = LY.getValue();
       layers.get(id).fill = Fill.getState();
       layers.get(id).stroke = Stroke.getState();
-      layers.get(id).Sw = SW.getValue();
+      layers.get(id).SW = SW.getValue();
       layers.get(id).lines = Lines.getState();
       layers.get(id).dots = Dots.getState();
       layers.get(id).PlotDots = D.getValue();
