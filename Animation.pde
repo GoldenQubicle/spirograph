@@ -48,7 +48,7 @@ class Animation { //<>//
       for (int x = 0; x < LayerStates; x++) {
         if (gui.Ani.get(x, y) == true) {
           Trigger Animate;
-          Animate = new Trigger(x, y, AniEnd[x][y], AniInt[x][y]);
+          Animate = new Trigger(x, y, AniEnd[x][y]);
           triggers.add(Animate);
         }
       }

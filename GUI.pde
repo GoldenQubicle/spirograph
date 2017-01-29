@@ -246,7 +246,7 @@ class GUI extends PApplet {     //<>//
               int y = (int(theEvent.getController().getPosition()[1]) - 500)/gif.CellHeight;        
               gif.AniEnd[x][y] = gif.AniEnd[x][y] + int(theEvent.getController().getValue());
               int interval = gif.AniEnd[x][y] - x; 
-              gif.AniInt[x][y] = interval;
+              //gif.AniInt[x][y] = interval;
               cp5.getController("Easing"+"0"+x+"0"+y).setWidth(gif.CellWidth + interval*gif.CellWidth);
               theEvent.getController().setPosition( ((10+gif.CellWidth) + (x*gif.CellWidth) + ((interval)*gif.CellWidth)), 500 + (y*gif.CellHeight));
               //println(gif.AniEnd[x][y],interval);
@@ -263,7 +263,7 @@ class GUI extends PApplet {     //<>//
               int y = (int(theEvent.getController().getPosition()[1]) - 500)/gif.CellHeight;        
               gif.AniEnd[x][y] = gif.AniEnd[x][y] - int(theEvent.getController().getValue());
               int interval = gif.AniEnd[x][y] - x;   
-              gif.AniInt[x][y] = interval;
+              //gif.AniInt[x][y] = interval;
               cp5.getController("Easing"+"0"+x+"0"+y).setWidth(gif.CellWidth + interval*gif.CellWidth);
               int tempx = int(cp5.getController("add"+"0"+x+"0"+y).getPosition()[0]);
               cp5.getController("add"+"0"+x+"0"+y).setPosition( (tempx - gif.CellWidth), 500 + (y*gif.CellHeight));
