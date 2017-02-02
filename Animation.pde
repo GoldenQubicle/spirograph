@@ -4,16 +4,17 @@ class Animation { //<>//
   float TotalTime, aniInterval;
   int [][] AniEnd, AniInt;
   ArrayList<Trigger> triggers;
+  boolean loadlayerstate;
 
   Animation() {
-    Ani.setDefaultTimeMode(Ani.SECONDS);
+
     TotalTime = 4000;
     LayerStates = 8;
-    Variables = 15; // one too many for top row matrix which needs to be active at all time
+    Variables = 19; // one too many for top row matrix which needs to be active at all time
     Interval = int(TotalTime/LayerStates);
     aniInterval = float(Interval)/1000;
     MatrixWidth = 500;
-    MatrixHeight = 300;
+    MatrixHeight = 400;
     CellWidth = MatrixWidth/LayerStates;    
     CellHeight = MatrixHeight/Variables;
     AniEnd = new int[LayerStates][Variables];
@@ -25,20 +26,18 @@ class Animation { //<>//
       }
     }
     triggers = new ArrayList();
+    println(aniInterval);
   }
 
   void AniStart(int theX, int theY) {
-    //println(theX, theY);
-    if(theY == 0){
-        gui.Layer.load(JSON+theX);
-    }
-    
     if (theY > 0) {
       for (Trigger myTrigger : triggers) {
         if (theX == myTrigger.Start) {
           myTrigger.ani();
         }
       }
+    } else {
+      gui.Layer.load(JSON+theX);
     }
   }
 

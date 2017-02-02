@@ -12,6 +12,7 @@ current thinking
 ROADMAP GOING FORWARD
   - ani easing / matrix tab as seperate controller property object
   - multiple layer support!
+  - also, add blendmodes to layers?
   - full control implementation
   - save/load above & layerstates into one single JSON file
   - start renderer seperate from timing matrix
@@ -58,6 +59,7 @@ void setup() {
   play = false;
   Ani.init(this);
   Ani.noAutostart();
+  Ani.setDefaultTimeMode(Ani.SECONDS);
   BG = 128;  
   layers = new ArrayList();
   layer_1 = new Layer();
@@ -65,7 +67,7 @@ void setup() {
   ds = new DawesomeToolkit(this);
   ds.enableLazySave('i', ".png");
   gui = new GUI(this);
-
+  blendMode(SCREEN);
   //gifExport = new GifMaker(this, "export.gif");
 }
 

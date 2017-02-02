@@ -14,7 +14,7 @@ class GUI extends PApplet {     //<>//
   ControllerProperties Layer;
   ButtonBar LayerState;
   Textlabel Label;
-  String [] Labels = {"", "Gear 0 X", "Gear 0 Y", "Gear 1 Petals", "Gear 1 X", "Gear 1 Y", "Gear 2 Petals", "Gear 2 X", "Gear 2 Y", "Gear 3 Petals", "Gear 3 X", "Gear 3 Y", "Line X", "Line Y", "StrokeWeight"}; 
+  String [] Labels = {"", "Gear 0 X", "Gear 0 Y", "Gear 1 Petals", "Gear 1 X", "Gear 1 Y", "Gear 2 Petals", "Gear 2 X", "Gear 2 Y", "Gear 3 Petals", "Gear 3 X", "Gear 3 Y", "Line X", "Line Y", "StrokeWeight", "Connect G1", "Connect G2", "Connect G3", "Density"}; 
   String[] EasingNames = {"LINEAR", "QUAD_IN", "QUAD_OUT", "QUAD_IN_OUT", "CUBIC_IN", "CUBIC_IN_OUT", "CUBIC_OUT", "QUART_IN", "QUART_OUT", "QUART_IN_OUT", "QUINT_IN", "QUINT_OUT", "QUINT_IN_OUT", "SINE_IN", "SINE_OUT", "SINE_IN_OUT", "CIRC_IN", "CIRC_OUT", "CIRC_IN_OUT", "EXPO_IN", "EXPO_OUT", "EXPO_IN_OUT", "BACK_IN", "BACK_OUT", "BACK_IN_OUT", "BOUNCE_IN", "BOUNCE_OUT", "BOUNCE_IN_OUT", "ELASTIC_IN", "ELASTIC_OUT", "ELASTIC_IN_OUT"};
 
   public GUI(PApplet theApplet) {
@@ -24,7 +24,7 @@ class GUI extends PApplet {     //<>//
   }
 
   public void settings() {
-    size(648, 824);
+    size(648, 980);
   } 
 
   public void setup() {
@@ -191,9 +191,9 @@ class GUI extends PApplet {     //<>//
     //Layer.remove(LY);
     //Layer.remove(SW);
     //Layer.remove(D);
-    Layer.remove(G1c);
-    Layer.remove(G2c);
-    Layer.remove(G3c);
+    //Layer.remove(G1c);
+    //Layer.remove(G2c);
+    //Layer.remove(G3c);
     //Layer.remove(Fill);
     //Layer.remove(Stroke);
     //Layer.remove(Lines);
@@ -204,7 +204,7 @@ class GUI extends PApplet {     //<>//
     Layer.remove(cp);
     Layer.remove(cw);
     Layer.remove(Ani);
-    Layer.remove(LayerList);
+    //Layer.remove(LayerList);
     Layer.remove(Copy);
     Layer.remove(New);
     //Layer.remove(LayerState);
@@ -220,9 +220,7 @@ class GUI extends PApplet {     //<>//
     // actual matrix
     Ani = cp5.addMatrix("Matrix").setPosition(10, 500).setSize(gif.MatrixWidth, gif.MatrixHeight). setGap(5, 5).setMode(ControlP5.MULTIPLES)
       .setInterval(gif.Interval).setGrid(gif.LayerStates, gif.Variables).set(0, 0, true).stop();
-    //for (int i = 0; i < gif.LayerStates; i++) {
-    //  Ani.set(i, 0, true);
-    //}
+
     //// labels
     for (int i = 0; i < Labels.length; i++) {
       Label =  cp5.addTextlabel("Label" + i).setPosition(gif.MatrixWidth + 10, 505 + (gif.CellHeight*i)).setText(Labels[i]).moveTo("global");
