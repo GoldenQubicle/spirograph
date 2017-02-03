@@ -349,7 +349,7 @@ class GUI extends PApplet {     //<>//
       G2 = cp5.addSlider2D("Radius Gear2").setMinMax(0, 0, 256, 256).setPosition(10, 230).setCaptionLabel("Radius Gear 2").plugTo(this, "Controls").setValue(map(layers.get(set).gear2.RX, -128, 128, 0, 256), map(layers.get(set).gear2.RY, -128, 128, 0, 256));
       cp5.getController("Radius Gear2").moveTo("global");
       G3 = cp5.addSlider2D("Radius Gear3").setMinMax(0, 0, 256, 256).setPosition(160, 230).setCaptionLabel("Radius Gear 3").plugTo(this, "Controls").setValue(map(layers.get(set).gear3.RX, -128, 128, 0, 256), map(layers.get(set).gear3.RY, -128, 128, 0, 256));
-      cp5.getController("Radius Gear3").moveTo("global");
+      cp5.getController("Radius Gear3").moveTo("global");   
       P1.setValue(layers.get(set).gear1.P);
       P2.setValue(layers.get(set).gear2.P);
       P3.setValue(layers.get(set).gear3.P);
@@ -377,6 +377,13 @@ class GUI extends PApplet {     //<>//
 
   void Controls() {
     if (layerlock == false) {
+
+      // 3D
+      //layers.get(id).gear0.RX = G0.getArrayValue(0);
+      //layers.get(id).gear0.RY = G0.getArrayValue(1);
+      //layers.get(id).gear0.RZ = G3.getArrayValue(0);
+
+
       layers.get(id).gear0.RX = map(G0.getArrayValue(0), 0, 512, -256, 256);
       layers.get(id).gear0.RY = map(G0.getArrayValue(1), 0, 512, -256, 256);
       layers.get(id).gear1.RX = map(G1.getArrayValue(0), 0, 256, -128, 128);

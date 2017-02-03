@@ -6,7 +6,7 @@ class Layer { //<>//
   color Fill, Stroke;
   boolean stroke, fill, lines, dots;
   int ID;
-
+  float r = .1;
   Layer() {
     XY = new PVector();
     XY2 = new PVector();
@@ -46,6 +46,15 @@ class Layer { //<>//
     if (stroke == false) {
       noStroke();
     }
+    // faux 3D, spinning over axis
+    //pushMatrix();
+    //translate(256,256);    
+    //rotateX(r);
+    //rotateY(r);
+    //rotateZ(r);
+    //translate(-256, -256);
+    //pushMatrix();
+
     if (dots == true && lines == true) {
       Dots();
       Lines();
@@ -53,11 +62,12 @@ class Layer { //<>//
       Lines();
     } else if (dots == true) {
       Dots();
-    } else {
+    } else {     
       Spiro();
-      //experimental();
-      //sphere3d();
     }
+    //popMatrix();
+    //r+=.01;
+    //popMatrix();
   }
 
   void sphere3d() {
