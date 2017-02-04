@@ -14,7 +14,7 @@ class Layer3D {
 
     XYZ = new PVector();
     gears = new Gears3D[4];
-    gear0 = new Gears3D(0, 0, 0);
+    gear0 = new Gears3D(25, 50, 0);
     gear1 = new Gears3D(0, 0, 0);
     gear2 = new Gears3D(0, 0, 0);
     gear3 = new Gears3D(0, 0, 0);
@@ -23,23 +23,25 @@ class Layer3D {
     gears[2] = gear2;
     gears[3] = gear3;
     SW=10;
+    
+
+    
   }
 
   void display() {
     noStroke();
     lights();
-
-    translate(256, 256);
+    translate(width/2, height/4, -512);
     pushMatrix();
-    for (float i = 0; i < 200; i++) {
-      Theta = (TAU/gear0.Area())*i;
-      Phi = (PI/gear0.Area())*i;
-      XYZ.x =  gear0.RX*cos(Theta)*cos(Phi); // + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
+    for (float i = 0; i <= 100; i++) {
+      Theta = (TAU/100)*i;
+      Phi = (PI/100)*i;
+      XYZ.x =  gear0.RX*sin(Theta)*cos(Phi); // + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
       XYZ.y =  gear0.RY*sin(Theta)*sin(Phi); // + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
-      XYZ.z =  gear0.RZ*sin(Theta)*cos(Phi); 
+      XYZ.z =  gear0.RZ*cos(Theta); 
       translate(XYZ.x, XYZ.y, XYZ.z);
-      sphere(SW);
-      //println(XYZ.x, XYZ.y, XYZ.z, Theta, Phi, gear0.RX,gear0.RY);
+      sphere(10);
+
        //sqrt(sq(gear0.RX)+sq(gear0.RY)+sq(gear0.RZ))
     }
     popMatrix();

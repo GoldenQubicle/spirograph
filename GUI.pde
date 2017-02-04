@@ -4,7 +4,7 @@ class GUI extends PApplet {     //<>//
   PApplet parent;
   ControlP5 cp5;
   Slider2D G0, G1, G2, G3;
-  Slider P1, P2, P3, LX, LY, SW, D, G1c, G2c, G3c, Duration;
+  Slider P1, P2, P3, LX, LY, SW, D, G1c, G2c, G3c, Duration, G0X, G0Y, G0Z;
   Toggle Fill, Stroke, Lines, Dots, CS, Cast, Pause;
   ColorPicker cp;
   ColorWheel cw;
@@ -159,12 +159,14 @@ class GUI extends PApplet {     //<>//
     Pause = cp5.addToggle("Play/Pause").setPosition(10, 400).setSize(30, 15).setState(play).moveTo("global");
 
     // setup tabs for animation ui
-    cp5.getTab("default").setCaptionLabel("Matrix");
+    cp5.getTab("default").setCaptionLabel("Matrix").setId(1);
     cp5.addTab("Ani Easing");
-    cp5.getTab("Ani Easing").activateEvent(true);
+    cp5.getTab("Ani Easing").activateEvent(true).setId(2);
     cp5.getTab("default").activateEvent(true);
     cp5.getTab("Ani Easing");
     cp5.getWindow().setPositionOfTabs(10, 450);
+    cp5.addTab("3D");
+    cp5.getTab("3D").activateEvent(true).setId(3);
 
     //button bar layerstates
     LayerState = cp5.addButtonBar("ls").setPosition(10, 475).setSize(gif.MatrixWidth, gif.CellHeight);
@@ -280,6 +282,12 @@ class GUI extends PApplet {     //<>//
         //Layer.remove(Easing, "Easing"+"0"+x+"0"+y);
       }
     }
+    
+    
+        G0X = cp5.addSlider("G0X").setPosition(10, 500).moveTo("3D").setRange(0,50).plugTo(this, "Controls");
+        G0Y = cp5.addSlider("G0Y").setPosition(10, 515).moveTo("3D").setRange(0,50).plugTo(this, "Controls");
+        G0Z = cp5.addSlider("G0Z").setPosition(10, 530).moveTo("3D").setRange(0,50).plugTo(this, "Controls");
+    
   }
 
   void draw() {
@@ -319,8 +327,12 @@ class GUI extends PApplet {     //<>//
 
   void controlEvent(ControlEvent theControlEvent) {
     if (theControlEvent.isTab()) {
-      gif.TabToggle();
-    }
+       gif.TabToggle();
+        Mode = theControlEvent.getTab().getId();
+        
+     println("check" +  theControlEvent.getTab().getId());
+     
+   }
   }
 
   void ColorFillStroke() {
@@ -377,13 +389,12 @@ class GUI extends PApplet {     //<>//
 
   void Controls() {
     if (layerlock == false) {
-
-      // 3D
-      //layers.get(id).gear0.RX = G0.getArrayValue(0);
-      //layers.get(id).gear0.RY = G0.getArrayValue(1);
-      //layers.get(id).gear0.RZ = G3.getArrayValue(0);
-
-
+      //3D controls
+      layer3d_1.gear0.RX = G0X.getValue();
+      layer3d_1.gear0.RY = G0Y.getValue();
+      layer3d_1.gear0.RZ = G0Z.getValue();
+      
+      
       layers.get(id).gear0.RX = map(G0.getArrayValue(0), 0, 512, -256, 256);
       layers.get(id).gear0.RY = map(G0.getArrayValue(1), 0, 512, -256, 256);
       layers.get(id).gear1.RX = map(G1.getArrayValue(0), 0, 256, -128, 128);

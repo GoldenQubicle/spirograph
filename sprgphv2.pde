@@ -1,17 +1,8 @@
 /* //<>//
-BIG IDEA: TRY 3D!
- so yeah, deffo gonna do this =) 
- current thinking
- add z dimension to gear
- add z calculation to formulas
- since theta is based on circumference, gear0.C needs to be replaced with surface area sphere
- plot the outcome to translate
+3D
+ - sphere made out of spheres first
  
- also, prolly want to make a new class for this . .
  
- quick braindump with regard to myriad of fixes for 2d
- basically need to tackle it from multiple layer, because each layer will need 1) layerstates AND 2) it's own ani/easing settings
- i.e. all data need to be held per layer, and probably want to move functions for it into animation class
  
  ROADMAP GOING FORWARD 
  - ani easing / matrix tab as seperate controller property object
@@ -55,7 +46,7 @@ GUI gui;
 Animation gif;
 boolean play;
 String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
-
+int Mode;
 void settings() {
   size(512, 512, P3D);
   smooth(8);
@@ -76,7 +67,7 @@ void setup() {
   ds = new DawesomeToolkit(this);
   ds.enableLazySave('i', ".png");
   gui = new GUI(this);
-  blendMode(SCREEN);
+  //blendMode(SCREEN);
   //gifExport = new GifMaker(this, "export.gif");
   //cam = new PeasyCam(this, 100);
   //cam = new PeasyCam(this, 100);
@@ -87,12 +78,16 @@ void draw() {
   background(BG);
   //println(frameRate);
 
-  for (int i = 0; i < layers.size(); i++) {
-    layers.get(i).display();
+  if (Mode == 1 || Mode == 2) {
+    for (int i = 0; i < layers.size(); i++) {
+      layers.get(i).display();
+    }
+  } else {
+    layer3d_1.display();
   }
 
   gui.BG(BG);  
-  gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
+  //gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
 }
 
 void keyPressed() {
