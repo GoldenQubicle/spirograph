@@ -49,8 +49,8 @@ class Layer { //<>//
     // faux 3D, spinning over axis
     //pushMatrix();
     //translate(256,256);    
-    //rotateX(r);
-    //rotateY(r);
+    ////rotateX(r);
+    ////rotateY(r);
     //rotateZ(r);
     //translate(-256, -256);
     //pushMatrix();

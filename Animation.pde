@@ -8,8 +8,8 @@ class Animation { //<>//
 
   Animation() {
 
-    TotalTime = 6000;
-    LayerStates = 12;
+    TotalTime = 3000;
+    LayerStates = 15;
     Variables = 19; // one too many for top row matrix which needs to be active at all time
     Interval = int(TotalTime/LayerStates);
     aniInterval = float(Interval)/1000;

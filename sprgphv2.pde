@@ -1,30 +1,14 @@
 /* //<>//
-3D
- - sphere made out of spheres first
- 
- 
- 
- ROADMAP GOING FORWARD 
- - ani easing / matrix tab as seperate controller property object
- - multiple layer support!
- - also, add blendmodes to layers?
- - full control implementation
- - save/load above & layerstates into one single JSON file
- - start renderer seperate from timing matrix
- 
- TODO
- - sort saving colors
- adding color picker to layer properties result in nullpointer on load, even though it's saved in json
- however, doesnt matter because I want to save both fill & stroke color, i.e. two variables instead of one     
- - add callbacks to easing dropdown to bring to front, along with add/sub
- - be able to save the result of interacting ani to layerstate, grab the value from layer, write to cp5 and save json
- - textfields to enter gear radii
- - toggle to save forward for individual layer parameter
- - individual matrix trigger, ie .trigger(N), somekind of dial? i.e. selected trigger fires on spacebar 
- 
- low prio
- cast toggle mode per individual gear / gear connector
- rework density with radiobutton for value ranges 
+so yeah, not sure where this project is going. Like, I would ideally like to have a 3d version yes, and a custom renderer which writes out
+elaborate animations at 60fps. . thats not what I meant. 
+What I mean is, not sure what exaclty the next thing I should be working on is gonna be
+like, being able to write/write animations would be pretty awesome, however, thats gonna require some sort of refactoring
+both in terms of layerstate treatment and gui
+moreover, 3d mode would be pretty awesome as well, yes, though yet again will require some work in terms of gui
+SO
+maybe I should abstract gui, e.g. slider2d provides 2d array of values within a certain range, i.e. its not bound to any specific object
+in yet another words, perhaps the actual controls need become methods of layer objects, and which specific visual element they affect 
+is determined by the layer mode - which can be spirograph, lines, dots, 3d, whatever
  
  */
 import peasy.*;
@@ -48,7 +32,7 @@ boolean play;
 String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
 int Mode;
 void settings() {
-  size(512, 512, P3D);
+  size(640, 640, P3D);
   smooth(8);
 }
 
@@ -67,11 +51,11 @@ void setup() {
   ds = new DawesomeToolkit(this);
   ds.enableLazySave('i', ".png");
   gui = new GUI(this);
-  //blendMode(SCREEN);
+  blendMode(SCREEN);
   //gifExport = new GifMaker(this, "export.gif");
-  //cam = new PeasyCam(this, 100);
-  //cam = new PeasyCam(this, 100);
-  //cam.setFreeRotationMode();
+  cam = new PeasyCam(this, 100);
+  cam = new PeasyCam(this, 100);
+  cam.setFreeRotationMode();
 }
 
 void draw() {
@@ -87,7 +71,7 @@ void draw() {
   }
 
   gui.BG(BG);  
-  //gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
+  gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
 }
 
 void keyPressed() {
