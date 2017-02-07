@@ -51,7 +51,7 @@ void setup() {
   ds = new DawesomeToolkit(this);
   ds.enableLazySave('i', ".png");
   gui = new GUI(this);
-  blendMode(SCREEN);
+  //blendMode(SCREEN);
   //gifExport = new GifMaker(this, "export.gif");
   cam = new PeasyCam(this, 100);
   cam = new PeasyCam(this, 100);
@@ -71,7 +71,7 @@ void draw() {
   }
 
   gui.BG(BG);  
-  gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
+  //gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
 }
 
 void keyPressed() {
