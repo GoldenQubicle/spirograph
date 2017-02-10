@@ -1,14 +1,14 @@
 class Layer { //<>//
-  PVector XY, XY2;  
-  float Theta, LX, LY, PlotDots, thelta, SW, Connect;
+  PVector XYZ, XY2;  
+  float Theta, Phi, LX, LY, PlotDots, SW, Connect;
   Gears[] gears;
   Gears gear0, gear1, gear2, gear3;
   color Fill, Stroke;
-  boolean stroke, fill, lines, dots;
+  boolean stroke, fill, lines, dots, spheres3d;
   int ID;
   float r = .1;
   Layer() {
-    XY = new PVector();
+    XYZ = new PVector();
     XY2 = new PVector();
     gears = new Gears[4];
     gear0 = new Gears(130, 130, 0);
@@ -62,6 +62,12 @@ class Layer { //<>//
       Lines();
     } else if (dots == true) {
       Dots();
+    } else if (spheres3d == true) {
+
+      //     pushMatrix();
+      //      translate(width/2, height/2, 0);
+      sphere3d();
+      //popMatrix();
     } else {     
       Spiro();
     }
@@ -71,46 +77,54 @@ class Layer { //<>//
   }
 
   void sphere3d() {
+      cam.setActive(true);
+    lights();  
+    float Spheres = 500;   
+    for (float T = 0; T < Spheres; T+=2) {
+      Theta = (TAU/Spheres)*T;
+      for (float P = 0; P < Spheres; P+=2) {
+        Phi = (PI/Spheres)*P;
+        XYZ.x =  gear0.RX*cos(Theta)*sin(Phi) + gear1.RX*cos(Theta/gear1.Ratio())*sin(Phi/gear1.Ratio()) + gear2.RX*cos(Theta/gear2.Ratio())*sin(Phi/gear2.Ratio()) + gear3.RX*cos(Theta/gear3.Ratio())*sin(Phi/gear3.Ratio());
+        XYZ.y =  gear0.RY*sin(Theta)*sin(Phi) + gear1.RY*sin(Theta/gear1.Ratio())*sin(Phi/gear1.Ratio()) + gear2.RY*sin(Theta/gear2.Ratio())*sin(Phi/gear2.Ratio()) + gear3.RY*sin(Theta/gear3.Ratio())*sin(Phi/gear3.Ratio()); 
+        XYZ.z =  gear0.RZ*cos(Phi) + gear1.RZ*cos(Phi/gear1.Ratio()) + gear2.RZ*cos(Phi/gear2.Ratio()) + gear3.RZ*cos(Phi/gear3.Ratio());
+        //pushMatrix();
+        //translate(XYZ.x, XYZ.y, XYZ.z);
+        //sphere(1);
+        stroke(255, 255, 255);
+        point(XYZ.x, XYZ.y, XYZ.z);
+        //sphereDetail(3);
+        //popMatrix();
+      }
+    }
 
-    noStroke();
-    lights();
-    translate(gear1.RX, gear1.RY, gear2.RX);
-    sphere(SW);
   }
 
-  void experimental() {
-    XY.x = gear0.RX;
-    XY.y =  gear0.RY;
-    LX = gear1.RX;
-    LY = gear1.RY;
-    rectMode(CENTER);
-    strokeWeight(SW);
-    rect(XY.x, XY.y, LX, LY);
-  }
 
   void Spiro() {
+    cam.setActive(false);
     for (float i = 0; i < PlotDots; i++) {
       Theta = (TAU/gear0.C)*i;
-      XY.x = width/2 + cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
-      XY.y = height/2 - sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
+      XYZ.x = cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
+      XYZ.y =  sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
       strokeWeight(1);
-      ellipse(XY.x, XY.y, LX, LY);
+      ellipse(XYZ.x, XYZ.y, LX, LY);
     }
+
   }
 
   void Lines() {
     for (int G = 0; G < gears.length; G++) {
       for (float i = 0; i < gears[G].P; i++) {
         Theta = (TAU/gears[G].P)*i; 
-        thelta = (TAU/gears[G].P)*(i+gears[G].Connect);
-        XY.x = width/2 + cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
-        XY.y = height/2 - sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
-        XY2.x = width/2 + cos(thelta)*gear0.RX + cos(thelta/gear1.Ratio())*gear1.RX + cos(thelta/gear2.Ratio())*gear2.RX + cos(thelta/gear3.Ratio())*gear3.RX;
-        XY2.y = height/2 - sin(thelta)*gear0.RY + sin(thelta/gear1.Ratio())*gear1.RY + sin(thelta/gear2.Ratio())*gear2.RY  + sin(thelta/gear3.Ratio())*gear3.RY;
+        Phi = (TAU/gears[G].P)*(i+gears[G].Connect);
+        XYZ.x = width/2 + cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
+        XYZ.y = height/2 - sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
+        XY2.x = width/2 + cos(Phi)*gear0.RX + cos(Phi/gear1.Ratio())*gear1.RX + cos(Phi/gear2.Ratio())*gear2.RX + cos(Phi/gear3.Ratio())*gear3.RX;
+        XY2.y = height/2 - sin(Phi)*gear0.RY + sin(Phi/gear1.Ratio())*gear1.RY + sin(Phi/gear2.Ratio())*gear2.RY  + sin(Phi/gear3.Ratio())*gear3.RY;
         strokeCap(ROUND);
         strokeJoin(ROUND);
         strokeWeight(SW);
-        line(XY.x, XY.y, XY2.x, XY2.y);
+        line(XYZ.x, XYZ.y, XY2.x, XY2.y);
       }
     }
   }
@@ -119,36 +133,33 @@ class Layer { //<>//
     for (int G = 0; G < gears.length; G++) {
       for (float i = 0; i < gears[G].P; i++) {
         Theta = (TAU/gears[G].P)*(i);
-        XY.x = width/2 + cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
-        XY.y = height/2 - sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
+        XYZ.x = width/2 + cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
+        XYZ.y = height/2 - sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
         strokeWeight(SW);
-        ellipse(XY.x, XY.y, LX, LY);
+        ellipse(XYZ.x, XYZ.y, LX, LY);
       }
     }
   }
 }
 
 class Gears {
-  boolean cast;
-  float RX, RY, C, R, fP, Connect;
-  int P;
-  Gears(float rx, float ry, int p) {
+  float RX, RY, RZ, C, fP, Connect;
+
+  float P, R;
+
+  Gears(float rx, float ry, float rz) {
     RX = rx;
     RY = ry;
-    P = p;
+    RZ = rz;
     R = 1/(P-1);
     C = ((RX+RY)/2) * TAU;
-    cast = false;
   }
 
   float Ratio() {
-    if (cast == false) {
-      R = 1/float((P-1));
-    }
-    if (cast == true) {
-      fP = float(P);
-      R = 1/((fP-1));
-    }
-    return R;
+
+    R = 1/((P-1));    
+
+
+    return (R);
   }
 }

@@ -5,7 +5,7 @@ class Trigger {
   int Start, End, Duration, LayerParameter, G, GV, XY, LS, LV, Interval;
   float aniDuration, aniValue;
   String [] Parameter = {"/Radius Gear 0", "/Radius Gear 1", "/Radius Gear 2", "/Radius Gear 3", "/Petals_1", "/Petals_2", "/Petals_3", "/LineX", "/LineY", "/StrokeWeight", "/Connect G1", "/Connect G2", "/Connect G3", "/Density"}; 
-  String [] GearVars = {"RX", "RY", "P", "Connect"};
+  String [] GearVars = {"RX", "RY", "P", "Connect", "RZ"};
   String [] LayerVars = {"LX", "LY", "SW", "PlotDots"};
   JSONObject LayerState;
 
@@ -86,6 +86,13 @@ class Trigger {
       LV = 2;
       aniValue = LayerState.getJSONObject(Parameter[9]).getFloat("value");
     }
+    
+    if (LayerParameter == 14 && gui.Spheres.getState() == true) {
+      G = 0;
+      GV = 4;
+      aniValue = LayerState.getJSONObject(Parameter[9]).getFloat("value");
+     }
+
     if (LayerParameter == 15) {
       G = 1;
       GV = 3;
@@ -109,8 +116,13 @@ class Trigger {
 
   void AniType() {
     for (Layer myLayer : layers) {
-      if (LayerParameter <= 11 || LayerParameter >= 15 && LayerParameter <= 17  ) {
+      
+      if (LayerParameter == 14 && myLayer.spheres3d == true) {
+        ani = Ani.to(myLayer.gears[G], aniDuration, GearVars[GV], aniValue, easings[int(gui.cp5.getController("Easing"+"0"+Start+"0"+LayerParameter).getValue())]);
+     
+      }
 
+      if (LayerParameter <= 11 || LayerParameter >= 15 && LayerParameter <= 17  ) {
         ani = Ani.to(myLayer.gears[G], aniDuration, GearVars[GV], aniValue, easings[int(gui.cp5.getController("Easing"+"0"+Start+"0"+LayerParameter).getValue())]);
       } else {
         //for (Layer myLayer : layers) {

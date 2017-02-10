@@ -5,7 +5,7 @@ class GUI extends PApplet {     //<>//
   ControlP5 cp5;
   Slider2D G0, G1, G2, G3;
   Slider P1, P2, P3, LX, LY, SW, D, G1c, G2c, G3c, Duration, G0X, G0Y, G0Z;
-  Toggle Fill, Stroke, Lines, Dots, CS, Cast, Pause;
+  Toggle Fill, Stroke, Lines, Dots, CS, Spheres, Pause;
   ColorPicker cp;
   ColorWheel cw;
   ScrollableList LayerList, Easing;
@@ -69,7 +69,7 @@ class GUI extends PApplet {     //<>//
     SW = cp5.addSlider("StrokeWeight").setPosition(310, 330).setRange(0, 250).setValue(2).plugTo(this, "Controls").setValue(layers.get(id).SW).moveTo("global");
     Lines = cp5.addToggle("Lines").setPosition(310, 290).setSize(20, 20).setState(false).plugTo(this, "Controls").moveTo("global");
     Dots = cp5.addToggle("Dots").setPosition(340, 290).setSize(20, 20).setState(false).plugTo(this, "Controls").moveTo("global");
-    Cast = cp5.addToggle("Cast").setPosition(370, 290).setSize(20, 20).setState(false).plugTo(this, "Controls").moveTo("global");
+    Spheres = cp5.addToggle("3D").setPosition(370, 290).setSize(20, 20).setState(false).plugTo(this, "Controls").moveTo("global");
 
     // line density for spiro mode
     D = cp5.addSlider("Density").setPosition(10, 430).setSize(450, 15).setRange(0, 100000).plugTo(this, "Controls").setValue(layers.get(id).PlotDots).moveTo("global");
@@ -103,12 +103,16 @@ class GUI extends PApplet {     //<>//
           Layer New = new Layer();
           New.gear0.RX = layers.get(id).gear0.RX;
           New.gear0.RY = layers.get(id).gear0.RY;
+          New.gear0.RZ = layers.get(id).gear0.RZ;
           New.gear1.RX = layers.get(id).gear1.RX;
           New.gear1.RY = layers.get(id).gear1.RY;
+          New.gear1.RZ = layers.get(id).gear1.RZ;
           New.gear2.RX = layers.get(id).gear2.RX;
           New.gear2.RY = layers.get(id).gear2.RY;
+          New.gear2.RZ = layers.get(id).gear2.RZ;
           New.gear3.RX = layers.get(id).gear3.RX;
           New.gear3.RY = layers.get(id).gear3.RY;
+          New.gear3.RZ = layers.get(id).gear3.RZ;
           New.gear1.P = layers.get(id).gear1.P;
           New.gear2.P = layers.get(id).gear2.P;
           New.gear3.P = layers.get(id).gear3.P;
@@ -122,6 +126,7 @@ class GUI extends PApplet {     //<>//
           New.gear1.Connect = layers.get(id).gear1.Connect;
           New.gear2.Connect = layers.get(id).gear2.Connect;
           New.gear3.Connect = layers.get(id).gear3.Connect;
+          New.spheres3d = layers.get(id).spheres3d;
           layers.add(New);
           LayerList.addItem("Copy " + (id+1), New);
         }
@@ -165,8 +170,6 @@ class GUI extends PApplet {     //<>//
     cp5.getTab("default").activateEvent(true);
     cp5.getTab("Ani Easing");
     cp5.getWindow().setPositionOfTabs(10, 450);
-    cp5.addTab("3D");
-    cp5.getTab("3D").activateEvent(true).setId(3);
 
     //button bar layerstates
     LayerState = cp5.addButtonBar("ls").setPosition(10, 475).setSize(gif.MatrixWidth, gif.CellHeight);
@@ -201,7 +204,7 @@ class GUI extends PApplet {     //<>//
     //Layer.remove(Lines);
     //Layer.remove(Dots);
     Layer.remove(CS);
-    Layer.remove(Cast);
+    //Layer.remove(Spheres);
     Layer.remove(Pause);
     Layer.remove(cp);
     Layer.remove(cw);
@@ -282,12 +285,6 @@ class GUI extends PApplet {     //<>//
         //Layer.remove(Easing, "Easing"+"0"+x+"0"+y);
       }
     }
-    
-    
-        G0X = cp5.addSlider("G0X").setPosition(10, 500).moveTo("3D").setRange(0,50).plugTo(this, "Controls");
-        G0Y = cp5.addSlider("G0Y").setPosition(10, 515).moveTo("3D").setRange(0,50).plugTo(this, "Controls");
-        G0Z = cp5.addSlider("G0Z").setPosition(10, 530).moveTo("3D").setRange(0,50).plugTo(this, "Controls");
-    
   }
 
   void draw() {
@@ -327,12 +324,8 @@ class GUI extends PApplet {     //<>//
 
   void controlEvent(ControlEvent theControlEvent) {
     if (theControlEvent.isTab()) {
-       gif.TabToggle();
-        Mode = theControlEvent.getTab().getId();
-        
-     println("check" +  theControlEvent.getTab().getId());
-     
-   }
+      gif.TabToggle();
+    }
   }
 
   void ColorFillStroke() {
@@ -389,12 +382,15 @@ class GUI extends PApplet {     //<>//
 
   void Controls() {
     if (layerlock == false) {
+
       //3D controls
-      layer3d_1.gear0.RX = G0X.getValue();
-      layer3d_1.gear0.RY = G0Y.getValue();
-      layer3d_1.gear0.RZ = G0Z.getValue();
-      
-      
+      if (Spheres.getState() == true) {
+        layers.get(id).gear0.RZ = SW.getValue();
+        layers.get(id).gear1.RZ = G2c.getValue();
+        layers.get(id).gear2.RZ = G3c.getValue();
+        layers.get(id).gear3.RZ = G1c.getValue();
+      }
+
       layers.get(id).gear0.RX = map(G0.getArrayValue(0), 0, 512, -256, 256);
       layers.get(id).gear0.RY = map(G0.getArrayValue(1), 0, 512, -256, 256);
       layers.get(id).gear1.RX = map(G1.getArrayValue(0), 0, 256, -128, 128);
@@ -403,34 +399,21 @@ class GUI extends PApplet {     //<>//
       layers.get(id).gear2.RY = map(G2.getArrayValue(1), 0, 256, -128, 128);
       layers.get(id).gear3.RX = map(G3.getArrayValue(0), 0, 256, -128, 128);
       layers.get(id).gear3.RY = map(G3.getArrayValue(1), 0, 256, -128, 128);
-      if (Cast.getState() == false) {
-        layers.get(id).gear1.P = int(P1.getValue()); 
-        layers.get(id).gear2.P = int(P2.getValue());
-        layers.get(id).gear3.P = int(P3.getValue());
-      }
-      //if (Cast.getState() == true) {
-      //  layers.get(id).gear1.P = P1.getValue(); 
-      //  layers.get(id).gear2.P = P2.getValue();
-      //  layers.get(id).gear3.P = P3.getValue();
-      //}
+      layers.get(id).gear1.P = int(P1.getValue()); 
+      layers.get(id).gear2.P = int(P2.getValue());
+      layers.get(id).gear3.P = int(P3.getValue());
       layers.get(id).LX = LX.getValue();
       layers.get(id).LY = LY.getValue();
       layers.get(id).fill = Fill.getState();
       layers.get(id).stroke = Stroke.getState();
+      layers.get(id).spheres3d = Spheres.getState();
       layers.get(id).SW = SW.getValue();
       layers.get(id).lines = Lines.getState();
       layers.get(id).dots = Dots.getState();
       layers.get(id).PlotDots = D.getValue();
-      if (Cast.getState() == false) {
-        layers.get(id).gear1.Connect = int(G1c.getValue());
-        layers.get(id).gear2.Connect = int(G2c.getValue());
-        layers.get(id).gear3.Connect = int(G3c.getValue());
-      }
-      //if (Cast.getState() == true) {
-      //  layers.get(id).gear1.Connect = (G1c.getValue());
-      //  layers.get(id).gear2.Connect = (G2c.getValue());
-      //  layers.get(id).gear3.Connect = (G3c.getValue());
-      //}
+      layers.get(id).gear1.Connect = int(G1c.getValue());
+      layers.get(id).gear2.Connect = int(G2c.getValue());
+      layers.get(id).gear3.Connect = int(G3c.getValue());
     }
   }
 

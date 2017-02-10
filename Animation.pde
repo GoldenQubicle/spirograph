@@ -9,7 +9,7 @@ class Animation { //<>//
   Animation() {
 
     TotalTime = 3000;
-    LayerStates = 15;
+    LayerStates = 10;
     Variables = 19; // one too many for top row matrix which needs to be active at all time
     Interval = int(TotalTime/LayerStates);
     aniInterval = float(Interval)/1000;
@@ -34,6 +34,7 @@ class Animation { //<>//
       for (Trigger myTrigger : triggers) {
         if (theX == myTrigger.Start) {
           myTrigger.ani();
+          println(myTrigger.G, myTrigger.GV);
         }
       }
     } else {
