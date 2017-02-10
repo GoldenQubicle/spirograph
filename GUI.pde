@@ -386,9 +386,9 @@ class GUI extends PApplet {     //<>//
       //3D controls
       if (Spheres.getState() == true) {
         layers.get(id).gear0.RZ = SW.getValue();
-        layers.get(id).gear1.RZ = G2c.getValue();
-        layers.get(id).gear2.RZ = G3c.getValue();
-        layers.get(id).gear3.RZ = G1c.getValue();
+        layers.get(id).gear1.RZ = G1c.getValue();
+        layers.get(id).gear2.RZ = G2c.getValue();
+        layers.get(id).gear3.RZ = G3c.getValue();
       }
 
       layers.get(id).gear0.RX = map(G0.getArrayValue(0), 0, 512, -256, 256);
