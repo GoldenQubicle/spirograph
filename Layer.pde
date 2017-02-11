@@ -90,7 +90,7 @@ class Layer { //<>//
         //pushMatrix();
         //translate(XYZ.x, XYZ.y, XYZ.z);
         //sphere(1);
-        stroke(255, 255, 255);
+        stroke(Fill);
         point(XYZ.x, XYZ.y, XYZ.z);
         //sphereDetail(3);
         //popMatrix();
