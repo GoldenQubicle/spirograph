@@ -41,7 +41,7 @@ DawesomeToolkit ds;
 color BG;
 GUI gui;
 Animation gif;
-boolean play;
+boolean play, update;
 String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
 int gifWidth = 400;
 int gifHeight = 400;
@@ -56,13 +56,10 @@ void setup() {
   surface.setTitle("Preview");
   gif = new Animation();
   play = false;
-
   Ani.init(this);
   Ani.noAutostart();
   Ani.setDefaultTimeMode(Ani.SECONDS);
-
   BG = 120;
-
   layers = new ArrayList();
   layer_1 = new Layer();
   layers.add(layer_1);
@@ -70,11 +67,9 @@ void setup() {
   for (int i = 0; i < gif.LayerStates; i++) {
     LayerStateArray.add(layers.get(0));
   }
-
   ds = new DawesomeToolkit(this);
   ds.enableLazySave('i', ".png");
   gui = new GUI(this);
-
   blendMode(DIFFERENCE);
   //gifExport = new GifMaker(this, "export.gif");
   cam = new PeasyCam(this, 300);
@@ -83,9 +78,9 @@ void setup() {
 
 void draw() {
   background(BG);
-  //println(frameRate);
   surface.setSize(gifWidth,gifHeight);
-  translate(gifWidth/2,gifHeight/2);
+  if(update == true){translate(gifWidth/2,gifHeight/2);}
+  
   for (int i = 0; i < layers.size(); i++) {
     layers.get(i).display();
   }

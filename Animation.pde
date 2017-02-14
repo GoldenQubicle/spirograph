@@ -33,10 +33,11 @@ class Animation { //<>//
 
   void Update() {
     CellWidth = MatrixWidth/LayerStates;  
+    Interval = int(TotalTime/LayerStates);
+    aniInterval = float(Interval)/1000;
     gui.cp5.dispose();
     gui.setup();
-
-    //gui = new GUI(parent);
+    update= true;  
   }
 
   void LoadLayerState(int ls) {
