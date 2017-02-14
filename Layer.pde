@@ -47,10 +47,10 @@ class Layer { //<>//
       noStroke();
     }
     // faux 3D, spinning over axis
-    //pushMatrix();
+    pushMatrix();
     //translate(256,256);    
-    ////rotateX(r);
-    ////rotateY(r);
+    //rotateX(r);
+    //rotateY(r);
     //rotateZ(r);
     //translate(-256, -256);
     //pushMatrix();
@@ -71,8 +71,8 @@ class Layer { //<>//
     } else {     
       Spiro();
     }
-    //popMatrix();
-    //r+=.01;
+    popMatrix();
+    r+=5;
     //popMatrix();
   }
 
@@ -117,10 +117,10 @@ class Layer { //<>//
       for (float i = 0; i < gears[G].P; i++) {
         Theta = (TAU/gears[G].P)*i; 
         Phi = (TAU/gears[G].P)*(i+gears[G].Connect);
-        XYZ.x = width/2 + cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
-        XYZ.y = height/2 - sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
-        XY2.x = width/2 + cos(Phi)*gear0.RX + cos(Phi/gear1.Ratio())*gear1.RX + cos(Phi/gear2.Ratio())*gear2.RX + cos(Phi/gear3.Ratio())*gear3.RX;
-        XY2.y = height/2 - sin(Phi)*gear0.RY + sin(Phi/gear1.Ratio())*gear1.RY + sin(Phi/gear2.Ratio())*gear2.RY  + sin(Phi/gear3.Ratio())*gear3.RY;
+        XYZ.x =  cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
+        XYZ.y =  sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
+        XY2.x =  cos(Phi)*gear0.RX + cos(Phi/gear1.Ratio())*gear1.RX + cos(Phi/gear2.Ratio())*gear2.RX + cos(Phi/gear3.Ratio())*gear3.RX;
+        XY2.y =  sin(Phi)*gear0.RY + sin(Phi/gear1.Ratio())*gear1.RY + sin(Phi/gear2.Ratio())*gear2.RY  + sin(Phi/gear3.Ratio())*gear3.RY;
         strokeCap(ROUND);
         strokeJoin(ROUND);
         strokeWeight(SW);
@@ -133,8 +133,8 @@ class Layer { //<>//
     for (int G = 0; G < gears.length; G++) {
       for (float i = 0; i < gears[G].P; i++) {
         Theta = (TAU/gears[G].P)*(i);
-        XYZ.x = width/2 + cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
-        XYZ.y = height/2 - sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
+        XYZ.x = cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
+        XYZ.y = sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
         strokeWeight(SW);
         ellipse(XYZ.x, XYZ.y, LX, LY);
       }

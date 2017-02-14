@@ -5,11 +5,15 @@ class Animation { //<>//
   int [][] AniEnd, AniInt;
   ArrayList<Trigger> triggers;
   boolean loadlayerstate;
-
+  JSONObject TestLS;
+  String[] LSjson = {"/LayerState1", "/LayerState2"};
+ 
   Animation() {
+    TestLS = loadJSONObject(JSON + "Test.json");
 
-    TotalTime = 3000;
-    LayerStates = 10;
+      
+    TotalTime = 4000;
+    LayerStates = 12;
     Variables = 19; // one too many for top row matrix which needs to be active at all time
     Interval = int(TotalTime/LayerStates);
     aniInterval = float(Interval)/1000;
@@ -26,15 +30,20 @@ class Animation { //<>//
       }
     }
     triggers = new ArrayList();
-    println(aniInterval);
   }
 
+
+   void LoadLayerState(int ls){
+     println(TestLS.getJSONObject(LSjson[ls]), ls);
+     
+     
+   }
+    
   void AniStart(int theX, int theY) {
     if (theY > 0) {
       for (Trigger myTrigger : triggers) {
         if (theX == myTrigger.Start) {
           myTrigger.ani();
-          println(myTrigger.G, myTrigger.GV);
         }
       }
     } else {

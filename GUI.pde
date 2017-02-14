@@ -155,6 +155,7 @@ class GUI extends PApplet {     //<>//
           int LS = int(LayerState.getValue());
           Layer.setSnapshot("LayerState" + LS);
           Layer.saveAs(JSON + LS);
+          //LayerStateArray.set(LS, layers.get(0)); 
         }
       }
     }
@@ -182,8 +183,11 @@ class GUI extends PApplet {     //<>//
     LayerState.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
         if (theEvent.getAction() == ControlP5.ACTION_CLICK) {
-          int i = int(LayerState.getValue());
-          Layer.load(JSON + i);
+          int LS = int(LayerState.getValue());
+          Layer.load(JSON + LS);
+          //gif.LoadLayerState(ls);
+        //set = int(LayerState.getValue());
+        //SwitchLayers();
         }
       }
     }
@@ -289,6 +293,10 @@ class GUI extends PApplet {     //<>//
 
   void draw() {
     background(190);
+  }
+
+  void reset(){
+    cp5.dispose();
   }
 
   void keyPressed() {

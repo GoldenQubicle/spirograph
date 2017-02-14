@@ -32,7 +32,7 @@ class Trigger {
     if (LayerParameter == 3) {
       G = 1;
       GV = 2;
-      aniValue = LayerState.getJSONObject(Parameter[4]).getFloat("value");
+      aniValue = int(LayerState.getJSONObject(Parameter[4]).getFloat("value"));
     }
     if (LayerParameter == 4) {
       G = 1;
@@ -47,7 +47,7 @@ class Trigger {
     if (LayerParameter == 6) {
       G = 2;
       GV = 2;
-      aniValue = LayerState.getJSONObject(Parameter[5]).getFloat("value");
+      aniValue = int(LayerState.getJSONObject(Parameter[5]).getFloat("value"));
     }
     if (LayerParameter == 7) {
       G = 2;
@@ -62,7 +62,7 @@ class Trigger {
     if (LayerParameter == 9) {
       G = 3;
       GV = 2;
-      aniValue = LayerState.getJSONObject(Parameter[6]).getFloat("value");
+      aniValue = int(LayerState.getJSONObject(Parameter[6]).getFloat("value"));
     }
     if (LayerParameter == 10) {
       G = 3;
