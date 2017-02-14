@@ -3,7 +3,8 @@
 *.gif
 *.pdf
 *.json
-
+/application.windows32
+application.windows64
 # Windows image file caches
 Thumbs.db
 ehthumbs.db

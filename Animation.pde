@@ -1,17 +1,16 @@
 class Animation { //<>//
 
-  int Interval, LayerStates, Variables, MatrixWidth, MatrixHeight, CellWidth, CellHeight ;
+  int Interval, LayerStates, Variables, MatrixWidth, MatrixHeight, CellWidth, CellHeight;
   float TotalTime, aniInterval;
   int [][] AniEnd, AniInt;
   ArrayList<Trigger> triggers;
   boolean loadlayerstate;
   JSONObject TestLS;
   String[] LSjson = {"/LayerState1", "/LayerState2"};
- 
+
   Animation() {
     TestLS = loadJSONObject(JSON + "Test.json");
 
-      
     TotalTime = 4000;
     LayerStates = 12;
     Variables = 19; // one too many for top row matrix which needs to be active at all time
@@ -32,13 +31,18 @@ class Animation { //<>//
     triggers = new ArrayList();
   }
 
+  void Update() {
+    CellWidth = MatrixWidth/LayerStates;  
+    gui.cp5.dispose();
+    gui.setup();
 
-   void LoadLayerState(int ls){
-     println(TestLS.getJSONObject(LSjson[ls]), ls);
-     
-     
-   }
-    
+    //gui = new GUI(parent);
+  }
+
+  void LoadLayerState(int ls) {
+    println(TestLS.getJSONObject(LSjson[ls]), ls);
+  }
+
   void AniStart(int theX, int theY) {
     if (theY > 0) {
       for (Trigger myTrigger : triggers) {

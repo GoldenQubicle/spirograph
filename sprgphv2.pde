@@ -43,13 +43,17 @@ GUI gui;
 Animation gif;
 boolean play;
 String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
+int gifWidth = 400;
+int gifHeight = 400;
 
 void settings() {
-  size(640, 640, P3D);
+  size(gifWidth, gifHeight, P3D);
   smooth(8);
 }
 
 void setup() {
+  surface.setResizable(true);
+  surface.setTitle("Preview");
   gif = new Animation();
   play = false;
 
@@ -80,13 +84,14 @@ void setup() {
 void draw() {
   background(BG);
   //println(frameRate);
-
+  surface.setSize(gifWidth,gifHeight);
+  translate(gifWidth/2,gifHeight/2);
   for (int i = 0; i < layers.size(); i++) {
     layers.get(i).display();
   }
 
   gui.BG(BG);  
-  gui.ColorFillStroke(); // temporary disabled because of intermittent NullPointers - still. .. aargghhhh >|
+  gui.ColorFillStroke(); // intermittent NullPointers - still. .. aargghhhh >|
 }
 
 void keyPressed() {
