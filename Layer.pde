@@ -70,7 +70,7 @@ class Layer { //<>//
       //popMatrix();
     } else {     
       //Spiro();
-      refactor();
+      spiroMode();
     }
     popMatrix();
     //r+=5;
@@ -99,17 +99,20 @@ class Layer { //<>//
     }
   }
 
-  void refactor() {
+  void spiroMode() {
     for (int i = 0; i < PlotDots; i++) {
-      for (Gears myGear : gears) {
-        myGear.Grinding(0, 1, 0, i);
-      }
+      gears(i);
       XYZ.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
       XYZ.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
       ellipse(XYZ.x, XYZ.y, LX, LY);
     }
   }
 
+  void gears(int i) {
+    for (Gears myGear : gears) {
+      myGear.grinding(0, 1, 0, i);
+    }
+  }
 
   void Spiro() {
     cam.setActive(false);
@@ -171,7 +174,7 @@ class Gears {
   }
 
 
-  void Grinding(int trigX, int trigY, int trigZ, int i) {
+  void grinding(int trigX, int trigY, int trigZ, int i) {
 
     theta = (TAU/C)*i;
 
