@@ -1,28 +1,10 @@
 /* //<>//
+factor the core funtionality out to gear class
 
- hmmm. . . petals is read as float in trigger atm
- also animation z axis not working. .  
- 
- load/safe animations as json
- - make color work, i.e. add color to json layerstates
- - make multiple layers work, i.e. layerstate json AND associated ani matrix per layer in one json
- - add camera per animation json
- 
- 
- make function which grabs camera position & rotations and than sets it as render point for 3d so I can play around with material / lighting for nice image =)
- also, can I ani between different camera positions?!
- funtion which calculated the different layerstates inbetween ani, i.e. LS1 = 0, LS3 = 60 than LS2 = 30 automatically
- 
- bit of braindump with regard to saving
- first off, I want one single json, however, can cp5 load sections from within the serve as layerstate - OK so it cannot becauase it takes a string as filename
- 
- so, need to approach this the other way around, i.e. design structure for json, and make load/save functions in animation, to be placed inside callbacks
- aaand come to think of it, the loading a layerstate is pretty much the same function as switching layers themselves
- so might write a controller class function which handles this (and saving) rather than having it split across gui and animation 
- soooo wouldnt it then make more sense to store the laterstate AS layer objects as well, i.e. inside an array and only use json for actual saving as 'script'
- and then saving a layertstate would be as simple as writing the actual layer into the layerstate array
- 
- so all things considered, maybe first make a front end menu where I can set the length and #layerstates and compile an aplha, then refactor everything
+  i.e. cos(Theta/gear1.Ratio())*gear1.RX
+  
+so a function which returns x,y,z values which are either cos / sin / tan
+
  
  */
 import peasy.*;
@@ -43,8 +25,8 @@ GUI gui;
 Animation gif;
 boolean play, update;
 String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
-int gifWidth = 400;
-int gifHeight = 400;
+int gifWidth = 512;
+int gifHeight = 512;
 
 void settings() {
   size(gifWidth, gifHeight, P3D);
@@ -86,7 +68,7 @@ void draw() {
   }
 
   gui.BG(BG);  
-  gui.ColorFillStroke(); // intermittent NullPointers - still. .. aargghhhh >|
+  //gui.ColorFillStroke(); // intermittent NullPointers - still. .. aargghhhh >|
 }
 
 void keyPressed() {

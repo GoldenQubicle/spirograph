@@ -70,14 +70,15 @@ class Layer { //<>//
       //popMatrix();
     } else {     
       Spiro();
+      refactor();
     }
     popMatrix();
-    r+=5;
+    //r+=5;
     //popMatrix();
   }
 
   void sphere3d() {
-      cam.setActive(true);
+    cam.setActive(true);
     lights();  
     float Spheres = 500;   
     for (float T = 0; T < Spheres; T+=2) {
@@ -96,7 +97,14 @@ class Layer { //<>//
         //popMatrix();
       }
     }
+  }
 
+  void refactor() {
+
+    for (int i = 0; i < gear0.C; i++) {
+      gear0.Grinding(0, 1, 0, i);
+      ellipse(gear0.xyz.x, gear0.xyz.y, LX, LY);
+    }
   }
 
 
@@ -104,12 +112,14 @@ class Layer { //<>//
     cam.setActive(false);
     for (float i = 0; i < PlotDots; i++) {
       Theta = (TAU/gear0.C)*i;
-      XYZ.x = cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
-      XYZ.y =  sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
-      strokeWeight(1);
+      Phi = Theta;// + r;
+      //rotateY(r);
+      XYZ.x = cos(Theta)*gear0.RX + (cos(Phi/gear1.Ratio())*gear1.RX) + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
+      XYZ.y =  sin(Theta)*gear0.RY + (sin(Phi/gear1.Ratio())*gear1.RY) + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
+      strokeWeight(SW);
       ellipse(XYZ.x, XYZ.y, LX, LY);
+      //r += .00000001;
     }
-
   }
 
   void Lines() {
@@ -143,17 +153,42 @@ class Layer { //<>//
 }
 
 class Gears {
+  PVector xyz;
+  float theta;
   float RX, RY, RZ, C, fP, Connect;
-
   float P, R;
 
   Gears(float rx, float ry, float rz) {
+    xyz = new PVector();    
     RX = rx;
     RY = ry;
     RZ = rz;
     R = 1/(P-1);
     C = ((RX+RY)/2) * TAU;
   }
+
+
+  void Grinding(int trigX, int trigY, int trigZ, int i) {
+
+    theta = (TAU/C)*i;
+
+    if (trigX == 0) {
+      xyz.x = cos(theta/Ratio())*RX;
+    }
+    if (trigX == 1) {
+      xyz.x = sin(theta/Ratio())*RX;
+    }
+
+    if (trigY == 0) {
+      xyz.y = cos(theta/Ratio())*RY;
+    }
+    if (trigY == 1) {
+      xyz.y = sin(theta/Ratio())*RY;
+    }
+
+    //return xyz;
+  }
+
 
   float Ratio() {
 
