@@ -12,9 +12,9 @@ class Layer { //<>//
     XY2 = new PVector();
     gears = new Gears[4];
     gear0 = new Gears(130, 130, 0);
-    gear1 = new Gears(0, 0, 0);
-    gear2 = new Gears(0, 0, 0);
-    gear3 = new Gears(0, 0, 0);
+    gear1 = new Gears(160, 160, 0);
+    gear2 = new Gears(100, 100, 0);
+    gear3 = new Gears(10, 10, 0);
     gears[0] = gear0;
     gears[1] = gear1;
     gears[2] = gear2;
@@ -69,7 +69,7 @@ class Layer { //<>//
       sphere3d();
       //popMatrix();
     } else {     
-      Spiro();
+      //Spiro();
       refactor();
     }
     popMatrix();
@@ -100,10 +100,13 @@ class Layer { //<>//
   }
 
   void refactor() {
-
-    for (int i = 0; i < gear0.C; i++) {
-      gear0.Grinding(0, 1, 0, i);
-      ellipse(gear0.xyz.x, gear0.xyz.y, LX, LY);
+    for (int i = 0; i < PlotDots; i++) {
+      for (Gears myGear : gears) {
+        myGear.Grinding(0, 1, 0, i);
+      }
+      XYZ.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
+      XYZ.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
+      ellipse(XYZ.x, XYZ.y, LX, LY);
     }
   }
 
@@ -178,17 +181,28 @@ class Gears {
     if (trigX == 1) {
       xyz.x = sin(theta/Ratio())*RX;
     }
-
+    if (trigX == 2) {
+      xyz.x = tan(theta/Ratio())*RX;
+    }
     if (trigY == 0) {
       xyz.y = cos(theta/Ratio())*RY;
     }
     if (trigY == 1) {
       xyz.y = sin(theta/Ratio())*RY;
     }
-
-    //return xyz;
+    if (trigY == 2) {
+      xyz.y = tan(theta/Ratio())*RY;
+    }
+    if (trigZ == 0) {
+      xyz.z = cos(theta/Ratio())*RZ;
+    }
+    if (trigZ == 1) {
+      xyz.x = sin(theta/Ratio())*RZ;
+    }
+    if (trigZ == 2) {
+      xyz.x = tan(theta/Ratio())*RZ;
+    }
   }
-
 
   float Ratio() {
 
