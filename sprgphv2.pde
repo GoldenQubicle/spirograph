@@ -1,12 +1,20 @@
 /* //<>//
 factor the core funtionality out to gear class
-
-  i.e. cos(Theta/gear1.Ratio())*gear1.RX
-  
-so a function which returns x,y,z values which are either cos / sin / tan
-
+ 
+ i.e. cos(Theta/gear1.Ratio())*gear1.RX
+ 
+ so a function which returns x,y,z values which are either cos / sin / tan
+ 
+ 
+ redesign gui - 3 colorwheels on top (left is background, middle stroke, right fill)
+ strokeweight, lineX/Y & fill stroke toggle together, top right, next to colorwheels
+ 4 gears below (0,1,2,3 left to right obviously)
+ density settings rework into radio button & range
+ new gif settings in dropdown group  
  
  */
+
+
 import peasy.*;
 import controlP5.*;
 import dawesometoolkit.*;
@@ -16,17 +24,16 @@ import de.looksgood.ani.easing.*;
 
 //GifMaker gifExport;
 PeasyCam cam;
-Layer layer_1;
-ArrayList<Layer> layers;
-ArrayList<Layer> LayerStateArray;
 DawesomeToolkit ds;
-color BG;
 GUI gui;
 Animation gif;
-boolean play, update;
+Layer layer_1;
+ArrayList<Layer> layers;
 String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
+boolean play, update;
 int gifWidth = 512;
 int gifHeight = 512;
+color BG;
 
 void settings() {
   size(gifWidth, gifHeight, P3D);
@@ -36,38 +43,37 @@ void settings() {
 void setup() {
   surface.setResizable(true);
   surface.setTitle("Preview");
-  gif = new Animation();
-  play = false;
+  cam = new PeasyCam(this, 300);
+  cam.setFreeRotationMode();
+  ds = new DawesomeToolkit(this);
+  ds.enableLazySave('i', ".png");
   Ani.init(this);
   Ani.noAutostart();
   Ani.setDefaultTimeMode(Ani.SECONDS);
-  BG = 120;
+  gui = new GUI(this);
+  gif = new Animation();
   layers = new ArrayList();
   layer_1 = new Layer();
   layers.add(layer_1);
-  LayerStateArray = new ArrayList();
-  for (int i = 0; i < gif.LayerStates; i++) {
-    LayerStateArray.add(layers.get(0));
-  }
-  ds = new DawesomeToolkit(this);
-  ds.enableLazySave('i', ".png");
-  gui = new GUI(this);
+  BG = 120;
+  play = false;
   blendMode(DIFFERENCE);
   //gifExport = new GifMaker(this, "export.gif");
-  cam = new PeasyCam(this, 300);
-  cam.setFreeRotationMode();
 }
 
 void draw() {
-  background(BG);
-  surface.setSize(gifWidth,gifHeight);
-  if(update == true){translate(gifWidth/2,gifHeight/2);}
-  
+  surface.setSize(gifWidth, gifHeight);
+  background(120);  
+
+  if (update == true) {
+    translate(gifWidth/2, gifHeight/2);
+  }
+
   for (int i = 0; i < layers.size(); i++) {
     layers.get(i).display();
   }
 
-  gui.BG(BG);  
+  //gui.BG(BG);  
   //gui.ColorFillStroke(); // intermittent NullPointers - still. .. aargghhhh >|
 }
 

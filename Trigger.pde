@@ -114,7 +114,7 @@ class Trigger {
     }
   }
 
-  void AniType() {
+  void aniType() {
     for (Layer myLayer : layers) {
       
       if (LayerParameter == 14 && myLayer.spheres3d == true) {
@@ -132,7 +132,7 @@ class Trigger {
   }
 
   void ani() {
-    AniType();
+    aniType();
     ani.start();
   }
 }

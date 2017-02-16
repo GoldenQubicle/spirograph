@@ -1,4 +1,4 @@
-class GUI extends PApplet {     //<>// //<>//
+class GUI extends PApplet {     //<>//
   int id, set;
   boolean layerlock;
   PApplet parent;
@@ -31,7 +31,7 @@ class GUI extends PApplet {     //<>// //<>//
     id = 0;
     set = 0;
     cp5 = new ControlP5(this);
-    cw = cp5.addColorWheel("BackGround").setPosition(302, 10).setValue(128).plugTo(this, "BG").moveTo("global");
+    cw = cp5.addColorWheel("BackGround").setPosition(302, 10).setValue(128).plugTo(this, "Controls").moveTo("global");
     
     // gif dimensions, lenght & interval 
     GifWidth = cp5.addSlider("Width").setPosition(510, 45).setRange(200, 1920).setValue(gifWidth).moveTo("global");
@@ -307,7 +307,7 @@ class GUI extends PApplet {     //<>// //<>//
   }
 
   void Matrix(int theX, int theY) {
-    gif.AniStart(theX, theY);
+    gif.aniStart(theX, theY);
     if (theX == 0) {
       Layer.load(JSON+0);
     }
@@ -315,20 +315,22 @@ class GUI extends PApplet {     //<>// //<>//
 
   void controlEvent(ControlEvent theControlEvent) {
     if (theControlEvent.isTab()) {
-      gif.TabToggle();
+      gif.tabToggle();
     }
   }
 
-  void ColorFillStroke() {
-    if (layerlock == false) {
-      if (CS.getState() == false) {
-        layers.get(id).Fill =  cp.getColorValue() ;
-      }
-      if (CS.getState() == true) {
-        layers.get(id).Stroke =  cp.getColorValue();
-      }
-    }
-  }
+  //void ColorFillStroke() {
+  //  if (layerlock == false) {
+  //    if (CS.getState() == false) {
+  //      //layers.get(id).Fill =  cp.getColorValue() ;
+  //        //layers.get(id).Fill =  cw.getPickingColor();
+
+  //    }
+  //    if (CS.getState() == true) {
+  //      layers.get(id).Stroke =  cp.getColorValue();
+  //    }
+  //  }
+  //}
 
   void SwitchLayers() {
     if (id != int(LayerList.getValue())) {
@@ -373,6 +375,7 @@ class GUI extends PApplet {     //<>// //<>//
 
   void Controls() {
     if (layerlock == false) {
+layers.get(id).Fill =  cw.getRGB();
 
       //3D controls
       if (Spheres.getState() == true) {

@@ -1,16 +1,10 @@
-class Animation { //<>// //<>//
-
+class Animation {  //<>//
   int Interval, LayerStates, Variables, MatrixWidth, MatrixHeight, CellWidth, CellHeight;
   float TotalTime, aniInterval;
   int [][] AniEnd, AniInt;
   ArrayList<Trigger> triggers;
-  boolean loadlayerstate;
-  JSONObject TestLS;
-  String[] LSjson = {"/LayerState1", "/LayerState2"};
 
   Animation() {
-    TestLS = loadJSONObject(JSON + "Test.json");
-
     TotalTime = 4000;
     LayerStates = 12;
     Variables = 19; // one too many for top row matrix which needs to be active at all time
@@ -40,11 +34,7 @@ class Animation { //<>// //<>//
     update= true;  
   }
 
-  void LoadLayerState(int ls) {
-    println(TestLS.getJSONObject(LSjson[ls]), ls);
-  }
-
-  void AniStart(int theX, int theY) {
+  void aniStart(int theX, int theY) {
     if (theY > 0) {
       for (Trigger myTrigger : triggers) {
         if (theX == myTrigger.Start) {
@@ -69,7 +59,7 @@ class Animation { //<>// //<>//
     }
   }
 
-  void TabToggle() {
+  void tabToggle() {
     for (int y = 1; y < Variables; y++) {
       for (int x = 0; x < LayerStates; x++) {
         if (gui.Ani.get(x, y) == true) {

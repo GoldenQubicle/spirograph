@@ -7,6 +7,7 @@ class Layer { //<>//
   boolean stroke, fill, lines, dots, spheres3d;
   int ID;
   float r = .1;
+
   Layer() {
     XYZ = new PVector();
     XY2 = new PVector();
@@ -100,15 +101,17 @@ class Layer { //<>//
   }
 
   void spiroMode() {
+    cam.setActive(false);
     for (int i = 0; i < PlotDots; i++) {
-      gears(i);
+      Gears(i);
       XYZ.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
       XYZ.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
+      strokeWeight(SW);
       ellipse(XYZ.x, XYZ.y, LX, LY);
     }
   }
 
-  void gears(int i) {
+  void Gears(int i) {
     for (Gears myGear : gears) {
       myGear.grinding(0, 1, 0, i);
     }
