@@ -42,7 +42,7 @@ class GUI extends PApplet {     //<>//
     OK.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
         if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
-          println("check");
+          //println("check");
           gifWidth = int(GifWidth.getValue());
           gifHeight = int(GifHeight.getValue());
           gif.TotalTime = GifLength.getValue();

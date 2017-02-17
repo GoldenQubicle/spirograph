@@ -7,6 +7,7 @@ class Layer { //<>//
   boolean stroke, fill, lines, dots, spheres3d;
   int ID;
   float r = .1;
+  float circumference;
 
   Layer() {
     XYZ = new PVector();
@@ -113,7 +114,7 @@ class Layer { //<>//
 
   void Gears(int i) {
     for (Gears myGear : gears) {
-      myGear.grinding(0, 1, 0, i);
+      myGear.grinding(0, 1, 0, i, gear0.C);
     }
   }
 
@@ -121,10 +122,10 @@ class Layer { //<>//
     cam.setActive(false);
     for (float i = 0; i < PlotDots; i++) {
       Theta = (TAU/gear0.C)*i;
-      Phi = Theta;// + r;
+      //Phi = Theta;// + r;
       //rotateY(r);
-      XYZ.x = cos(Theta)*gear0.RX + (cos(Phi/gear1.Ratio())*gear1.RX) + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
-      XYZ.y =  sin(Theta)*gear0.RY + (sin(Phi/gear1.Ratio())*gear1.RY) + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
+      XYZ.x = cos(Theta/gear0.Ratio())*gear0.RX + (cos(Theta/gear1.Ratio())*gear1.RX) + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
+      XYZ.y =  sin(Theta/gear0.Ratio())*gear0.RY + (sin(Theta/gear1.Ratio())*gear1.RY) + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
       strokeWeight(SW);
       ellipse(XYZ.x, XYZ.y, LX, LY);
       //r += .00000001;
@@ -163,9 +164,7 @@ class Layer { //<>//
 
 class Gears {
   PVector xyz;
-  float theta;
-  float RX, RY, RZ, C, fP, Connect;
-  float P, R;
+  float theta, RX, RY, RZ, C, Connect, P, R;
 
   Gears(float rx, float ry, float rz) {
     xyz = new PVector();    
@@ -177,9 +176,9 @@ class Gears {
   }
 
 
-  void grinding(int trigX, int trigY, int trigZ, int i) {
+  void grinding(int trigX, int trigY, int trigZ, int i, float circumference) {
 
-    theta = (TAU/C)*i;
+    theta = (TAU/circumference)*i;        
 
     if (trigX == 0) {
       xyz.x = cos(theta/Ratio())*RX;
@@ -206,15 +205,12 @@ class Gears {
       xyz.x = sin(theta/Ratio())*RZ;
     }
     if (trigZ == 2) {
-      xyz.x = tan(theta/Ratio())*RZ;
+    xyz.x = tan(theta/Ratio())*RZ;
     }
   }
 
   float Ratio() {
-
-    R = 1/((P-1));    
-
-
+    R = 1/((P-1));   
     return (R);
   }
 }
