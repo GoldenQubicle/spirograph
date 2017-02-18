@@ -31,12 +31,12 @@ Layer layer_1;
 ArrayList<Layer> layers;
 String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
 boolean play, update;
-int gifWidth = 512;
-int gifHeight = 512;
+int Width = 512;
+int Height = 512;
 color BG;
 
 void settings() {
-  size(gifWidth, gifHeight, P3D);
+  size(Width, Height, P3D);
   smooth(8);
 }
 
@@ -49,7 +49,7 @@ void setup() {
   ds.enableLazySave('i', ".png");
   Ani.init(this);
   Ani.noAutostart();
-  Ani.setDefaultTimeMode(Ani.SECONDS);
+  Ani.setDefaultTimeMode(Ani.FRAMES);
   gui = new GUI(this);
   gif = new Animation();
   layers = new ArrayList();
@@ -63,16 +63,16 @@ void setup() {
 }
 
 void draw() {
-  surface.setSize(gifWidth, gifHeight);
+  surface.setSize(Width, Height);
   background(BG);  
 
   //fill(255);
   //rect(20, 20, 50, 50); 
 
 
-  //if (update == true) {
-  //  translate(gifWidth/2, gifHeight/2);
-  //}
+
+    //translate(Width/2, Height/2);
+ 
 
   for (int i = 0; i < layers.size(); i++) {
     layers.get(i).display();

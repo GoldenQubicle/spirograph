@@ -2,11 +2,13 @@ class GUI extends PApplet {     //<>//
   PApplet parent;
   ControlP5 cp5;
   ColorWheel colorBackground, colorStroke, colorFill;
-  Toggle stroke, fill;
-  Slider lx, ly, sw;
+  Toggle stroke, fill, drawMode;
+  Slider gifWidth, gifHeight, gifLength, gifInterval, lx, ly, sw;
+  Button gifNew, gifNewOK;
+  Slider2D gear0, gear1, gear2, gear3;
 
-  Slider2D G0, G1, G2, G3;
-  Slider P1, P2, P3, D, G1c, G2c, G3c, Duration, G0X, G0Y, G0Z, GifWidth, GifHeight, GifLength, GifInterval;
+  
+  Slider P1, P2, P3, D, G1c, G2c, G3c, G0X, G0Y, G0Z;
   Toggle Lines, Dots, CS, Spheres, Pause;
   ColorPicker cp;
   ScrollableList LayerList, Easing;
@@ -18,7 +20,8 @@ class GUI extends PApplet {     //<>//
   String[] EasingNames = {"LINEAR", "QUAD_IN", "QUAD_OUT", "QUAD_IN_OUT", "CUBIC_IN", "CUBIC_IN_OUT", "CUBIC_OUT", "QUART_IN", "QUART_OUT", "QUART_IN_OUT", "QUINT_IN", "QUINT_OUT", "QUINT_IN_OUT", "SINE_IN", "SINE_OUT", "SINE_IN_OUT", "CIRC_IN", "CIRC_OUT", "CIRC_IN_OUT", "EXPO_IN", "EXPO_OUT", "EXPO_IN_OUT", "BACK_IN", "BACK_OUT", "BACK_IN_OUT", "BOUNCE_IN", "BOUNCE_OUT", "BOUNCE_IN_OUT", "ELASTIC_IN", "ELASTIC_OUT", "ELASTIC_IN_OUT"};
   int id, set;
   boolean layerlock;
-  int LX, LY, SW; // using in to strip decimals for better vieweing, might come back to bite me in the ass
+
+  int LX, LY, SW, GW, GH, ms, i ; // using int to strip decimals for better ui aethetic, might come back to bite me in the arse . . =) 
 
   public GUI(PApplet theApplet) {
     super();
@@ -27,32 +30,66 @@ class GUI extends PApplet {     //<>//
   }
 
   public void settings() {
-    size(680, 980);
+    size(860, 980);
   } 
 
   public void setup() {
     id = 0;
     set = 0;
     cp5 = new ControlP5(this);
-
+    // new gif menu, probably want to add change dimensions / length buttons later
+    gifNew = cp5.addButton("gifNew").setPosition(780, 3).setCaptionLabel("New");
+    cp5.addGroup("ng").setPosition(300, 300).setSize(175, 110).setBackgroundColor(color(255, 50)).setCaptionLabel("set animation").disableCollapse().hide();
+    gifWidth = cp5.addSlider("GW").setPosition(10, 10).setRange(200, 1920).setGroup("ng").setCaptionLabel("Width");
+    gifHeight = cp5.addSlider("GH").setPosition(10, 25).setRange(200, 1920).setGroup("ng").setCaptionLabel("Height");
+    gifLength = cp5.addSlider("ms").setPosition(10, 40).setRange(1000, 10000).setGroup("ng").setCaptionLabel("Duration (ms)");
+    gifInterval = cp5.addSlider("i").setPosition(10, 55).setRange(2, 20).setNumberOfTickMarks(19).snapToTickMarks(true).setGroup("ng").setCaptionLabel("Intervals");
+    gifNewOK = cp5.addButton("Create").setPosition(50, 80).setGroup("ng");
+    
+    // draw modes
+    drawMode = cp5.addToggle("drawMode").setPosition(620,3).setSize(50,20).setValue(false).setMode(ControlP5.SWITCH).setCaptionLabel("  3D           2D");
+    
+    // colors, line & stroke
     colorBackground = cp5.addColorWheel("Background").setPosition(3, 3).setValue(128);
     colorStroke = cp5.addColorWheel("Stroke").setPosition(206, 3).setValue(128);
     colorFill = cp5.addColorWheel("Fill").setPosition(409, 3).setValue(128);
     fill = cp5.addToggle("fill").setPosition(620, 60).setSize(20, 20).setState(true);
     stroke = cp5.addToggle("stroke").setPosition(650, 60).setSize(20, 20).setState(false);
     lx = cp5.addSlider("LX").setPosition(620, 103).setSize(10, 100).setRange(0, 255);
-    ly = cp5.addSlider("LY").setPosition(635, 103).setSize(10, 100).setRange(0, 255);
-    sw = cp5.addSlider("SW").setPosition(650, 103).setSize(10, 100).setRange(0, 255);
+    ly = cp5.addSlider("LY").setPosition(640, 103).setSize(10, 100).setRange(0, 255);
+    sw = cp5.addSlider("SW").setPosition(660, 103).setSize(10, 100).setRange(0, 255);
     cp5.getController("LX").getValueLabel().align(CENTER, TOP);
     cp5.getController("LX").getCaptionLabel().align(CENTER, ControlP5.BOTTOM_OUTSIDE);
     cp5.getController("LY").getValueLabel().align(CENTER, TOP);
     cp5.getController("LY").getCaptionLabel().align(CENTER, ControlP5.BOTTOM_OUTSIDE);
     cp5.getController("SW").getValueLabel().align(CENTER, TOP);
-    cp5.getController("SW").getCaptionLabel().align(CENTER, ControlP5.BOTTOM_OUTSIDE);;
+    cp5.getController("SW").getCaptionLabel().align(CENTER, ControlP5.BOTTOM_OUTSIDE);
+    // gears
+    int size2d = 160;
+    gear0 = cp5.addSlider2D("G0").setMinMax(0, 0, 512, 512).setPosition(3, 230).setCaptionLabel("Radius Gear 0").setSize(size2d, size2d);
+    gear1 = cp5.addSlider2D("G1").setMinMax(0, 0, 512, 512).setPosition(173, 230).setCaptionLabel("Radius Gear 1").setSize(size2d, size2d);
+    gear2 = cp5.addSlider2D("G2").setMinMax(0, 0, 512, 512).setPosition(344, 230).setCaptionLabel("Radius Gear 2").setSize(size2d, size2d);
+    gear3 = cp5.addSlider2D("G3").setMinMax(0, 0, 512, 512).setPosition(515, 230).setCaptionLabel("Radius Gear 3").setSize(size2d, size2d);
   }
 
 
   void controlEvent(ControlEvent theEvent) {
+    if (theEvent.getController().equals(gifNew)) {
+      cp5.getGroup("ng").show();
+    }
+    if (theEvent.getController().equals(gifWidth)) {
+      Width = int(gifWidth.getValue());
+    }
+    if (theEvent.getController().equals(gifHeight)) {
+      Height = int(gifHeight.getValue());
+    }
+    if (theEvent.getController().equals(gifNewOK)) {
+      cp5.getGroup("ng").hide();
+    }
+    if(theEvent.getController().equals(drawMode)){
+      layers.get(id).spheres3d = drawMode.getState();
+    }
+    
     if (theEvent.getController().equals(colorBackground)) {
       BG = colorBackground.getRGB();
     }
@@ -74,8 +111,24 @@ class GUI extends PApplet {     //<>//
     if (theEvent.getController().equals(ly)) {
       layers.get(id).ly = ly.getValue();
     }
-     if (theEvent.getController().equals(sw)) {
-      layers.get(id).sw   = sw.getValue();
+    if (theEvent.getController().equals(sw)) {
+      layers.get(id).sw = sw.getValue();
+    }
+    if (theEvent.getController().equals(gear0)) {
+      layers.get(id).gear0.RX = map(gear0.getArrayValue(0), 0, 512, -256, 256);
+      layers.get(id).gear0.RY = map(gear0.getArrayValue(1), 0, 512, -256, 256);
+    }
+     if (theEvent.getController().equals(gear1)) {
+      layers.get(id).gear1.RX = map(gear1.getArrayValue(0), 0, 512, -256, 256);
+      layers.get(id).gear1.RY = map(gear1.getArrayValue(1), 0, 512, -256, 256);
+    }
+     if (theEvent.getController().equals(gear2)) {
+      layers.get(id).gear2.RX = map(gear2.getArrayValue(0), 0, 512, -256, 256);
+      layers.get(id).gear2.RY = map(gear2.getArrayValue(1), 0, 512, -256, 256);
+    }
+     if (theEvent.getController().equals(gear3)) {
+      layers.get(id).gear3.RX = map(gear3.getArrayValue(0), 0, 512, -256, 256);
+      layers.get(id).gear3.RY = map(gear3.getArrayValue(1), 0, 512, -256, 256);
     }
   }
 
