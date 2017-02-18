@@ -66,12 +66,7 @@ void draw() {
   surface.setSize(Width, Height);
   background(BG);  
 
-  //fill(255);
-  //rect(20, 20, 50, 50); 
-
-
-
-    //translate(Width/2, Height/2);
+  //translate(Width/2, Height/2);
  
 
   for (int i = 0; i < layers.size(); i++) {

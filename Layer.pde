@@ -1,15 +1,16 @@
 class Layer { //<>//
   PVector XYZ, XY2;  
-  float Theta, Phi, lx, ly, PlotDots, sw, Connect;
+  float Theta, Phi, lx, ly, PlotDots, sw, Connect, circumference;
   Gears[] gears;
   Gears gear0, gear1, gear2, gear3;
-  color Fill, Stroke;
+  color cFill, cStroke;
   boolean stroke, fill, lines, dots, spheres3d;
-  int ID;
+  int id;
   float r = .1;
-  float circumference;
+  IntDict trig;
 
   Layer() {
+    id = 0;
     XYZ = new PVector();
     XY2 = new PVector();
     gears = new Gears[4];
@@ -21,10 +22,10 @@ class Layer { //<>//
     gears[1] = gear1;
     gears[2] = gear2;
     gears[3] = gear3;
-    lx = 25;
-    ly = 25;
-    Fill = color(random(155, 255), random(155, 255), random(155, 255));
-    Stroke = color(random(155, 255), random(155, 255), random(155, 255));
+    lx = 2;
+    ly = 2;
+    cFill = color(random(155, 255), random(155, 255), random(155, 255));
+    cStroke = color(random(155, 255), random(155, 255), random(155, 255));
     PlotDots = 5000;
     stroke = false;
     fill = true;
@@ -32,21 +33,30 @@ class Layer { //<>//
     dots = false;
     sw = 2;
     Connect = 2;
-    ID = 1;
+    trig = new IntDict();
+    trig.set("G0trigX", 0);
+    trig.set("G0trigY", 1);
+    trig.set("G0trigZ", 1);
+    trig.set("G1trigX", 0);
+    trig.set("G1trigY", 1);
+    trig.set("G1trigZ", 1);
+    trig.set("G2trigX", 0);
+    trig.set("G2trigY", 1);
+    trig.set("G2trigZ", 1);
+    trig.set("G3trigX", 0);
+    trig.set("G3trigY", 1);
+    trig.set("G3trigZ", 1);
   }
 
-  void display() {
-
-     
-
+  void display() {     
     if (fill == true) {
-      fill(Fill);
+      fill(cFill);
     }
     if (fill == false) {
       noFill();
     }
     if (stroke == true) {
-      stroke(Stroke);
+      stroke(cStroke);
     }
     if (stroke == false) {
       noStroke();
@@ -96,7 +106,7 @@ class Layer { //<>//
         //pushMatrix();
         //translate(XYZ.x, XYZ.y, XYZ.z);
         //sphere(1);
-        stroke(Fill);
+        stroke(cFill);
         point(XYZ.x, XYZ.y, XYZ.z);
         //sphereDetail(3);
         //popMatrix();
@@ -116,9 +126,11 @@ class Layer { //<>//
   }
 
   void Gears(int i) {
-    for (Gears myGear : gears) {
-      myGear.grinding(0, 1, 0, i, gear0.C);
-    }
+    //for (Gears myGear : gears) {
+      for(int g = 0; g < 4; g++){
+      gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), 0, i, gear0.C);
+      }
+    //}
   }
 
   void Spiro() {
@@ -168,6 +180,7 @@ class Layer { //<>//
 class Gears {
   PVector xyz;
   float theta, RX, RY, RZ, C, Connect, P, R, move;
+
 
   Gears(float rx, float ry, float rz) {
     xyz = new PVector();    
