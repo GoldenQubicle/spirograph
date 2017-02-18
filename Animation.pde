@@ -29,9 +29,17 @@ class Animation {  //<>//
     CellWidth = MatrixWidth/LayerStates;  
     Interval = int(TotalTime/LayerStates);
     aniInterval = float(Interval)/1000;
+    AniEnd = new int[LayerStates][Variables];
+    AniInt = new int[LayerStates][Variables];
+    for (int x = 0; x < LayerStates; x++) {
+      for (int y = 0; y < Variables; y++) {
+        AniEnd[x][y] = x;
+        AniInt[x][y] = 1;
+      }
+    }
     gui.cp5.dispose();
     gui.setup();
-    update= true;  
+    update= true;
   }
 
   void aniStart(int theX, int theY) {
@@ -42,7 +50,7 @@ class Animation {  //<>//
         }
       }
     } else {
-      gui.Layer.load(JSON+theX);
+      //gui.layerProperties.load(JSON+theX);
     }
   }
 

@@ -1,6 +1,6 @@
 class Layer { //<>//
   PVector XYZ, XY2;  
-  float Theta, Phi, LX, LY, PlotDots, SW, Connect;
+  float Theta, Phi, lx, ly, PlotDots, sw, Connect;
   Gears[] gears;
   Gears gear0, gear1, gear2, gear3;
   color Fill, Stroke;
@@ -13,29 +13,32 @@ class Layer { //<>//
     XYZ = new PVector();
     XY2 = new PVector();
     gears = new Gears[4];
-    gear0 = new Gears(130, 130, 0);
-    gear1 = new Gears(160, 160, 0);
-    gear2 = new Gears(100, 100, 0);
-    gear3 = new Gears(10, 10, 0);
+    gear0 = new Gears(100, 100, 0);
+    gear1 = new Gears(0, 0, 0);
+    gear2 = new Gears(0, 0, 0);
+    gear3 = new Gears(0, 0, 0);
     gears[0] = gear0;
     gears[1] = gear1;
     gears[2] = gear2;
     gears[3] = gear3;
-    LX = 2.5;
-    LY = 2.5;
+    lx = 25;
+    ly = 25;
     Fill = color(random(155, 255), random(155, 255), random(155, 255));
     Stroke = color(random(155, 255), random(155, 255), random(155, 255));
     PlotDots = 5000;
-    stroke = true;
+    stroke = false;
     fill = true;
     lines = false;
     dots = false;
-    SW = 2;
+    sw = 2;
     Connect = 2;
     ID = 1;
   }
 
   void display() {
+
+     
+
     if (fill == true) {
       fill(Fill);
     }
@@ -49,7 +52,7 @@ class Layer { //<>//
       noStroke();
     }
     // faux 3D, spinning over axis
-    pushMatrix();
+    //pushMatrix();
     //translate(256,256);    
     //rotateX(r);
     //rotateY(r);
@@ -74,7 +77,7 @@ class Layer { //<>//
       //Spiro();
       spiroMode();
     }
-    popMatrix();
+    //popMatrix();
     //r+=5;
     //popMatrix();
   }
@@ -101,14 +104,14 @@ class Layer { //<>//
     }
   }
 
-  void spiroMode() {
+  void spiroMode() {    
     cam.setActive(false);
     for (int i = 0; i < PlotDots; i++) {
       Gears(i);
       XYZ.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
       XYZ.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
-      strokeWeight(SW);
-      ellipse(XYZ.x, XYZ.y, LX, LY);
+      strokeWeight(sw);
+      ellipse(XYZ.x, XYZ.y, lx, ly);
     }
   }
 
@@ -126,8 +129,8 @@ class Layer { //<>//
       //rotateY(r);
       XYZ.x = cos(Theta/gear0.Ratio())*gear0.RX + (cos(Theta/gear1.Ratio())*gear1.RX) + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
       XYZ.y =  sin(Theta/gear0.Ratio())*gear0.RY + (sin(Theta/gear1.Ratio())*gear1.RY) + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
-      strokeWeight(SW);
-      ellipse(XYZ.x, XYZ.y, LX, LY);
+      strokeWeight(sw);
+      ellipse(XYZ.x, XYZ.y, lx, ly);
       //r += .00000001;
     }
   }
@@ -143,7 +146,7 @@ class Layer { //<>//
         XY2.y =  sin(Phi)*gear0.RY + sin(Phi/gear1.Ratio())*gear1.RY + sin(Phi/gear2.Ratio())*gear2.RY  + sin(Phi/gear3.Ratio())*gear3.RY;
         strokeCap(ROUND);
         strokeJoin(ROUND);
-        strokeWeight(SW);
+        strokeWeight(sw);
         line(XYZ.x, XYZ.y, XY2.x, XY2.y);
       }
     }
@@ -155,8 +158,8 @@ class Layer { //<>//
         Theta = (TAU/gears[G].P)*(i);
         XYZ.x = cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
         XYZ.y = sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
-        strokeWeight(SW);
-        ellipse(XYZ.x, XYZ.y, LX, LY);
+        strokeWeight(sw);
+        ellipse(XYZ.x, XYZ.y, lx, ly);
       }
     }
   }
@@ -164,7 +167,7 @@ class Layer { //<>//
 
 class Gears {
   PVector xyz;
-  float theta, RX, RY, RZ, C, Connect, P, R;
+  float theta, RX, RY, RZ, C, Connect, P, R, move;
 
   Gears(float rx, float ry, float rz) {
     xyz = new PVector();    
@@ -175,10 +178,9 @@ class Gears {
     C = ((RX+RY)/2) * TAU;
   }
 
-
   void grinding(int trigX, int trigY, int trigZ, int i, float circumference) {
-
-    theta = (TAU/circumference)*i;        
+    theta = ((TAU/circumference)*i)+move;
+    //move += .01;
 
     if (trigX == 0) {
       xyz.x = cos(theta/Ratio())*RX;
@@ -205,7 +207,7 @@ class Gears {
       xyz.x = sin(theta/Ratio())*RZ;
     }
     if (trigZ == 2) {
-    xyz.x = tan(theta/Ratio())*RZ;
+      xyz.x = tan(theta/Ratio())*RZ;
     }
   }
 

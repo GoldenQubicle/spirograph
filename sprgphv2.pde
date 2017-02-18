@@ -43,7 +43,7 @@ void settings() {
 void setup() {
   surface.setResizable(true);
   surface.setTitle("Preview");
-  cam = new PeasyCam(this, 300);
+  cam = new PeasyCam(this, 512);
   cam.setFreeRotationMode();
   ds = new DawesomeToolkit(this);
   ds.enableLazySave('i', ".png");
@@ -57,17 +57,22 @@ void setup() {
   layers.add(layer_1);
   BG = 120;
   play = false;
-  blendMode(DIFFERENCE);
+  //blendMode(DIFFERENCE);
   //gifExport = new GifMaker(this, "export.gif");
+  update = true;
 }
 
 void draw() {
   surface.setSize(gifWidth, gifHeight);
-  background(120);  
+  background(BG);  
 
-  if (update == true) {
-    translate(gifWidth/2, gifHeight/2);
-  }
+  //fill(255);
+  //rect(20, 20, 50, 50); 
+
+
+  //if (update == true) {
+  //  translate(gifWidth/2, gifHeight/2);
+  //}
 
   for (int i = 0; i < layers.size(); i++) {
     layers.get(i).display();
