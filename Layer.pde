@@ -1,6 +1,6 @@
 class Layer { //<>//
-  PVector XYZ, XY2;  
-  float Theta, Phi, lx, ly, PlotDots, sw, Connect, circumference;
+  PVector xyz, xy2;  
+  float theta, phi, lx, ly, density, sw, connectLines, circumference;
   Gears[] gears;
   Gears gear0, gear1, gear2, gear3;
   color cFill, cStroke;
@@ -11,8 +11,8 @@ class Layer { //<>//
 
   Layer() {
     id = 0;
-    XYZ = new PVector();
-    XY2 = new PVector();
+    xyz = new PVector();
+    xy2 = new PVector();
     gears = new Gears[4];
     gear0 = new Gears(100, 100, 0);
     gear1 = new Gears(0, 0, 0);
@@ -26,13 +26,13 @@ class Layer { //<>//
     ly = 2;
     cFill = color(random(155, 255), random(155, 255), random(155, 255));
     cStroke = color(random(155, 255), random(155, 255), random(155, 255));
-    PlotDots = 5000;
+    density = 25000;
     stroke = false;
     fill = true;
     lines = false;
     dots = false;
     sw = 2;
-    Connect = 2;
+    connectLines = 2;
     trig = new IntDict();
     trig.set("G0trigX", 0);
     trig.set("G0trigY", 1);
@@ -97,17 +97,17 @@ class Layer { //<>//
     lights();  
     float Spheres = 500;   
     for (float T = 0; T < Spheres; T+=2) {
-      Theta = (TAU/Spheres)*T;
+      theta = (TAU/Spheres)*T;
       for (float P = 0; P < Spheres; P+=2) {
-        Phi = (PI/Spheres)*P;
-        XYZ.x =  gear0.RX*cos(Theta)*sin(Phi) + gear1.RX*cos(Theta/gear1.Ratio())*sin(Phi/gear1.Ratio()) + gear2.RX*cos(Theta/gear2.Ratio())*sin(Phi/gear2.Ratio()) + gear3.RX*cos(Theta/gear3.Ratio())*sin(Phi/gear3.Ratio());
-        XYZ.y =  gear0.RY*sin(Theta)*sin(Phi) + gear1.RY*sin(Theta/gear1.Ratio())*sin(Phi/gear1.Ratio()) + gear2.RY*sin(Theta/gear2.Ratio())*sin(Phi/gear2.Ratio()) + gear3.RY*sin(Theta/gear3.Ratio())*sin(Phi/gear3.Ratio()); 
-        XYZ.z =  gear0.RZ*cos(Phi) + gear1.RZ*cos(Phi/gear1.Ratio()) + gear2.RZ*cos(Phi/gear2.Ratio()) + gear3.RZ*cos(Phi/gear3.Ratio());
+        phi = (PI/Spheres)*P;
+        xyz.x =  gear0.RX*cos(theta)*sin(phi) + gear1.RX*cos(theta/gear1.Ratio())*sin(phi/gear1.Ratio()) + gear2.RX*cos(theta/gear2.Ratio())*sin(phi/gear2.Ratio()) + gear3.RX*cos(theta/gear3.Ratio())*sin(phi/gear3.Ratio());
+        xyz.y =  gear0.RY*sin(theta)*sin(phi) + gear1.RY*sin(theta/gear1.Ratio())*sin(phi/gear1.Ratio()) + gear2.RY*sin(theta/gear2.Ratio())*sin(phi/gear2.Ratio()) + gear3.RY*sin(theta/gear3.Ratio())*sin(phi/gear3.Ratio()); 
+        xyz.z =  gear0.RZ*cos(phi) + gear1.RZ*cos(phi/gear1.Ratio()) + gear2.RZ*cos(phi/gear2.Ratio()) + gear3.RZ*cos(phi/gear3.Ratio());
         //pushMatrix();
         //translate(XYZ.x, XYZ.y, XYZ.z);
         //sphere(1);
         stroke(cFill);
-        point(XYZ.x, XYZ.y, XYZ.z);
+        point(xyz.x, xyz.y, xyz.z);
         //sphereDetail(3);
         //popMatrix();
       }
@@ -116,33 +116,31 @@ class Layer { //<>//
 
   void spiroMode() {    
     cam.setActive(false);
-    for (int i = 0; i < PlotDots; i++) {
+    for (int i = 0; i < density; i++) {
       Gears(i);
-      XYZ.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
-      XYZ.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
+      xyz.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
+      xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
       strokeWeight(sw);
-      ellipse(XYZ.x, XYZ.y, lx, ly);
+      ellipse(xyz.x, xyz.y, lx, ly);
     }
   }
 
   void Gears(int i) {
-    //for (Gears myGear : gears) {
-      for(int g = 0; g < 4; g++){
-      gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), 0, i, gear0.C);
-      }
-    //}
+    for (int g = 0; g < 4; g++) {
+      gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), trig.get("G"+g+"trigZ"), i, gear0.C);
+    }
   }
 
   void Spiro() {
     cam.setActive(false);
-    for (float i = 0; i < PlotDots; i++) {
-      Theta = (TAU/gear0.C)*i;
+    for (float i = 0; i < density; i++) {
+      theta = (TAU/gear0.C)*i;
       //Phi = Theta;// + r;
       //rotateY(r);
-      XYZ.x = cos(Theta/gear0.Ratio())*gear0.RX + (cos(Theta/gear1.Ratio())*gear1.RX) + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
-      XYZ.y =  sin(Theta/gear0.Ratio())*gear0.RY + (sin(Theta/gear1.Ratio())*gear1.RY) + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
+      xyz.x = cos(theta/gear0.Ratio())*gear0.RX + (cos(theta/gear1.Ratio())*gear1.RX) + cos(theta/gear2.Ratio())*gear2.RX + cos(theta/gear3.Ratio())*gear3.RX;
+      xyz.y =  sin(theta/gear0.Ratio())*gear0.RY + (sin(theta/gear1.Ratio())*gear1.RY) + sin(theta/gear2.Ratio())*gear2.RY  + sin(theta/gear3.Ratio())*gear3.RY;
       strokeWeight(sw);
-      ellipse(XYZ.x, XYZ.y, lx, ly);
+      ellipse(xyz.x, xyz.y, lx, ly);
       //r += .00000001;
     }
   }
@@ -150,16 +148,16 @@ class Layer { //<>//
   void Lines() {
     for (int G = 0; G < gears.length; G++) {
       for (float i = 0; i < gears[G].P; i++) {
-        Theta = (TAU/gears[G].P)*i; 
-        Phi = (TAU/gears[G].P)*(i+gears[G].Connect);
-        XYZ.x =  cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
-        XYZ.y =  sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
-        XY2.x =  cos(Phi)*gear0.RX + cos(Phi/gear1.Ratio())*gear1.RX + cos(Phi/gear2.Ratio())*gear2.RX + cos(Phi/gear3.Ratio())*gear3.RX;
-        XY2.y =  sin(Phi)*gear0.RY + sin(Phi/gear1.Ratio())*gear1.RY + sin(Phi/gear2.Ratio())*gear2.RY  + sin(Phi/gear3.Ratio())*gear3.RY;
+        theta = (TAU/gears[G].P)*i; 
+        phi = (TAU/gears[G].P)*(i+gears[G].Connect);
+        xyz.x =  cos(theta)*gear0.RX + cos(theta/gear1.Ratio())*gear1.RX + cos(theta/gear2.Ratio())*gear2.RX + cos(theta/gear3.Ratio())*gear3.RX;
+        xyz.y =  sin(theta)*gear0.RY + sin(theta/gear1.Ratio())*gear1.RY + sin(theta/gear2.Ratio())*gear2.RY  + sin(theta/gear3.Ratio())*gear3.RY;
+        xy2.x =  cos(phi)*gear0.RX + cos(phi/gear1.Ratio())*gear1.RX + cos(phi/gear2.Ratio())*gear2.RX + cos(phi/gear3.Ratio())*gear3.RX;
+        xy2.y =  sin(phi)*gear0.RY + sin(phi/gear1.Ratio())*gear1.RY + sin(phi/gear2.Ratio())*gear2.RY  + sin(phi/gear3.Ratio())*gear3.RY;
         strokeCap(ROUND);
         strokeJoin(ROUND);
         strokeWeight(sw);
-        line(XYZ.x, XYZ.y, XY2.x, XY2.y);
+        line(xyz.x, xyz.y, xy2.x, xy2.y);
       }
     }
   }
@@ -167,11 +165,11 @@ class Layer { //<>//
   void Dots() {
     for (int G = 0; G < gears.length; G++) {
       for (float i = 0; i < gears[G].P; i++) {
-        Theta = (TAU/gears[G].P)*(i);
-        XYZ.x = cos(Theta)*gear0.RX + cos(Theta/gear1.Ratio())*gear1.RX + cos(Theta/gear2.Ratio())*gear2.RX + cos(Theta/gear3.Ratio())*gear3.RX;
-        XYZ.y = sin(Theta)*gear0.RY + sin(Theta/gear1.Ratio())*gear1.RY + sin(Theta/gear2.Ratio())*gear2.RY  + sin(Theta/gear3.Ratio())*gear3.RY;
+        theta = (TAU/gears[G].P)*(i);
+        xyz.x = cos(theta)*gear0.RX + cos(theta/gear1.Ratio())*gear1.RX + cos(theta/gear2.Ratio())*gear2.RX + cos(theta/gear3.Ratio())*gear3.RX;
+        xyz.y = sin(theta)*gear0.RY + sin(theta/gear1.Ratio())*gear1.RY + sin(theta/gear2.Ratio())*gear2.RY  + sin(theta/gear3.Ratio())*gear3.RY;
         strokeWeight(sw);
-        ellipse(XYZ.x, XYZ.y, lx, ly);
+        ellipse(xyz.x, xyz.y, lx, ly);
       }
     }
   }
@@ -180,7 +178,7 @@ class Layer { //<>//
 class Gears {
   PVector xyz;
   float theta, RX, RY, RZ, C, Connect, P, R, move;
-
+  float cossintan;
 
   Gears(float rx, float ry, float rz) {
     xyz = new PVector();    
@@ -193,35 +191,23 @@ class Gears {
 
   void grinding(int trigX, int trigY, int trigZ, int i, float circumference) {
     theta = ((TAU/circumference)*i)+move;
-    //move += .01;
-
-    if (trigX == 0) {
-      xyz.x = cos(theta/Ratio())*RX;
+    xyz.x = cossintan(trigX, theta)*RX;
+    xyz.y = cossintan(trigY, theta)*RY;
+    xyz.z = cossintan(trigZ, theta)*RZ;
+    //move += .1; // gear0 needs to remain stationary
+  }
+    
+  float cossintan(int trig, float theta) {
+    if (trig == 0) {
+      cossintan = cos(theta/Ratio());
     }
-    if (trigX == 1) {
-      xyz.x = sin(theta/Ratio())*RX;
+    if (trig == 1) {
+      cossintan = sin(theta/Ratio());
     }
-    if (trigX == 2) {
-      xyz.x = tan(theta/Ratio())*RX;
+    if (trig == 2) {
+      cossintan = tan(theta/Ratio());
     }
-    if (trigY == 0) {
-      xyz.y = cos(theta/Ratio())*RY;
-    }
-    if (trigY == 1) {
-      xyz.y = sin(theta/Ratio())*RY;
-    }
-    if (trigY == 2) {
-      xyz.y = tan(theta/Ratio())*RY;
-    }
-    if (trigZ == 0) {
-      xyz.z = cos(theta/Ratio())*RZ;
-    }
-    if (trigZ == 1) {
-      xyz.x = sin(theta/Ratio())*RZ;
-    }
-    if (trigZ == 2) {
-      xyz.x = tan(theta/Ratio())*RZ;
-    }
+    return cossintan;
   }
 
   float Ratio() {

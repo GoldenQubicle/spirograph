@@ -73,8 +73,7 @@ void draw() {
     layers.get(i).display();
   }
 
-  //gui.BG(BG);  
-  //gui.ColorFillStroke(); // intermittent NullPointers - still. .. aargghhhh >|
+
 }
 
 void keyPressed() {

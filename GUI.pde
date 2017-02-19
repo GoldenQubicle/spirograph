@@ -38,9 +38,9 @@ class GUI extends PApplet {     //<>//
     set = 0;
     cp5 = new ControlP5(this);
 
-    // new gif menu, probably want to add change dimensions / length buttons later
+    // new gif menu
     gifNew = cp5.addButton("gifNew").setPosition(780, 3).setCaptionLabel("New");
-    cp5.addGroup("ng").setPosition(300, 300).setSize(175, 110).setBackgroundColor(color(255, 50)).setCaptionLabel("set animation").disableCollapse().hide();
+    cp5.addGroup("ng").setPosition(300, 500).setSize(175, 110).setBackgroundColor(color(255, 50)).setCaptionLabel("set animation").disableCollapse().hide();
     gifWidth = cp5.addSlider("GW").setPosition(10, 10).setRange(200, 1920).setGroup("ng").setCaptionLabel("Width");
     gifHeight = cp5.addSlider("GH").setPosition(10, 25).setRange(200, 1920).setGroup("ng").setCaptionLabel("Height");
     gifLength = cp5.addSlider("ms").setPosition(10, 40).setRange(1000, 10000).setGroup("ng").setCaptionLabel("Duration (ms)");
@@ -86,7 +86,6 @@ class GUI extends PApplet {     //<>//
     cp5.getController("p1").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("p2").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("p3").getCaptionLabel().align(CENTER, CENTER);
-
     int poy = 0;
     String [] trig = {"cos", "sin", "tan"};
     for (int i = 0; i < 4; i++) {
@@ -114,19 +113,7 @@ class GUI extends PApplet {     //<>//
     }
   }
 
-
   void controlEvent(ControlEvent theEvent) {
-
-    //if (theEvent.getController().equals(trigX)) {
-    //   for (int i = 0; i < 4; i++) {
-    //     println(cp5.getController("G" + i + "trigX").getValue());
-
-
-    //  //println(theEvent.getController().getValue());
-    //   }
-    //}
-
-
     if (theEvent.getController().equals(gifNew)) {
       cp5.getGroup("ng").show();
     }
@@ -215,72 +202,7 @@ class GUI extends PApplet {     //<>//
       layers.get(id).gear3.P = petals3.getValue();
     }
   }
-
-  //// gif dimensions, lenght & interval 
-  //GifWidth = cp5.addSlider("Width").setPosition(510, 45).setRange(200, 1920).setValue(gifWidth).moveTo("global");
-  //GifHeight = cp5.addSlider("Height").setPosition(510, 60).setRange(200, 1920).setValue(gifHeight).moveTo("global");
-  //GifLength = cp5.addSlider("TimeLength").setPosition(510, 75).setRange(1000, 10000).setValue(gif.TotalTime).moveTo("global");
-  //GifInterval = cp5.addSlider("Intervals").setPosition(510, 90).setRange(2, 20).setValue(gif.LayerStates).setNumberOfTickMarks(19).snapToTickMarks(true).moveTo("global");
-  //OK = cp5.addButton("OK").setPosition(510, 115).setVisible(true);
-  //OK.addCallback(new CallbackListener() {
-  //  public void controlEvent(CallbackEvent theEvent) {
-  //    if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
-  //      //println("check");
-  //      gifWidth = int(GifWidth.getValue());
-  //      gifHeight = int(GifHeight.getValue());
-  //      gif.TotalTime = GifLength.getValue();
-  //      gif.LayerStates = int(GifInterval.getValue());
-  //      gif.Update();
-  //    }
-  //  }
-  //}
-  //);
-  //// not functional button, i.e. just visual indicator 
-  //Pause = cp5.addToggle("Play/Pause").setPosition(10, 400).setSize(30, 15).setState(play).moveTo("global");
-
-  //// LAYER CONTROLS START HERE
-  //cp = cp5.addColorPicker("ColorPicker").setPosition(10, 10).setColorValue(layers.get(id).Fill).moveTo("global");
-  //CS = cp5.addToggle("Switch").setPosition(270, 10).setSize(25, 25).setState(false).moveTo("global");
-  //CS.addCallback(new CallbackListener() {
-  //  public void controlEvent(CallbackEvent theEvent) {
-  //    if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
-  //      if (CS.getState() == false) {
-  //        cp.setColorValue(layers.get(id).Fill);
-  //      }          
-  //      if (CS.getState() == true) {
-  //        cp.setColorValue(layers.get(id).Stroke);
-  //      }
-  //    }
-  //  }
-  //}
-  //);
-  //// gear 0
-  //G0 = cp5.addSlider2D("Radius Gear 0").setMinMax(0, 0, 512, 512).setPosition(10, 90).setCaptionLabel("Radius Gear 0").plugTo(this, "Controls").setValue(160, 160).moveTo("global");
-  //// gear1
-  //G1 = cp5.addSlider2D("Radius Gear 1").setMinMax(0, 0, 256, 256).setPosition(160, 90).setCaptionLabel("Radius Gear 1").plugTo(this, "Controls").setValue(190, 190).moveTo("global");
-  //P1 = cp5.addSlider("Petals_1").setRange(0, 50).setPosition(160, 80).setCaptionLabel("Petals").plugTo(this, "Controls").setValue(6).moveTo("global");
-  //// gear2
-  //G2 = cp5.addSlider2D("Radius Gear 2").setMinMax(0, 0, 256, 256).setPosition(10, 230).setCaptionLabel("Radius Gear 2").plugTo(this, "Controls").setValue(128, 128).moveTo("global");
-  //P2 = cp5.addSlider("Petals_2").setRange(0, 100).setPosition(10, 220).setCaptionLabel("Petals").plugTo(this, "Controls").setValue(layers.get(id).gear2.P).moveTo("global");
-  ////// gear3
-  //G3 = cp5.addSlider2D("Radius Gear 3").setMinMax(0, 0, 256, 256).setPosition(160, 230).setCaptionLabel("Radius Gear 3").plugTo(this, "Controls").setValue(128, 128).moveTo("global");
-  //P3 = cp5.addSlider("Petals_3").setRange(0, 200).setPosition(160, 220).setCaptionLabel("Petals").plugTo(this, "Controls").setValue(layers.get(id).gear3.P).moveTo("global");
-  //// fill stroke width for all modes
-  //Fill = cp5.addToggle("Fill").setPosition(10, 370).setSize(45, 15).setMode(ControlP5.SWITCH).setState(true).plugTo(this, "Controls").moveTo("global");
-  //Stroke = cp5.addToggle("Stroke").setPosition(65, 370).setSize(45, 15).setMode(ControlP5.SWITCH).setState(false).plugTo(this, "Controls").moveTo("global");
-  //LX = cp5.addSlider("LineX").setPosition(10, 350).setRange(0, 250).plugTo(this, "Controls").setValue(layers.get(id).LX).moveTo("global");
-  //LY = cp5.addSlider("LineY").setPosition(160, 350).setRange(0, 250).plugTo(this, "Controls").setValue(layers.get(id).LY).moveTo("global");
-  //SW = cp5.addSlider("StrokeWeight").setPosition(310, 330).setRange(0, 250).setValue(2).plugTo(this, "Controls").setValue(layers.get(id).SW).moveTo("global");
-  //Lines = cp5.addToggle("Lines").setPosition(310, 290).setSize(20, 20).setState(false).plugTo(this, "Controls").moveTo("global");
-  //Dots = cp5.addToggle("Dots").setPosition(340, 290).setSize(20, 20).setState(false).plugTo(this, "Controls").moveTo("global");
-  //Spheres = cp5.addToggle("3D").setPosition(370, 290).setSize(20, 20).setState(false).plugTo(this, "Controls").moveTo("global");
-  //// line density for spiro mode
-  //D = cp5.addSlider("Density").setPosition(10, 430).setSize(450, 15).setRange(0, 100000).plugTo(this, "Controls").setValue(layers.get(id).PlotDots).moveTo("global");
-  //// gear connectors for line & dot mode
-  //G1c = cp5.addSlider("Connect G1").setPosition(310, 230).setRange(0, 100).plugTo(this, "Controls").moveTo("global");
-  //G2c = cp5.addSlider("Connect G2").setPosition(310, 250).setRange(0, 100).plugTo(this, "Controls").moveTo("global");
-  //G3c = cp5.addSlider("Connect G3").setPosition(310, 270).setRange(0, 100).plugTo(this, "Controls").moveTo("global");
-
+ 
   //// new, copy, switch
   //LayerList = cp5.addScrollableList("SwitchLayers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").moveTo("global").setOpen(false);
   //for (int i = 0; i<layers.size(); i++) {
@@ -502,19 +424,7 @@ class GUI extends PApplet {     //<>//
   //  }
   //}
 
-  //void ColorFillStroke() {
-  //  if (layerlock == false) {
-  //    if (CS.getState() == false) {
-  //      //layers.get(id).Fill =  cp.getColorValue() ;
-  //        //layers.get(id).Fill =  cw.getPickingColor();
-
-  //    }
-  //    if (CS.getState() == true) {
-  //      layers.get(id).Stroke =  cp.getColorValue();
-  //    }
-  //  }
-  //}
-
+  
   //void SwitchLayers() {
   //  if (id != int(LayerList.getValue())) {
   //    layerlock = true;
@@ -555,46 +465,5 @@ class GUI extends PApplet {     //<>//
   //    id = int(LayerList.getValue());
   //  }
   //}
-
-  //void Controls() {
-  //  if (layerlock == false) {
-  //    layers.get(id).Fill =  cw.getRGB();
-
-  ////3D controls
-  //if (Spheres.getState() == true) {
-  //  layers.get(id).gear0.RZ = SW.getValue();
-  //  layers.get(id).gear1.RZ = G1c.getValue();
-  //  layers.get(id).gear2.RZ = G2c.getValue();
-  //  layers.get(id).gear3.RZ = G3c.getValue();
-  //}
-
-  //layers.get(id).gear0.RX = map(G0.getArrayValue(0), 0, 512, -256, 256);
-  //layers.get(id).gear0.RY = map(G0.getArrayValue(1), 0, 512, -256, 256);
-  //layers.get(id).gear1.RX = map(G1.getArrayValue(0), 0, 256, -128, 128);
-  //layers.get(id).gear1.RY = map(G1.getArrayValue(1), 0, 256, -128, 128);
-  //layers.get(id).gear2.RX = map(G2.getArrayValue(0), 0, 256, -128, 128);
-  //layers.get(id).gear2.RY = map(G2.getArrayValue(1), 0, 256, -128, 128);
-  //layers.get(id).gear3.RX = map(G3.getArrayValue(0), 0, 256, -128, 128);
-  //layers.get(id).gear3.RY = map(G3.getArrayValue(1), 0, 256, -128, 128);
-  //layers.get(id).gear1.P = int(P1.getValue()); 
-  //layers.get(id).gear2.P = int(P2.getValue());
-  //layers.get(id).gear3.P = int(P3.getValue());
-  //layers.get(id).LX = LX.getValue();
-  //layers.get(id).LY = LY.getValue();
-  //layers.get(id).fill = Fill.getState();
-  //layers.get(id).stroke = Stroke.getState();
-  //layers.get(id).spheres3d = Spheres.getState();
-  //layers.get(id).SW = SW.getValue();
-  //layers.get(id).lines = Lines.getState();
-  //layers.get(id).dots = Dots.getState();
-  //layers.get(id).PlotDots = D.getValue();
-  //layers.get(id).gear1.Connect = int(G1c.getValue());
-  //layers.get(id).gear2.Connect = int(G2c.getValue());
-  //layers.get(id).gear3.Connect = int(G3c.getValue());
-  //}
-  //}
-  //
-  //void BG(color bg) {
-  //  BG = bg;
-  //}
+ 
 }
