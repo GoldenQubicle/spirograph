@@ -46,6 +46,7 @@ class Layer { //<>//
     trig.set("G3trigX", 0);
     trig.set("G3trigY", 1);
     trig.set("G3trigZ", 1);
+    spheres3d = true;
   }
 
   void display() {     
@@ -95,14 +96,15 @@ class Layer { //<>//
   void sphere3d() {
     cam.setActive(true);
     lights();  
-    float Spheres = 500;   
-    for (float T = 0; T < Spheres; T+=2) {
-      theta = (TAU/Spheres)*T;
-      for (float P = 0; P < Spheres; P+=2) {
-        phi = (PI/Spheres)*P;
-        xyz.x =  gear0.RX*cos(theta)*sin(phi) + gear1.RX*cos(theta/gear1.Ratio())*sin(phi/gear1.Ratio()) + gear2.RX*cos(theta/gear2.Ratio())*sin(phi/gear2.Ratio()) + gear3.RX*cos(theta/gear3.Ratio())*sin(phi/gear3.Ratio());
-        xyz.y =  gear0.RY*sin(theta)*sin(phi) + gear1.RY*sin(theta/gear1.Ratio())*sin(phi/gear1.Ratio()) + gear2.RY*sin(theta/gear2.Ratio())*sin(phi/gear2.Ratio()) + gear3.RY*sin(theta/gear3.Ratio())*sin(phi/gear3.Ratio()); 
-        xyz.z =  gear0.RZ*cos(phi) + gear1.RZ*cos(phi/gear1.Ratio()) + gear2.RZ*cos(phi/gear2.Ratio()) + gear3.RZ*cos(phi/gear3.Ratio());
+    density = 500;       
+    for (int t = 0; t < density; t+=2) {
+      theta = (TAU/density)*t;
+      for (int p = 0; p < density; p+=2) {
+        phi = (PI/density)*p;
+        Gears(theta, phi);
+        xyz.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
+        xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
+        xyz.z = gear0.xyz.z + gear1.xyz.z + gear2.xyz.z + gear3.xyz.z;
         //pushMatrix();
         //translate(XYZ.x, XYZ.y, XYZ.z);
         //sphere(1);
@@ -110,14 +112,15 @@ class Layer { //<>//
         point(xyz.x, xyz.y, xyz.z);
         //sphereDetail(3);
         //popMatrix();
+        //}
       }
     }
   }
 
   void spiroMode() {    
     cam.setActive(false);
-    for (int i = 0; i < density; i++) {
-      Gears(i);
+    for (int theta = 0; theta < density; theta++) {
+      Gears(theta, 0);
       xyz.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
       xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
       strokeWeight(sw);
@@ -125,9 +128,9 @@ class Layer { //<>//
     }
   }
 
-  void Gears(int i) {
+  void Gears(float theta, float phi) {
     for (int g = 0; g < 4; g++) {
-      gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), trig.get("G"+g+"trigZ"), i, gear0.C);
+      gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), trig.get("G"+g+"trigZ"), theta, phi, gear0.C, spheres3d);
     }
   }
 
@@ -177,7 +180,7 @@ class Layer { //<>//
 
 class Gears {
   PVector xyz;
-  float theta, RX, RY, RZ, C, Connect, P, R, move;
+  float theta, phi, RX, RY, RZ, C, Connect, P, R, move;
   float cossintan;
 
   Gears(float rx, float ry, float rz) {
@@ -189,14 +192,20 @@ class Gears {
     C = ((RX+RY)/2) * TAU;
   }
 
-  void grinding(int trigX, int trigY, int trigZ, int i, float circumference) {
-    theta = ((TAU/circumference)*i)+move;
-    xyz.x = cossintan(trigX, theta)*RX;
-    xyz.y = cossintan(trigY, theta)*RY;
-    xyz.z = cossintan(trigZ, theta)*RZ;
-    //move += .1; // gear0 needs to remain stationary
+  void grinding(int trigX, int trigY, int trigZ, float theta, float phi, float circumference, boolean threed) {
+    if (threed == true) {
+      xyz.x = cossintan(trigX, theta)*cossintan(1, phi)*RX;
+      xyz.y = cossintan(trigY, theta)*cossintan(1, phi)*RY;
+      xyz.z = cossintan(trigZ, phi)*RZ;
+    } else {
+      theta = ((TAU/circumference)*theta)+move;
+      xyz.x = cossintan(trigX, theta)*RX;
+      xyz.y = cossintan(trigY, theta)*RY;
+      xyz.z = cossintan(trigZ, theta)*RZ;
+      //move += .1; // gear0 needs to remain stationary
+    }
   }
-    
+
   float cossintan(int trig, float theta) {
     if (trig == 0) {
       cossintan = cos(theta/Ratio());
