@@ -87,11 +87,11 @@ class Trigger {
       aniValue = LayerState.getJSONObject(Parameter[9]).getFloat("value");
     }
     
-    if (LayerParameter == 14 && gui.Spheres.getState() == true) {
-      G = 0;
-      GV = 4;
-      aniValue = LayerState.getJSONObject(Parameter[9]).getFloat("value");
-     }
+    //if (LayerParameter == 14 && gui.Spheres.getState() == true) {
+    //  G = 0;
+    //  GV = 4;
+    //  aniValue = LayerState.getJSONObject(Parameter[9]).getFloat("value");
+    // }
 
     if (LayerParameter == 15) {
       G = 1;

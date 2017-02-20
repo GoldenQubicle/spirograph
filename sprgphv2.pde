@@ -1,17 +1,31 @@
-/* //<>//
+/* //<>// //<>//
+so yeah, need to put this on hold once more for my own good, probably untill sometime in march - which is actually pretty soon. .
+anyway, would be really nice if I had more control over color, i.e. apply a lerp color over radius gear0
+so it'd need to check x and y positions
+
+couple more random ideas 
+- used spheres while in '2d' and apply rotate over x and y, probably pretty cool
+- speaking of, look into how I could possibly set up material / lighting
+- add blend mode to layer
+
+Controller Class
+- handles saving and loading of all settings - whether by cp5 json or custom function
+- hanbles rendering
+
+
+todo
 add a 'reset to middle' button to gears
 add a 'lock radii' button to gears
 make the rotation of gears slider into actual control over said rotation, rather than its speed
 
 maybe move additional z controls over to beneath the existing cos/sin/tan
 
-- also wtf does the rotation sometimes just stop?!
 
 
 add layer support
 density toggle / reset between 2d&3d
 
-start on custom save & load
+s
  
 */
 

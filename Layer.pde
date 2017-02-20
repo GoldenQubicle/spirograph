@@ -1,12 +1,11 @@
 class Layer { //<>//
+  int id;
   PVector xyz, xy2;  
   float theta, phi, lx, ly, density, sw, connectLines, circumference;
   Gears[] gears;
   Gears gear0, gear1, gear2, gear3;
   color cFill, cStroke;
   boolean stroke, fill, lines, dots, spheres3d;
-  int id;
-  float r = .1;
   IntDict trig;
 
   Layer() {
@@ -14,10 +13,10 @@ class Layer { //<>//
     xyz = new PVector();
     xy2 = new PVector();
     gears = new Gears[4];
-    gear0 = new Gears(100, 100, 0, false);
-    gear1 = new Gears(0, 0, 0, false);
-    gear2 = new Gears(0, 0, 0, false);
-    gear3 = new Gears(0, 0, 0, false);
+    gear0 = new Gears(100, 100, 0);
+    gear1 = new Gears(0, 0, 0);
+    gear2 = new Gears(0, 0, 0);
+    gear3 = new Gears(0, 0, 0);
     gears[0] = gear0;
     gears[1] = gear1;
     gears[2] = gear2;
@@ -70,15 +69,6 @@ class Layer { //<>//
     if (stroke == false) {
       noStroke();
     }
-    // faux 3D, spinning over axis
-    //pushMatrix();
-    //translate(256,256);    
-    //rotateX(r);
-    //rotateY(r);
-    //rotateZ(r);
-    //translate(-256, -256);
-    //pushMatrix();
-
     if (dots == true && lines == true) {
       Dots();
       Lines();
@@ -87,18 +77,10 @@ class Layer { //<>//
     } else if (dots == true) {
       Dots();
     } else if (spheres3d == true) {
-
-      //     pushMatrix();
-      //      translate(width/2, height/2, 0);
       sphere3d();
-      //popMatrix();
     } else {     
-      //Spiro();
       spiroMode();
     }
-    //popMatrix();
-    //r+=5;
-    //popMatrix();
   }
 
   void sphere3d() {
@@ -113,15 +95,14 @@ class Layer { //<>//
         xyz.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
         xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
         xyz.z = gear0.xyz.z + gear1.xyz.z + gear2.xyz.z + gear3.xyz.z;
-        //pushMatrix();
-        //translate(XYZ.x, XYZ.y, XYZ.z);
-        //sphere(1);
         stroke(cFill);
         strokeWeight(sw);
-        point(xyz.x, xyz.y, xyz.z);
+        point(xyz.x, xyz.y, xyz.z);   
+        //pushMatrix();
+        //translate(xyz.x, xyz.y, xyz.z);
+        //sphere(3);
         //sphereDetail(3);
         //popMatrix();
-        //}
       }
     }
   }
@@ -134,31 +115,12 @@ class Layer { //<>//
       xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
       strokeWeight(sw);
       ellipse(xyz.x, xyz.y, lx, ly);
-      //pushMatrix();
-      //translate(xyz.x, xyz.y, xyz.z);
-      //sphere(lx);
-      //sphereDetail(3);
-      //popMatrix();
     }
   }
 
   void Gears(float theta, float phi) {
     for (int g = 0; g < 4; g++) {
       gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), trig.get("G"+g+"trigZ"), trig.get("G"+g+"trigX2"), trig.get("G"+g+"trigY2"), theta, phi, gear0.C, spheres3d);
-    }
-  }
-
-  void Spiro() {
-    cam.setActive(false);
-    for (float i = 0; i < density; i++) {
-      theta = (TAU/gear0.C)*i;
-      phi = theta + r;
-      //rotateY(r);
-      xyz.x = cos(theta/gear0.Ratio())*gear0.RX + (cos(phi/gear1.Ratio())*gear1.RX) + cos(theta/gear2.Ratio())*gear2.RX + cos(theta/gear3.Ratio())*gear3.RX;
-      xyz.y =  sin(theta/gear0.Ratio())*gear0.RY + (sin(phi/gear1.Ratio())*gear1.RY) + sin(theta/gear2.Ratio())*gear2.RY  + sin(theta/gear3.Ratio())*gear3.RY;
-      strokeWeight(sw);
-      ellipse(xyz.x, xyz.y, lx, ly);
-      r += .00001;
     }
   }
 
@@ -195,19 +157,15 @@ class Layer { //<>//
 class Gears {
   PVector xyz;
   float theta, phi, RX, RY, RZ, C, Connect, P, R, move, speed, cossintan;
-  boolean rotate;
 
-  Gears(float rx, float ry, float rz, boolean r) {
+  Gears(float rx, float ry, float rz) {
     xyz = new PVector();    
     RX = rx;
     RY = ry;
     RZ = rz;
     R = 1/(P-1);
     C = ((RX+RY)/2) * TAU;
-    rotate = r;
   }
-
-
   void grinding(int trigX, int trigY, int trigZ, int trigX2, int trigY2, float theta, float phi, float circumference, boolean threed) {
     if (threed != true) {
       theta = ((TAU/circumference)*theta)+move;
@@ -224,18 +182,6 @@ class Gears {
       xyz.y = cossintan(trigY, theta)*cossintan(trigY2, phi)*RY;
       xyz.z = cossintan(trigZ, phi)*RZ;
     }
-
-    //if (rotate == true) {
-    //  //rotateY(move);   
-    //  //rotateX(move);   
-    //  //xyz.x = cossintan(trigX, theta)*RX;
-    //  //xyz.y = cossintan(trigY, theta)*RY;
-
-    //  phi  = theta + move;
-    //  xyz.x = cossintan(trigX, phi)*RX;
-    //  xyz.y = cossintan(trigY, phi)*RY;
-    //  move += .0000035;
-    //}
   }
 
   float cossintan(int trig, float theta) {

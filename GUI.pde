@@ -8,11 +8,10 @@ class GUI extends PApplet {     //<>//
   Slider2D gear0, gear1, gear2, gear3;
   ButtonBar trigX, trigY, trigZ;
   Textlabel trig;
-
-
-  Toggle Lines, Dots, CS, Spheres, Pause;
+  
+  // not yet in use, however, lots of stuff in animation depends on it so therefor not commented out
   ScrollableList LayerList, Easing;
-  Button New, Copy, SaveAll, Save, Increase, Decrease, OK;
+  Button New, Copy, SaveAll, Save, Increase, Decrease;
   Matrix Ani;
   ButtonBar LayerState;
   Textlabel Label;
@@ -20,8 +19,8 @@ class GUI extends PApplet {     //<>//
   String[] EasingNames = {"LINEAR", "QUAD_IN", "QUAD_OUT", "QUAD_IN_OUT", "CUBIC_IN", "CUBIC_IN_OUT", "CUBIC_OUT", "QUART_IN", "QUART_OUT", "QUART_IN_OUT", "QUINT_IN", "QUINT_OUT", "QUINT_IN_OUT", "SINE_IN", "SINE_OUT", "SINE_IN_OUT", "CIRC_IN", "CIRC_OUT", "CIRC_IN_OUT", "EXPO_IN", "EXPO_OUT", "EXPO_IN_OUT", "BACK_IN", "BACK_OUT", "BACK_IN_OUT", "BOUNCE_IN", "BOUNCE_OUT", "BOUNCE_IN_OUT", "ELASTIC_IN", "ELASTIC_OUT", "ELASTIC_IN_OUT"};
   int id, set;
   boolean layerlock;
-
-  int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p1, p2, p3, as, af, g1r, g2r, g3r ; // using int to strip decimals for better ui aethetic, might come back to bite me in the arse . . =) 
+  // using int variables to strip decimals for gui aethetic
+  int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p1, p2, p3, as, af, g1r, g2r, g3r ; 
 
   public GUI(PApplet theApplet) {
     super();
