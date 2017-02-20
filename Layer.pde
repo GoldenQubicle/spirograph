@@ -17,7 +17,7 @@ class Layer { //<>//
     gear0 = new Gears(100, 100, 0, false);
     gear1 = new Gears(0, 0, 0, false);
     gear2 = new Gears(0, 0, 0, false);
-    gear3 = new Gears(0, 0, 0, true);
+    gear3 = new Gears(0, 0, 0, false);
     gears[0] = gear0;
     gears[1] = gear1;
     gears[2] = gear2;
@@ -134,6 +134,11 @@ class Layer { //<>//
       xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
       strokeWeight(sw);
       ellipse(xyz.x, xyz.y, lx, ly);
+      //pushMatrix();
+      //translate(xyz.x, xyz.y, xyz.z);
+      //sphere(lx);
+      //sphereDetail(3);
+      //popMatrix();
     }
   }
 
@@ -189,8 +194,7 @@ class Layer { //<>//
 
 class Gears {
   PVector xyz;
-  float theta, phi, RX, RY, RZ, C, Connect, P, R, move;
-  float cossintan;
+  float theta, phi, RX, RY, RZ, C, Connect, P, R, move, speed, cossintan;
   boolean rotate;
 
   Gears(float rx, float ry, float rz, boolean r) {
@@ -203,28 +207,35 @@ class Gears {
     rotate = r;
   }
 
-  void grinding(int trigX, int trigY, int trigZ, int trigX2, int trigY2, float theta, float phi, float circumference, boolean threed) {
-    theta = ((TAU/circumference)*theta);
-    xyz.x = cossintan(trigX, theta)*RX;
-    xyz.y = cossintan(trigY, theta)*RY;
-    if (rotate == true) {
-      //rotateY(move);   
-      //rotateX(move);   
-      //xyz.x = cossintan(trigX, theta)*RX;
-      //xyz.y = cossintan(trigY, theta)*RY;
 
-      phi  = theta + move;
-      xyz.x = cossintan(trigX, phi)*RX;
-      xyz.y = cossintan(trigY, phi)*RY;
-      move += .0000035;
-      if (move > TAU) {
+  void grinding(int trigX, int trigY, int trigZ, int trigX2, int trigY2, float theta, float phi, float circumference, boolean threed) {
+    if (threed != true) {
+      theta = ((TAU/circumference)*theta)+move;
+      //rotateY(move);   
+      //rotateX(move);
+      xyz.x = cossintan(trigX, theta)*RX;
+      xyz.y = cossintan(trigY, theta)*RY;
+      move = move + speed;      
+      if (move > TAU || move < -TAU) {
         move = 0;
       }
-    } else if (threed == true) {
+    } else {
       xyz.x = cossintan(trigX, theta)*cossintan(trigX2, phi)*RX;
       xyz.y = cossintan(trigY, theta)*cossintan(trigY2, phi)*RY;
       xyz.z = cossintan(trigZ, phi)*RZ;
     }
+
+    //if (rotate == true) {
+    //  //rotateY(move);   
+    //  //rotateX(move);   
+    //  //xyz.x = cossintan(trigX, theta)*RX;
+    //  //xyz.y = cossintan(trigY, theta)*RY;
+
+    //  phi  = theta + move;
+    //  xyz.x = cossintan(trigX, phi)*RX;
+    //  xyz.y = cossintan(trigY, phi)*RY;
+    //  move += .0000035;
+    //}
   }
 
   float cossintan(int trig, float theta) {

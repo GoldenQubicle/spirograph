@@ -1,4 +1,13 @@
 /* //<>//
+add a 'reset to middle' button to gears
+add a 'lock radii' button to gears
+make the rotation of gears slider into actual control over said rotation, rather than its speed
+
+maybe move additional z controls over to beneath the existing cos/sin/tan
+
+- also wtf does the rotation sometimes just stop?!
+
+
 add layer support
 density toggle / reset between 2d&3d
 
@@ -58,7 +67,7 @@ void draw() {
   surface.setSize(Width, Height);
   background(BG);  
 
-  translate(Width/2, Height/2);
+  //translate(Width/2, Height/2);
  
 
   for (int i = 0; i < layers.size(); i++) {

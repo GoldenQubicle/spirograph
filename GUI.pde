@@ -4,7 +4,7 @@ class GUI extends PApplet {     //<>//
   Button gifNew, gifNewOK;
   ColorWheel colorBackground, colorStroke, colorFill;
   Toggle stroke, fill, drawMode;
-  Slider gifWidth, gifHeight, gifLength, gifInterval, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals1, petals2, petals3, alphaFill, alphaStroke;
+  Slider gifWidth, gifHeight, gifLength, gifInterval, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals1, petals2, petals3, alphaFill, alphaStroke, G1r, G2r, G3r; 
   Slider2D gear0, gear1, gear2, gear3;
   ButtonBar trigX, trigY, trigZ;
   Textlabel trig;
@@ -21,7 +21,7 @@ class GUI extends PApplet {     //<>//
   int id, set;
   boolean layerlock;
 
-  int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p1, p2, p3, as, af ; // using int to strip decimals for better ui aethetic, might come back to bite me in the arse . . =) 
+  int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p1, p2, p3, as, af, g1r, g2r, g3r ; // using int to strip decimals for better ui aethetic, might come back to bite me in the arse . . =) 
 
   public GUI(PApplet theApplet) {
     super();
@@ -56,9 +56,9 @@ class GUI extends PApplet {     //<>//
     alphaFill = cp5.addSlider("af").setPosition(415, 220).setSize(200, 10).setRange(0, 255).setValue(255).setCaptionLabel("alpha");   
     fill = cp5.addToggle("fill").setPosition(623, 60).setSize(20, 20).setState(true);
     stroke = cp5.addToggle("stroke").setPosition(653, 60).setSize(20, 20).setState(false);
-    lx = cp5.addSlider("LX").setPosition(623, 120).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Width");  
-    ly = cp5.addSlider("LY").setPosition(623, 140).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Height"); 
-    sw = cp5.addSlider("SW").setPosition(623, 160).setSize(200, 10).setRange(0, 200).setCaptionLabel("Stroke Weight");    
+    lx = cp5.addSlider("LX").setPosition(623, 100).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Width");  
+    ly = cp5.addSlider("LY").setPosition(623, 115).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Height"); 
+    sw = cp5.addSlider("SW").setPosition(623, 130).setSize(200, 10).setRange(0, 200).setCaptionLabel("Stroke Weight");    
     cp5.getController("as").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("af").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("LX").getCaptionLabel().align(CENTER, CENTER);
@@ -68,17 +68,20 @@ class GUI extends PApplet {     //<>//
     // gears
     int size2d = 150;
     int posy = 240;
-    gear0 = cp5.addSlider2D("G0").setMinMax(-256, -256, 256, 256).setPosition(3, posy).setCaptionLabel("Radius Gear 0").setSize(size2d, size2d);
-    gear1 = cp5.addSlider2D("G1").setMinMax(-256, -256, 256, 256).setPosition(158, posy).setCaptionLabel("Radius Gear 1").setSize(size2d, size2d);
-    gear2 = cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(313, posy).setCaptionLabel("Radius Gear 2").setSize(size2d, size2d);
-    gear3 = cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(468, posy).setCaptionLabel("Radius Gear 3").setSize(size2d, size2d);    
-    gear0z = cp5.addSlider("G0z").setRange(-256, 256).setPosition(3, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 0 Z").hide(); 
-    gear1z = cp5.addSlider("G1z").setRange(-256, 256).setPosition(158, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 1 Z").hide(); 
-    gear2z = cp5.addSlider("G2z").setRange(-256, 256).setPosition(313, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 2 Z").hide(); 
-    gear3z = cp5.addSlider("G3z").setRange(-256, 256).setPosition(468, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 3 Z").hide(); 
-    petals1 = cp5.addSlider("p1").setPosition(623, posy).setSize(200, 10).setRange(0, 200).setCaptionLabel("Petals Gear 1"); 
-    petals2 = cp5.addSlider("p2").setPosition(623, posy+15).setSize(200, 10).setRange(0, 200).setCaptionLabel("Petals Gear 2");
-    petals3 = cp5.addSlider("p3").setPosition(623, posy+30).setSize(200, 10).setRange(0, 200).setCaptionLabel("Petals Gear 3");
+    gear0 = cp5.addSlider2D("G0").setMinMax(-256, -256, 256, 256).setPosition(3, posy).setCaptionLabel("Radius Gear 0").setSize(size2d, size2d).setValue(layers.get(id).gear0.RX, layers.get(id).gear0.RY);
+    gear1 = cp5.addSlider2D("G1").setMinMax(-256, -256, 256, 256).setPosition(158, posy).setCaptionLabel("Radius Gear 1").setSize(size2d, size2d).setValue(layers.get(id).gear1.RX, layers.get(id).gear1.RY);
+    gear2 = cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(313, posy).setCaptionLabel("Radius Gear 2").setSize(size2d, size2d).setValue(layers.get(id).gear2.RX, layers.get(id).gear2.RY);
+    gear3 = cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(468, posy).setCaptionLabel("Radius Gear 3").setSize(size2d, size2d).setValue(layers.get(id).gear3.RX, layers.get(id).gear3.RY);    
+    gear0z = cp5.addSlider("G0z").setRange(-256, 256).setPosition(3, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 0 Z").setValue(layers.get(id).gear0.RZ).hide(); 
+    gear1z = cp5.addSlider("G1z").setRange(-256, 256).setPosition(158, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 1 Z").setValue(layers.get(id).gear1.RZ).hide(); 
+    gear2z = cp5.addSlider("G2z").setRange(-256, 256).setPosition(313, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 2 Z").setValue(layers.get(id).gear2.RZ).hide(); 
+    gear3z = cp5.addSlider("G3z").setRange(-256, 256).setPosition(468, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 3 Z").setValue(layers.get(id).gear3.RZ).hide(); 
+    petals1 = cp5.addSlider("p1").setPosition(623, posy).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 1 Petals"); 
+    petals2 = cp5.addSlider("p2").setPosition(623, posy+15).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 2 Petals");
+    petals3 = cp5.addSlider("p3").setPosition(623, posy+30).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 3 Petals");        
+    G1r = cp5.addSlider("g1r").setPosition(623, posy+45).setSize(200, 10).setRange(-100, 100).setCaptionLabel("Gear 1 Rotate"); 
+    G2r = cp5.addSlider("g2r").setPosition(623, posy+60).setSize(200, 10).setRange(-100, 100).setCaptionLabel("Gear 2 Rotate"); 
+    G3r = cp5.addSlider("g3r").setPosition(623, posy+75).setSize(200, 10).setRange(-100, 100).setCaptionLabel("Gear 3 Rotate");
     cp5.getController("G0z").getCaptionLabel().align(CENTER, BOTTOM);  
     cp5.getController("G1z").getCaptionLabel().align(CENTER, BOTTOM);
     cp5.getController("G2z").getCaptionLabel().align(CENTER, BOTTOM);
@@ -86,11 +89,14 @@ class GUI extends PApplet {     //<>//
     cp5.getController("p1").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("p2").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("p3").getCaptionLabel().align(CENTER, CENTER);
+    cp5.getController("g1r").getCaptionLabel().align(CENTER, CENTER);
+    cp5.getController("g2r").getCaptionLabel().align(CENTER, CENTER);
+    cp5.getController("g3r").getCaptionLabel().align(CENTER, CENTER);
     int poy = 0;
     int pox = 0;
     String [] trig = {"cos", "sin", "tan"};
     for (int i = 0; i < 4; i++) {
-      trigX = cp5.addButtonBar("G" + i + "trigX").setPosition(623, 285 + poy).addItems(trig).setSize(120, 12);
+      trigX = cp5.addButtonBar("G" + i + "trigX").setPosition(623, 400 + poy).addItems(trig).setSize(120, 12);
       cp5.getController("G" + i + "trigX").addCallback(new CallbackListener() {
         public void controlEvent(CallbackEvent theEvent) { 
           if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
@@ -99,7 +105,7 @@ class GUI extends PApplet {     //<>//
         }
       }
       );
-      trigY = cp5.addButtonBar("G" + i + "trigY").setPosition(623, 300  + poy).addItems(trig).setSize(120, 12);
+      trigY = cp5.addButtonBar("G" + i + "trigY").setPosition(623, 415  + poy).addItems(trig).setSize(120, 12);
       cp5.getController("G" + i + "trigY").addCallback(new CallbackListener() {
         public void controlEvent(CallbackEvent theEvent) { 
           if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
@@ -136,10 +142,9 @@ class GUI extends PApplet {     //<>//
         }
       }
       );
-      cp5.addTextlabel("g" + i + "x").setPosition(750, 287  + poy).setText("Gear"+ i + " X");
-      cp5.addTextlabel("g" + i + "y").setPosition(750, 302 + poy).setText("Gear" + i +" Y");
+      cp5.addTextlabel("g" + i + "x").setPosition(750, 402  + poy).setText("Gear"+ i + " X");
+      cp5.addTextlabel("g" + i + "y").setPosition(750, 417 + poy).setText("Gear" + i +" Y");
       cp5.addTextlabel("g" + i + "z").setPosition(125 + pox, 426).setText("G" + i +" Z").hide();
-      ;
       cp5.addTextlabel("g" + i + "x2").setPosition(125 + pox, 441).setText("G" + i +" X2").hide();
       cp5.addTextlabel("g" + i + "y2").setPosition(125 + pox, 456).setText("G" + i + "Y2").hide();
       poy = poy + 30;
@@ -242,6 +247,15 @@ class GUI extends PApplet {     //<>//
     }
     if (theEvent.getController().equals(petals3)) {
       layers.get(id).gear3.P = petals3.getValue();
+    }
+    if (theEvent.getController().equals(G1r)) {
+      layers.get(id).gear1.speed = map(G1r.getValue(), -100, 100, -.0000025, .0000025);
+    }
+    if (theEvent.getController().equals(G2r)) {
+      layers.get(id).gear2.speed = map(G2r.getValue(), -100, 100, -.0000025, .0000025);
+    }
+    if (theEvent.getController().equals(G3r)) {
+      layers.get(id).gear3.speed = map(G3r.getValue(), -100, 100, -.0000025, .0000025);
     }
   }
 
