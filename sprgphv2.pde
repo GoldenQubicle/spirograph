@@ -1,18 +1,10 @@
 /* //<>//
-factor the core funtionality out to gear class
+add layer support
+density toggle / reset between 2d&3d
+
+start on custom save & load
  
- i.e. cos(Theta/gear1.Ratio())*gear1.RX
- 
- so a function which returns x,y,z values which are either cos / sin / tan
- 
- 
- redesign gui - 3 colorwheels on top (left is background, middle stroke, right fill)
- strokeweight, lineX/Y & fill stroke toggle together, top right, next to colorwheels
- 4 gears below (0,1,2,3 left to right obviously)
- density settings rework into radio button & range
- new gif settings in dropdown group  
- 
- */
+*/
 
 
 import peasy.*;
@@ -66,7 +58,7 @@ void draw() {
   surface.setSize(Width, Height);
   background(BG);  
 
-  //translate(Width/2, Height/2);
+  translate(Width/2, Height/2);
  
 
   for (int i = 0; i < layers.size(); i++) {

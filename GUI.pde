@@ -46,7 +46,7 @@ class GUI extends PApplet {     //<>//
     gifLength = cp5.addSlider("ms").setPosition(10, 40).setRange(1000, 10000).setGroup("ng").setCaptionLabel("Duration (ms)");
     gifInterval = cp5.addSlider("i").setPosition(10, 55).setRange(2, 20).setNumberOfTickMarks(19).snapToTickMarks(true).setGroup("ng").setCaptionLabel("Intervals");
     gifNewOK = cp5.addButton("Create").setPosition(50, 80).setGroup("ng");
-    drawMode = cp5.addToggle("drawMode").setPosition(623, 3).setSize(50, 20).setValue(true).setMode(ControlP5.SWITCH).setCaptionLabel("  3D           2D");
+    drawMode = cp5.addToggle("drawMode").setPosition(623, 3).setSize(50, 20).setValue(false).setMode(ControlP5.SWITCH).setCaptionLabel("  3D           2D");
 
     // colors, line & stroke
     colorBackground = cp5.addColorWheel("Background").setPosition(3, 3).setValue(128);
@@ -72,10 +72,10 @@ class GUI extends PApplet {     //<>//
     gear1 = cp5.addSlider2D("G1").setMinMax(-256, -256, 256, 256).setPosition(158, posy).setCaptionLabel("Radius Gear 1").setSize(size2d, size2d);
     gear2 = cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(313, posy).setCaptionLabel("Radius Gear 2").setSize(size2d, size2d);
     gear3 = cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(468, posy).setCaptionLabel("Radius Gear 3").setSize(size2d, size2d);    
-    gear0z = cp5.addSlider("G0z").setRange(-256, 256).setPosition(3, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 0 Z").show(); 
-    gear1z = cp5.addSlider("G1z").setRange(-256, 256).setPosition(158, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 1 Z").show(); 
-    gear2z = cp5.addSlider("G2z").setRange(-256, 256).setPosition(313, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 2 Z").show(); 
-    gear3z = cp5.addSlider("G3z").setRange(-256, 256).setPosition(468, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 3 Z").show(); 
+    gear0z = cp5.addSlider("G0z").setRange(-256, 256).setPosition(3, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 0 Z").hide(); 
+    gear1z = cp5.addSlider("G1z").setRange(-256, 256).setPosition(158, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 1 Z").hide(); 
+    gear2z = cp5.addSlider("G2z").setRange(-256, 256).setPosition(313, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 2 Z").hide(); 
+    gear3z = cp5.addSlider("G3z").setRange(-256, 256).setPosition(468, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 3 Z").hide(); 
     petals1 = cp5.addSlider("p1").setPosition(623, posy).setSize(200, 10).setRange(0, 200).setCaptionLabel("Petals Gear 1"); 
     petals2 = cp5.addSlider("p2").setPosition(623, posy+15).setSize(200, 10).setRange(0, 200).setCaptionLabel("Petals Gear 2");
     petals3 = cp5.addSlider("p3").setPosition(623, posy+30).setSize(200, 10).setRange(0, 200).setCaptionLabel("Petals Gear 3");
@@ -109,8 +109,26 @@ class GUI extends PApplet {     //<>//
       }
       );
 
-      trigZ = cp5.addButtonBar("G" + i + "trigZ").setPosition(3 + pox, 425).addItems(trig).setSize(120, 12);
+      trigZ = cp5.addButtonBar("G" + i + "trigZ").setPosition(3 + pox, 425).addItems(trig).setSize(120, 12).hide();
       cp5.getController("G" + i + "trigZ").addCallback(new CallbackListener() {
+        public void controlEvent(CallbackEvent theEvent) { 
+          if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
+            layers.get(id).trig.set(theEvent.getController().getName(), int(theEvent.getController().getValue()));
+          }
+        }
+      }
+      );
+      trigX = cp5.addButtonBar("G" + i + "trigX2").setPosition(3 + pox, 440).addItems(trig).setSize(120, 12).hide();
+      cp5.getController("G" + i + "trigX2").addCallback(new CallbackListener() {
+        public void controlEvent(CallbackEvent theEvent) { 
+          if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
+            layers.get(id).trig.set(theEvent.getController().getName(), int(theEvent.getController().getValue()));
+          }
+        }
+      }
+      );
+      trigY = cp5.addButtonBar("G" + i + "trigY2").setPosition(3 + pox, 455).addItems(trig).setSize(120, 12).hide();
+      cp5.getController("G" + i + "trigY2").addCallback(new CallbackListener() {
         public void controlEvent(CallbackEvent theEvent) { 
           if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
             layers.get(id).trig.set(theEvent.getController().getName(), int(theEvent.getController().getValue()));
@@ -120,7 +138,10 @@ class GUI extends PApplet {     //<>//
       );
       cp5.addTextlabel("g" + i + "x").setPosition(750, 287  + poy).setText("Gear"+ i + " X");
       cp5.addTextlabel("g" + i + "y").setPosition(750, 302 + poy).setText("Gear" + i +" Y");
-      cp5.addTextlabel("g" + i + "z").setPosition(125 + pox, 426).setText("G" + i +" Z");
+      cp5.addTextlabel("g" + i + "z").setPosition(125 + pox, 426).setText("G" + i +" Z").hide();
+      ;
+      cp5.addTextlabel("g" + i + "x2").setPosition(125 + pox, 441).setText("G" + i +" X2").hide();
+      cp5.addTextlabel("g" + i + "y2").setPosition(125 + pox, 456).setText("G" + i + "Y2").hide();
       poy = poy + 30;
       pox = pox + 155;
     }
@@ -141,18 +162,26 @@ class GUI extends PApplet {     //<>//
     }
     if (theEvent.getController().equals(drawMode)) {
       layers.get(id).spheres3d = drawMode.getState();
-      if (drawMode.getState() == true) {
-        gear0z.show(); 
-        gear1z.show(); 
-        gear2z.show(); 
-        gear3z.show();
-      } else {
-        gear0z.hide(); 
-        gear1z.hide(); 
-        gear2z.hide(); 
-        gear3z.hide();
+      for (int i =0; i < 4; i++) {
+        if (drawMode.getState() == true) {
+          cp5.getController("G"+i+"z").show();
+          cp5.getController("G" + i + "trigZ").show();
+          cp5.getController("G" + i + "trigX2").show();
+          cp5.getController("G" + i + "trigY2").show();
+          cp5.getController("g" + i + "z").show();
+          cp5.getController("g" + i + "x2").show();
+          cp5.getController("g" + i + "y2").show();
+        } else {
+          cp5.getController("G"+i+"z").hide();
+          cp5.getController("G" + i + "trigZ").hide();
+          cp5.getController("G" + i + "trigX2").hide();
+          cp5.getController("G" + i + "trigY2").hide();
+          cp5.getController("g" + i + "z").hide();
+          cp5.getController("g" + i + "x2").hide();
+          cp5.getController("g" + i + "y2").hide();
+        }
       }
-    }    
+    }
     if (theEvent.getController().equals(colorBackground)) {
       BG = colorBackground.getRGB();
     }

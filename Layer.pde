@@ -14,10 +14,10 @@ class Layer { //<>//
     xyz = new PVector();
     xy2 = new PVector();
     gears = new Gears[4];
-    gear0 = new Gears(100, 100, 0);
-    gear1 = new Gears(0, 0, 0);
-    gear2 = new Gears(0, 0, 0);
-    gear3 = new Gears(0, 0, 0);
+    gear0 = new Gears(100, 100, 0, false);
+    gear1 = new Gears(0, 0, 0, false);
+    gear2 = new Gears(0, 0, 0, false);
+    gear3 = new Gears(0, 0, 0, true);
     gears[0] = gear0;
     gears[1] = gear1;
     gears[2] = gear2;
@@ -46,7 +46,15 @@ class Layer { //<>//
     trig.set("G3trigX", 0);
     trig.set("G3trigY", 1);
     trig.set("G3trigZ", 1);
-    spheres3d = true;
+    trig.set("G0trigX2", 0);
+    trig.set("G0trigY2", 1);
+    trig.set("G1trigX2", 0);
+    trig.set("G1trigY2", 1);
+    trig.set("G2trigX2", 0);
+    trig.set("G2trigY2", 1);
+    trig.set("G3trigX2", 0);
+    trig.set("G3trigY2", 1);
+    //spheres3d = true;
   }
 
   void display() {     
@@ -109,6 +117,7 @@ class Layer { //<>//
         //translate(XYZ.x, XYZ.y, XYZ.z);
         //sphere(1);
         stroke(cFill);
+        strokeWeight(sw);
         point(xyz.x, xyz.y, xyz.z);
         //sphereDetail(3);
         //popMatrix();
@@ -130,7 +139,7 @@ class Layer { //<>//
 
   void Gears(float theta, float phi) {
     for (int g = 0; g < 4; g++) {
-      gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), trig.get("G"+g+"trigZ"), theta, phi, gear0.C, spheres3d);
+      gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), trig.get("G"+g+"trigZ"), trig.get("G"+g+"trigX2"), trig.get("G"+g+"trigY2"), theta, phi, gear0.C, spheres3d);
     }
   }
 
@@ -138,13 +147,13 @@ class Layer { //<>//
     cam.setActive(false);
     for (float i = 0; i < density; i++) {
       theta = (TAU/gear0.C)*i;
-      //Phi = Theta;// + r;
+      phi = theta + r;
       //rotateY(r);
-      xyz.x = cos(theta/gear0.Ratio())*gear0.RX + (cos(theta/gear1.Ratio())*gear1.RX) + cos(theta/gear2.Ratio())*gear2.RX + cos(theta/gear3.Ratio())*gear3.RX;
-      xyz.y =  sin(theta/gear0.Ratio())*gear0.RY + (sin(theta/gear1.Ratio())*gear1.RY) + sin(theta/gear2.Ratio())*gear2.RY  + sin(theta/gear3.Ratio())*gear3.RY;
+      xyz.x = cos(theta/gear0.Ratio())*gear0.RX + (cos(phi/gear1.Ratio())*gear1.RX) + cos(theta/gear2.Ratio())*gear2.RX + cos(theta/gear3.Ratio())*gear3.RX;
+      xyz.y =  sin(theta/gear0.Ratio())*gear0.RY + (sin(phi/gear1.Ratio())*gear1.RY) + sin(theta/gear2.Ratio())*gear2.RY  + sin(theta/gear3.Ratio())*gear3.RY;
       strokeWeight(sw);
       ellipse(xyz.x, xyz.y, lx, ly);
-      //r += .00000001;
+      r += .00001;
     }
   }
 
@@ -182,27 +191,39 @@ class Gears {
   PVector xyz;
   float theta, phi, RX, RY, RZ, C, Connect, P, R, move;
   float cossintan;
+  boolean rotate;
 
-  Gears(float rx, float ry, float rz) {
+  Gears(float rx, float ry, float rz, boolean r) {
     xyz = new PVector();    
     RX = rx;
     RY = ry;
     RZ = rz;
     R = 1/(P-1);
     C = ((RX+RY)/2) * TAU;
+    rotate = r;
   }
 
-  void grinding(int trigX, int trigY, int trigZ, float theta, float phi, float circumference, boolean threed) {
-    if (threed == true) {
-      xyz.x = cossintan(trigX, theta)*cossintan(1, phi)*RX;
-      xyz.y = cossintan(trigY, theta)*cossintan(1, phi)*RY;
+  void grinding(int trigX, int trigY, int trigZ, int trigX2, int trigY2, float theta, float phi, float circumference, boolean threed) {
+    theta = ((TAU/circumference)*theta);
+    xyz.x = cossintan(trigX, theta)*RX;
+    xyz.y = cossintan(trigY, theta)*RY;
+    if (rotate == true) {
+      //rotateY(move);   
+      //rotateX(move);   
+      //xyz.x = cossintan(trigX, theta)*RX;
+      //xyz.y = cossintan(trigY, theta)*RY;
+
+      phi  = theta + move;
+      xyz.x = cossintan(trigX, phi)*RX;
+      xyz.y = cossintan(trigY, phi)*RY;
+      move += .0000035;
+      if (move > TAU) {
+        move = 0;
+      }
+    } else if (threed == true) {
+      xyz.x = cossintan(trigX, theta)*cossintan(trigX2, phi)*RX;
+      xyz.y = cossintan(trigY, theta)*cossintan(trigY2, phi)*RY;
       xyz.z = cossintan(trigZ, phi)*RZ;
-    } else {
-      theta = ((TAU/circumference)*theta)+move;
-      xyz.x = cossintan(trigX, theta)*RX;
-      xyz.y = cossintan(trigY, theta)*RY;
-      xyz.z = cossintan(trigZ, theta)*RZ;
-      //move += .1; // gear0 needs to remain stationary
     }
   }
 
