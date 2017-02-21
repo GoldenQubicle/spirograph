@@ -107,12 +107,22 @@ class Layer { //<>//
     }
   }
 
+  void radialColor(float x, float y) {
+    float X = map(x, -256, 256, -1, 1); // mapping here needs to be dynamic, i.e. dependent on radius gear0 - or rather overall radiuas?
+    float Y = map(y, -256, 256, -1, 1);
+    float c = sq(X)+sq(Y);
+    float lerp = sqrt(c);
+    color interA = lerpColor(cFill, cStroke, lerp);
+    fill(interA);
+  }
+
   void spiroMode() {    
     cam.setActive(false);
     for (int theta = 0; theta < density; theta++) {
       Gears(theta, 0);
       xyz.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
       xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
+      radialColor(xyz.x, xyz.y);
       strokeWeight(sw);
       ellipse(xyz.x, xyz.y, lx, ly);
     }
