@@ -87,8 +87,6 @@ void draw() {
   for (int i = 0; i < layers.size(); i++) {
     layers.get(i).display();
   }
-
-
 }
 
 void keyPressed() {
