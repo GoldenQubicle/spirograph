@@ -1,33 +1,28 @@
 /* //<>// //<>//
-
-  layer swithcing not working on copy layer. . 
-
- - 4 buttons in top right, new layer, new gif, copy layer, delete layer
- - layer dropdown below
  
+
+- trig switches pose bit of a problem for layer switching, hehehehe
+- use space underneath gears in 2d mode for density controls, i.e. density for 3d will be hardcoded, or maybe some slider but it doesnt need to be as finegraines as for 2d 
+
  couple more random ideas 
  - used spheres while in '2d' and apply rotate over x and y, probably pretty cool
  - speaking of, look into how I could possibly set up material / lighting
- - add blend mode to layer
+ - add blend mode to layer, next to layer switch
  
  Controller Class
  - handles saving and loading of all settings - whether by cp5 json or custom function
- - hanbles rendering
+ - handles rendering
  
  
  todo
  add a 'reset to middle' button to gears
  add a 'lock radii' button to gears
- make the rotation of gears slider into actual control over said rotation, rather than its speed
- 
- maybe move additional z controls over to beneath the existing cos/sin/tan
- 
- 
- 
- add layer support
+
+  
+
  density toggle / reset between 2d&3d
  
- s
+ 
  
  */
 
@@ -89,8 +84,6 @@ void draw() {
     surface.setSize(Width, Height);
     translate(Width/2, Height/2);
   }
-
-
   for (int i = 0; i < layers.size(); i++) {
     layers.get(i).display();
   }

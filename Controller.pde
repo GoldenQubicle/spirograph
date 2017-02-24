@@ -4,6 +4,39 @@ class Controller {
   Controller() {
   }
 
+  void menuGifLayer(int id) {
+    switch(id) {
+    case 0:
+      // gif settings
+      update = true;
+      break;
+    case 1:
+      // save gif
+      break;
+    case 2:
+      // load gif
+      break;
+    case 3:
+      // create new gif  
+      break;
+    case 4:
+      // new layer
+      Layer New = new Layer();
+      layers.add(New);
+      gui.LayerList.addItem("Layer" + layers.size(), New);
+      break;
+    case 5:
+      // copy layer
+      Layer newC = new Layer();
+      layerCopy(newC);
+      layers.add(newC);
+      gui.LayerList.addItem("copy off" + int(gui.LayerList.getValue()+1), newC);
+      break;
+    case 6:
+      // delete layer
+      break;
+    }
+  }
 
   void layerSwitch(int set) {
     if (gui.layerlock == true) {
@@ -36,103 +69,25 @@ class Controller {
       gui.id = set;
       gui.layerlock = false;
     }
-    //
-
-    //P1.setValue(layers.get(set).gear1.P);
-    //P2.setValue(layers.get(set).gear2.P);
-    //P3.setValue(layers.get(set).gear3.P);
-    //LX.setValue(layers.get(set).LX);
-    //LY.setValue(layers.get(set).LY);
-    //Fill.setState(layers.get(set).fill);
-    //Stroke.setState(layers.get(set).stroke);
-    //SW.setValue(layers.get(set).SW);
-    //Lines.setState(layers.get(set).lines);
-    //Dots.setState(layers.get(set).dots);
-    //D.setValue(layers.get(set).PlotDots);
-    //G1c.setValue(layers.get(set).gear1.Connect);
-    //G2c.setValue(layers.get(set).gear2.Connect);
-    //G3c.setValue(layers.get(set).gear3.Connect);
-    //gui.layerlock = false;
   }
 
-  void layerCopy() {
-
-    int id = int(gui.LayerList.getValue());
-    //int set = id +1; 
-    //  if (id != int(LayerList.getValue())) {
-    //    layerlock = true;
-    //    set = int(LayerList.getValue());
-    //    G0.remove();
-    //    G1.remove();
-    //    G2.remove();
-    //    G3.remove();    
-
-
-    Layer Copy = new Layer();
-    layers.add(Copy);
-    Copy.id = gui.id+1;
-
-    layers.set(set, layers.get(id));
-    gui.LayerList.addItem("Copy" + (int(gui.LayerList.getValue())+1), Copy);
-
-    //  Copy.gear0.RX = layers.get(int(gui.LayerList.getValue())).gear0.RX;
-    //  Copy.gear0.RY = layers.get(int(gui.LayerList.getValue())).gear0.RY;
-    //  Copy.gear0.RZ = layers.get(int(gui.LayerList.getValue())).gear0.RZ;
-    //  Copy.gear1.RX = layers.get(int(gui.LayerList.getValue())).gear1.RX;
-    //  Copy.gear1.RY = layers.get(int(gui.LayerList.getValue())).gear1.RY;
-    //  Copy.gear1.RZ = layers.get(int(gui.LayerList.getValue())).gear1.RZ;
-    //  Copy.gear2.RX = layers.get(int(gui.LayerList.getValue())).gear2.RX;
-    //  Copy.gear2.RY = layers.get(int(gui.LayerList.getValue())).gear2.RY;
-    //  Copy.gear2.RZ = layers.get(int(gui.LayerList.getValue())).gear2.RZ;
-    //  Copy.gear3.RX = layers.get(int(gui.LayerList.getValue())).gear3.RX;
-    //  Copy.gear3.RY = layers.get(int(gui.LayerList.getValue())).gear3.RY;
-    //  Copy.gear3.RZ = layers.get(int(gui.LayerList.getValue())).gear3.RZ;
-    //  Copy.gear1.P = layers.get(int(gui.LayerList.getValue())).gear1.P;
-    //  Copy.gear2.P = layers.get(int(gui.LayerList.getValue())).gear2.P;
-    //  Copy.gear3.P = layers.get(int(gui.LayerList.getValue())).gear3.P;
-    //  Copy.lx = layers.get(int(gui.LayerList.getValue())).lx;
-    //  Copy.ly = layers.get(int(gui.LayerList.getValue())).ly;
-    //  Copy.cFill = layers.get(int(gui.LayerList.getValue())).cFill;
-    //  Copy.cStroke = layers.get(int(gui.LayerList.getValue())).cStroke;
-    //  Copy.lines = layers.get(int(gui.LayerList.getValue())).lines;
-    //  Copy.dots = layers.get(int(gui.LayerList.getValue())).dots;
-    //  Copy.density = layers.get(int(gui.LayerList.getValue())).density;
-    //  Copy.gear1.Connect = layers.get(int(gui.LayerList.getValue())).gear1.Connect;
-    //  Copy.gear2.Connect = layers.get(int(gui.LayerList.getValue())).gear2.Connect;
-    //  Copy.gear3.Connect = layers.get(int(gui.LayerList.getValue())).gear3.Connect;
-    //  Copy.spheres3d = layers.get(int(gui.LayerList.getValue())).spheres3d;
-  }
-
-  void menuGifLayer(int id) {
-    switch(id) {
-    case 0:
-      // gif settings
-      update = true;
-      break;
-    case 1:
-      // save gif
-      break;
-    case 2:
-      // load gif
-      break;
-    case 3:
-      // new layer
-      Layer New = new Layer();
-      layers.add(New);
-      gui.LayerList.addItem("Layer" + layers.size(), New);
-      break;
-    case 4:
-      // copy layer
-      layerCopy();
-
-
-      break;
-    case 5:
-      // delete layer
-      break;
-    case 6:
-      // create new gif  
-      break;
+  void layerCopy(Layer Copy) {
+    for (int i = 0; i < 4; i++) {
+      Copy.gears[i].RX = layers.get(int(gui.LayerList.getValue())).gears[i].RX;  
+      Copy.gears[i].RY = layers.get(int(gui.LayerList.getValue())).gears[i].RY;   
+      Copy.gears[i].RZ = layers.get(int(gui.LayerList.getValue())).gears[i].RZ;
     }
+    for (int i = 0; i < 3; i++) {
+      Copy.gears[i].P = layers.get(int(gui.LayerList.getValue())).gears[i].P;
+      Copy.gears[i].move = layers.get(int(gui.LayerList.getValue())).gears[i].move;
+    }
+    Copy.cFill = layers.get(int(gui.LayerList.getValue())).cFill;
+    Copy.cStroke = layers.get(int(gui.LayerList.getValue())).cStroke;
+    Copy.fill = layers.get(int(gui.LayerList.getValue())).fill;
+    Copy.stroke = layers.get(int(gui.LayerList.getValue())).stroke;
+    Copy.lx = layers.get(int(gui.LayerList.getValue())).lx;
+    Copy.ly = layers.get(int(gui.LayerList.getValue())).ly;
+    Copy.sw = layers.get(int(gui.LayerList.getValue())).sw;
+    Copy.trig = layers.get(int(gui.LayerList.getValue())).trig;
   }
 }

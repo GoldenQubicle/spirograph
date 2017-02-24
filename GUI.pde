@@ -44,16 +44,30 @@ class GUI extends PApplet {     //<>//
     gifNew = cp5.addButton("gifNew").setPosition(rPanex+150, rPaneyMenu).setCaptionLabel("New GIF").setId(0);
     gifSave = cp5.addButton("gifSave").setPosition(rPanex+150, rPaneyMenu+25).setCaptionLabel("Save GIF").setId(1);
     gifLoad = cp5.addButton("gifLoad").setPosition(rPanex+150, rPaneyMenu+50).setCaptionLabel("Load GIF").setId(2);
-    layerNew = cp5.addButton("layerNew").setPosition(rPanex + 75, rPaneyMenu).setCaptionLabel("New Layer").setId(3);
-    layerCopy = cp5.addButton("layerCopy").setPosition(rPanex + 75, rPaneyMenu+25).setCaptionLabel("Copy Layer").setId(4);
-    layerDelete = cp5.addButton("layerDelete").setPosition(rPanex + 75, rPaneyMenu+50).setCaptionLabel("Delete Layer").setId(5);
     // new gif menu
     cp5.addGroup("ng").setPosition(300, 500).setSize(175, 110).setBackgroundColor(color(255, 50)).setCaptionLabel("GIF setting").disableCollapse().hide();
     gifWidth = cp5.addSlider("GW").setPosition(10, 10).setRange(200, 1920).setGroup("ng").setCaptionLabel("Width");
     gifHeight = cp5.addSlider("GH").setPosition(10, 25).setRange(200, 1920).setGroup("ng").setCaptionLabel("Height");
     gifLength = cp5.addSlider("ms").setPosition(10, 40).setRange(1000, 10000).setGroup("ng").setCaptionLabel("Duration (ms)");
     gifInterval = cp5.addSlider("i").setPosition(10, 55).setRange(2, 20).setNumberOfTickMarks(19).snapToTickMarks(true).setGroup("ng").setCaptionLabel("Intervals");
-    gifNewOK = cp5.addButton("gifNewOK").setPosition(50, 80).setGroup("ng").setCaptionLabel("Create").setId(6);
+    gifNewOK = cp5.addButton("gifNewOK").setPosition(50, 80).setGroup("ng").setCaptionLabel("Create").setId(3);
+    // layer controls
+    layerNew = cp5.addButton("layerNew").setPosition(rPanex + 75, rPaneyMenu).setCaptionLabel("New Layer").setId(4);
+    layerCopy = cp5.addButton("layerCopy").setPosition(rPanex + 75, rPaneyMenu+25).setCaptionLabel("Copy Layer").setId(5);
+    layerDelete = cp5.addButton("layerDelete").setPosition(rPanex + 75, rPaneyMenu+50).setCaptionLabel("Delete Layer").setId(6);
+    LayerList = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+75, 80).setWidth(145).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false);
+    LayerList.addCallback(new CallbackListener() {
+      public void controlEvent(CallbackEvent theEvent) {
+        if (theEvent.getAction()==ControlP5.ACTIVE) {
+          LayerList.bringToFront();
+        }
+      }
+    }
+    );
+    for (int i = 0; i<layers.size(); i++) {
+      LayerList.addItem("Layer" + (i+1), layers.get(i));
+    }
+    // add controller callbacks
     menuGifLayer.add(cp5.get(Button.class, "gifNew"));
     menuGifLayer.add(cp5.get(Button.class, "gifSave"));
     menuGifLayer.add(cp5.get(Button.class, "gifLoad"));
@@ -70,10 +84,6 @@ class GUI extends PApplet {     //<>//
         }
       }
       );
-    }
-    LayerList = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+65, 100).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false);
-    for (int i = 0; i<layers.size(); i++) {
-      LayerList.addItem("Layer" + (i+1), layers.get(i));
     }
     // colors, line & stroke
     drawMode = cp5.addToggle("drawMode").setPosition(rPanex, 3).setSize(50, 20).setValue(false).setMode(ControlP5.SWITCH).setCaptionLabel("  3D           2D");
@@ -265,58 +275,12 @@ class GUI extends PApplet {     //<>//
     if (theEvent.getController().equals(gear3z)) {
       layers.get(id).gear3.RZ = gear3z.getValue();
     }
-
     if (theEvent.getController().equals(LayerList)) {
-      println(int(LayerList.getValue()), id);
       int set = int(LayerList.getValue());
       layerlock = true;
       controller.layerSwitch(set);
     }
   }
-
-  //// new, copy, switch
-  //LayerList = cp5.addScrollableList("SwitchLayers").setPosition(310, 390).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").moveTo("global").setOpen(false);
-  //for (int i = 0; i<layers.size(); i++) {
-  //  LayerList.addItem("Layer" + (i+1), layers.get(i));
-  //}
-
-  //Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15).moveTo("global");
-  //Copy.addCallback(new CallbackListener() {
-  //  public void controlEvent(CallbackEvent theEvent) {
-  //    if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
-  //      Layer New = new Layer();
-  //      New.gear0.RX = layers.get(id).gear0.RX;
-  //      New.gear0.RY = layers.get(id).gear0.RY;
-  //      New.gear0.RZ = layers.get(id).gear0.RZ;
-  //      New.gear1.RX = layers.get(id).gear1.RX;
-  //      New.gear1.RY = layers.get(id).gear1.RY;
-  //      New.gear1.RZ = layers.get(id).gear1.RZ;
-  //      New.gear2.RX = layers.get(id).gear2.RX;
-  //      New.gear2.RY = layers.get(id).gear2.RY;
-  //      New.gear2.RZ = layers.get(id).gear2.RZ;
-  //      New.gear3.RX = layers.get(id).gear3.RX;
-  //      New.gear3.RY = layers.get(id).gear3.RY;
-  //      New.gear3.RZ = layers.get(id).gear3.RZ;
-  //      New.gear1.P = layers.get(id).gear1.P;
-  //      New.gear2.P = layers.get(id).gear2.P;
-  //      New.gear3.P = layers.get(id).gear3.P;
-  //      New.LX = layers.get(id).LX;
-  //      New.LY = layers.get(id).LY;
-  //      New.Fill = layers.get(id).Fill;
-  //      New.Stroke = layers.get(id).Stroke;
-  //      New.lines = layers.get(id).lines;
-  //      New.dots = layers.get(id).dots;
-  //      New.PlotDots = layers.get(id).PlotDots;
-  //      New.gear1.Connect = layers.get(id).gear1.Connect;
-  //      New.gear2.Connect = layers.get(id).gear2.Connect;
-  //      New.gear3.Connect = layers.get(id).gear3.Connect;
-  //      New.spheres3d = layers.get(id).spheres3d;
-  //      layers.add(New);
-  //      LayerList.addItem("Copy " + (id+1), New);
-  //    }
-  //  }
-  //}
-  //);
 
   //// LAYERSTATES START HERE
   //// Controller object
@@ -327,32 +291,7 @@ class GUI extends PApplet {     //<>//
   //  Layer.setSnapshot("LayerState" + i);
   //  Layer.saveAs(JSON + i);
   //}
-  //// save functions
-  //SaveAll = cp5.addButton("Save FWD").setPosition(120, 400).setSize(60, 15).moveTo("global");
-  //SaveAll.addCallback(new CallbackListener() {
-  //  public void controlEvent(CallbackEvent theEvent) {
-  //    if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
-  //      int LS = int(LayerState.getValue());
-  //      for (int i = LS; i < gif.LayerStates; i++) {
-  //        Layer.setSnapshot("LayerState" + i);
-  //        Layer.saveAs(JSON + i);
-  //      }
-  //    }
-  //  }
-  //}
-  //);
-  //Save = cp5.addButton("Save").setPosition(50, 400).setSize(60, 15).moveTo("global");
-  //Save.addCallback(new CallbackListener() {
-  //  public void controlEvent(CallbackEvent theEvent) {
-  //    if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
-  //      int LS = int(LayerState.getValue());
-  //      Layer.setSnapshot("LayerState" + LS);
-  //      Layer.saveAs(JSON + LS);
-  //      //LayerStateArray.set(LS, layers.get(0));
-  //    }
-  //  }
-  //}
-  //);
+
   ////button bar to toggle layerstates
   //LayerState = cp5.addButtonBar("ls").setPosition(10, 475).setSize(gif.MatrixWidth, gif.CellHeight);
   //String [] buttonL;
@@ -482,48 +421,6 @@ class GUI extends PApplet {     //<>//
   //void controlEvent(ControlEvent theControlEvent) {
   //  if (theControlEvent.isTab()) {
   //    gif.tabToggle();
-  //  }
-  //}
-
-
-  //void SwitchLayers() {
-  //  if (id != int(LayerList.getValue())) {
-  //    layerlock = true;
-  //    set = int(LayerList.getValue());
-  //    G0.remove();
-  //    G1.remove();
-  //    G2.remove();
-  //    G3.remove();
-  //    G0 = cp5.addSlider2D("Radius Gear 0").setMinMax(0, 0, 512, 512).setPosition(10, 90).setCaptionLabel("Radius Gear 0").plugTo(this, "Controls").setValue(map(layers.get(set).gear0.RX, -256, 256, 0, 512), map(layers.get(set).gear0.RY, -256, 256, 0, 512));
-  //    cp5.getController("Radius Gear 0").moveTo("global");
-  //    G1 = cp5.addSlider2D("Radius Gear1").setMinMax(0, 0, 256, 256).setPosition(160, 90).setCaptionLabel("Radius Gear 1").plugTo(this, "Controls").setValue(map(layers.get(set).gear1.RX, -128, 128, 0, 256), map(layers.get(set).gear1.RY, -128, 128, 0, 256));
-  //    cp5.getController("Radius Gear1").moveTo("global");
-  //    G2 = cp5.addSlider2D("Radius Gear2").setMinMax(0, 0, 256, 256).setPosition(10, 230).setCaptionLabel("Radius Gear 2").plugTo(this, "Controls").setValue(map(layers.get(set).gear2.RX, -128, 128, 0, 256), map(layers.get(set).gear2.RY, -128, 128, 0, 256));
-  //    cp5.getController("Radius Gear2").moveTo("global");
-  //    G3 = cp5.addSlider2D("Radius Gear3").setMinMax(0, 0, 256, 256).setPosition(160, 230).setCaptionLabel("Radius Gear 3").plugTo(this, "Controls").setValue(map(layers.get(set).gear3.RX, -128, 128, 0, 256), map(layers.get(set).gear3.RY, -128, 128, 0, 256));
-  //    cp5.getController("Radius Gear3").moveTo("global");   
-  //    P1.setValue(layers.get(set).gear1.P);
-  //    P2.setValue(layers.get(set).gear2.P);
-  //    P3.setValue(layers.get(set).gear3.P);
-  //    LX.setValue(layers.get(set).LX);
-  //    LY.setValue(layers.get(set).LY);
-  //    Fill.setState(layers.get(set).fill);
-  //    Stroke.setState(layers.get(set).stroke);
-  //    SW.setValue(layers.get(set).SW);
-  //    Lines.setState(layers.get(set).lines);
-  //    Dots.setState(layers.get(set).dots);
-  //    D.setValue(layers.get(set).PlotDots);
-  //    G1c.setValue(layers.get(set).gear1.Connect);
-  //    G2c.setValue(layers.get(set).gear2.Connect);
-  //    G3c.setValue(layers.get(set).gear3.Connect);
-  //    if (CS.getState() == false) {
-  //      cp.setColorValue(layers.get(set).Fill);
-  //    }
-  //    if (CS.getState() == true) {
-  //      cp.setColorValue(layers.get(set).Stroke);
-  //    }
-  //    layerlock = false;
-  //    id = int(LayerList.getValue());
   //  }
   //}
 }
