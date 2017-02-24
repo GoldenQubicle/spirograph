@@ -1,33 +1,35 @@
 /* //<>// //<>//
-so yeah, need to put this on hold once more for my own good, probably untill sometime in march - which is actually pretty soon. .
-anyway, would be really nice if I had more control over color, i.e. apply a lerp color over radius gear0
-so it'd need to check x and y positions
 
-couple more random ideas 
-- used spheres while in '2d' and apply rotate over x and y, probably pretty cool
-- speaking of, look into how I could possibly set up material / lighting
-- add blend mode to layer
+  layer swithcing not working on copy layer. . 
 
-Controller Class
-- handles saving and loading of all settings - whether by cp5 json or custom function
-- hanbles rendering
-
-
-todo
-add a 'reset to middle' button to gears
-add a 'lock radii' button to gears
-make the rotation of gears slider into actual control over said rotation, rather than its speed
-
-maybe move additional z controls over to beneath the existing cos/sin/tan
-
-
-
-add layer support
-density toggle / reset between 2d&3d
-
-s
+ - 4 buttons in top right, new layer, new gif, copy layer, delete layer
+ - layer dropdown below
  
-*/
+ couple more random ideas 
+ - used spheres while in '2d' and apply rotate over x and y, probably pretty cool
+ - speaking of, look into how I could possibly set up material / lighting
+ - add blend mode to layer
+ 
+ Controller Class
+ - handles saving and loading of all settings - whether by cp5 json or custom function
+ - hanbles rendering
+ 
+ 
+ todo
+ add a 'reset to middle' button to gears
+ add a 'lock radii' button to gears
+ make the rotation of gears slider into actual control over said rotation, rather than its speed
+ 
+ maybe move additional z controls over to beneath the existing cos/sin/tan
+ 
+ 
+ 
+ add layer support
+ density toggle / reset between 2d&3d
+ 
+ s
+ 
+ */
 
 
 import peasy.*;
@@ -40,6 +42,7 @@ import de.looksgood.ani.easing.*;
 //GifMaker gifExport;
 PeasyCam cam;
 DawesomeToolkit ds;
+Controller controller;
 GUI gui;
 Animation gif;
 Layer layer_1;
@@ -56,8 +59,9 @@ void settings() {
 }
 
 void setup() {
-  surface.setResizable(true);
+  colorMode(RGB);
   surface.setTitle("Preview");
+  surface.setResizable(true);
   cam = new PeasyCam(this, 512);
   cam.setFreeRotationMode();
   ds = new DawesomeToolkit(this);
@@ -65,6 +69,7 @@ void setup() {
   Ani.init(this);
   Ani.noAutostart();
   Ani.setDefaultTimeMode(Ani.FRAMES);
+  controller = new Controller();
   gui = new GUI(this);
   gif = new Animation();
   layers = new ArrayList();
@@ -74,15 +79,17 @@ void setup() {
   play = false;
   //blendMode(DIFFERENCE);
   //gifExport = new GifMaker(this, "export.gif");
-  update = true;
+  update = false;
 }
 
 void draw() {
-  surface.setSize(Width, Height);
   background(BG);  
 
-  //translate(Width/2, Height/2);
- 
+  if (update == true) {   
+    surface.setSize(Width, Height);
+    translate(Width/2, Height/2);
+  }
+
 
   for (int i = 0; i < layers.size(); i++) {
     layers.get(i).display();

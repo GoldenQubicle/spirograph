@@ -78,7 +78,7 @@ class Layer { //<>//
       Dots();
     } else if (spheres3d == true) {
       sphere3d();
-    } else {     
+    } else {    
       spiroMode();
     }
   }
@@ -122,7 +122,7 @@ class Layer { //<>//
       Gears(theta, 0);
       xyz.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
       xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
-      radialColor(xyz.x, xyz.y);
+      //radialColor(xyz.x, xyz.y);
       strokeWeight(sw);
       ellipse(xyz.x, xyz.y, lx, ly);
     }

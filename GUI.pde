@@ -1,18 +1,19 @@
 class GUI extends PApplet {     //<>//
   PApplet parent;
   ControlP5 cp5;
-  Button gifNew, gifNewOK;
+  Button gifNew, gifNewOK, gifLoad, gifSave, layerNew, layerCopy, layerDelete;
   ColorWheel colorBackground, colorStroke, colorFill;
   Toggle stroke, fill, drawMode;
   Slider gifWidth, gifHeight, gifLength, gifInterval, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals1, petals2, petals3, alphaFill, alphaStroke, G1r, G2r, G3r; 
   Slider2D gear0, gear1, gear2, gear3;
   ButtonBar trigX, trigY, trigZ, trigX2, trigY2;
   ArrayList <ButtonBar> trigSwitch = new ArrayList<ButtonBar>();
+  ArrayList <Button> menuGifLayer = new ArrayList<Button>();
   Textlabel trig;
 
   // not yet in use, however, lots of stuff in animation depends on it so therefor not commented out
   ScrollableList LayerList, Easing;
-  Button New, Copy, SaveAll, Save, Increase, Decrease;
+  Button Copy, SaveAll, Save, Increase, Decrease;
   Matrix Ani;
   ButtonBar LayerState;
   Textlabel Label;
@@ -38,26 +39,54 @@ class GUI extends PApplet {     //<>//
     set = 0;
     cp5 = new ControlP5(this);
     int rPanex = 630;
+    int rPaneyMenu = 3;
+    // gif & layer menu
+    gifNew = cp5.addButton("gifNew").setPosition(rPanex+150, rPaneyMenu).setCaptionLabel("New GIF").setId(0);
+    gifSave = cp5.addButton("gifSave").setPosition(rPanex+150, rPaneyMenu+25).setCaptionLabel("Save GIF").setId(1);
+    gifLoad = cp5.addButton("gifLoad").setPosition(rPanex+150, rPaneyMenu+50).setCaptionLabel("Load GIF").setId(2);
+    layerNew = cp5.addButton("layerNew").setPosition(rPanex + 75, rPaneyMenu).setCaptionLabel("New Layer").setId(3);
+    layerCopy = cp5.addButton("layerCopy").setPosition(rPanex + 75, rPaneyMenu+25).setCaptionLabel("Copy Layer").setId(4);
+    layerDelete = cp5.addButton("layerDelete").setPosition(rPanex + 75, rPaneyMenu+50).setCaptionLabel("Delete Layer").setId(5);
     // new gif menu
-    gifNew = cp5.addButton("gifNew").setPosition(780, 3).setCaptionLabel("New");
-    cp5.addGroup("ng").setPosition(300, 500).setSize(175, 110).setBackgroundColor(color(255, 50)).setCaptionLabel("set animation").disableCollapse().hide();
+    cp5.addGroup("ng").setPosition(300, 500).setSize(175, 110).setBackgroundColor(color(255, 50)).setCaptionLabel("GIF setting").disableCollapse().hide();
     gifWidth = cp5.addSlider("GW").setPosition(10, 10).setRange(200, 1920).setGroup("ng").setCaptionLabel("Width");
     gifHeight = cp5.addSlider("GH").setPosition(10, 25).setRange(200, 1920).setGroup("ng").setCaptionLabel("Height");
     gifLength = cp5.addSlider("ms").setPosition(10, 40).setRange(1000, 10000).setGroup("ng").setCaptionLabel("Duration (ms)");
     gifInterval = cp5.addSlider("i").setPosition(10, 55).setRange(2, 20).setNumberOfTickMarks(19).snapToTickMarks(true).setGroup("ng").setCaptionLabel("Intervals");
-    gifNewOK = cp5.addButton("Create").setPosition(50, 80).setGroup("ng");
-    drawMode = cp5.addToggle("drawMode").setPosition(rPanex, 3).setSize(50, 20).setValue(false).setMode(ControlP5.SWITCH).setCaptionLabel("  3D           2D");
+    gifNewOK = cp5.addButton("gifNewOK").setPosition(50, 80).setGroup("ng").setCaptionLabel("Create").setId(6);
+    menuGifLayer.add(cp5.get(Button.class, "gifNew"));
+    menuGifLayer.add(cp5.get(Button.class, "gifSave"));
+    menuGifLayer.add(cp5.get(Button.class, "gifLoad"));
+    menuGifLayer.add(cp5.get(Button.class, "gifNewOK"));
+    menuGifLayer.add(cp5.get(Button.class, "layerNew"));
+    menuGifLayer.add(cp5.get(Button.class, "layerCopy"));
+    menuGifLayer.add(cp5.get(Button.class, "layerDelete"));
+    for (int i =0; i < menuGifLayer.size(); i++) {
+      menuGifLayer.get(i).addCallback(new CallbackListener() {
+        public void controlEvent(CallbackEvent theEvent) { 
+          if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
+            controller.menuGifLayer(theEvent.getController().getId());
+          }
+        }
+      }
+      );
+    }
+    LayerList = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+65, 100).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false);
+    for (int i = 0; i<layers.size(); i++) {
+      LayerList.addItem("Layer" + (i+1), layers.get(i));
+    }
     // colors, line & stroke
+    drawMode = cp5.addToggle("drawMode").setPosition(rPanex, 3).setSize(50, 20).setValue(false).setMode(ControlP5.SWITCH).setCaptionLabel("  3D           2D");
     colorBackground = cp5.addColorWheel("Background").setPosition(3, 3).setValue(128);
     colorStroke = cp5.addColorWheel("Stroke").setPosition(209, 3).setValue(128);
     colorFill = cp5.addColorWheel("Fill").setPosition(415, 3).setValue(128);
     alphaStroke = cp5.addSlider("as").setPosition(209, 220).setSize(200, 10).setRange(0, 255).setValue(255).setCaptionLabel("alpha");   
     alphaFill = cp5.addSlider("af").setPosition(415, 220).setSize(200, 10).setRange(0, 255).setValue(255).setCaptionLabel("alpha");   
-    fill = cp5.addToggle("fill").setPosition(rPanex, 60).setSize(20, 20).setState(true);
-    stroke = cp5.addToggle("stroke").setPosition(rPanex+20, 60).setSize(20, 20).setState(false);
-    lx = cp5.addSlider("LX").setPosition(rPanex, 100).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Width");  
-    ly = cp5.addSlider("LY").setPosition(rPanex, 115).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Height"); 
-    sw = cp5.addSlider("SW").setPosition(rPanex, 130).setSize(200, 10).setRange(0, 200).setCaptionLabel("Stroke Weight");    
+    fill = cp5.addToggle("fill").setPosition(rPanex, 40).setSize(20, 20).setState(true);
+    stroke = cp5.addToggle("stroke").setPosition(rPanex+30, 40).setSize(20, 20).setState(false);
+    lx = cp5.addSlider("LX").setPosition(rPanex, 165).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Width");  
+    ly = cp5.addSlider("LY").setPosition(rPanex, 180).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Height"); 
+    sw = cp5.addSlider("SW").setPosition(rPanex, 195).setSize(200, 10).setRange(0, 200).setCaptionLabel("Stroke Weight");    
     cp5.getController("as").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("af").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("LX").getCaptionLabel().align(CENTER, CENTER);
@@ -163,27 +192,51 @@ class GUI extends PApplet {     //<>//
     if (theEvent.getController().equals(colorBackground)) {
       BG = colorBackground.getRGB();
     }
-    if (theEvent.getController().equals(colorStroke)  || theEvent.getController().equals(alphaStroke)) {
-      layers.get(id).cStroke = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
+    if (layerlock == false) {
+      if (theEvent.getController().equals(colorStroke)  || theEvent.getController().equals(alphaStroke)) {
+        layers.get(id).cStroke = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
+      }
+      if (theEvent.getController().equals(colorFill) || theEvent.getController().equals(alphaFill)) {
+        layers.get(id).cFill = color(colorFill.r(), colorFill.g(), colorFill.b(), int(alphaFill.getValue()));
+      }
+      if (theEvent.getController().equals(stroke)) {
+        layers.get(id).stroke = stroke.getState();
+      }
+      if (theEvent.getController().equals(fill)) {
+        layers.get(id).fill = fill.getState();
+      }
+      if (theEvent.getController().equals(lx)) {
+        layers.get(id).lx = lx.getValue();
+      }
+      if (theEvent.getController().equals(ly)) {
+        layers.get(id).ly = ly.getValue();
+      }
+      if (theEvent.getController().equals(sw)) {
+        layers.get(id).sw = sw.getValue();
+      }
+      if (theEvent.getController().equals(petals1)) {
+        layers.get(id).gear1.P = petals1.getValue();
+      }
+      if (theEvent.getController().equals(petals2)) {
+        layers.get(id).gear2.P = petals2.getValue();
+      }
+      if (theEvent.getController().equals(petals3)) {
+        layers.get(id).gear3.P = petals3.getValue();
+      }
+      if (theEvent.getController().equals(G1r)) {
+        //layers.get(id).gear1.speed = map(G1r.getValue(), -100, 100, -.0000025, .0000025);
+        layers.get(id).gear1.move = map(G1r.getValue(), -100, 100, -TAU, TAU);
+      }
+      if (theEvent.getController().equals(G2r)) {
+        //layers.get(id).gear2.speed = map(G2r.getValue(), -100, 100, -.0000025, .0000025);
+        layers.get(id).gear2.move = map(G2r.getValue(), -100, 100, -TAU, TAU);
+      }
+      if (theEvent.getController().equals(G3r)) {
+        //layers.get(id).gear3.speed = map(G3r.getValue(), -100, 100, -.0000025, .0000025);
+        layers.get(id).gear3.move = map(G3r.getValue(), -100, 100, -TAU, TAU);
+      }
     }
-    if (theEvent.getController().equals(colorFill) || theEvent.getController().equals(alphaFill)) {
-      layers.get(id).cFill = color(colorFill.r(), colorFill.g(), colorFill.b(), int(alphaFill.getValue()));
-    }
-    if (theEvent.getController().equals(stroke)) {
-      layers.get(id).stroke = stroke.getState();
-    }
-    if (theEvent.getController().equals(fill)) {
-      layers.get(id).fill = fill.getState();
-    }
-    if (theEvent.getController().equals(lx)) {
-      layers.get(id).lx = lx.getValue();
-    }
-    if (theEvent.getController().equals(ly)) {
-      layers.get(id).ly = ly.getValue();
-    }
-    if (theEvent.getController().equals(sw)) {
-      layers.get(id).sw = sw.getValue();
-    }
+
     if (theEvent.getController().equals(gear0)) {
       layers.get(id).gear0.RX = gear0.getArrayValue(0);
       layers.get(id).gear0.RY = gear0.getArrayValue(1);
@@ -212,26 +265,12 @@ class GUI extends PApplet {     //<>//
     if (theEvent.getController().equals(gear3z)) {
       layers.get(id).gear3.RZ = gear3z.getValue();
     }
-    if (theEvent.getController().equals(petals1)) {
-      layers.get(id).gear1.P = petals1.getValue();
-    }
-    if (theEvent.getController().equals(petals2)) {
-      layers.get(id).gear2.P = petals2.getValue();
-    }
-    if (theEvent.getController().equals(petals3)) {
-      layers.get(id).gear3.P = petals3.getValue();
-    }
-    if (theEvent.getController().equals(G1r)) {
-      //layers.get(id).gear1.speed = map(G1r.getValue(), -100, 100, -.0000025, .0000025);
-      layers.get(id).gear1.move = map(G1r.getValue(), -100, 100, -TAU, TAU);
-    }
-    if (theEvent.getController().equals(G2r)) {
-      //layers.get(id).gear2.speed = map(G2r.getValue(), -100, 100, -.0000025, .0000025);
-      layers.get(id).gear2.move = map(G2r.getValue(), -100, 100, -TAU, TAU);
-    }
-    if (theEvent.getController().equals(G3r)) {
-      //layers.get(id).gear3.speed = map(G3r.getValue(), -100, 100, -.0000025, .0000025);
-      layers.get(id).gear3.move = map(G3r.getValue(), -100, 100, -TAU, TAU);
+
+    if (theEvent.getController().equals(LayerList)) {
+      println(int(LayerList.getValue()), id);
+      int set = int(LayerList.getValue());
+      layerlock = true;
+      controller.layerSwitch(set);
     }
   }
 
@@ -240,17 +279,7 @@ class GUI extends PApplet {     //<>//
   //for (int i = 0; i<layers.size(); i++) {
   //  LayerList.addItem("Layer" + (i+1), layers.get(i));
   //}
-  //New = cp5.addButton("New Layer").setPosition(310, 350).setSize(60, 15).moveTo("global");
-  //New.addCallback(new CallbackListener() {
-  //  public void controlEvent(CallbackEvent theEvent) {
-  //    if (theEvent.getAction() == ControlP5.ACTION_PRESS) {
-  //      Layer New = new Layer();
-  //      layers.add(New);
-  //      LayerList.addItem("Layer" + layers.size(), New);
-  //    }
-  //  }
-  //}
-  //);
+
   //Copy = cp5.addButton("Copy Layer").setPosition(380, 350).setSize(60, 15).moveTo("global");
   //Copy.addCallback(new CallbackListener() {
   //  public void controlEvent(CallbackEvent theEvent) {
