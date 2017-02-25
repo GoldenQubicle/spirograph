@@ -1,5 +1,4 @@
 class Layer { //<>//
-  int id;
   PVector xyz, xy2;  
   float theta, phi, lx, ly, density, sw, connectLines, circumference;
   Gears[] gears;
@@ -9,7 +8,6 @@ class Layer { //<>//
   IntDict trig;
 
   Layer() {
-    id = 0;
     xyz = new PVector();
     xy2 = new PVector();
     gears = new Gears[4];

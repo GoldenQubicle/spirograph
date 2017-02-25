@@ -2,12 +2,15 @@
  
 
 - trig switches pose bit of a problem for layer switching, hehehehe
+  yeah so actually rather annoying, the buttunbar does not update visually and there doesbt seem to be a way to toggle active cells. . . :/
+
 - use space underneath gears in 2d mode for density controls, i.e. density for 3d will be hardcoded, or maybe some slider but it doesnt need to be as finegraines as for 2d 
 
  couple more random ideas 
  - used spheres while in '2d' and apply rotate over x and y, probably pretty cool
  - speaking of, look into how I could possibly set up material / lighting
  - add blend mode to layer, next to layer switch
+ - be able to move layers to the front or back, relative to each other
  
  Controller Class
  - handles saving and loading of all settings - whether by cp5 json or custom function
@@ -42,6 +45,7 @@ GUI gui;
 Animation gif;
 Layer layer_1;
 ArrayList<Layer> layers;
+ArrayList<Layer> layerFrames;
 String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
 boolean play, update;
 int Width = 512;

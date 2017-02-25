@@ -3,16 +3,19 @@ class GUI extends PApplet {     //<>//
   ControlP5 cp5;
   Button gifNew, gifNewOK, gifLoad, gifSave, layerNew, layerCopy, layerDelete;
   ColorWheel colorBackground, colorStroke, colorFill;
-  Toggle stroke, fill, drawMode;
+  Toggle stroke, fill, drawMode, dummyT;
   Slider gifWidth, gifHeight, gifLength, gifInterval, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals1, petals2, petals3, alphaFill, alphaStroke, G1r, G2r, G3r; 
   Slider2D gear0, gear1, gear2, gear3;
-  ButtonBar trigX, trigY, trigZ, trigX2, trigY2;
-  ArrayList <ButtonBar> trigSwitch = new ArrayList<ButtonBar>();
+  //ButtonBar trigX, trigY, trigZ, trigX2, trigY2;
+  //ArrayList <ButtonBar> trigSwitch = new ArrayList<ButtonBar>();
   ArrayList <Button> menuGifLayer = new ArrayList<Button>();
   Textlabel trig;
+  ScrollableList layerSwitch;
+  RadioButton trigX, trigY, trigZ, trigX2, trigY2, r1;
+  ArrayList <RadioButton> trigSwitch = new ArrayList<RadioButton>();
 
   // not yet in use, however, lots of stuff in animation depends on it so therefor not commented out
-  ScrollableList LayerList, Easing;
+  ScrollableList Easing;
   Button Copy, SaveAll, Save, Increase, Decrease;
   Matrix Ani;
   ButtonBar LayerState;
@@ -55,19 +58,17 @@ class GUI extends PApplet {     //<>//
     layerNew = cp5.addButton("layerNew").setPosition(rPanex + 75, rPaneyMenu).setCaptionLabel("New Layer").setId(4);
     layerCopy = cp5.addButton("layerCopy").setPosition(rPanex + 75, rPaneyMenu+25).setCaptionLabel("Copy Layer").setId(5);
     layerDelete = cp5.addButton("layerDelete").setPosition(rPanex + 75, rPaneyMenu+50).setCaptionLabel("Delete Layer").setId(6);
-    LayerList = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+75, 80).setWidth(145).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false);
-    LayerList.addCallback(new CallbackListener() {
+    layerSwitch = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+75, 80).setWidth(145).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false).addItem("Layer 1", layers.get(id));
+    layerSwitch.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
         if (theEvent.getAction()==ControlP5.ACTIVE) {
-          LayerList.bringToFront();
+          layerSwitch.bringToFront();
         }
       }
     }
     );
-    for (int i = 0; i<layers.size(); i++) {
-      LayerList.addItem("Layer" + (i+1), layers.get(i));
-    }
-    // add controller callbacks
+
+    // add callbacks
     menuGifLayer.add(cp5.get(Button.class, "gifNew"));
     menuGifLayer.add(cp5.get(Button.class, "gifSave"));
     menuGifLayer.add(cp5.get(Button.class, "gifLoad"));
@@ -105,10 +106,11 @@ class GUI extends PApplet {     //<>//
     // gears
     int size2d = 150;
     int posy = 240;
-    gear0 = cp5.addSlider2D("G0").setMinMax(-256, -256, 256, 256).setPosition(3, posy).setCaptionLabel("Radius Gear 0").setSize(size2d, size2d).setValue(layers.get(id).gear0.RX, layers.get(id).gear0.RY);
-    gear1 = cp5.addSlider2D("G1").setMinMax(-256, -256, 256, 256).setPosition(158, posy).setCaptionLabel("Radius Gear 1").setSize(size2d, size2d).setValue(layers.get(id).gear1.RX, layers.get(id).gear1.RY);
-    gear2 = cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(313, posy).setCaptionLabel("Radius Gear 2").setSize(size2d, size2d).setValue(layers.get(id).gear2.RX, layers.get(id).gear2.RY);
-    gear3 = cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(468, posy).setCaptionLabel("Radius Gear 3").setSize(size2d, size2d).setValue(layers.get(id).gear3.RX, layers.get(id).gear3.RY);    
+    int posx = 3;
+    gear0 = cp5.addSlider2D("G0").setMinMax(-256, -256, 256, 256).setPosition(posx, posy).setCaptionLabel("Radius Gear 0").setSize(size2d, size2d).setValue(layers.get(id).gear0.RX, layers.get(id).gear0.RY);
+    gear1 = cp5.addSlider2D("G1").setMinMax(-256, -256, 256, 256).setPosition(posx+155, posy).setCaptionLabel("Radius Gear 1").setSize(size2d, size2d).setValue(layers.get(id).gear1.RX, layers.get(id).gear1.RY);
+    gear2 = cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(posx+(155*2), posy).setCaptionLabel("Radius Gear 2").setSize(size2d, size2d).setValue(layers.get(id).gear2.RX, layers.get(id).gear2.RY);
+    gear3 = cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(posx+(155*3), posy).setCaptionLabel("Radius Gear 3").setSize(size2d, size2d).setValue(layers.get(id).gear3.RX, layers.get(id).gear3.RY);    
     gear0z = cp5.addSlider("G0z").setRange(-256, 256).setPosition(3, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 0 Z").setValue(layers.get(id).gear0.RZ).hide(); 
     gear1z = cp5.addSlider("G1z").setRange(-256, 256).setPosition(158, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 1 Z").setValue(layers.get(id).gear1.RZ).hide(); 
     gear2z = cp5.addSlider("G2z").setRange(-256, 256).setPosition(313, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 2 Z").setValue(layers.get(id).gear2.RZ).hide(); 
@@ -134,16 +136,23 @@ class GUI extends PApplet {     //<>//
     int pox = 0;
     String [] trig = {"cos", "sin", "tan"};
     for (int i = 0; i < 4; i++) {
-      trigX = cp5.addButtonBar("G" + i + "trigX").setPosition(rPanex, 352 + poy).addItems(trig).setSize(120, 12);
-      trigY = cp5.addButtonBar("G" + i + "trigY").setPosition(rPanex, 367  + poy).addItems(trig).setSize(120, 12);
-      trigZ = cp5.addButtonBar("G" + i + "trigZ").setPosition(3 + pox, 425).addItems(trig).setSize(120, 12).hide();
-      trigX2 = cp5.addButtonBar("G" + i + "trigX2").setPosition(3 + pox, 440).addItems(trig).setSize(120, 12).hide();
-      trigY2 = cp5.addButtonBar("G" + i + "trigY2").setPosition(3 + pox, 455).addItems(trig).setSize(120, 12).hide();
-      trigSwitch.add(cp5.get(ButtonBar.class, "G" + i + "trigX"));
-      trigSwitch.add(cp5.get(ButtonBar.class, "G" + i + "trigY"));
-      trigSwitch.add(cp5.get(ButtonBar.class, "G" + i + "trigZ"));
-      trigSwitch.add(cp5.get(ButtonBar.class, "G" + i + "trigX2"));
-      trigSwitch.add(cp5.get(ButtonBar.class, "G" + i + "trigY2"));
+      trigX = cp5.addRadioButton("G" + i + "trigX").setPosition(rPanex, 352 + poy).setSize(40, 12).setItemsPerRow(3).addItem(trig[0]+" g"+i+"x", 0).addItem(trig[1]+" g"+i+"x", 1).addItem(trig[2]+" g"+i+"x", 2).activate(0);
+      trigY = cp5.addRadioButton("G" + i + "trigY").setPosition(rPanex, 367  + poy).setSize(40, 12).setItemsPerRow(3).addItem(trig[0]+" g"+i+"y", 0).addItem(trig[1]+" g"+i+"y", 1).addItem(trig[2]+" g"+i+"y", 2).activate(1);
+      trigZ = cp5.addRadioButton("G" + i + "trigZ").setPosition(3 + pox, 425).setSize(40, 12).setItemsPerRow(3).addItem(trig[0]+" g"+i+"z", 0).addItem(trig[1]+" g"+i+"z", 1).addItem(trig[2]+" g"+i+"z", 2).hide();
+      trigX2 = cp5.addRadioButton("G" + i + "trigX2").setPosition(3 + pox, 440).setSize(40, 12).setItemsPerRow(3).addItem(trig[0]+" g"+i+"x2", 0).addItem(trig[1]+" g"+i+"x2", 1).addItem(trig[2]+" g"+i+"x2", 2).hide();
+      trigY2 = cp5.addRadioButton("G" + i + "trigY2").setPosition(3 + pox, 455).setSize(40, 12).setItemsPerRow(3).addItem(trig[0]+" g"+i+"y2", 0).addItem(trig[1]+" g"+i+"y2", 1).addItem(trig[2]+" g"+i+"y2", 2).hide();
+      for (int c = 0; c < 3; c++) {
+        trigX.getItem(c).getCaptionLabel().set(trig[c]).align(CENTER, CENTER); 
+        trigY.getItem(c).getCaptionLabel().set(trig[c]).align(CENTER, CENTER);
+        trigZ.getItem(c).getCaptionLabel().set(trig[c]).align(CENTER, CENTER);
+        trigX2.getItem(c).getCaptionLabel().set(trig[c]).align(CENTER, CENTER); 
+        trigY2.getItem(c).getCaptionLabel().set(trig[c]).align(CENTER, CENTER);
+      }
+      trigSwitch.add(cp5.get(RadioButton.class, "G" + i + "trigX"));
+      trigSwitch.add(cp5.get(RadioButton.class, "G" + i + "trigY"));
+      trigSwitch.add(cp5.get(RadioButton.class, "G" + i + "trigZ"));
+      trigSwitch.add(cp5.get(RadioButton.class, "G" + i + "trigX2"));
+      trigSwitch.add(cp5.get(RadioButton.class, "G" + i + "trigY2"));
       cp5.addTextlabel("g" + i + "x").setPosition(rPanex+128, 354  + poy).setText("Gear"+ i + " X");
       cp5.addTextlabel("g" + i + "y").setPosition(rPanex+128, 369 + poy).setText("Gear" + i +" Y");
       cp5.addTextlabel("g" + i + "z").setPosition(125 + pox, 426).setText("G" + i +" Z").hide();
@@ -152,19 +161,17 @@ class GUI extends PApplet {     //<>//
       poy = poy + 30;
       pox = pox + 155;
     }
-    for (int i =0; i < trigSwitch.size(); i++) {
-      trigSwitch.get(i).addCallback(new CallbackListener() {
-        public void controlEvent(CallbackEvent theEvent) { 
-          if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
-            layers.get(id).trig.set(theEvent.getController().getName(), int(theEvent.getController().getValue()));
-          }
-        }
-      }
-      );
-    }
   }
 
+
   void controlEvent(ControlEvent theEvent) {
+    for (RadioButton R : trigSwitch) {
+      if (theEvent.isFrom(R) && layerlock == false) {
+        layers.get(id).trig.set(R.getName(), int(R.getValue()));
+        
+      }
+    }
+
     if (theEvent.getController().equals(gifNew)) {
       cp5.getGroup("ng").show();
     }
@@ -182,17 +189,17 @@ class GUI extends PApplet {     //<>//
       for (int i =0; i < 4; i++) {
         if (drawMode.getState() == true) {
           cp5.getController("G"+i+"z").show();
-          cp5.getController("G" + i + "trigZ").show();
-          cp5.getController("G" + i + "trigX2").show();
-          cp5.getController("G" + i + "trigY2").show();
+          cp5.get(RadioButton.class, "G" + i + "trigZ").show();
+          cp5.get(RadioButton.class, "G" + i + "trigX2").show();
+          cp5.get(RadioButton.class, "G" + i + "trigY2").show();
           cp5.getController("g" + i + "z").show();
           cp5.getController("g" + i + "x2").show();
           cp5.getController("g" + i + "y2").show();
         } else {
           cp5.getController("G"+i+"z").hide();
-          cp5.getController("G" + i + "trigZ").hide();
-          cp5.getController("G" + i + "trigX2").hide();
-          cp5.getController("G" + i + "trigY2").hide();
+          cp5.get(RadioButton.class, "G" + i + "trigZ").hide();
+          cp5.get(RadioButton.class, "G" + i + "trigX2").hide();
+          cp5.get(RadioButton.class, "G" + i + "trigY2").hide();
           cp5.getController("g" + i + "z").hide();
           cp5.getController("g" + i + "x2").hide();
           cp5.getController("g" + i + "y2").hide();
@@ -245,40 +252,40 @@ class GUI extends PApplet {     //<>//
         //layers.get(id).gear3.speed = map(G3r.getValue(), -100, 100, -.0000025, .0000025);
         layers.get(id).gear3.move = map(G3r.getValue(), -100, 100, -TAU, TAU);
       }
-    }
 
-    if (theEvent.getController().equals(gear0)) {
-      layers.get(id).gear0.RX = gear0.getArrayValue(0);
-      layers.get(id).gear0.RY = gear0.getArrayValue(1);
-    }
-    if (theEvent.getController().equals(gear1)) {
-      layers.get(id).gear1.RX = gear1.getArrayValue(0);
-      layers.get(id).gear1.RY = gear1.getArrayValue(1);
-    }
-    if (theEvent.getController().equals(gear2)) {
-      layers.get(id).gear2.RX = gear2.getArrayValue(0);
-      layers.get(id).gear2.RY = gear2.getArrayValue(1);
-    }
-    if (theEvent.getController().equals(gear3)) {
-      layers.get(id).gear3.RX = gear3.getArrayValue(0);
-      layers.get(id).gear3.RY = gear3.getArrayValue(1);
-    }
-    if (theEvent.getController().equals(gear0z)) {
-      layers.get(id).gear0.RZ = gear0z.getValue();
-    }
-    if (theEvent.getController().equals(gear1z)) {
-      layers.get(id).gear1.RZ = gear1z.getValue();
-    }
-    if (theEvent.getController().equals(gear2z)) {
-      layers.get(id).gear2.RZ = gear2z.getValue();
-    }
-    if (theEvent.getController().equals(gear3z)) {
-      layers.get(id).gear3.RZ = gear3z.getValue();
-    }
-    if (theEvent.getController().equals(LayerList)) {
-      int set = int(LayerList.getValue());
-      layerlock = true;
-      controller.layerSwitch(set);
+      if (theEvent.getController().equals(gear0)) {
+        layers.get(id).gear0.RX = gear0.getArrayValue(0);
+        layers.get(id).gear0.RY = gear0.getArrayValue(1);
+      }
+      if (theEvent.getController().equals(gear1)) {
+        layers.get(id).gear1.RX = gear1.getArrayValue(0);
+        layers.get(id).gear1.RY = gear1.getArrayValue(1);
+      }
+      if (theEvent.getController().equals(gear2)) {
+        layers.get(id).gear2.RX = gear2.getArrayValue(0);
+        layers.get(id).gear2.RY = gear2.getArrayValue(1);
+      }
+      if (theEvent.getController().equals(gear3)) {
+        layers.get(id).gear3.RX = gear3.getArrayValue(0);
+        layers.get(id).gear3.RY = gear3.getArrayValue(1);
+      }
+      if (theEvent.getController().equals(gear0z)) {
+        layers.get(id).gear0.RZ = gear0z.getValue();
+      }
+      if (theEvent.getController().equals(gear1z)) {
+        layers.get(id).gear1.RZ = gear1z.getValue();
+      }
+      if (theEvent.getController().equals(gear2z)) {
+        layers.get(id).gear2.RZ = gear2z.getValue();
+      }
+      if (theEvent.getController().equals(gear3z)) {
+        layers.get(id).gear3.RZ = gear3z.getValue();
+      }
+      if (theEvent.getController().equals(layerSwitch)) {
+        int set = int(layerSwitch.getValue());
+        layerlock = true;
+        controller.updateGUI(0, set);
+      }
     }
   }
 
