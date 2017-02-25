@@ -67,7 +67,6 @@ class GUI extends PApplet {     //<>//
       }
     }
     );
-
     // add callbacks
     menuGifLayer.add(cp5.get(Button.class, "gifNew"));
     menuGifLayer.add(cp5.get(Button.class, "gifSave"));
@@ -163,15 +162,13 @@ class GUI extends PApplet {     //<>//
     }
   }
 
-
   void controlEvent(ControlEvent theEvent) {
     for (RadioButton R : trigSwitch) {
       if (theEvent.isFrom(R) && layerlock == false) {
-        layers.get(id).trig.set(R.getName(), int(R.getValue()));
-        
+        layers.get(id).trig.set(R.getName(), int(R.getValue())); 
+        println(id);
       }
     }
-
     if (theEvent.getController().equals(gifNew)) {
       cp5.getGroup("ng").show();
     }
@@ -252,7 +249,6 @@ class GUI extends PApplet {     //<>//
         //layers.get(id).gear3.speed = map(G3r.getValue(), -100, 100, -.0000025, .0000025);
         layers.get(id).gear3.move = map(G3r.getValue(), -100, 100, -TAU, TAU);
       }
-
       if (theEvent.getController().equals(gear0)) {
         layers.get(id).gear0.RX = gear0.getArrayValue(0);
         layers.get(id).gear0.RY = gear0.getArrayValue(1);

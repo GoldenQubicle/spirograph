@@ -28,8 +28,8 @@ class Controller {
     case 5:
       // copy layer
       Layer copy = new Layer();
-      layerGetSettings(copy);
-      layers.add(copy);
+      int origin = int(gui.layerSwitch.getValue());
+      layers.add(layerGetSettings(copy, origin));
       gui.layerSwitch.addItem("Layer " + layers.size() + " - copy layer " + int(gui.layerSwitch.getValue()+1), copy);
       break;
     case 6:
@@ -66,11 +66,8 @@ class Controller {
       gui.G2r.setValue(layerSelect(select, set).gear2.move);
       gui.G3r.setValue(layerSelect(select, set).gear3.move);
       for (int r = 0; r < gui.trigSwitch.size(); r++) {
-        
-          gui.trigSwitch.get(r).activate(layerSelect(select, set).trig.get(gui.trigSwitch.get(r).getName()));
-      
-         }
-
+        gui.trigSwitch.get(r).activate(layerSelect(select, set).trig.get(gui.trigSwitch.get(r).getName()));
+      }
       gui.id = set;
       gui.layerlock = false;
     }
@@ -87,23 +84,27 @@ class Controller {
     return dummy;
   }
 
-  void layerGetSettings(Layer Copy) {
+  Layer layerGetSettings(Layer Copy, int origin) {
     for (int i = 0; i < 4; i++) {
-      Copy.gears[i].RX = layers.get(int(gui.layerSwitch.getValue())).gears[i].RX;  
-      Copy.gears[i].RY = layers.get(int(gui.layerSwitch.getValue())).gears[i].RY;   
-      Copy.gears[i].RZ = layers.get(int(gui.layerSwitch.getValue())).gears[i].RZ;
+      Copy.gears[i].RX = layers.get(origin).gears[i].RX;  
+      Copy.gears[i].RY = layers.get(origin).gears[i].RY;   
+      Copy.gears[i].RZ = layers.get(origin).gears[i].RZ;
     }
     for (int i = 0; i < 3; i++) {
-      Copy.gears[i].P = layers.get(int(gui.layerSwitch.getValue())).gears[i].P;
-      Copy.gears[i].move = layers.get(int(gui.layerSwitch.getValue())).gears[i].move;
+      Copy.gears[i].P = layers.get(origin).gears[i].P;
+      Copy.gears[i].move = layers.get(origin).gears[i].move;
     }
-    Copy.cFill = layers.get(int(gui.layerSwitch.getValue())).cFill;
-    Copy.cStroke = layers.get(int(gui.layerSwitch.getValue())).cStroke;
-    Copy.fill = layers.get(int(gui.layerSwitch.getValue())).fill;
-    Copy.stroke = layers.get(int(gui.layerSwitch.getValue())).stroke;
-    Copy.lx = layers.get(int(gui.layerSwitch.getValue())).lx;
-    Copy.ly = layers.get(int(gui.layerSwitch.getValue())).ly;
-    Copy.sw = layers.get(int(gui.layerSwitch.getValue())).sw;
-    Copy.trig = layers.get(int(gui.layerSwitch.getValue())).trig;
+    Copy.cFill = layers.get(origin).cFill;
+    Copy.cStroke = layers.get(origin).cStroke;
+    Copy.fill = layers.get(origin).fill;
+    Copy.stroke = layers.get(origin).stroke;
+    Copy.lx = layers.get(origin).lx;
+    Copy.ly = layers.get(origin).ly;
+    Copy.sw = layers.get(origin).sw;
+    for (int r=0; r < gui.trigSwitch.size(); r++) {
+      Copy.trig.set(gui.trigSwitch.get(r).getName(), layers.get(origin).trig.get(gui.trigSwitch.get(r).getName()));
+    }
+
+    return Copy;
   }
 }

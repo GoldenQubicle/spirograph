@@ -1,9 +1,5 @@
 /* //<>// //<>//
  
-
-- trig switches pose bit of a problem for layer switching, hehehehe
-  yeah so actually rather annoying, the buttunbar does not update visually and there doesbt seem to be a way to toggle active cells. . . :/
-
 - use space underneath gears in 2d mode for density controls, i.e. density for 3d will be hardcoded, or maybe some slider but it doesnt need to be as finegraines as for 2d 
 
  couple more random ideas 
@@ -92,6 +88,7 @@ void draw() {
     layers.get(i).display();
   }
 }
+
 
 void keyPressed() {
   if (key==' ') {     
