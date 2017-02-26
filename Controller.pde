@@ -22,18 +22,23 @@ class Controller {
     case 4:
       // new layer
       Layer blank = new Layer();
+      blank.name = "Layer " + (layers.size()+1);
       layers.add(blank);
-      gui.layerSwitch.addItem("Layer " + layers.size(), blank);
+      gui.layerSwitch.addItem(blank.name, blank);
       break;
     case 5:
       // copy layer
       Layer copy = new Layer();
+      copy.name = ("Layer " + (layers.size()+1) + " - copy layer " + (int(gui.layerSwitch.getValue())+1));
       int origin = int(gui.layerSwitch.getValue());
       layers.add(layerGetSettings(copy, origin));
-      gui.layerSwitch.addItem("Layer " + layers.size() + " - copy layer " + int(gui.layerSwitch.getValue()+1), copy);
+      gui.layerSwitch.addItem(copy.name, copy);
       break;
     case 6:
       // delete layer
+      int del = int(gui.layerSwitch.getValue());
+      gui.layerSwitch.removeItem(layers.get(del).name);
+      layers.remove(del);
       break;
     }
   }

@@ -1,4 +1,4 @@
-/* //<>// //<>//
+/* //<>// //<>// //<>//
  
 - use space underneath gears in 2d mode for density controls, i.e. density for 3d will be hardcoded, or maybe some slider but it doesnt need to be as finegraines as for 2d 
 
@@ -19,12 +19,9 @@
 
   
 
- density toggle / reset between 2d&3d
- 
- 
- 
+ density toggle / reset between 2d&3d 
+  
  */
-
 
 import peasy.*;
 import controlP5.*;
@@ -69,6 +66,7 @@ void setup() {
   gif = new Animation();
   layers = new ArrayList();
   layer_1 = new Layer();
+  layer_1.name = "Layer 1";
   layers.add(layer_1);
   BG = 120;
   play = false;
@@ -79,7 +77,6 @@ void setup() {
 
 void draw() {
   background(BG);  
-
   if (update == true) {   
     surface.setSize(Width, Height);
     translate(Width/2, Height/2);
@@ -88,7 +85,6 @@ void draw() {
     layers.get(i).display();
   }
 }
-
 
 void keyPressed() {
   if (key==' ') {     

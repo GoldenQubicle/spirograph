@@ -1,4 +1,4 @@
-class GUI extends PApplet {     //<>//
+class GUI extends PApplet {     //<>// //<>//
   PApplet parent;
   ControlP5 cp5;
   Button gifNew, gifNewOK, gifLoad, gifSave, layerNew, layerCopy, layerDelete;
@@ -58,7 +58,7 @@ class GUI extends PApplet {     //<>//
     layerNew = cp5.addButton("layerNew").setPosition(rPanex + 75, rPaneyMenu).setCaptionLabel("New Layer").setId(4);
     layerCopy = cp5.addButton("layerCopy").setPosition(rPanex + 75, rPaneyMenu+25).setCaptionLabel("Copy Layer").setId(5);
     layerDelete = cp5.addButton("layerDelete").setPosition(rPanex + 75, rPaneyMenu+50).setCaptionLabel("Delete Layer").setId(6);
-    layerSwitch = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+75, 80).setWidth(145).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false).addItem("Layer 1", layers.get(id));
+    layerSwitch = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+75, 80).setWidth(145).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false).addItem(layers.get(id).name, layers.get(id));
     layerSwitch.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
         if (theEvent.getAction()==ControlP5.ACTIVE) {

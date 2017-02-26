@@ -1,4 +1,4 @@
-class Animation {  //<>//
+class Animation {  //<>// //<>//
   int Interval, LayerStates, Variables, MatrixWidth, MatrixHeight, CellWidth, CellHeight;
   float TotalTime, aniInterval;
   int [][] AniEnd, AniInt;

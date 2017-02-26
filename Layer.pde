@@ -1,4 +1,5 @@
-class Layer { //<>//
+class Layer { //<>// //<>//
+  String name;
   PVector xyz, xy2;  
   float theta, phi, lx, ly, density, sw, connectLines, circumference;
   Gears[] gears;
