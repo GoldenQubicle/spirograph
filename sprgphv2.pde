@@ -70,7 +70,6 @@ void setup() {
   layers.add(layer_1);
   BG = 120;
   play = false;
-  //blendMode(DIFFERENCE);
   //gifExport = new GifMaker(this, "export.gif");
   update = false;
 }

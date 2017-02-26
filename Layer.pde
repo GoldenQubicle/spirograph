@@ -7,7 +7,9 @@ class Layer { //<>// //<>//
   color cFill, cStroke;
   boolean stroke, fill, lines, dots, spheres3d;
   IntDict trig;
-
+  int [] mode = {1, 2, 4, 16, 8, 32, 64, 128, 256, 0};
+  int select;
+  
   Layer() {
     xyz = new PVector();
     xy2 = new PVector();
@@ -53,9 +55,12 @@ class Layer { //<>// //<>//
     trig.set("G3trigX2", 0);
     trig.set("G3trigY2", 1);
     //spheres3d = true;
+    
   }
 
   void display() {     
+    blendMode(mode[select]);
+
     if (fill == true) {
       fill(cFill);
     }
@@ -121,7 +126,7 @@ class Layer { //<>// //<>//
       Gears(theta, 0);
       xyz.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
       xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
-      radialColor(xyz.x, xyz.y);
+      //radialColor(xyz.x, xyz.y);
       strokeWeight(sw);
       ellipse(xyz.x, xyz.y, lx, ly);
     }

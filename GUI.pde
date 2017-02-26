@@ -10,9 +10,10 @@ class GUI extends PApplet {     //<>// //<>//
   //ArrayList <ButtonBar> trigSwitch = new ArrayList<ButtonBar>();
   ArrayList <Button> menuGifLayer = new ArrayList<Button>();
   Textlabel trig;
-  ScrollableList layerSwitch;
+  ScrollableList layerSwitch, blendMode;
   RadioButton trigX, trigY, trigZ, trigX2, trigY2, r1;
   ArrayList <RadioButton> trigSwitch = new ArrayList<RadioButton>();
+  String [] blendModes = {"Normal", "Add", "Subtract", "Darkest", "Lightest", "Difference", "Exclusion", "Multiply", "Screen", "Replace"};
 
   // not yet in use, however, lots of stuff in animation depends on it so therefor not commented out
   ScrollableList Easing;
@@ -97,6 +98,7 @@ class GUI extends PApplet {     //<>// //<>//
     lx = cp5.addSlider("LX").setPosition(rPanex, 165).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Width");  
     ly = cp5.addSlider("LY").setPosition(rPanex, 180).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Height"); 
     sw = cp5.addSlider("SW").setPosition(rPanex, 195).setSize(200, 10).setRange(0, 200).setCaptionLabel("Stroke Weight");    
+    blendMode = cp5.addScrollableList("blendMode").setPosition(rPanex, 80).setWidth(70).setType(ScrollableList.DROPDOWN).setCaptionLabel("blendMode").setOpen(false).addItems(blendModes);
     cp5.getController("as").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("af").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("LX").getCaptionLabel().align(CENTER, CENTER);
@@ -137,9 +139,9 @@ class GUI extends PApplet {     //<>// //<>//
     for (int i = 0; i < 4; i++) {
       trigX = cp5.addRadioButton("G" + i + "trigX").setPosition(rPanex, 352 + poy).setSize(40, 12).setItemsPerRow(3).addItem(trig[0]+" g"+i+"x", 0).addItem(trig[1]+" g"+i+"x", 1).addItem(trig[2]+" g"+i+"x", 2).activate(0);
       trigY = cp5.addRadioButton("G" + i + "trigY").setPosition(rPanex, 367  + poy).setSize(40, 12).setItemsPerRow(3).addItem(trig[0]+" g"+i+"y", 0).addItem(trig[1]+" g"+i+"y", 1).addItem(trig[2]+" g"+i+"y", 2).activate(1);
-      trigZ = cp5.addRadioButton("G" + i + "trigZ").setPosition(3 + pox, 425).setSize(40, 12).setItemsPerRow(3).addItem(trig[0]+" g"+i+"z", 0).addItem(trig[1]+" g"+i+"z", 1).addItem(trig[2]+" g"+i+"z", 2).hide();
-      trigX2 = cp5.addRadioButton("G" + i + "trigX2").setPosition(3 + pox, 440).setSize(40, 12).setItemsPerRow(3).addItem(trig[0]+" g"+i+"x2", 0).addItem(trig[1]+" g"+i+"x2", 1).addItem(trig[2]+" g"+i+"x2", 2).hide();
-      trigY2 = cp5.addRadioButton("G" + i + "trigY2").setPosition(3 + pox, 455).setSize(40, 12).setItemsPerRow(3).addItem(trig[0]+" g"+i+"y2", 0).addItem(trig[1]+" g"+i+"y2", 1).addItem(trig[2]+" g"+i+"y2", 2).hide();
+      trigZ = cp5.addRadioButton("G" + i + "trigZ").setPosition(3 + pox, 425).setSize(40, 12).setItemsPerRow(3).addItem(trig[0]+" g"+i+"z", 0).addItem(trig[1]+" g"+i+"z", 1).addItem(trig[2]+" g"+i+"z", 2).activate(0).hide();
+      trigX2 = cp5.addRadioButton("G" + i + "trigX2").setPosition(3 + pox, 440).setSize(40, 12).setItemsPerRow(3).addItem(trig[0]+" g"+i+"x2", 0).addItem(trig[1]+" g"+i+"x2", 1).addItem(trig[2]+" g"+i+"x2", 2).activate(1).hide();
+      trigY2 = cp5.addRadioButton("G" + i + "trigY2").setPosition(3 + pox, 455).setSize(40, 12).setItemsPerRow(3).addItem(trig[0]+" g"+i+"y2", 0).addItem(trig[1]+" g"+i+"y2", 1).addItem(trig[2]+" g"+i+"y2", 2).activate(1).hide();
       for (int c = 0; c < 3; c++) {
         trigX.getItem(c).getCaptionLabel().set(trig[c]).align(CENTER, CENTER); 
         trigY.getItem(c).getCaptionLabel().set(trig[c]).align(CENTER, CENTER);
@@ -207,6 +209,11 @@ class GUI extends PApplet {     //<>// //<>//
       BG = colorBackground.getRGB();
     }
     if (layerlock == false) {
+      if (theEvent.getController().equals(blendMode)){
+        layers.get(id).select = int(blendMode.getValue());
+        println(int(blendMode.getValue()));
+      }
+      
       if (theEvent.getController().equals(colorStroke)  || theEvent.getController().equals(alphaStroke)) {
         layers.get(id).cStroke = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
       }
@@ -387,6 +394,7 @@ class GUI extends PApplet {     //<>// //<>//
   //}
 
   void draw() {
+    blendMode(BLEND);
     background(190);
   }
 

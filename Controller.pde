@@ -59,6 +59,7 @@ class Controller {
       gui.alphaFill.setValue(alpha(layerSelect(select, set).cFill));
       gui.colorStroke = gui.cp5.addColorWheel("Stroke").setPosition(209, 3).setRGB(layerSelect(select, set).cStroke);
       gui.alphaStroke.setValue(alpha(layerSelect(select, set).cStroke));
+      gui.blendMode.setValue(layerSelect(select, set).select); 
       gui.fill.setState(layerSelect(select, set).fill);
       gui.stroke.setState(layerSelect(select, set).stroke);
       gui.lx.setValue(layerSelect(select, set).lx);
