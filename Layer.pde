@@ -1,4 +1,5 @@
-class Layer { //<>// //<>//
+class Layer {  //<>//
+
   String name;
   PVector xyz, xy2;  
   float theta, phi, lx, ly, density, sw, connectLines, circumference;
@@ -7,9 +8,9 @@ class Layer { //<>// //<>//
   color cFill, cStroke;
   boolean stroke, fill, lines, dots, spheres3d;
   IntDict trig;
-  int [] mode = {1, 2, 4, 16, 8, 32, 64, 128, 256, 0};
+  int [] mode = {1, 2, 4, 16, 8, 64, 128, 256, 0};
   int select;
-  
+
   Layer() {
     xyz = new PVector();
     xy2 = new PVector();
@@ -55,7 +56,6 @@ class Layer { //<>// //<>//
     trig.set("G3trigX2", 0);
     trig.set("G3trigY2", 1);
     //spheres3d = true;
-    
   }
 
   void display() {     

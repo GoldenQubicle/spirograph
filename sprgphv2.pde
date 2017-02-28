@@ -1,5 +1,5 @@
-/* //<>// //<>// //<>//
- 
+/*  //<>//
+
 - use space underneath gears in 2d mode for density controls, i.e. density for 3d will be hardcoded, or maybe some slider but it doesnt need to be as finegraines as for 2d 
 
  couple more random ideas 
@@ -11,14 +11,11 @@
  Controller Class
  - handles saving and loading of all settings - whether by cp5 json or custom function
  - handles rendering
- 
- 
+  
  todo
  add a 'reset to middle' button to gears
  add a 'lock radii' button to gears
-
   
-
  density toggle / reset between 2d&3d 
   
  */

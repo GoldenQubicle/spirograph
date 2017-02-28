@@ -1,6 +1,7 @@
 class Controller {
-
-
+  
+  Layer dummy = new Layer();
+  
   Controller() {
   }
 
@@ -79,8 +80,7 @@ class Controller {
     }
   }
 
-  Layer layerSelect(int select, int set) {
-    Layer dummy = new Layer();
+  Layer layerSelect(int select, int set) {  
     if (select == 0) {
       dummy = layers.get(set);
     }

@@ -1,19 +1,21 @@
-class GUI extends PApplet {     //<>// //<>//
+class GUI extends PApplet {   //<>//
+
   PApplet parent;
   ControlP5 cp5;
-  Button gifNew, gifNewOK, gifLoad, gifSave, layerNew, layerCopy, layerDelete;
   ColorWheel colorBackground, colorStroke, colorFill;
-  Toggle stroke, fill, drawMode, dummyT;
-  Slider gifWidth, gifHeight, gifLength, gifInterval, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals1, petals2, petals3, alphaFill, alphaStroke, G1r, G2r, G3r; 
-  Slider2D gear0, gear1, gear2, gear3;
-  //ButtonBar trigX, trigY, trigZ, trigX2, trigY2;
-  //ArrayList <ButtonBar> trigSwitch = new ArrayList<ButtonBar>();
-  ArrayList <Button> menuGifLayer = new ArrayList<Button>();
-  Textlabel trig;
+  Toggle stroke, fill, drawMode;
   ScrollableList layerSwitch, blendMode;
-  RadioButton trigX, trigY, trigZ, trigX2, trigY2, r1;
+  String [] blendModes = {"Normal", "Add", "Subtract", "Darkest", "Lightest", "Exclusion", "Multiply", "Screen", "Replace"};
+  Slider gifWidth, gifHeight, gifLength, gifInterval, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals1, petals2, petals3, alphaFill, alphaStroke, G1r, G2r, G3r, density; 
+  Button gifNew, gifNewOK, gifLoad, gifSave, layerNew, layerCopy, layerDelete;
+  ArrayList <Button> menuGifLayer = new ArrayList<Button>();
+  Slider2D gear0, gear1, gear2, gear3;
+  RadioButton trigX, trigY, trigZ, trigX2, trigY2, densityRanges;
   ArrayList <RadioButton> trigSwitch = new ArrayList<RadioButton>();
-  String [] blendModes = {"Normal", "Add", "Subtract", "Darkest", "Lightest", "Difference", "Exclusion", "Multiply", "Screen", "Replace"};
+  Textlabel trig;  
+  boolean layerlock;
+  int id;
+
 
   // not yet in use, however, lots of stuff in animation depends on it so therefor not commented out
   ScrollableList Easing;
@@ -23,10 +25,11 @@ class GUI extends PApplet {     //<>// //<>//
   Textlabel Label;
   String [] Labels = {"", "Gear 0 X", "Gear 0 Y", "Gear 1 Petals", "Gear 1 X", "Gear 1 Y", "Gear 2 Petals", "Gear 2 X", "Gear 2 Y", "Gear 3 Petals", "Gear 3 X", "Gear 3 Y", "Line X", "Line Y", "StrokeWeight", "Connect G1", "Connect G2", "Connect G3", "Density"}; 
   String[] EasingNames = {"LINEAR", "QUAD_IN", "QUAD_OUT", "QUAD_IN_OUT", "CUBIC_IN", "CUBIC_IN_OUT", "CUBIC_OUT", "QUART_IN", "QUART_OUT", "QUART_IN_OUT", "QUINT_IN", "QUINT_OUT", "QUINT_IN_OUT", "SINE_IN", "SINE_OUT", "SINE_IN_OUT", "CIRC_IN", "CIRC_OUT", "CIRC_IN_OUT", "EXPO_IN", "EXPO_OUT", "EXPO_IN_OUT", "BACK_IN", "BACK_OUT", "BACK_IN_OUT", "BOUNCE_IN", "BOUNCE_OUT", "BOUNCE_IN_OUT", "ELASTIC_IN", "ELASTIC_OUT", "ELASTIC_IN_OUT"};
-  int id, set;
-  boolean layerlock;
+
   // using int variables to strip decimals for gui aethetic
-  int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p1, p2, p3, as, af, g1r, g2r, g3r ; 
+  int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p1, p2, p3, as, af, g1r, g2r, g3r, d; 
+  float densityRangeMin = 1;
+  float densityRangeMax = 1000;
 
   public GUI(PApplet theApplet) {
     super();
@@ -40,7 +43,6 @@ class GUI extends PApplet {     //<>// //<>//
 
   public void setup() {
     id = 0;
-    set = 0;
     cp5 = new ControlP5(this);
     int rPanex = 630;
     int rPaneyMenu = 3;
@@ -104,6 +106,16 @@ class GUI extends PApplet {     //<>// //<>//
     cp5.getController("LX").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("LY").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("SW").getCaptionLabel().align(CENTER, CENTER);
+    // density  
+    densityRanges = cp5.addRadioButton("density").setPosition(3, 425).setSize(60, 20).setItemsPerRow(10).addItem("1-10k", 1).addItem("10k-20k", 2).addItem("20k-30k", 3).addItem("30k-40k", 4)
+      .addItem("40k-50k", 5).addItem("50k-60k", 6).addItem("60k-70k", 7).addItem("70k-80k", 8).addItem("80k-90k", 9).addItem("90k-100k", 10);//.addItem("10001-11000", 11).addItem("11001-12000", 12).addItem("12001-13000", 13)
+    //.addItem("103001-14000", 14).addItem("14001-15000", 15).addItem("15001-16000", 16).addItem("16001-17000", 17).addItem("17001-18000", 18).addItem("18001-19000", 19).addItem("19001-20000", 20);
+    for (int i =0; i < 10; i++) {
+      densityRanges.getItem(i).getCaptionLabel().align(CENTER, CENTER);
+    }
+    density = cp5.addSlider("d").setPosition(3, 450).setSize(610, 20).setRange(densityRangeMin, densityRangeMax).setCaptionLabel("Density").setNumberOfTickMarks(101).showTickMarks(true).snapToTickMarks(true); 
+    density.getCaptionLabel().align(CENTER, CENTER);
+
     // gears
     int size2d = 150;
     int posy = 240;
@@ -167,9 +179,14 @@ class GUI extends PApplet {     //<>// //<>//
   void controlEvent(ControlEvent theEvent) {
     for (RadioButton R : trigSwitch) {
       if (theEvent.isFrom(R) && layerlock == false) {
-        layers.get(id).trig.set(R.getName(), int(R.getValue())); 
-        println(id);
+        layers.get(id).trig.set(R.getName(), int(R.getValue()));
       }
+    }
+    if (theEvent.isFrom(densityRanges) && layerlock == false) {
+      densityRangeMax = densityRanges.getValue()* 10000;
+      densityRangeMin = densityRangeMax - 10000;
+      density.setRange(densityRangeMin, densityRangeMax);
+      density.getCaptionLabel().align(CENTER, CENTER);
     }
     if (theEvent.getController().equals(gifNew)) {
       cp5.getGroup("ng").show();
@@ -209,11 +226,13 @@ class GUI extends PApplet {     //<>// //<>//
       BG = colorBackground.getRGB();
     }
     if (layerlock == false) {
-      if (theEvent.getController().equals(blendMode)){
+
+      if (theEvent.getController().equals(density)) {
+        layers.get(id).density = density.getValue();
+      }      
+      if (theEvent.getController().equals(blendMode)) {
         layers.get(id).select = int(blendMode.getValue());
-        println(int(blendMode.getValue()));
       }
-      
       if (theEvent.getController().equals(colorStroke)  || theEvent.getController().equals(alphaStroke)) {
         layers.get(id).cStroke = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
       }
@@ -245,16 +264,16 @@ class GUI extends PApplet {     //<>// //<>//
         layers.get(id).gear3.P = petals3.getValue();
       }
       if (theEvent.getController().equals(G1r)) {
-        //layers.get(id).gear1.speed = map(G1r.getValue(), -100, 100, -.0000025, .0000025);
-        layers.get(id).gear1.move = map(G1r.getValue(), -100, 100, -TAU, TAU);
+        layers.get(id).gear1.speed = map(G1r.getValue(), -100, 100, -.0000025, .0000025);
+        //layers.get(id).gear1.move = map(G1r.getValue(), -100, 100, -TAU, TAU);
       }
       if (theEvent.getController().equals(G2r)) {
-        //layers.get(id).gear2.speed = map(G2r.getValue(), -100, 100, -.0000025, .0000025);
-        layers.get(id).gear2.move = map(G2r.getValue(), -100, 100, -TAU, TAU);
+        layers.get(id).gear2.speed = map(G2r.getValue(), -100, 100, -.0000025, .0000025);
+        //layers.get(id).gear2.move = map(G2r.getValue(), -100, 100, -TAU, TAU);
       }
       if (theEvent.getController().equals(G3r)) {
-        //layers.get(id).gear3.speed = map(G3r.getValue(), -100, 100, -.0000025, .0000025);
-        layers.get(id).gear3.move = map(G3r.getValue(), -100, 100, -TAU, TAU);
+        layers.get(id).gear3.speed = map(G3r.getValue(), -100, 100, -.0000025, .0000025);
+        //layers.get(id).gear3.move = map(G3r.getValue(), -100, 100, -TAU, TAU);
       }
       if (theEvent.getController().equals(gear0)) {
         layers.get(id).gear0.RX = gear0.getArrayValue(0);
