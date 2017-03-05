@@ -1,16 +1,16 @@
 class Animation {   //<>//
   
-  int Interval, LayerStates, Variables, MatrixWidth, MatrixHeight, CellWidth, CellHeight;
-  float TotalTime, aniInterval;
+  int LayerStates, Variables, MatrixWidth, MatrixHeight, CellWidth, CellHeight;
+  float totalTime, aniInterval, Interval;
   int [][] AniEnd, AniInt;
   ArrayList<Trigger> triggers;
 
   Animation() {
-    TotalTime = 4000;
+    totalTime = 4000;
     LayerStates = 12;
     Variables = 19; // one too many for top row matrix which needs to be active at all time
-    Interval = int(TotalTime/LayerStates);
-    aniInterval = float(Interval)/1000;
+    Interval = int(totalTime/LayerStates);
+    aniInterval = Interval/1000;
     MatrixWidth = 500;
     MatrixHeight = 400;
     CellWidth = MatrixWidth/LayerStates;    
@@ -28,8 +28,8 @@ class Animation {   //<>//
 
   void Update() {
     CellWidth = MatrixWidth/LayerStates;  
-    Interval = int(TotalTime/LayerStates);
-    aniInterval = float(Interval)/1000;
+    Interval = int(totalTime/LayerStates);
+    aniInterval = Interval/1000;
     AniEnd = new int[LayerStates][Variables];
     AniInt = new int[LayerStates][Variables];
     for (int x = 0; x < LayerStates; x++) {

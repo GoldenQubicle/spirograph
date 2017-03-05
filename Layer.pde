@@ -59,15 +59,17 @@ class Layer {  //<>//
   }
 
   void display() {     
-    blendMode(mode[select]);
+  
 
     if (fill == true) {
+        blendMode(mode[select]);
       fill(cFill);
     }
     if (fill == false) {
       noFill();
     }
     if (stroke == true) {
+        blendMode(mode[select]);
       stroke(cStroke);
     }
     if (stroke == false) {

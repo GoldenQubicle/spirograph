@@ -2,20 +2,23 @@ class GUI extends PApplet {   //<>//
 
   PApplet parent;
   ControlP5 cp5;
+  int id;
+  boolean layerlock;
   ColorWheel colorBackground, colorStroke, colorFill;
   Toggle stroke, fill, drawMode;
   ScrollableList layerSwitch, blendMode;
   String [] blendModes = {"Normal", "Add", "Subtract", "Darkest", "Lightest", "Exclusion", "Multiply", "Screen", "Replace"};
   Slider gifWidth, gifHeight, gifLength, gifInterval, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals1, petals2, petals3, alphaFill, alphaStroke, G1r, G2r, G3r, density; 
-  Button gifNew, gifNewOK, gifLoad, gifSave, layerNew, layerCopy, layerDelete;
+  Button gifNew, gifSaveAs, gifLoad, gifSave, layerNew, layerCopy, layerDelete;
   ArrayList <Button> menuGifLayer = new ArrayList<Button>();
   Slider2D gear0, gear1, gear2, gear3;
   RadioButton trigX, trigY, trigZ, trigX2, trigY2, densityRanges;
   ArrayList <RadioButton> trigSwitch = new ArrayList<RadioButton>();
   Textlabel trig;  
-  boolean layerlock;
-  int id;
-
+  // using int variables to strip decimals for gui aethetic
+  int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p1, p2, p3, as, af, g1r, g2r, g3r, d; 
+  float densityRangeMin = 1;
+  float densityRangeMax = 1000;
 
   // not yet in use, however, lots of stuff in animation depends on it so therefor not commented out
   ScrollableList Easing;
@@ -25,11 +28,6 @@ class GUI extends PApplet {   //<>//
   Textlabel Label;
   String [] Labels = {"", "Gear 0 X", "Gear 0 Y", "Gear 1 Petals", "Gear 1 X", "Gear 1 Y", "Gear 2 Petals", "Gear 2 X", "Gear 2 Y", "Gear 3 Petals", "Gear 3 X", "Gear 3 Y", "Line X", "Line Y", "StrokeWeight", "Connect G1", "Connect G2", "Connect G3", "Density"}; 
   String[] EasingNames = {"LINEAR", "QUAD_IN", "QUAD_OUT", "QUAD_IN_OUT", "CUBIC_IN", "CUBIC_IN_OUT", "CUBIC_OUT", "QUART_IN", "QUART_OUT", "QUART_IN_OUT", "QUINT_IN", "QUINT_OUT", "QUINT_IN_OUT", "SINE_IN", "SINE_OUT", "SINE_IN_OUT", "CIRC_IN", "CIRC_OUT", "CIRC_IN_OUT", "EXPO_IN", "EXPO_OUT", "EXPO_IN_OUT", "BACK_IN", "BACK_OUT", "BACK_IN_OUT", "BOUNCE_IN", "BOUNCE_OUT", "BOUNCE_IN_OUT", "ELASTIC_IN", "ELASTIC_OUT", "ELASTIC_IN_OUT"};
-
-  // using int variables to strip decimals for gui aethetic
-  int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p1, p2, p3, as, af, g1r, g2r, g3r, d; 
-  float densityRangeMin = 1;
-  float densityRangeMax = 1000;
 
   public GUI(PApplet theApplet) {
     super();
@@ -56,7 +54,7 @@ class GUI extends PApplet {   //<>//
     gifHeight = cp5.addSlider("GH").setPosition(10, 25).setRange(200, 1920).setGroup("ng").setCaptionLabel("Height");
     gifLength = cp5.addSlider("ms").setPosition(10, 40).setRange(1000, 10000).setGroup("ng").setCaptionLabel("Duration (ms)");
     gifInterval = cp5.addSlider("i").setPosition(10, 55).setRange(2, 20).setNumberOfTickMarks(19).snapToTickMarks(true).setGroup("ng").setCaptionLabel("Intervals");
-    gifNewOK = cp5.addButton("gifNewOK").setPosition(50, 80).setGroup("ng").setCaptionLabel("Create").setId(3);
+    gifSaveAs = cp5.addButton("gifSaveAs").setPosition(50, 80).setGroup("ng").setCaptionLabel("Save As").setId(3);
     // layer controls
     layerNew = cp5.addButton("layerNew").setPosition(rPanex + 75, rPaneyMenu).setCaptionLabel("New Layer").setId(4);
     layerCopy = cp5.addButton("layerCopy").setPosition(rPanex + 75, rPaneyMenu+25).setCaptionLabel("Copy Layer").setId(5);
@@ -74,7 +72,7 @@ class GUI extends PApplet {   //<>//
     menuGifLayer.add(cp5.get(Button.class, "gifNew"));
     menuGifLayer.add(cp5.get(Button.class, "gifSave"));
     menuGifLayer.add(cp5.get(Button.class, "gifLoad"));
-    menuGifLayer.add(cp5.get(Button.class, "gifNewOK"));
+    menuGifLayer.add(cp5.get(Button.class, "gifSaveAs"));
     menuGifLayer.add(cp5.get(Button.class, "layerNew"));
     menuGifLayer.add(cp5.get(Button.class, "layerCopy"));
     menuGifLayer.add(cp5.get(Button.class, "layerDelete"));
@@ -177,6 +175,9 @@ class GUI extends PApplet {   //<>//
   }
 
   void controlEvent(ControlEvent theEvent) {
+    //if (theEvent.getController().equals(gifSave)) {
+    //}
+
     for (RadioButton R : trigSwitch) {
       if (theEvent.isFrom(R) && layerlock == false) {
         layers.get(id).trig.set(R.getName(), int(R.getValue()));
@@ -197,13 +198,17 @@ class GUI extends PApplet {   //<>//
     if (theEvent.getController().equals(gifHeight)) {
       Height = int(gifHeight.getValue());
     }
-    if (theEvent.getController().equals(gifNewOK)) {
+    if (theEvent.getController().equals(gifSaveAs)) {     
+      gif.totalTime = gifLength.getValue();
+      gif.Interval = gifInterval.getValue();
       cp5.getGroup("ng").hide();
     }
     if (theEvent.getController().equals(drawMode)) {
       layers.get(id).spheres3d = drawMode.getState();
       for (int i =0; i < 4; i++) {
         if (drawMode.getState() == true) {
+          density.hide();
+          densityRanges.hide();
           cp5.getController("G"+i+"z").show();
           cp5.get(RadioButton.class, "G" + i + "trigZ").show();
           cp5.get(RadioButton.class, "G" + i + "trigX2").show();
@@ -212,6 +217,8 @@ class GUI extends PApplet {   //<>//
           cp5.getController("g" + i + "x2").show();
           cp5.getController("g" + i + "y2").show();
         } else {
+          density.show();
+          densityRanges.show();
           cp5.getController("G"+i+"z").hide();
           cp5.get(RadioButton.class, "G" + i + "trigZ").hide();
           cp5.get(RadioButton.class, "G" + i + "trigX2").hide();
@@ -223,10 +230,9 @@ class GUI extends PApplet {   //<>//
       }
     }
     if (theEvent.getController().equals(colorBackground)) {
-      BG = colorBackground.getRGB();
+      cBackground = colorBackground.getRGB();
     }
     if (layerlock == false) {
-
       if (theEvent.getController().equals(density)) {
         layers.get(id).density = density.getValue();
       }      
@@ -306,7 +312,7 @@ class GUI extends PApplet {   //<>//
       if (theEvent.getController().equals(layerSwitch)) {
         int set = int(layerSwitch.getValue());
         layerlock = true;
-        controller.updateGUI(0, set);
+        controller.updateLayerGUI(0, set);
       }
     }
   }

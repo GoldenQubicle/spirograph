@@ -1,16 +1,32 @@
 /*  //<>//
 
-- use space underneath gears in 2d mode for density controls, i.e. density for 3d will be hardcoded, or maybe some slider but it doesnt need to be as finegraines as for 2d 
+going forward, be able to
+- save json with size, length, intervals & background color - DONE!
+- load said json - AND DONE!!
+- add layer variables
+- add mutliple layer support
+- reintroduce matrix
 
  couple more random ideas 
  - used spheres while in '2d' and apply rotate over x and y, probably pretty cool
  - speaking of, look into how I could possibly set up material / lighting
- - add blend mode to layer, next to layer switch
  - be able to move layers to the front or back, relative to each other
  
  Controller Class
- - handles saving and loading of all settings - whether by cp5 json or custom function
- - handles rendering
+- handles program logic, i.e. middle man gui and layer / animation / rendering / saveNLoad
+- gifSaveAs -> text inputfield, and add preview button?
+- gifSave -> 'current file' string as parameter?
+- loadGif -> select file from dropdown menu?
+
+  SaveNLoad Class
+  - saves gui settings not related to layer, i.e. background color
+  - saves layers as json objects 
+  - loads layers
+  
+  Some thoughs to entertain
+  - should SaveNLoad return layer objects? Or, should it write to dummy layer object in controller?
+  - and in general, should keyframes be treated as layer objects, or read/write from json directly? or possibly ACT as json?
+  - guess what Im asking, how and where do I translate between layer and json?
   
  todo
  add a 'reset to middle' button to gears
@@ -36,11 +52,10 @@ Animation gif;
 Layer layer_1;
 ArrayList<Layer> layers;
 ArrayList<Layer> layerFrames;
-String JSON = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\LayerState";
 boolean play, update;
 int Width = 512;
 int Height = 512;
-color BG;
+color cBackground;
 
 void settings() {
   size(Width, Height, P3D);
@@ -65,14 +80,14 @@ void setup() {
   layer_1 = new Layer();
   layer_1.name = "Layer 1";
   layers.add(layer_1);
-  BG = 120;
+  cBackground = 120;
   play = false;
   //gifExport = new GifMaker(this, "export.gif");
   update = false;
 }
 
 void draw() {
-  background(BG);  
+  background(cBackground);  
   if (update == true) {   
     surface.setSize(Width, Height);
     translate(Width/2, Height/2);
