@@ -1,32 +1,35 @@
 class Controller {
-
+  FileIO fileio = new FileIO();
   Layer dummy = new Layer();
-  FileIO fileio;
-
 
   Controller() {
-    fileio = new FileIO();
   }
 
   void menuGifLayer(int buttonID) {
     switch(buttonID) {
     case 0:
       // gif settings
+      gui.cp5.getGroup("ng").show();     
+      Width = 300;
+      Height = 300;
+      gui.cp5.getController("GW").setValue(Width);
+      gui.cp5.getController("GH").setValue(Height);
       update = true;
       break;
     case 1:
       // save gif      
-    
       break;
     case 2:
-      // load gif
-      update = true;
-      fileio.loadGif();
-      loadGlobals();
+      // load gif   
+      gui.fileSelect.show();
+      for (File file : fileio.getFiles()) {
+        gui.fileSelect.addItem(file.getName(), file);
+      }
       break;
     case 3:
       // create new gif  
-        fileio.saveAs();
+      fileio.saveAs(gui.fileName.getText());
+      gui.cp5.getGroup("ng").hide();
       break;
     case 4:
       // new layer
@@ -40,7 +43,7 @@ class Controller {
       Layer copy = new Layer();
       copy.name = ("Layer " + (layers.size()+1) + " - copy layer " + (int(gui.layerSwitch.getValue())+1));
       int origin = int(gui.layerSwitch.getValue());
-      layers.add(layerGetSettings(copy, origin, 0));
+      layers.add(layerSettings(copy, origin, 0));
       gui.layerSwitch.addItem(copy.name, copy);
       break;
     case 6:
@@ -49,17 +52,25 @@ class Controller {
       gui.layerSwitch.removeItem(layers.get(del).name);
       layers.remove(del);
       break;
+      case 7:
+      // load file
+      fileio.loadGif(fileio.listOfFiles[int(gui.fileSelect.getValue())].getName());
+      gui.colorBackground.remove();
+      gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(fileio.currentFile.getInt("colorBackground"));
+      //update = true;
+      break;
     }
   }
 
-  void loadGlobals() {
-    Width = fileio.currentFile.getInt("gifWidth");
-    Height = fileio.currentFile.getInt("gifHeight");
-    gif.totalTime = fileio.currentFile.getFloat("gifLength");
-    gif.Interval = fileio.currentFile.getFloat("gifInterval");
-    gui.colorBackground.remove();
-    gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(fileio.currentFile.getInt("colorBackground"));    
-    cBackground = fileio.currentFile.getInt("colorBackground");
+
+  Layer layerSelect(int select, int getlayer) {  
+    if (select == 0) {
+      dummy = layers.get(getlayer);
+    }
+    if (select == 1 ) {
+      dummy = layerFrames.get(getlayer);
+    }
+    return dummy;
   }
 
   void updateLayerGUI(int select, int get) {
@@ -98,17 +109,7 @@ class Controller {
     }
   }
 
-  Layer layerSelect(int select, int getlayer) {  
-    if (select == 0) {
-      dummy = layers.get(getlayer);
-    }
-    if (select == 1 ) {
-      dummy = layerFrames.get(getlayer);
-    }
-    return dummy;
-  }
-
-  Layer layerGetSettings(Layer layer, int get, int select) {
+  Layer layerSettings(Layer layer, int get, int select) {
     for (int i = 0; i < 4; i++) {
       layer.gears[i].RX = layerSelect(select, get).gears[i].RX;  
       layer.gears[i].RY = layerSelect(select, get).gears[i].RY;   

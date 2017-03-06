@@ -1,4 +1,5 @@
 /*  //<>//
+RREAALLLY need to sort out the funky offset business on update / load - maybe preempt it by loading a default in setup?!
 
 going forward, be able to
 - save json with size, length, intervals & background color - DONE!
@@ -87,9 +88,10 @@ void setup() {
 }
 
 void draw() {
-  background(cBackground);  
-  if (update == true) {   
-    surface.setSize(Width, Height);
+  background(cBackground);   
+ 
+  if (update == true) { 
+     surface.setSize(Width, Height);
     translate(Width/2, Height/2);
   }
   for (int i = 0; i < layers.size(); i++) {

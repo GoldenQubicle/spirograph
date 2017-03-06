@@ -6,7 +6,7 @@ class GUI extends PApplet {   //<>//
   boolean layerlock;
   ColorWheel colorBackground, colorStroke, colorFill;
   Toggle stroke, fill, drawMode;
-  ScrollableList layerSwitch, blendMode;
+  ScrollableList layerSwitch, blendMode, fileSelect;
   String [] blendModes = {"Normal", "Add", "Subtract", "Darkest", "Lightest", "Exclusion", "Multiply", "Screen", "Replace"};
   Slider gifWidth, gifHeight, gifLength, gifInterval, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals1, petals2, petals3, alphaFill, alphaStroke, G1r, G2r, G3r, density; 
   Button gifNew, gifSaveAs, gifLoad, gifSave, layerNew, layerCopy, layerDelete;
@@ -15,6 +15,7 @@ class GUI extends PApplet {   //<>//
   RadioButton trigX, trigY, trigZ, trigX2, trigY2, densityRanges;
   ArrayList <RadioButton> trigSwitch = new ArrayList<RadioButton>();
   Textlabel trig;  
+  Textfield fileName;
   // using int variables to strip decimals for gui aethetic
   int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p1, p2, p3, as, af, g1r, g2r, g3r, d; 
   float densityRangeMin = 1;
@@ -48,13 +49,15 @@ class GUI extends PApplet {   //<>//
     gifNew = cp5.addButton("gifNew").setPosition(rPanex+150, rPaneyMenu).setCaptionLabel("New GIF").setId(0);
     gifSave = cp5.addButton("gifSave").setPosition(rPanex+150, rPaneyMenu+25).setCaptionLabel("Save GIF").setId(1);
     gifLoad = cp5.addButton("gifLoad").setPosition(rPanex+150, rPaneyMenu+50).setCaptionLabel("Load GIF").setId(2);
+    fileSelect = cp5.addScrollableList("fileSelect").setPosition(300, 500).setSize(175, 110).hide();
     // new gif menu
     cp5.addGroup("ng").setPosition(300, 500).setSize(175, 110).setBackgroundColor(color(255, 50)).setCaptionLabel("GIF setting").disableCollapse().hide();
     gifWidth = cp5.addSlider("GW").setPosition(10, 10).setRange(200, 1920).setGroup("ng").setCaptionLabel("Width");
     gifHeight = cp5.addSlider("GH").setPosition(10, 25).setRange(200, 1920).setGroup("ng").setCaptionLabel("Height");
     gifLength = cp5.addSlider("ms").setPosition(10, 40).setRange(1000, 10000).setGroup("ng").setCaptionLabel("Duration (ms)");
     gifInterval = cp5.addSlider("i").setPosition(10, 55).setRange(2, 20).setNumberOfTickMarks(19).snapToTickMarks(true).setGroup("ng").setCaptionLabel("Intervals");
-    gifSaveAs = cp5.addButton("gifSaveAs").setPosition(50, 80).setGroup("ng").setCaptionLabel("Save As").setId(3);
+    gifSaveAs = cp5.addButton("gifSaveAs").setPosition(90, 80).setGroup("ng").setCaptionLabel("Save As").setId(3);
+    fileName = cp5.addTextfield("fileName").setPosition(10, 80).setGroup("ng").setSize(75, 20);
     // layer controls
     layerNew = cp5.addButton("layerNew").setPosition(rPanex + 75, rPaneyMenu).setCaptionLabel("New Layer").setId(4);
     layerCopy = cp5.addButton("layerCopy").setPosition(rPanex + 75, rPaneyMenu+25).setCaptionLabel("Copy Layer").setId(5);
@@ -175,9 +178,11 @@ class GUI extends PApplet {   //<>//
   }
 
   void controlEvent(ControlEvent theEvent) {
-    //if (theEvent.getController().equals(gifSave)) {
-    //}
-
+    if (theEvent.getController().equals(fileSelect)) {    
+      controller.menuGifLayer(7);
+      fileSelect.clear();
+      fileSelect.hide();
+    }
     for (RadioButton R : trigSwitch) {
       if (theEvent.isFrom(R) && layerlock == false) {
         layers.get(id).trig.set(R.getName(), int(R.getValue()));
@@ -189,19 +194,17 @@ class GUI extends PApplet {   //<>//
       density.setRange(densityRangeMin, densityRangeMax);
       density.getCaptionLabel().align(CENTER, CENTER);
     }
-    if (theEvent.getController().equals(gifNew)) {
-      cp5.getGroup("ng").show();
-    }
     if (theEvent.getController().equals(gifWidth)) {
       Width = int(gifWidth.getValue());
     }
     if (theEvent.getController().equals(gifHeight)) {
       Height = int(gifHeight.getValue());
     }
-    if (theEvent.getController().equals(gifSaveAs)) {     
+    if (theEvent.getController().equals(gifLength)) {
       gif.totalTime = gifLength.getValue();
+    }
+    if (theEvent.getController().equals(gifInterval)) {
       gif.Interval = gifInterval.getValue();
-      cp5.getGroup("ng").hide();
     }
     if (theEvent.getController().equals(drawMode)) {
       layers.get(id).spheres3d = drawMode.getState();
