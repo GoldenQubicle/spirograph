@@ -4,7 +4,7 @@ RREAALLLY need to sort out the funky offset business on update / load - maybe pr
 going forward, be able to
 - save json with size, length, intervals & background color - DONE!
 - load said json - AND DONE!!
-- add layer variables
+- add layer variables almost done
 - add mutliple layer support
 - reintroduce matrix
 
@@ -78,9 +78,8 @@ void setup() {
   gui = new GUI(this);
   gif = new Animation();
   layers = new ArrayList();
-  layer_1 = new Layer();
-  layer_1.name = "Layer 1";
-  layers.add(layer_1);
+  //layer_1 = new Layer();
+  //layers.add(layer_1);
   cBackground = 120;
   play = false;
   //gifExport = new GifMaker(this, "export.gif");

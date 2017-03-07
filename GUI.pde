@@ -3,7 +3,7 @@ class GUI extends PApplet {   //<>//
   PApplet parent;
   ControlP5 cp5;
   int id;
-  boolean layerlock;
+  boolean layerlock = false;
   ColorWheel colorBackground, colorStroke, colorFill;
   Toggle stroke, fill, drawMode;
   ScrollableList layerSwitch, blendMode, fileSelect;
@@ -62,7 +62,7 @@ class GUI extends PApplet {   //<>//
     layerNew = cp5.addButton("layerNew").setPosition(rPanex + 75, rPaneyMenu).setCaptionLabel("New Layer").setId(4);
     layerCopy = cp5.addButton("layerCopy").setPosition(rPanex + 75, rPaneyMenu+25).setCaptionLabel("Copy Layer").setId(5);
     layerDelete = cp5.addButton("layerDelete").setPosition(rPanex + 75, rPaneyMenu+50).setCaptionLabel("Delete Layer").setId(6);
-    layerSwitch = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+75, 80).setWidth(145).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false).addItem(layers.get(id).name, layers.get(id));
+    layerSwitch = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+75, 80).setWidth(145).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false);//.addItem(layers.get(id).name, layers.get(id));
     layerSwitch.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
         if (theEvent.getAction()==ControlP5.ACTIVE) {
@@ -121,14 +121,14 @@ class GUI extends PApplet {   //<>//
     int size2d = 150;
     int posy = 240;
     int posx = 3;
-    gear0 = cp5.addSlider2D("G0").setMinMax(-256, -256, 256, 256).setPosition(posx, posy).setCaptionLabel("Radius Gear 0").setSize(size2d, size2d).setValue(layers.get(id).gear0.RX, layers.get(id).gear0.RY);
-    gear1 = cp5.addSlider2D("G1").setMinMax(-256, -256, 256, 256).setPosition(posx+155, posy).setCaptionLabel("Radius Gear 1").setSize(size2d, size2d).setValue(layers.get(id).gear1.RX, layers.get(id).gear1.RY);
-    gear2 = cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(posx+(155*2), posy).setCaptionLabel("Radius Gear 2").setSize(size2d, size2d).setValue(layers.get(id).gear2.RX, layers.get(id).gear2.RY);
-    gear3 = cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(posx+(155*3), posy).setCaptionLabel("Radius Gear 3").setSize(size2d, size2d).setValue(layers.get(id).gear3.RX, layers.get(id).gear3.RY);    
-    gear0z = cp5.addSlider("G0z").setRange(-256, 256).setPosition(3, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 0 Z").setValue(layers.get(id).gear0.RZ).hide(); 
-    gear1z = cp5.addSlider("G1z").setRange(-256, 256).setPosition(158, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 1 Z").setValue(layers.get(id).gear1.RZ).hide(); 
-    gear2z = cp5.addSlider("G2z").setRange(-256, 256).setPosition(313, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 2 Z").setValue(layers.get(id).gear2.RZ).hide(); 
-    gear3z = cp5.addSlider("G3z").setRange(-256, 256).setPosition(468, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 3 Z").setValue(layers.get(id).gear3.RZ).hide(); 
+    gear0 = cp5.addSlider2D("G0").setMinMax(-256, -256, 256, 256).setPosition(posx, posy).setCaptionLabel("Radius Gear 0").setSize(size2d, size2d);//.setValue(layers.get(id).gear0.RX, layers.get(id).gear0.RY);
+    gear1 = cp5.addSlider2D("G1").setMinMax(-256, -256, 256, 256).setPosition(posx+155, posy).setCaptionLabel("Radius Gear 1").setSize(size2d, size2d);//.setValue(layers.get(id).gear1.RX, layers.get(id).gear1.RY);
+    gear2 = cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(posx+(155*2), posy).setCaptionLabel("Radius Gear 2").setSize(size2d, size2d);//.setValue(layers.get(id).gear2.RX, layers.get(id).gear2.RY);
+    gear3 = cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(posx+(155*3), posy).setCaptionLabel("Radius Gear 3").setSize(size2d, size2d);//.setValue(layers.get(id).gear3.RX, layers.get(id).gear3.RY);    
+    gear0z = cp5.addSlider("G0z").setRange(-256, 256).setPosition(3, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 0 Z").hide();//.setValue(layers.get(id).gear0.RZ);
+    gear1z = cp5.addSlider("G1z").setRange(-256, 256).setPosition(158, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 1 Z").hide(); //.setValue(layers.get(id).gear1.RZ);
+    gear2z = cp5.addSlider("G2z").setRange(-256, 256).setPosition(313, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 2 Z").hide();//.setValue(layers.get(id).gear2.RZ);
+    gear3z = cp5.addSlider("G3z").setRange(-256, 256).setPosition(468, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 3 Z").hide();//.setValue(layers.get(id).gear3.RZ);
     petals1 = cp5.addSlider("p1").setPosition(rPanex, posy).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 1 Petals"); 
     petals2 = cp5.addSlider("p2").setPosition(rPanex, posy+15).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 2 Petals");
     petals3 = cp5.addSlider("p3").setPosition(rPanex, posy+30).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 3 Petals");        
@@ -178,11 +178,6 @@ class GUI extends PApplet {   //<>//
   }
 
   void controlEvent(ControlEvent theEvent) {
-    if (theEvent.getController().equals(fileSelect)) {    
-      controller.menuGifLayer(7);
-      fileSelect.clear();
-      fileSelect.hide();
-    }
     for (RadioButton R : trigSwitch) {
       if (theEvent.isFrom(R) && layerlock == false) {
         layers.get(id).trig.set(R.getName(), int(R.getValue()));
@@ -193,6 +188,12 @@ class GUI extends PApplet {   //<>//
       densityRangeMin = densityRangeMax - 10000;
       density.setRange(densityRangeMin, densityRangeMax);
       density.getCaptionLabel().align(CENTER, CENTER);
+      println("checkiecheck");
+    }
+    if (theEvent.getController().equals(fileSelect)) {    
+      controller.menuGifLayer(7);
+      fileSelect.hide();
+      fileSelect.clear();
     }
     if (theEvent.getController().equals(gifWidth)) {
       Width = int(gifWidth.getValue());
@@ -240,7 +241,7 @@ class GUI extends PApplet {   //<>//
         layers.get(id).density = density.getValue();
       }      
       if (theEvent.getController().equals(blendMode)) {
-        layers.get(id).select = int(blendMode.getValue());
+        layers.get(id).blendSelect = int(blendMode.getValue());
       }
       if (theEvent.getController().equals(colorStroke)  || theEvent.getController().equals(alphaStroke)) {
         layers.get(id).cStroke = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
@@ -273,16 +274,16 @@ class GUI extends PApplet {   //<>//
         layers.get(id).gear3.P = petals3.getValue();
       }
       if (theEvent.getController().equals(G1r)) {
-        layers.get(id).gear1.speed = map(G1r.getValue(), -100, 100, -.0000025, .0000025);
-        //layers.get(id).gear1.move = map(G1r.getValue(), -100, 100, -TAU, TAU);
+        //layers.get(id).gear1.speed = map(G1r.getValue(), -100, 100, -.0000025, .0000025);
+        layers.get(id).gear1.rotate = map(G1r.getValue(), -100, 100, -TAU, TAU);
       }
       if (theEvent.getController().equals(G2r)) {
-        layers.get(id).gear2.speed = map(G2r.getValue(), -100, 100, -.0000025, .0000025);
-        //layers.get(id).gear2.move = map(G2r.getValue(), -100, 100, -TAU, TAU);
+        //layers.get(id).gear2.speed = map(G2r.getValue(), -100, 100, -.0000025, .0000025);
+        layers.get(id).gear2.rotate = map(G2r.getValue(), -100, 100, -TAU, TAU);
       }
       if (theEvent.getController().equals(G3r)) {
-        layers.get(id).gear3.speed = map(G3r.getValue(), -100, 100, -.0000025, .0000025);
-        //layers.get(id).gear3.move = map(G3r.getValue(), -100, 100, -TAU, TAU);
+        //layers.get(id).gear3.speed = map(G3r.getValue(), -100, 100, -.0000025, .0000025);
+        layers.get(id).gear3.rotate = map(G3r.getValue(), -100, 100, -TAU, TAU);
       }
       if (theEvent.getController().equals(gear0)) {
         layers.get(id).gear0.RX = gear0.getArrayValue(0);

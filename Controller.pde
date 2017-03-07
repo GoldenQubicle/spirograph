@@ -17,7 +17,8 @@ class Controller {
       update = true;
       break;
     case 1:
-      // save gif      
+      // save gif 
+      fileio.saveJSON();
       break;
     case 2:
       // load gif   
@@ -28,7 +29,12 @@ class Controller {
       break;
     case 3:
       // create new gif  
-      fileio.saveAs(gui.fileName.getText());
+      Layer newgif = new Layer();
+      newgif.name = "Layer " + (layers.size()+1);
+      layers.add(newgif);
+      gui.layerSwitch.addItem(newgif.name, newgif);
+      fileio.fileName = gui.fileName.getText();
+      fileio.saveAs();
       gui.cp5.getGroup("ng").hide();
       break;
     case 4:
@@ -52,12 +58,14 @@ class Controller {
       gui.layerSwitch.removeItem(layers.get(del).name);
       layers.remove(del);
       break;
-      case 7:
+    case 7:
       // load file
       fileio.loadGif(fileio.listOfFiles[int(gui.fileSelect.getValue())].getName());
       gui.colorBackground.remove();
-      gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(fileio.currentFile.getInt("colorBackground"));
-      //update = true;
+      gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(fileio.global.getInt("colorBackground"));
+      update = true;
+      gui.layerlock = true;
+      updateLayerGUI(0,0);
       break;
     }
   }
@@ -89,7 +97,7 @@ class Controller {
       gui.alphaFill.setValue(alpha(layerSelect(select, get).cFill));
       gui.colorStroke = gui.cp5.addColorWheel("Stroke").setPosition(209, 3).setRGB(layerSelect(select, get).cStroke);
       gui.alphaStroke.setValue(alpha(layerSelect(select, get).cStroke));
-      gui.blendMode.setValue(layerSelect(select, get).select); 
+      gui.blendMode.setValue(layerSelect(select, get).blendSelect); 
       gui.fill.setState(layerSelect(select, get).fill);
       gui.stroke.setState(layerSelect(select, get).stroke);
       gui.lx.setValue(layerSelect(select, get).lx);
@@ -98,9 +106,9 @@ class Controller {
       gui.petals1.setValue(layerSelect(select, get).gear1.P);
       gui.petals2.setValue(layerSelect(select, get).gear2.P);
       gui.petals3.setValue(layerSelect(select, get).gear3.P);
-      gui.G1r.setValue(layerSelect(select, get).gear1.move);
-      gui.G2r.setValue(layerSelect(select, get).gear2.move);
-      gui.G3r.setValue(layerSelect(select, get).gear3.move);
+      gui.G1r.setValue(layerSelect(select, get).gear1.rotate);
+      gui.G2r.setValue(layerSelect(select, get).gear2.rotate);
+      gui.G3r.setValue(layerSelect(select, get).gear3.rotate);
       for (int r = 0; r < gui.trigSwitch.size(); r++) {
         gui.trigSwitch.get(r).activate(layerSelect(select, get).trig.get(gui.trigSwitch.get(r).getName()));
       }
@@ -117,7 +125,7 @@ class Controller {
     }
     for (int i = 0; i < 3; i++) {
       layer.gears[i].P = layerSelect(select, get).gears[i].P;
-      layer.gears[i].move = layerSelect(select, get).gears[i].move;
+      layer.gears[i].rotate = layerSelect(select, get).gears[i].rotate;
     }
     layer.cFill = layerSelect(select, get).cFill;
     layer.cStroke = layerSelect(select, get).cStroke;

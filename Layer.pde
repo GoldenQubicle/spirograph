@@ -2,16 +2,18 @@ class Layer {  //<>//
 
   String name;
   PVector xyz, xy2;  
-  float theta, phi, lx, ly, density, sw, connectLines, circumference;
+  float theta, phi, lx, ly, density, sw, connectLines;
   Gears[] gears;
   Gears gear0, gear1, gear2, gear3;
   color cFill, cStroke;
   boolean stroke, fill, lines, dots, spheres3d;
   IntDict trig;
   int [] mode = {1, 2, 4, 16, 8, 64, 128, 256, 0};
-  int select;
+  int blendSelect, id;
 
   Layer() {
+    id = 0;
+    name = "Layer 1";
     xyz = new PVector();
     xy2 = new PVector();
     gears = new Gears[4];
@@ -62,14 +64,14 @@ class Layer {  //<>//
   
 
     if (fill == true) {
-        blendMode(mode[select]);
+        blendMode(mode[blendSelect]);
       fill(cFill);
     }
     if (fill == false) {
       noFill();
     }
     if (stroke == true) {
-        blendMode(mode[select]);
+        blendMode(mode[blendSelect]);
       stroke(cStroke);
     }
     if (stroke == false) {
@@ -172,7 +174,7 @@ class Layer {  //<>//
 
 class Gears {
   PVector xyz;
-  float theta, phi, RX, RY, RZ, C, Connect, P, R, move, speed, cossintan;
+  float theta, phi, RX, RY, RZ, C, Connect, P, R, rotate, speed, cossintan;
 
   Gears(float rx, float ry, float rz) {
     xyz = new PVector();    
@@ -184,14 +186,14 @@ class Gears {
   }
   void grinding(int trigX, int trigY, int trigZ, int trigX2, int trigY2, float theta, float phi, float circumference, boolean threed) {
     if (threed != true) {
-      theta = ((TAU/circumference)*theta)+move;
+      theta = ((TAU/circumference)*theta)+rotate;
       //rotateY(move);   
       //rotateX(move);
       xyz.x = cossintan(trigX, theta)*RX;
       xyz.y = cossintan(trigY, theta)*RY;
-      move = move + speed;      
-      if (move > TAU || move < -TAU) {
-        move = 0;
+      rotate = rotate + speed;      
+      if (rotate > TAU || rotate < -TAU) {
+        rotate = 0;
       }
     } else {
       xyz.x = cossintan(trigX, theta)*cossintan(trigX2, phi)*RX;
