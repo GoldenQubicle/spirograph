@@ -21,7 +21,7 @@ class Controller {
       fileio.saveJSON();
       break;
     case 2:
-      // load gif   
+      // load menu json file   
       gui.fileSelect.show();
       for (File file : fileio.getFiles()) {
         gui.fileSelect.addItem(file.getName(), file);
@@ -34,22 +34,24 @@ class Controller {
       layers.add(newgif);
       gui.layerSwitch.addItem(newgif.name, newgif);
       fileio.fileName = gui.fileName.getText();
-      fileio.saveAs();
+      fileio.saveJSON();
       gui.cp5.getGroup("ng").hide();
       break;
     case 4:
       // new layer
       Layer blank = new Layer();
-      blank.name = "Layer " + (layers.size()+1);
       layers.add(blank);
+      blank.id = layers.size();
+      blank.name = "Layer " + layers.size();     
       gui.layerSwitch.addItem(blank.name, blank);
       break;
     case 5:
       // copy layer
       Layer copy = new Layer();
-      copy.name = ("Layer " + (layers.size()+1) + " - copy layer " + (int(gui.layerSwitch.getValue())+1));
-      int origin = int(gui.layerSwitch.getValue());
+      int origin = int(gui.layerSwitch.getValue());      
       layers.add(layerSettings(copy, origin, 0));
+      copy.id =  layers.size(); 
+      copy.name = ("Layer " + (layers.size()) + " - copy layer " + (int(gui.layerSwitch.getValue())+1));
       gui.layerSwitch.addItem(copy.name, copy);
       break;
     case 6:
@@ -60,12 +62,18 @@ class Controller {
       break;
     case 7:
       // load file
-      fileio.loadGif(fileio.listOfFiles[int(gui.fileSelect.getValue())].getName());
-      gui.colorBackground.remove();
-      gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(fileio.global.getInt("colorBackground"));
       update = true;
       gui.layerlock = true;
-      updateLayerGUI(0,0);
+      layers.clear();
+      gui.layerSwitch.clear();
+      gui.colorBackground.remove();      
+      fileio.loadJSON(fileio.listOfFiles[int(gui.fileSelect.getValue())].getName());
+      gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(fileio.global.getInt("colorBackground"));
+      for (Layer myLayer : layers) {
+        gui.layerSwitch.addItem(myLayer.name, myLayer);
+      }
+      updateLayerGUI(0, 0);
+      gui.layerlock = false;
       break;
     }
   }
@@ -122,8 +130,6 @@ class Controller {
       layer.gears[i].RX = layerSelect(select, get).gears[i].RX;  
       layer.gears[i].RY = layerSelect(select, get).gears[i].RY;   
       layer.gears[i].RZ = layerSelect(select, get).gears[i].RZ;
-    }
-    for (int i = 0; i < 3; i++) {
       layer.gears[i].P = layerSelect(select, get).gears[i].P;
       layer.gears[i].rotate = layerSelect(select, get).gears[i].rotate;
     }

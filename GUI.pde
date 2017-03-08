@@ -50,6 +50,16 @@ class GUI extends PApplet {   //<>//
     gifSave = cp5.addButton("gifSave").setPosition(rPanex+150, rPaneyMenu+25).setCaptionLabel("Save GIF").setId(1);
     gifLoad = cp5.addButton("gifLoad").setPosition(rPanex+150, rPaneyMenu+50).setCaptionLabel("Load GIF").setId(2);
     fileSelect = cp5.addScrollableList("fileSelect").setPosition(300, 500).setSize(175, 110).hide();
+    fileSelect.addCallback(new CallbackListener() {
+      public void controlEvent(CallbackEvent theEvent) {
+        if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
+            controller.menuGifLayer(7);
+            fileSelect.hide();
+            fileSelect.clear();
+        }
+      }
+    }
+    );
     // new gif menu
     cp5.addGroup("ng").setPosition(300, 500).setSize(175, 110).setBackgroundColor(color(255, 50)).setCaptionLabel("GIF setting").disableCollapse().hide();
     gifWidth = cp5.addSlider("GW").setPosition(10, 10).setRange(200, 1920).setGroup("ng").setCaptionLabel("Width");
@@ -188,12 +198,7 @@ class GUI extends PApplet {   //<>//
       densityRangeMin = densityRangeMax - 10000;
       density.setRange(densityRangeMin, densityRangeMax);
       density.getCaptionLabel().align(CENTER, CENTER);
-      println("checkiecheck");
-    }
-    if (theEvent.getController().equals(fileSelect)) {    
-      controller.menuGifLayer(7);
-      fileSelect.hide();
-      fileSelect.clear();
+      //println("checkiecheck");
     }
     if (theEvent.getController().equals(gifWidth)) {
       Width = int(gifWidth.getValue());
@@ -315,6 +320,7 @@ class GUI extends PApplet {   //<>//
       }
       if (theEvent.getController().equals(layerSwitch)) {
         int set = int(layerSwitch.getValue());
+        println(set);
         layerlock = true;
         controller.updateLayerGUI(0, set);
       }

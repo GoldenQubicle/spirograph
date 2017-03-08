@@ -1,8 +1,8 @@
 class FileIO {
   String path = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\";
-  String fileName = "";
+  String fileName = "default";
   JSONObject global, layer, gears;
-  String[] globals = {"gifWidth", "gifHeight", "gifLength", "gifInterval", "colorBackground"};
+  String[] globals = {"gifWidth", "gifHeight", "gifLength", "gifInterval", "colorBackground", "Layers"};
   String [] Gears = {"Gear 0", "Gear 1", "Gear 2", "Gear 3"};
 
   File folder = new File(path);
@@ -14,61 +14,83 @@ class FileIO {
     gears = new JSONObject();
   }
 
-  JSONObject saveLayer() {
-    // so in here I also, later, want to iterate over layerFrames
-    int index = 0;    
-    layer.setString("name", layers.get(index).name);
-    layer.setInt("id", layers.get(index).id);
-    layer.setBoolean("3d", layers.get(index).spheres3d); 
-    for (int i = 0; i < layers.get(index).gears.length; i++) {
-      gears.setFloat(Gears[i] + " RX", layers.get(index).gears[i].RX);
-      gears.setFloat(Gears[i] + " RY", layers.get(index).gears[i].RY);
-      gears.setFloat(Gears[i] + " RZ", layers.get(index).gears[i].RZ);
-      gears.setFloat(Gears[i] + " Petals", layers.get(index).gears[i].P);
-      gears.setFloat(Gears[i] + " Rotate", layers.get(index).gears[i].rotate);
-      gears.setFloat(Gears[i] + " Move", layers.get(index).gears[i].speed);
+  void saveJSON() {
+    global.setInt(globals[0], Width);
+    global.setInt(globals[1], Height);
+    global.setFloat(globals[2], gif.totalTime);
+    global.setFloat(globals[3], gif.Interval);
+    global.setInt(globals[4], cBackground);
+    global.setInt(globals[5], layers.size());
+    for (Layer myLayer : layers) {
+      global.setJSONObject("Layer" + str(myLayer.id), saveLayer(myLayer));
+    }
+    saveJSONObject(global, path + fileName + ".json" );
+  }
+
+  JSONObject saveLayer(Layer tobeSaved) {
+    layer = new JSONObject();
+    gears = new JSONObject();
+    layer.setString("name", tobeSaved.name);
+    layer.setInt("id", tobeSaved.id);
+    layer.setBoolean("3d", tobeSaved.spheres3d); 
+    for (int i = 0; i < tobeSaved.gears.length; i++) {
+      gears.setFloat(Gears[i] + " RX", tobeSaved.gears[i].RX);
+      gears.setInt(Gears[i] + " trigX", tobeSaved.gears[i].trigX);
+      gears.setInt(Gears[i] + " trigX2", tobeSaved.gears[i].trigX2);
+      gears.setFloat(Gears[i] + " RY", tobeSaved.gears[i].RY);
+      gears.setInt(Gears[i] + " trigY", tobeSaved.gears[i].trigY);
+      gears.setInt(Gears[i] + " trigY2", tobeSaved.gears[i].trigY2);
+      gears.setFloat(Gears[i] + " RZ", tobeSaved.gears[i].RZ);
+      gears.setInt(Gears[i] + " trigZ", tobeSaved.gears[i].trigZ);
+      gears.setFloat(Gears[i] + " Petals", tobeSaved.gears[i].P);
+      gears.setFloat(Gears[i] + " Rotate", tobeSaved.gears[i].rotate);
+      gears.setFloat(Gears[i] + " Move", tobeSaved.gears[i].speed);
     }; 
     layer.setJSONObject("Gears", gears);      
-    layer.setInt("colorFill", layers.get(index).cFill);
-    layer.setBoolean("Fill", layers.get(index).fill); 
-    layer.setInt("colorStroke", layers.get(index).cStroke);
-    layer.setBoolean("Stroke", layers.get(index).stroke);
-    layer.setFloat("Line X", layers.get(index).lx);
-    layer.setFloat("Line Y", layers.get(index).ly);
-    layer.setFloat("strokeWeight", layers.get(index).sw);
-    layer.setFloat("density", layers.get(index).density);
-    layer.setInt("blendMode", layers.get(index).blendSelect);
+    layer.setInt("colorFill", tobeSaved.cFill);
+    layer.setBoolean("Fill", tobeSaved.fill); 
+    layer.setInt("colorStroke", tobeSaved.cStroke);
+    layer.setBoolean("Stroke", tobeSaved.stroke);
+    layer.setFloat("Line X", tobeSaved.lx);
+    layer.setFloat("Line Y", tobeSaved.ly);
+    layer.setFloat("strokeWeight", tobeSaved.sw);
+    layer.setFloat("density", tobeSaved.density);
+    layer.setInt("blendMode", tobeSaved.blendSelect);
     return layer;
   }
 
-  void loadLayer(JSONObject layer) {
+  Layer loadLayer(JSONObject tobeLoaded) {
     Layer fromJSON = new Layer();
-    fromJSON.name = layer.getString("name");
-    fromJSON.id = layer.getInt("id");
-    fromJSON.spheres3d = layer.getBoolean("3d");
+    fromJSON.name = tobeLoaded.getString("name");
+    fromJSON.id = tobeLoaded.getInt("id");
+    fromJSON.spheres3d = tobeLoaded.getBoolean("3d");
     for (int i = 0; i < fromJSON.gears.length; i++) {
-      fromJSON.gears[i].RX = layer.getJSONObject("Gears").getFloat(Gears[i] + " RX"); 
-      fromJSON.gears[i].RY = layer.getJSONObject("Gears").getFloat(Gears[i] + " RY");
-      fromJSON.gears[i].RZ = layer.getJSONObject("Gears").getFloat(Gears[i] + " RZ");
-      fromJSON.gears[i].P = layer.getJSONObject("Gears").getFloat(Gears[i] + " Petals");
-      fromJSON.gears[i].rotate = layer.getJSONObject("Gears").getFloat(Gears[i] + " Rotate");
-      fromJSON.gears[i].speed = layer.getJSONObject("Gears").getFloat(Gears[i] + " Move");
+      fromJSON.gears[i].RX = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RX"); 
+      fromJSON.gears[i].RY = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RY");
+      fromJSON.gears[i].RZ = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RZ");
+      fromJSON.gears[i].P = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " Petals");
+      fromJSON.gears[i].rotate = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " Rotate");
+      fromJSON.gears[i].speed = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " Move");
+      fromJSON.trig.set("G"+i+"trigX", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigX")); 
+      fromJSON.trig.set("G"+i+"trigX2", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigX2")); 
+      fromJSON.trig.set("G"+i+"trigY", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigY")); 
+      fromJSON.trig.set("G"+i+"trigY2", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigY2"));
+      fromJSON.trig.set("G"+i+"trigZ", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigZ"));
     }
-    fromJSON.cFill = layer.getInt("colorFill");
-    fromJSON.fill = layer.getBoolean("Fill");
-    fromJSON.cStroke = layer.getInt("colorStroke");
-    fromJSON.stroke = layer.getBoolean("Stroke");
-    fromJSON.lx = layer.getFloat("Line X");
-    fromJSON.ly = layer.getFloat("Line Y"); 
-    fromJSON.sw = layer.getFloat("strokeWeight");
-    fromJSON.density = layer.getFloat("density");
-    fromJSON.blendSelect = layer.getInt("blendMode"); 
-    layers.add(fromJSON);
-    gui.layerSwitch.addItem(fromJSON.name, fromJSON);
+    fromJSON.cFill = tobeLoaded.getInt("colorFill");
+    fromJSON.fill = tobeLoaded.getBoolean("Fill");
+    fromJSON.cStroke = tobeLoaded.getInt("colorStroke");
+    fromJSON.stroke = tobeLoaded.getBoolean("Stroke");
+    fromJSON.lx = tobeLoaded.getFloat("Line X");
+    fromJSON.ly = tobeLoaded.getFloat("Line Y"); 
+    fromJSON.sw = tobeLoaded.getFloat("strokeWeight");
+    fromJSON.density = tobeLoaded.getFloat("density");
+    fromJSON.blendSelect = tobeLoaded.getInt("blendMode"); 
+    return fromJSON;
   }
 
 
-  void loadGif(String filename) { 
+  void loadJSON(String filename) { 
     String [] splitName = split(filename, '.');
     fileName = splitName[0];    
     global = loadJSONObject(path + fileName + ".json");
@@ -77,26 +99,10 @@ class FileIO {
     gif.totalTime = global.getFloat(globals[2]);
     gif.Interval = global.getFloat(globals[3]);
     cBackground = global.getInt(globals[4]);
-
-    loadLayer(global.getJSONObject("Layer 1"));
+    for (int i = 1; i <= global.getInt("Layers"); i++) {
+      layers.add(loadLayer(global.getJSONObject("Layer" + str(i))));
+    }
   }
-
-  void saveJSON() {
-    global.setInt(globals[4], cBackground);
-    global.setJSONObject(layers.get(0).name, saveLayer());
-    saveJSONObject(global, path + fileName + ".json" );
-  }
-
-  void saveAs() {   
-    //fileName = filename;
-    global.setInt(globals[0], Width);
-    global.setInt(globals[1], Height);
-    global.setFloat(globals[2], gif.totalTime);
-    global.setFloat(globals[3], gif.Interval);
-    global.setInt(globals[4], cBackground);
-    saveJSONObject(global, path + fileName + ".json");
-  }
-
 
   File[] getFiles() {
     File folder = new File(path);

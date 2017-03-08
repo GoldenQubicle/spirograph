@@ -1,5 +1,13 @@
-/*  //<>//
-RREAALLLY need to sort out the funky offset business on update / load - maybe preempt it by loading a default in setup?!
+/* //<>//
+
+
+RIGHT the new gif function was there because hey, thats how regular programs work
+HOWEVER, come to think of use cases, it'd be very helpful to be able to change gif settings halfway through, 
+  e.g. have a nice sequence but too fast, so increase the over all length
+  e.g. stuck on sequence end, so decrease the number of invervals (while retaining all settings AND the proper speed)
+  e.g. small pattern with lots of white space around, so resize the surface to make it more appealing
+SO it would actually be very helpful to have the gif settings available all the time, not just when making new gif
+
 
 going forward, be able to
 - save json with size, length, intervals & background color - DONE!

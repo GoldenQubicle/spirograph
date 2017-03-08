@@ -12,7 +12,7 @@ class Layer {  //<>//
   int blendSelect, id;
 
   Layer() {
-    id = 0;
+    id = 1;
     name = "Layer 1";
     xyz = new PVector();
     xy2 = new PVector();
@@ -37,41 +37,48 @@ class Layer {  //<>//
     sw = 2;
     connectLines = 2;
     trig = new IntDict();
-    trig.set("G0trigX", 0);
-    trig.set("G0trigY", 1);
-    trig.set("G0trigZ", 1);
-    trig.set("G1trigX", 0);
-    trig.set("G1trigY", 1);
-    trig.set("G1trigZ", 1);
-    trig.set("G2trigX", 0);
-    trig.set("G2trigY", 1);
-    trig.set("G2trigZ", 1);
-    trig.set("G3trigX", 0);
-    trig.set("G3trigY", 1);
-    trig.set("G3trigZ", 1);
-    trig.set("G0trigX2", 0);
-    trig.set("G0trigY2", 1);
-    trig.set("G1trigX2", 0);
-    trig.set("G1trigY2", 1);
-    trig.set("G2trigX2", 0);
-    trig.set("G2trigY2", 1);
-    trig.set("G3trigX2", 0);
-    trig.set("G3trigY2", 1);
+    for (int g = 0; g < 4; g++) {
+      trig.set("G"+g+"trigX", gears[g].trigX);
+      trig.set("G"+g+"trigX2", gears[g].trigX2);
+      trig.set("G"+g+"trigY", gears[g].trigY);
+      trig.set("G"+g+"trigY2", gears[g].trigY2);
+      trig.set("G"+g+"trigZ", gears[g].trigZ);
+    }
+    //trig.set("G0trigX", 0);
+    //trig.set("G0trigY", 1);
+    //trig.set("G0trigZ", 1);
+    //trig.set("G1trigX", 0);
+    //trig.set("G1trigY", 1);
+    //trig.set("G1trigZ", 1);
+    //trig.set("G2trigX", 0);
+    //trig.set("G2trigY", 1);
+    //trig.set("G2trigZ", 1);
+    //trig.set("G3trigX", 0);
+    //trig.set("G3trigY", 1);
+    //trig.set("G3trigZ", 1);
+    //trig.set("G0trigX2", 0);
+    //trig.set("G0trigY2", 1);
+    //trig.set("G1trigX2", 0);
+    //trig.set("G1trigY2", 1);
+    //trig.set("G2trigX2", 0);
+    //trig.set("G2trigY2", 1);
+    //trig.set("G3trigX2", 0);
+    //trig.set("G3trigY2", 1);
     //spheres3d = true;
   }
 
   void display() {     
-  
+
 
     if (fill == true) {
-        blendMode(mode[blendSelect]);
+      blendMode(mode[blendSelect]);
       fill(cFill);
     }
     if (fill == false) {
       noFill();
     }
     if (stroke == true) {
-        blendMode(mode[blendSelect]);
+      blendMode(mode[blendSelect]);
       stroke(cStroke);
     }
     if (stroke == false) {
@@ -175,6 +182,7 @@ class Layer {  //<>//
 class Gears {
   PVector xyz;
   float theta, phi, RX, RY, RZ, C, Connect, P, R, rotate, speed, cossintan;
+  int trigX = 0, trigY = 1, trigX2, trigY2, trigZ;
 
   Gears(float rx, float ry, float rz) {
     xyz = new PVector();    
@@ -184,7 +192,13 @@ class Gears {
     R = 1/(P-1);
     C = ((RX+RY)/2) * TAU;
   }
-  void grinding(int trigX, int trigY, int trigZ, int trigX2, int trigY2, float theta, float phi, float circumference, boolean threed) {
+  void grinding(int trigx, int trigy, int trigz, int trigx2, int trigy2, float theta, float phi, float circumference, boolean threed) {
+    trigX = trigx;
+    trigX2 = trigx2;
+    trigY = trigy;
+    trigY2 = trigy2;
+    trigZ = trigz;
+
     if (threed != true) {
       theta = ((TAU/circumference)*theta)+rotate;
       //rotateY(move);   
