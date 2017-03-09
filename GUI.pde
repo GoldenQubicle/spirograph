@@ -56,7 +56,6 @@ class GUI extends PApplet {   //<>//
       public void controlEvent(CallbackEvent theEvent) {
         if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
           controller.menuGifLayer(7);
-
           fileSelect.hide();
           fileSelect.clear();
         }
@@ -75,7 +74,7 @@ class GUI extends PApplet {   //<>//
     layerNew = cp5.addButton("layerNew").setPosition(rPanex + 75, rPaneyMenu).setCaptionLabel("New Layer").setId(4);
     layerCopy = cp5.addButton("layerCopy").setPosition(rPanex + 75, rPaneyMenu+25).setCaptionLabel("Copy Layer").setId(5);
     layerDelete = cp5.addButton("layerDelete").setPosition(rPanex + 75, rPaneyMenu+50).setCaptionLabel("Delete Layer").setId(6);
-    layerSwitch = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+75, 80).setWidth(145).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false).addItem(layers.get(layerID).name, layers.get(layerID));
+    layerSwitch = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+75, 80).setWidth(145).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false);//.addItem(layers.get(layerID).name, layers.get(layerID));
     layerSwitch.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
         if (theEvent.getAction()==ControlP5.ACTIVE) {
@@ -189,8 +188,8 @@ class GUI extends PApplet {   //<>//
       pox = pox + 155;
     }
 
-    ///button bar to toggle layerstates
-    keyFrames = cp5.addButtonBar("ls").setPosition(3, 500).setSize(610, 20);
+    ///button bar to toggle keyFrames
+    keyFrames = cp5.addButtonBar("ls").setPosition(3, 500).setSize(610, 20).setDefaultValue(0);
     String [] buttonL;
     buttonL = new String[gif.keyFrames];
     for (int i = 0; i < gif.keyFrames; i++) {       
@@ -200,11 +199,10 @@ class GUI extends PApplet {   //<>//
     keyFrames.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
         if (theEvent.getAction() == ControlP5.ACTION_CLICK) {
-          int kf = int(keyFrames.getValue());
-          //Layer.load(JSON + LS);
-          //gif.LoadLayerState(ls);
-          //set = int(LayerState.getValue());
-          //SwitchLayers();
+          layers.clear();
+          layers.add(layerFrames.get(int(keyFrames.getValue())));
+          layerlock = true; 
+          controller.updateLayerGUI(0, 0);
         }
       }
     }

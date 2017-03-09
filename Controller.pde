@@ -3,6 +3,12 @@ class Controller {
   Layer dummy = new Layer();
 
   Controller() {
+      for (int i = 0; i < gif.keyFrames; i++) {
+      Layer kf = new Layer();
+      kf.id = i;
+      kf.name =  "keyFrame "+ i;
+      layerFrames.add(layerSettings(kf, 0, 0)); 
+    }
   }
 
   void menuGifLayer(int buttonID) {
@@ -80,6 +86,7 @@ class Controller {
 
 
   Layer layerSelect(int select, int getlayer) {  
+    Layer dummy = new Layer();
     if (select == 0) {
       dummy = layers.get(getlayer);
     }

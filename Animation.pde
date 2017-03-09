@@ -1,5 +1,5 @@
 class Animation {   //<>//
-  
+
   int keyFrames, Variables, MatrixWidth, MatrixHeight, CellWidth, CellHeight;
   float totalTime, aniInterval, Interval;
   int [][] AniEnd, AniInt;
@@ -23,10 +23,7 @@ class Animation {   //<>//
         AniInt[x][y] = 1;
       }
     }
-    triggers = new ArrayList();
-    for(int i =0; i < keyFrames; i++){
-     layerFrames.add(layers.get(gui.layerID)); 
-    }
+    triggers = new ArrayList();  
   }
 
   void Update() {
