@@ -15,7 +15,6 @@ class FileIO {
   }
 
   void saveJSON() {
-    println("check" + fileName);
     global.setInt(globals[0], Width);
     global.setInt(globals[1], Height);
     global.setFloat(globals[2], gif.totalTime);

@@ -1,20 +1,9 @@
 /* //<>//
 
+NEXT
+  reinstate buttonbar and setup keyFrame layer array
+  so basically, I want to pass layer objects around between arrays. . 
 
-RIGHT the new gif function was there because hey, thats how regular programs work
-HOWEVER, come to think of use cases, it'd be very helpful to be able to change gif settings halfway through, 
-  e.g. have a nice sequence but too fast, so increase the over all length
-  e.g. stuck on sequence end, so decrease the number of invervals (while retaining all settings AND the proper speed)
-  e.g. small pattern with lots of white space around, so resize the surface to make it more appealing
-SO it would actually be very helpful to have the gif settings available all the time, not just when making new gif
-
-
-going forward, be able to
-- save json with size, length, intervals & background color - DONE!
-- load said json - AND DONE!!
-- add layer variables DONE
-- add mutliple layer support aaan dare I say DONE?!!
-- reintroduce matrix
 
  couple more random ideas 
  - used spheres while in '2d' and apply rotate over x and y, probably pretty cool
@@ -86,9 +75,9 @@ void setup() {
   gui = new GUI(this);
   gif = new Animation();
   layers = new ArrayList();
-  //layer_1 = new Layer();
-  //layers.add(layer_1);
-  cBackground = 120;
+  layer_1 = new Layer();
+  layers.add(layer_1);
+  cBackground = color(128,128,128);
   play = false;
   //gifExport = new GifMaker(this, "export.gif");
   update = false;

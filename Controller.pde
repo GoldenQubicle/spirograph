@@ -120,7 +120,7 @@ class Controller {
       for (int r = 0; r < gui.trigSwitch.size(); r++) {
         gui.trigSwitch.get(r).activate(layerSelect(select, get).trig.get(gui.trigSwitch.get(r).getName()));
       }
-      gui.id = get;
+      gui.layerID = get;
       gui.layerlock = false;
     }
   }

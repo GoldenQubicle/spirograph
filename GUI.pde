@@ -2,7 +2,7 @@ class GUI extends PApplet {   //<>//
 
   PApplet parent;
   ControlP5 cp5;
-  int id;
+  int layerID;
   boolean layerlock = false;
   ColorWheel colorBackground, colorStroke, colorFill;
   Toggle stroke, fill, drawMode;
@@ -14,6 +14,7 @@ class GUI extends PApplet {   //<>//
   Slider2D gear0, gear1, gear2, gear3;
   RadioButton trigX, trigY, trigZ, trigX2, trigY2, densityRanges;
   ArrayList <RadioButton> trigSwitch = new ArrayList<RadioButton>();
+  ButtonBar keyFrames;
   Textlabel trig;  
   Textfield fileName;
   // using int variables to strip decimals for gui aethetic
@@ -25,7 +26,7 @@ class GUI extends PApplet {   //<>//
   ScrollableList Easing;
   //Button Copy, SaveAll, Save, Increase, Decrease;
   Matrix Ani;
-  ButtonBar LayerState;
+
   Textlabel Label;
   String [] Labels = {"", "Gear 0 X", "Gear 0 Y", "Gear 1 Petals", "Gear 1 X", "Gear 1 Y", "Gear 2 Petals", "Gear 2 X", "Gear 2 Y", "Gear 3 Petals", "Gear 3 X", "Gear 3 Y", "Line X", "Line Y", "StrokeWeight", "Connect G1", "Connect G2", "Connect G3", "Density"}; 
   String[] EasingNames = {"LINEAR", "QUAD_IN", "QUAD_OUT", "QUAD_IN_OUT", "CUBIC_IN", "CUBIC_IN_OUT", "CUBIC_OUT", "QUART_IN", "QUART_OUT", "QUART_IN_OUT", "QUINT_IN", "QUINT_OUT", "QUINT_IN_OUT", "SINE_IN", "SINE_OUT", "SINE_IN_OUT", "CIRC_IN", "CIRC_OUT", "CIRC_IN_OUT", "EXPO_IN", "EXPO_OUT", "EXPO_IN_OUT", "BACK_IN", "BACK_OUT", "BACK_IN_OUT", "BOUNCE_IN", "BOUNCE_OUT", "BOUNCE_IN_OUT", "ELASTIC_IN", "ELASTIC_OUT", "ELASTIC_IN_OUT"};
@@ -41,7 +42,7 @@ class GUI extends PApplet {   //<>//
   } 
 
   public void setup() {
-    id = 0;
+    layerID = 0;
     cp5 = new ControlP5(this);
     int rPanex = 630;
     int rPaneyMenu = 3;
@@ -54,10 +55,10 @@ class GUI extends PApplet {   //<>//
     fileSelect.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
         if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
-            controller.menuGifLayer(7);
-            
-            fileSelect.hide();
-            fileSelect.clear();
+          controller.menuGifLayer(7);
+
+          fileSelect.hide();
+          fileSelect.clear();
         }
       }
     }
@@ -74,7 +75,7 @@ class GUI extends PApplet {   //<>//
     layerNew = cp5.addButton("layerNew").setPosition(rPanex + 75, rPaneyMenu).setCaptionLabel("New Layer").setId(4);
     layerCopy = cp5.addButton("layerCopy").setPosition(rPanex + 75, rPaneyMenu+25).setCaptionLabel("Copy Layer").setId(5);
     layerDelete = cp5.addButton("layerDelete").setPosition(rPanex + 75, rPaneyMenu+50).setCaptionLabel("Delete Layer").setId(6);
-    layerSwitch = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+75, 80).setWidth(145).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false);//.addItem(layers.get(id).name, layers.get(id));
+    layerSwitch = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+75, 80).setWidth(145).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false).addItem(layers.get(layerID).name, layers.get(layerID));
     layerSwitch.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
         if (theEvent.getAction()==ControlP5.ACTIVE) {
@@ -187,12 +188,33 @@ class GUI extends PApplet {   //<>//
       poy = poy + 30;
       pox = pox + 155;
     }
+
+    ///button bar to toggle layerstates
+    keyFrames = cp5.addButtonBar("ls").setPosition(3, 500).setSize(610, 20);
+    String [] buttonL;
+    buttonL = new String[gif.keyFrames];
+    for (int i = 0; i < gif.keyFrames; i++) {       
+      buttonL[i] = "KF" + (i+1);
+    }
+    keyFrames.addItems(buttonL);
+    keyFrames.addCallback(new CallbackListener() {
+      public void controlEvent(CallbackEvent theEvent) {
+        if (theEvent.getAction() == ControlP5.ACTION_CLICK) {
+          int kf = int(keyFrames.getValue());
+          //Layer.load(JSON + LS);
+          //gif.LoadLayerState(ls);
+          //set = int(LayerState.getValue());
+          //SwitchLayers();
+        }
+      }
+    }
+    );
   }
 
   void controlEvent(ControlEvent theEvent) {
     for (RadioButton R : trigSwitch) {
       if (theEvent.isFrom(R) && layerlock == false) {
-        layers.get(id).trig.set(R.getName(), int(R.getValue()));
+        layers.get(layerID).trig.set(R.getName(), int(R.getValue()));
       }
     }
     if (theEvent.isFrom(densityRanges) && layerlock == false) {
@@ -215,7 +237,7 @@ class GUI extends PApplet {   //<>//
       gif.Interval = gifInterval.getValue();
     }
     if (theEvent.getController().equals(drawMode)) {
-      layers.get(id).spheres3d = drawMode.getState();
+      layers.get(layerID).spheres3d = drawMode.getState();
       for (int i =0; i < 4; i++) {
         if (drawMode.getState() == true) {
           density.hide();
@@ -245,80 +267,80 @@ class GUI extends PApplet {   //<>//
     }
     if (layerlock == false) {
       if (theEvent.getController().equals(density)) {
-        layers.get(id).density = density.getValue();
+        layers.get(layerID).density = density.getValue();
       }      
       if (theEvent.getController().equals(blendMode)) {
-        layers.get(id).blendSelect = int(blendMode.getValue());
+        layers.get(layerID).blendSelect = int(blendMode.getValue());
       }
       if (theEvent.getController().equals(colorStroke)  || theEvent.getController().equals(alphaStroke)) {
-        layers.get(id).cStroke = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
+        layers.get(layerID).cStroke = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
       }
       if (theEvent.getController().equals(colorFill) || theEvent.getController().equals(alphaFill)) {
-        layers.get(id).cFill = color(colorFill.r(), colorFill.g(), colorFill.b(), int(alphaFill.getValue()));
+        layers.get(layerID).cFill = color(colorFill.r(), colorFill.g(), colorFill.b(), int(alphaFill.getValue()));
       }
       if (theEvent.getController().equals(stroke)) {
-        layers.get(id).stroke = stroke.getState();
+        layers.get(layerID).stroke = stroke.getState();
       }
       if (theEvent.getController().equals(fill)) {
-        layers.get(id).fill = fill.getState();
+        layers.get(layerID).fill = fill.getState();
       }
       if (theEvent.getController().equals(lx)) {
-        layers.get(id).lx = lx.getValue();
+        layers.get(layerID).lx = lx.getValue();
       }
       if (theEvent.getController().equals(ly)) {
-        layers.get(id).ly = ly.getValue();
+        layers.get(layerID).ly = ly.getValue();
       }
       if (theEvent.getController().equals(sw)) {
-        layers.get(id).sw = sw.getValue();
+        layers.get(layerID).sw = sw.getValue();
       }
       if (theEvent.getController().equals(petals1)) {
-        layers.get(id).gear1.P = petals1.getValue();
+        layers.get(layerID).gear1.P = petals1.getValue();
       }
       if (theEvent.getController().equals(petals2)) {
-        layers.get(id).gear2.P = petals2.getValue();
+        layers.get(layerID).gear2.P = petals2.getValue();
       }
       if (theEvent.getController().equals(petals3)) {
-        layers.get(id).gear3.P = petals3.getValue();
+        layers.get(layerID).gear3.P = petals3.getValue();
       }
       if (theEvent.getController().equals(G1r)) {
         //layers.get(id).gear1.speed = map(G1r.getValue(), -100, 100, -.0000025, .0000025);
-        layers.get(id).gear1.rotate = map(G1r.getValue(), -100, 100, -TAU, TAU);
+        layers.get(layerID).gear1.rotate = map(G1r.getValue(), -100, 100, -TAU, TAU);
       }
       if (theEvent.getController().equals(G2r)) {
         //layers.get(id).gear2.speed = map(G2r.getValue(), -100, 100, -.0000025, .0000025);
-        layers.get(id).gear2.rotate = map(G2r.getValue(), -100, 100, -TAU, TAU);
+        layers.get(layerID).gear2.rotate = map(G2r.getValue(), -100, 100, -TAU, TAU);
       }
       if (theEvent.getController().equals(G3r)) {
         //layers.get(id).gear3.speed = map(G3r.getValue(), -100, 100, -.0000025, .0000025);
-        layers.get(id).gear3.rotate = map(G3r.getValue(), -100, 100, -TAU, TAU);
+        layers.get(layerID).gear3.rotate = map(G3r.getValue(), -100, 100, -TAU, TAU);
       }
       if (theEvent.getController().equals(gear0)) {
-        layers.get(id).gear0.RX = gear0.getArrayValue(0);
-        layers.get(id).gear0.RY = gear0.getArrayValue(1);
+        layers.get(layerID).gear0.RX = gear0.getArrayValue(0);
+        layers.get(layerID).gear0.RY = gear0.getArrayValue(1);
       }
       if (theEvent.getController().equals(gear1)) {
-        layers.get(id).gear1.RX = gear1.getArrayValue(0);
-        layers.get(id).gear1.RY = gear1.getArrayValue(1);
+        layers.get(layerID).gear1.RX = gear1.getArrayValue(0);
+        layers.get(layerID).gear1.RY = gear1.getArrayValue(1);
       }
       if (theEvent.getController().equals(gear2)) {
-        layers.get(id).gear2.RX = gear2.getArrayValue(0);
-        layers.get(id).gear2.RY = gear2.getArrayValue(1);
+        layers.get(layerID).gear2.RX = gear2.getArrayValue(0);
+        layers.get(layerID).gear2.RY = gear2.getArrayValue(1);
       }
       if (theEvent.getController().equals(gear3)) {
-        layers.get(id).gear3.RX = gear3.getArrayValue(0);
-        layers.get(id).gear3.RY = gear3.getArrayValue(1);
+        layers.get(layerID).gear3.RX = gear3.getArrayValue(0);
+        layers.get(layerID).gear3.RY = gear3.getArrayValue(1);
       }
       if (theEvent.getController().equals(gear0z)) {
-        layers.get(id).gear0.RZ = gear0z.getValue();
+        layers.get(layerID).gear0.RZ = gear0z.getValue();
       }
       if (theEvent.getController().equals(gear1z)) {
-        layers.get(id).gear1.RZ = gear1z.getValue();
+        layers.get(layerID).gear1.RZ = gear1z.getValue();
       }
       if (theEvent.getController().equals(gear2z)) {
-        layers.get(id).gear2.RZ = gear2z.getValue();
+        layers.get(layerID).gear2.RZ = gear2z.getValue();
       }
       if (theEvent.getController().equals(gear3z)) {
-        layers.get(id).gear3.RZ = gear3z.getValue();
+        layers.get(layerID).gear3.RZ = gear3z.getValue();
       }
       if (theEvent.getController().equals(layerSwitch)) {
         int set = int(layerSwitch.getValue());
