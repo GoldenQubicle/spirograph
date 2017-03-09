@@ -8,32 +8,30 @@ class Controller {
   void menuGifLayer(int buttonID) {
     switch(buttonID) {
     case 0:
-      // gif settings
-      gui.cp5.getGroup("ng").show();     
-      Width = 300;
-      Height = 300;
+      // gif settings menu
+       update = true;
+      gui.cp5.getGroup("ng").show();
+      gui.cp5.getGroup("ng").bringToFront();
       gui.cp5.getController("GW").setValue(Width);
       gui.cp5.getController("GH").setValue(Height);
-      update = true;
+     
       break;
     case 1:
-      // save gif 
+      // save all as json 
       fileio.saveJSON();
       break;
     case 2:
-      // load menu json file   
-      gui.fileSelect.show();
+      // load json menu   
+      gui.cp5.getGroup("fs").show();
+      gui.cp5.getGroup("fs").bringToFront();
+      gui.fileSelect.setOpen(true).show();
       for (File file : fileio.getFiles()) {
         gui.fileSelect.addItem(file.getName(), file);
       }
       break;
     case 3:
-      // create new gif  
-      Layer newgif = new Layer();
-      newgif.name = "Layer " + (layers.size()+1);
-      layers.add(newgif);
-      gui.layerSwitch.addItem(newgif.name, newgif);
-      fileio.fileName = gui.fileName.getText();
+      // save gif settings  
+      controller.fileio.fileName = gui.fileName.getText();
       fileio.saveJSON();
       gui.cp5.getGroup("ng").hide();
       break;
@@ -61,7 +59,8 @@ class Controller {
       layers.remove(del);
       break;
     case 7:
-      // load file
+      // load actual json file selected
+      gui.cp5.getGroup("fs").hide();
       update = true;
       gui.layerlock = true;
       layers.clear();
@@ -69,6 +68,7 @@ class Controller {
       gui.colorBackground.remove();      
       fileio.loadJSON(fileio.listOfFiles[int(gui.fileSelect.getValue())].getName());
       gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(fileio.global.getInt("colorBackground"));
+      gui.fileName.setText(controller.fileio.fileName);
       for (Layer myLayer : layers) {
         gui.layerSwitch.addItem(myLayer.name, myLayer);
       }

@@ -12,8 +12,8 @@ SO it would actually be very helpful to have the gif settings available all the 
 going forward, be able to
 - save json with size, length, intervals & background color - DONE!
 - load said json - AND DONE!!
-- add layer variables almost done
-- add mutliple layer support
+- add layer variables DONE
+- add mutliple layer support aaan dare I say DONE?!!
 - reintroduce matrix
 
  couple more random ideas 

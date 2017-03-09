@@ -9,7 +9,7 @@ class GUI extends PApplet {   //<>//
   ScrollableList layerSwitch, blendMode, fileSelect;
   String [] blendModes = {"Normal", "Add", "Subtract", "Darkest", "Lightest", "Exclusion", "Multiply", "Screen", "Replace"};
   Slider gifWidth, gifHeight, gifLength, gifInterval, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals1, petals2, petals3, alphaFill, alphaStroke, G1r, G2r, G3r, density; 
-  Button gifNew, gifSaveAs, gifLoad, gifSave, layerNew, layerCopy, layerDelete;
+  Button gifSettings, gifSave, Load, Save, layerNew, layerCopy, layerDelete;
   ArrayList <Button> menuGifLayer = new ArrayList<Button>();
   Slider2D gear0, gear1, gear2, gear3;
   RadioButton trigX, trigY, trigZ, trigX2, trigY2, densityRanges;
@@ -23,7 +23,7 @@ class GUI extends PApplet {   //<>//
 
   // not yet in use, however, lots of stuff in animation depends on it so therefor not commented out
   ScrollableList Easing;
-  Button Copy, SaveAll, Save, Increase, Decrease;
+  //Button Copy, SaveAll, Save, Increase, Decrease;
   Matrix Ani;
   ButtonBar LayerState;
   Textlabel Label;
@@ -46,14 +46,16 @@ class GUI extends PApplet {   //<>//
     int rPanex = 630;
     int rPaneyMenu = 3;
     // gif & layer menu
-    gifNew = cp5.addButton("gifNew").setPosition(rPanex+150, rPaneyMenu).setCaptionLabel("New GIF").setId(0);
-    gifSave = cp5.addButton("gifSave").setPosition(rPanex+150, rPaneyMenu+25).setCaptionLabel("Save GIF").setId(1);
-    gifLoad = cp5.addButton("gifLoad").setPosition(rPanex+150, rPaneyMenu+50).setCaptionLabel("Load GIF").setId(2);
-    fileSelect = cp5.addScrollableList("fileSelect").setPosition(300, 500).setSize(175, 110).hide();
+    gifSettings = cp5.addButton("gifSettings").setPosition(rPanex+150, rPaneyMenu).setCaptionLabel("Settings").setId(0);
+    Save = cp5.addButton("Save").setPosition(rPanex+150, rPaneyMenu+25).setCaptionLabel("Save").setId(1);
+    Load = cp5.addButton("Load").setPosition(rPanex+150, rPaneyMenu+50).setCaptionLabel("Load").setId(2);
+    cp5.addGroup("fs").setPosition(rPanex, 15).setSize(220, 135).setBackgroundColor(color(255)).setBarHeight(15).setCaptionLabel("Load File").disableCollapse().setBackgroundColor(0).hide();
+    fileSelect = cp5.addScrollableList("fileSelect").setPosition(15, 15).setSize(180, 85).setGroup("fs");//.hide();
     fileSelect.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
         if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
             controller.menuGifLayer(7);
+            
             fileSelect.hide();
             fileSelect.clear();
         }
@@ -61,13 +63,13 @@ class GUI extends PApplet {   //<>//
     }
     );
     // new gif menu
-    cp5.addGroup("ng").setPosition(300, 500).setSize(175, 110).setBackgroundColor(color(255, 50)).setCaptionLabel("GIF setting").disableCollapse().hide();
+    cp5.addGroup("ng").setPosition(rPanex, 15).setSize(220, 135).setBackgroundColor(color(255)).setBarHeight(15).setCaptionLabel("GIF setting").disableCollapse().setBackgroundColor(0).hide();
     gifWidth = cp5.addSlider("GW").setPosition(10, 10).setRange(200, 1920).setGroup("ng").setCaptionLabel("Width");
     gifHeight = cp5.addSlider("GH").setPosition(10, 25).setRange(200, 1920).setGroup("ng").setCaptionLabel("Height");
     gifLength = cp5.addSlider("ms").setPosition(10, 40).setRange(1000, 10000).setGroup("ng").setCaptionLabel("Duration (ms)");
     gifInterval = cp5.addSlider("i").setPosition(10, 55).setRange(2, 20).setNumberOfTickMarks(19).snapToTickMarks(true).setGroup("ng").setCaptionLabel("Intervals");
-    gifSaveAs = cp5.addButton("gifSaveAs").setPosition(90, 80).setGroup("ng").setCaptionLabel("Save As").setId(3);
-    fileName = cp5.addTextfield("fileName").setPosition(10, 80).setGroup("ng").setSize(75, 20);
+    gifSave = cp5.addButton("gifSave").setPosition(90, 80).setGroup("ng").setCaptionLabel("Save").setId(3);
+    fileName = cp5.addTextfield("fileName").setPosition(10, 80).setGroup("ng").setSize(75, 20).setText(controller.fileio.fileName);
     // layer controls
     layerNew = cp5.addButton("layerNew").setPosition(rPanex + 75, rPaneyMenu).setCaptionLabel("New Layer").setId(4);
     layerCopy = cp5.addButton("layerCopy").setPosition(rPanex + 75, rPaneyMenu+25).setCaptionLabel("Copy Layer").setId(5);
@@ -82,10 +84,10 @@ class GUI extends PApplet {   //<>//
     }
     );
     // add callbacks
-    menuGifLayer.add(cp5.get(Button.class, "gifNew"));
+    menuGifLayer.add(cp5.get(Button.class, "gifSettings"));
+    menuGifLayer.add(cp5.get(Button.class, "Save"));
+    menuGifLayer.add(cp5.get(Button.class, "Load"));
     menuGifLayer.add(cp5.get(Button.class, "gifSave"));
-    menuGifLayer.add(cp5.get(Button.class, "gifLoad"));
-    menuGifLayer.add(cp5.get(Button.class, "gifSaveAs"));
     menuGifLayer.add(cp5.get(Button.class, "layerNew"));
     menuGifLayer.add(cp5.get(Button.class, "layerCopy"));
     menuGifLayer.add(cp5.get(Button.class, "layerDelete"));

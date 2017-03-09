@@ -15,6 +15,7 @@ class FileIO {
   }
 
   void saveJSON() {
+    println("check" + fileName);
     global.setInt(globals[0], Width);
     global.setInt(globals[1], Height);
     global.setFloat(globals[2], gif.totalTime);
@@ -88,7 +89,6 @@ class FileIO {
     fromJSON.blendSelect = tobeLoaded.getInt("blendMode"); 
     return fromJSON;
   }
-
 
   void loadJSON(String filename) { 
     String [] splitName = split(filename, '.');
