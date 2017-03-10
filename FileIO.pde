@@ -20,9 +20,9 @@ class FileIO {
     global.setFloat(globals[2], gif.totalTime);
     global.setFloat(globals[3], gif.keyFrames);
     global.setInt(globals[4], cBackground);
-    global.setInt(globals[5], layers.size());
+    global.setInt(globals[5], gif.nLayers);
     global.setJSONArray("keyFrames", keyFrames);
-    for (int i = 0; i < gif.keyFrames; i++) {   
+    for (int i = 0; i < gif.keyFrames*layers.size(); i++) {   
       global.getJSONArray("keyFrames").setJSONObject(i, saveLayer(layerFrames.get(i)));
     }
     saveJSONObject(global, path + fileName + ".json" );
@@ -100,8 +100,9 @@ class FileIO {
     Height = global.getInt(globals[1]);
     gif.totalTime = global.getFloat(globals[2]);
     gif.keyFrames = int(global.getFloat(globals[3]));
+    gif.nLayers = global.getInt(globals[5]);
     cBackground = global.getInt(globals[4]);
-    for (int i = 0; i < gif.keyFrames; i++) {
+    for (int i = 0; i < gif.keyFrames*gif.nLayers; i++) {
       layerFrames.add(loadLayer(global.getJSONArray("keyFrames").getJSONObject(i)));
     }
   }

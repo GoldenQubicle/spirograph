@@ -1,6 +1,6 @@
 class Animation {   //<>//
 
-  int keyFrames, Variables, MatrixWidth, MatrixHeight, CellWidth, CellHeight;
+  int keyFrames, Variables, MatrixWidth, MatrixHeight, CellWidth, CellHeight, nLayers;
   float totalTime, aniInterval, Interval;
   int [][] AniEnd, AniInt;
   ArrayList<Trigger> triggers;
@@ -24,6 +24,7 @@ class Animation {   //<>//
       }
     }
     triggers = new ArrayList();  
+   nLayers = 1;
   }
 
   void Update() {

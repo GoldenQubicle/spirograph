@@ -5,9 +5,9 @@ class Controller {
   Controller() {
     for (int i = 0; i < gif.keyFrames; i++) {
       Layer kf = new Layer();
-      kf.id = 1;
+      kf.id = layers.get(gui.layerID).id;
       kf.kf = i;
-      //kf.name =  "keyFrame "+ i;
+      kf.name =  "keyFrame "+ i;
       layerFrames.add(layerSettings(kf, 0, 0));
     }
   }
@@ -39,7 +39,7 @@ class Controller {
       // save gif settings  
       gui.cp5.getGroup("ng").hide();
       controller.fileio.fileName = gui.fileName.getText();
-      setKeyFrames();
+      trimKeyFramesArray();
       fileio.saveJSON();     
       updateAniMatrixGUI();
       break;
@@ -50,6 +50,14 @@ class Controller {
       blank.id = layers.size();
       blank.name = "Layer " + layers.size();     
       gui.layerSwitch.addItem(blank.name, blank);
+      for (int i = 0; i< gif.keyFrames; i++) {
+        Layer kf = new Layer();
+        kf.id = layers.size();
+        kf.kf = i;
+        kf.name =  "keyFrame "+ i;
+        layerFrames.add(layerSettings(kf, 0, 0));
+      }
+      gif.nLayers=+1;
       break;
     case 5:
       // copy layer
@@ -89,7 +97,7 @@ class Controller {
     }
   }
 
-  void setKeyFrames() {
+  void trimKeyFramesArray() {
     if (gif.keyFrames > layerFrames.size()) {
       int add =  gif.keyFrames - layerFrames.size();
       for (int i =0; i < add; i++) {

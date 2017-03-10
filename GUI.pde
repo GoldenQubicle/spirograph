@@ -204,9 +204,14 @@ class GUI extends PApplet {   //<>//
     }
     if (theEvent.isFrom(keyFrames)) {
       layers.clear();
-      layers.add(layerFrames.get(int(keyFrames.getValue())));
+      int frame = int(keyFrames.getValue());
+      for(int i =0; i < gif.nLayers ;i++){
+      layers.add(layerFrames.get(frame));
+      frame+= gif.keyFrames;
+      }
       layerlock = true; 
       controller.updateLayerGUI(0, 0);
+ 
     }
     if (theEvent.isFrom(densityRanges) && layerlock == false) {
       densityRangeMax = densityRanges.getValue()* 10000;
@@ -334,7 +339,7 @@ class GUI extends PApplet {   //<>//
       }
       if (theEvent.getController().equals(layerSwitch)) {
         int set = int(layerSwitch.getValue());
-        println(set);
+        //println(set);
         layerlock = true;
         controller.updateLayerGUI(0, set);
       }
