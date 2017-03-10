@@ -8,13 +8,12 @@ class GUI extends PApplet {   //<>//
   Toggle stroke, fill, drawMode;
   ScrollableList layerSwitch, blendMode, fileSelect;
   String [] blendModes = {"Normal", "Add", "Subtract", "Darkest", "Lightest", "Exclusion", "Multiply", "Screen", "Replace"};
-  Slider gifWidth, gifHeight, gifLength, gifInterval, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals1, petals2, petals3, alphaFill, alphaStroke, G1r, G2r, G3r, density; 
+  Slider gifWidth, gifHeight, gifLength, gifKeyFrames, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals1, petals2, petals3, alphaFill, alphaStroke, G1r, G2r, G3r, density; 
   Button gifSettings, gifSave, Load, Save, layerNew, layerCopy, layerDelete;
   ArrayList <Button> menuGifLayer = new ArrayList<Button>();
   Slider2D gear0, gear1, gear2, gear3;
-  RadioButton trigX, trigY, trigZ, trigX2, trigY2, densityRanges;
+  RadioButton trigX, trigY, trigZ, trigX2, trigY2, densityRanges, keyFrames;
   ArrayList <RadioButton> trigSwitch = new ArrayList<RadioButton>();
-  ButtonBar keyFrames;
   Textlabel trig;  
   Textfield fileName;
   // using int variables to strip decimals for gui aethetic
@@ -67,14 +66,14 @@ class GUI extends PApplet {   //<>//
     gifWidth = cp5.addSlider("GW").setPosition(10, 10).setRange(200, 1920).setGroup("ng").setCaptionLabel("Width");
     gifHeight = cp5.addSlider("GH").setPosition(10, 25).setRange(200, 1920).setGroup("ng").setCaptionLabel("Height");
     gifLength = cp5.addSlider("ms").setPosition(10, 40).setRange(1000, 10000).setGroup("ng").setCaptionLabel("Duration (ms)");
-    gifInterval = cp5.addSlider("i").setPosition(10, 55).setRange(2, 20).setNumberOfTickMarks(19).snapToTickMarks(true).setGroup("ng").setCaptionLabel("Intervals");
+    gifKeyFrames = cp5.addSlider("i").setPosition(10, 55).setRange(2, 20).setNumberOfTickMarks(19).snapToTickMarks(true).setGroup("ng").setCaptionLabel("Key Frames");
     gifSave = cp5.addButton("gifSave").setPosition(90, 80).setGroup("ng").setCaptionLabel("Save").setId(3);
     fileName = cp5.addTextfield("fileName").setPosition(10, 80).setGroup("ng").setSize(75, 20).setText(controller.fileio.fileName);
     // layer controls
     layerNew = cp5.addButton("layerNew").setPosition(rPanex + 75, rPaneyMenu).setCaptionLabel("New Layer").setId(4);
     layerCopy = cp5.addButton("layerCopy").setPosition(rPanex + 75, rPaneyMenu+25).setCaptionLabel("Copy Layer").setId(5);
     layerDelete = cp5.addButton("layerDelete").setPosition(rPanex + 75, rPaneyMenu+50).setCaptionLabel("Delete Layer").setId(6);
-    layerSwitch = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+75, 80).setWidth(145).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false);//.addItem(layers.get(layerID).name, layers.get(layerID));
+    layerSwitch = cp5.addScrollableList("SwitchLayers").setPosition(rPanex+75, 80).setWidth(145).setType(ScrollableList.DROPDOWN).setCaptionLabel("Layers").setOpen(false).addItem(layers.get(layerID).name, layers.get(layerID));
     layerSwitch.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
         if (theEvent.getAction()==ControlP5.ACTIVE) {
@@ -144,9 +143,9 @@ class GUI extends PApplet {   //<>//
     petals1 = cp5.addSlider("p1").setPosition(rPanex, posy).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 1 Petals"); 
     petals2 = cp5.addSlider("p2").setPosition(rPanex, posy+15).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 2 Petals");
     petals3 = cp5.addSlider("p3").setPosition(rPanex, posy+30).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 3 Petals");        
-    G1r = cp5.addSlider("g1r").setPosition(rPanex, posy+45).setSize(200, 10).setRange(-100, 100).setCaptionLabel("Gear 1 Rotate"); 
-    G2r = cp5.addSlider("g2r").setPosition(rPanex, posy+60).setSize(200, 10).setRange(-100, 100).setCaptionLabel("Gear 2 Rotate"); 
-    G3r = cp5.addSlider("g3r").setPosition(rPanex, posy+75).setSize(200, 10).setRange(-100, 100).setCaptionLabel("Gear 3 Rotate");
+    G1r = cp5.addSlider("g1r").setPosition(rPanex, posy+45).setSize(200, 10).setRange(0, 100).setCaptionLabel("Gear 1 Rotate"); 
+    G2r = cp5.addSlider("g2r").setPosition(rPanex, posy+60).setSize(200, 10).setRange(0, 100).setCaptionLabel("Gear 2 Rotate"); 
+    G3r = cp5.addSlider("g3r").setPosition(rPanex, posy+75).setSize(200, 10).setRange(0, 100).setCaptionLabel("Gear 3 Rotate");
     cp5.getController("G0z").getCaptionLabel().align(CENTER, BOTTOM);  
     cp5.getController("G1z").getCaptionLabel().align(CENTER, BOTTOM);
     cp5.getController("G2z").getCaptionLabel().align(CENTER, BOTTOM);
@@ -187,27 +186,15 @@ class GUI extends PApplet {   //<>//
       poy = poy + 30;
       pox = pox + 155;
     }
-
-    ///button bar to toggle keyFrames
-    keyFrames = cp5.addButtonBar("ls").setPosition(3, 500).setSize(610, 20).setDefaultValue(0);
-    String [] buttonL;
-    buttonL = new String[gif.keyFrames];
+    //radio button bar to toggle keyFrames
+    keyFrames = cp5.addRadioButton("kf").setPosition(3, 500).setSize((610/gif.keyFrames), 20).setItemsPerRow(gif.keyFrames);
     for (int i = 0; i < gif.keyFrames; i++) {       
-      buttonL[i] = "KF" + (i+1);
+      keyFrames.addItem("KF" + (i+1), i);
+      keyFrames.getItem(i).getCaptionLabel().set("KF" + (i+1)).align(CENTER, CENTER);
     }
-    keyFrames.addItems(buttonL);
-    keyFrames.addCallback(new CallbackListener() {
-      public void controlEvent(CallbackEvent theEvent) {
-        if (theEvent.getAction() == ControlP5.ACTION_CLICK) {
-          layers.clear();
-          layers.add(layerFrames.get(int(keyFrames.getValue())));
-          layerlock = true; 
-          controller.updateLayerGUI(0, 0);
-        }
-      }
-    }
-    );
+    keyFrames.activate(0);
   }
+  
 
   void controlEvent(ControlEvent theEvent) {
     for (RadioButton R : trigSwitch) {
@@ -215,12 +202,17 @@ class GUI extends PApplet {   //<>//
         layers.get(layerID).trig.set(R.getName(), int(R.getValue()));
       }
     }
+    if (theEvent.isFrom(keyFrames)) {
+      layers.clear();
+      layers.add(layerFrames.get(int(keyFrames.getValue())));
+      layerlock = true; 
+      controller.updateLayerGUI(0, 0);
+    }
     if (theEvent.isFrom(densityRanges) && layerlock == false) {
       densityRangeMax = densityRanges.getValue()* 10000;
       densityRangeMin = densityRangeMax - 10000;
       density.setRange(densityRangeMin, densityRangeMax);
       density.getCaptionLabel().align(CENTER, CENTER);
-      //println("checkiecheck");
     }
     if (theEvent.getController().equals(gifWidth)) {
       Width = int(gifWidth.getValue());
@@ -231,8 +223,8 @@ class GUI extends PApplet {   //<>//
     if (theEvent.getController().equals(gifLength)) {
       gif.totalTime = gifLength.getValue();
     }
-    if (theEvent.getController().equals(gifInterval)) {
-      gif.Interval = gifInterval.getValue();
+    if (theEvent.getController().equals(gifKeyFrames)) {
+      gif.keyFrames = int(gifKeyFrames.getValue());
     }
     if (theEvent.getController().equals(drawMode)) {
       layers.get(layerID).spheres3d = drawMode.getState();
@@ -301,16 +293,16 @@ class GUI extends PApplet {   //<>//
         layers.get(layerID).gear3.P = petals3.getValue();
       }
       if (theEvent.getController().equals(G1r)) {
-        //layers.get(id).gear1.speed = map(G1r.getValue(), -100, 100, -.0000025, .0000025);
-        layers.get(layerID).gear1.rotate = map(G1r.getValue(), -100, 100, -TAU, TAU);
+        //layers.get(layerID).gear1.speed = map(G1r.getValue(), -100, 100, -.00000025, .00000025);
+        layers.get(layerID).gear1.rotate = map(G1r.getValue(), 0, 100, 0, TAU);
       }
       if (theEvent.getController().equals(G2r)) {
-        //layers.get(id).gear2.speed = map(G2r.getValue(), -100, 100, -.0000025, .0000025);
-        layers.get(layerID).gear2.rotate = map(G2r.getValue(), -100, 100, -TAU, TAU);
+        //layers.get(layerID).gear2.speed = map(G2r.getValue(), -100, 100, -.00000025, .00000025);
+        layers.get(layerID).gear2.rotate = map(G2r.getValue(), 0, 100, 0, TAU);
       }
       if (theEvent.getController().equals(G3r)) {
-        //layers.get(id).gear3.speed = map(G3r.getValue(), -100, 100, -.0000025, .0000025);
-        layers.get(layerID).gear3.rotate = map(G3r.getValue(), -100, 100, -TAU, TAU);
+        //layers.get(layerID).gear3.speed = map(G3r.getValue(), -100, 100, -.00000025, .00000025);
+        layers.get(layerID).gear3.rotate = map(G3r.getValue(), 0, 100, 0, TAU);
       }
       if (theEvent.getController().equals(gear0)) {
         layers.get(layerID).gear0.RX = gear0.getArrayValue(0);
@@ -349,37 +341,7 @@ class GUI extends PApplet {   //<>//
     }
   }
 
-  //// LAYERSTATES START HERE
-  //// Controller object
-  //Layer = cp5.getProperties();
-  //Layer.remove(CS).remove(Pause).remove(cp).remove(cw).remove(Ani).remove(Copy).remove(New).remove(SaveAll).remove(Save);
-  //// saves JSON for each layerstate
-  //for (int i=0; i < gif.LayerStates; i++) {
-  //  Layer.setSnapshot("LayerState" + i);
-  //  Layer.saveAs(JSON + i);
-  //}
-
-  ////button bar to toggle layerstates
-  //LayerState = cp5.addButtonBar("ls").setPosition(10, 475).setSize(gif.MatrixWidth, gif.CellHeight);
-  //String [] buttonL;
-  //buttonL = new String[gif.LayerStates];
-  //for (int i = 0; i < gif.LayerStates; i++) {       
-  //  buttonL[i] = "LS" + (i+1);
-  //}
-  //LayerState.addItems(buttonL);
-  //cp5.getController("ls").moveTo("global");
-  //LayerState.addCallback(new CallbackListener() {
-  //  public void controlEvent(CallbackEvent theEvent) {
-  //    if (theEvent.getAction() == ControlP5.ACTION_CLICK) {
-  //      int LS = int(LayerState.getValue());
-  //      Layer.load(JSON + LS);
-  //      //gif.LoadLayerState(ls);
-  //      //set = int(LayerState.getValue());
-  //      //SwitchLayers();
-  //    }
-  //  }
-  //}
-  //);
+ 
 
   //// ANIMATRIX TABS START HERE
   //// make tabs

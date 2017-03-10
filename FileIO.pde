@@ -2,7 +2,7 @@ class FileIO {
   String path = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\";
   String fileName = "default";
   JSONObject global, layer, gears;
-  String[] globals = {"gifWidth", "gifHeight", "gifLength", "gifInterval", "colorBackground", "Layers"};
+  String[] globals = {"gifWidth", "gifHeight", "gifLength", "gifKeyFrames", "colorBackground", "Layers"};
   String [] Gears = {"Gear 0", "Gear 1", "Gear 2", "Gear 3"};
 
   File folder = new File(path);
@@ -18,7 +18,7 @@ class FileIO {
     global.setInt(globals[0], Width);
     global.setInt(globals[1], Height);
     global.setFloat(globals[2], gif.totalTime);
-    global.setFloat(globals[3], gif.Interval);
+    global.setFloat(globals[3], gif.keyFrames);
     global.setInt(globals[4], cBackground);
     global.setInt(globals[5], layers.size());
     for (Layer myLayer : layers) {
@@ -96,7 +96,7 @@ class FileIO {
     Width = global.getInt(globals[0]);
     Height = global.getInt(globals[1]);
     gif.totalTime = global.getFloat(globals[2]);
-    gif.Interval = global.getFloat(globals[3]);
+    gif.keyFrames = int(global.getFloat(globals[3]));
     cBackground = global.getInt(globals[4]);
     for (int i = 1; i <= global.getInt("Layers"); i++) {
       layers.add(loadLayer(global.getJSONObject("Layer" + str(i))));

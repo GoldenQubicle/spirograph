@@ -44,41 +44,17 @@ class Layer {  //<>//
       trig.set("G"+g+"trigY2", gears[g].trigY2);
       trig.set("G"+g+"trigZ", gears[g].trigZ);
     }
-    //trig.set("G0trigX", 0);
-    //trig.set("G0trigY", 1);
-    //trig.set("G0trigZ", 1);
-    //trig.set("G1trigX", 0);
-    //trig.set("G1trigY", 1);
-    //trig.set("G1trigZ", 1);
-    //trig.set("G2trigX", 0);
-    //trig.set("G2trigY", 1);
-    //trig.set("G2trigZ", 1);
-    //trig.set("G3trigX", 0);
-    //trig.set("G3trigY", 1);
-    //trig.set("G3trigZ", 1);
-    //trig.set("G0trigX2", 0);
-    //trig.set("G0trigY2", 1);
-    //trig.set("G1trigX2", 0);
-    //trig.set("G1trigY2", 1);
-    //trig.set("G2trigX2", 0);
-    //trig.set("G2trigY2", 1);
-    //trig.set("G3trigX2", 0);
-    //trig.set("G3trigY2", 1);
-    //spheres3d = true;
   }
 
   void display() {     
-
-
-    if (fill == true) {
-      blendMode(mode[blendSelect]);
+    blendMode(mode[blendSelect]);
+    if (fill == true) {      
       fill(cFill);
     }
     if (fill == false) {
       noFill();
     }
     if (stroke == true) {
-      blendMode(mode[blendSelect]);
       stroke(cStroke);
     }
     if (stroke == false) {
@@ -201,11 +177,11 @@ class Gears {
 
     if (threed != true) {
       theta = ((TAU/circumference)*theta)+rotate;
-      //rotateY(move);   
+      //rotateY(rotate);   
       //rotateX(move);
       xyz.x = cossintan(trigX, theta)*RX;
       xyz.y = cossintan(trigY, theta)*RY;
-      rotate = rotate + speed;      
+      //rotate = rotate + speed;      
       if (rotate > TAU || rotate < -TAU) {
         rotate = 0;
       }

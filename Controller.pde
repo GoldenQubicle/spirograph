@@ -3,11 +3,11 @@ class Controller {
   Layer dummy = new Layer();
 
   Controller() {
-      for (int i = 0; i < gif.keyFrames; i++) {
+    for (int i = 0; i < gif.keyFrames; i++) {
       Layer kf = new Layer();
       kf.id = i;
       kf.name =  "keyFrame "+ i;
-      layerFrames.add(layerSettings(kf, 0, 0)); 
+      layerFrames.add(layerSettings(kf, 0, 0));
     }
   }
 
@@ -15,12 +15,11 @@ class Controller {
     switch(buttonID) {
     case 0:
       // gif settings menu
-       update = true;
+      update = true;
       gui.cp5.getGroup("ng").show();
       gui.cp5.getGroup("ng").bringToFront();
       gui.cp5.getController("GW").setValue(Width);
       gui.cp5.getController("GH").setValue(Height);
-     
       break;
     case 1:
       // save all as json 
@@ -37,9 +36,10 @@ class Controller {
       break;
     case 3:
       // save gif settings  
-      controller.fileio.fileName = gui.fileName.getText();
-      fileio.saveJSON();
       gui.cp5.getGroup("ng").hide();
+      controller.fileio.fileName = gui.fileName.getText();
+      fileio.saveJSON();     
+      updateAniMatrixGUI();
       break;
     case 4:
       // new layer
@@ -78,12 +78,12 @@ class Controller {
       for (Layer myLayer : layers) {
         gui.layerSwitch.addItem(myLayer.name, myLayer);
       }
+      updateAniMatrixGUI();
       updateLayerGUI(0, 0);
       gui.layerlock = false;
       break;
     }
   }
-
 
   Layer layerSelect(int select, int getlayer) {  
     Layer dummy = new Layer();
@@ -95,6 +95,17 @@ class Controller {
     }
     return dummy;
   }
+
+  void  updateAniMatrixGUI() {
+    gui.keyFrames.remove();   
+    gui.keyFrames =  gui.cp5.addRadioButton("kf").setPosition(3, 500).setSize((610/gif.keyFrames), 20).setItemsPerRow(gif.keyFrames);
+    for (int i = 0; i < gif.keyFrames; i++) {       
+      gui.keyFrames.addItem("KF" + (i+1), i);
+      gui.keyFrames.getItem(i).getCaptionLabel().set("KF" + (i+1)).align(CENTER, CENTER);
+    }
+    gui.keyFrames.activate(0);
+  }
+
 
   void updateLayerGUI(int select, int get) {
     if (gui.layerlock == true) {
