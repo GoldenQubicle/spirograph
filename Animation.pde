@@ -7,7 +7,7 @@ class Animation {   //<>//
 
   Animation() {
     totalTime = 4000;
-    keyFrames = 12;
+    keyFrames = 4;
     Variables = 19; // one too many for top row matrix which needs to be active at all time
     Interval = int(totalTime/keyFrames);
     aniInterval = Interval/1000;

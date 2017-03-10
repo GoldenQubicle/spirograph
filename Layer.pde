@@ -9,7 +9,7 @@ class Layer {  //<>//
   boolean stroke, fill, lines, dots, spheres3d;
   IntDict trig;
   int [] mode = {1, 2, 4, 16, 8, 64, 128, 256, 0};
-  int blendSelect, id;
+  int blendSelect, id, kf;
 
   Layer() {
     id = 1;

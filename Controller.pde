@@ -5,8 +5,9 @@ class Controller {
   Controller() {
     for (int i = 0; i < gif.keyFrames; i++) {
       Layer kf = new Layer();
-      kf.id = i;
-      kf.name =  "keyFrame "+ i;
+      kf.id = 1;
+      kf.kf = i;
+      //kf.name =  "keyFrame "+ i;
       layerFrames.add(layerSettings(kf, 0, 0));
     }
   }
@@ -38,6 +39,7 @@ class Controller {
       // save gif settings  
       gui.cp5.getGroup("ng").hide();
       controller.fileio.fileName = gui.fileName.getText();
+      setKeyFrames();
       fileio.saveJSON();     
       updateAniMatrixGUI();
       break;
@@ -70,11 +72,13 @@ class Controller {
       update = true;
       gui.layerlock = true;
       layers.clear();
+      layerFrames.clear();
       gui.layerSwitch.clear();
       gui.colorBackground.remove();      
       fileio.loadJSON(fileio.listOfFiles[int(gui.fileSelect.getValue())].getName());
       gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(fileio.global.getInt("colorBackground"));
       gui.fileName.setText(controller.fileio.fileName);
+      layers.add(layerFrames.get(0));
       for (Layer myLayer : layers) {
         gui.layerSwitch.addItem(myLayer.name, myLayer);
       }
@@ -84,6 +88,25 @@ class Controller {
       break;
     }
   }
+
+  void setKeyFrames() {
+    if (gif.keyFrames > layerFrames.size()) {
+      int add =  gif.keyFrames - layerFrames.size();
+      for (int i =0; i < add; i++) {
+        Layer kf = new Layer();
+        kf.id = 1;
+        kf.kf = add + i;
+        layerFrames.add(layerSettings(kf, int(layerFrames.size()-1), 1));
+      }
+    }
+    if (gif.keyFrames < layerFrames.size()) {
+      int sub = layerFrames.size();
+      for (int i = sub; i > gif.keyFrames; i--) {
+        layerFrames.remove(i-1);
+        fileio.global.getJSONArray("keyFrames").remove(i-1);
+      }
+    }
+  };
 
   Layer layerSelect(int select, int getlayer) {  
     Layer dummy = new Layer();
@@ -96,7 +119,7 @@ class Controller {
     return dummy;
   }
 
-  void  updateAniMatrixGUI() {
+  void updateAniMatrixGUI() {
     gui.keyFrames.remove();   
     gui.keyFrames =  gui.cp5.addRadioButton("kf").setPosition(3, 500).setSize((610/gif.keyFrames), 20).setItemsPerRow(gif.keyFrames);
     for (int i = 0; i < gif.keyFrames; i++) {       
@@ -104,8 +127,9 @@ class Controller {
       gui.keyFrames.getItem(i).getCaptionLabel().set("KF" + (i+1)).align(CENTER, CENTER);
     }
     gui.keyFrames.activate(0);
+    gui.gifKeyFrames.setValue(gif.keyFrames);
+    gui.gifLength.setValue(gif.totalTime);
   }
-
 
   void updateLayerGUI(int select, int get) {
     if (gui.layerlock == true) {

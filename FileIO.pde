@@ -1,7 +1,8 @@
 class FileIO {
   String path = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\";
   String fileName = "default";
-  JSONObject global, layer, gears;
+  JSONObject global, layer, gears, keyFrame;
+  JSONArray keyFrames;
   String[] globals = {"gifWidth", "gifHeight", "gifLength", "gifKeyFrames", "colorBackground", "Layers"};
   String [] Gears = {"Gear 0", "Gear 1", "Gear 2", "Gear 3"};
 
@@ -10,8 +11,7 @@ class FileIO {
 
   FileIO() {
     global = new JSONObject();
-    layer = new JSONObject();
-    gears = new JSONObject();
+    keyFrames = new JSONArray();
   }
 
   void saveJSON() {
@@ -21,8 +21,9 @@ class FileIO {
     global.setFloat(globals[3], gif.keyFrames);
     global.setInt(globals[4], cBackground);
     global.setInt(globals[5], layers.size());
-    for (Layer myLayer : layers) {
-      global.setJSONObject("Layer" + str(myLayer.id), saveLayer(myLayer));
+    global.setJSONArray("keyFrames", keyFrames);
+    for (int i = 0; i < gif.keyFrames; i++) {   
+      global.getJSONArray("keyFrames").setJSONObject(i, saveLayer(layerFrames.get(i)));
     }
     saveJSONObject(global, path + fileName + ".json" );
   }
@@ -32,6 +33,7 @@ class FileIO {
     gears = new JSONObject();
     layer.setString("name", tobeSaved.name);
     layer.setInt("id", tobeSaved.id);
+    layer.setInt("kf", tobeSaved.kf);
     layer.setBoolean("3d", tobeSaved.spheres3d); 
     for (int i = 0; i < tobeSaved.gears.length; i++) {
       gears.setFloat(Gears[i] + " RX", tobeSaved.gears[i].RX);
@@ -63,6 +65,7 @@ class FileIO {
     Layer fromJSON = new Layer();
     fromJSON.name = tobeLoaded.getString("name");
     fromJSON.id = tobeLoaded.getInt("id");
+    fromJSON.kf = tobeLoaded.getInt("kf");
     fromJSON.spheres3d = tobeLoaded.getBoolean("3d");
     for (int i = 0; i < fromJSON.gears.length; i++) {
       fromJSON.gears[i].RX = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RX"); 
@@ -98,8 +101,8 @@ class FileIO {
     gif.totalTime = global.getFloat(globals[2]);
     gif.keyFrames = int(global.getFloat(globals[3]));
     cBackground = global.getInt(globals[4]);
-    for (int i = 1; i <= global.getInt("Layers"); i++) {
-      layers.add(loadLayer(global.getJSONObject("Layer" + str(i))));
+    for (int i = 0; i < gif.keyFrames; i++) {
+      layerFrames.add(loadLayer(global.getJSONArray("keyFrames").getJSONObject(i)));
     }
   }
 
