@@ -2,7 +2,7 @@ class FileIO {
   String path = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\";
   String fileName = "default";
   JSONObject global, layer, gears, keyFrame;
-  JSONArray keyFrames;
+  JSONArray keyFrames, lkf;
   String[] globals = {"gifWidth", "gifHeight", "gifLength", "gifKeyFrames", "colorBackground", "Layers"};
   String [] Gears = {"Gear 0", "Gear 1", "Gear 2", "Gear 3"};
 
@@ -11,19 +11,25 @@ class FileIO {
 
   FileIO() {
     global = new JSONObject();
-    keyFrames = new JSONArray();
+    keyFrame = new JSONObject();
+    lkf = new JSONArray();
   }
 
   void saveJSON() {
+    println(gif.nLayers);
     global.setInt(globals[0], Width);
     global.setInt(globals[1], Height);
     global.setFloat(globals[2], gif.totalTime);
     global.setFloat(globals[3], gif.keyFrames);
     global.setInt(globals[4], cBackground);
     global.setInt(globals[5], gif.nLayers);
-    global.setJSONArray("keyFrames", keyFrames);
-    for (int i = 0; i < gif.keyFrames*layers.size(); i++) {   
-      global.getJSONArray("keyFrames").setJSONObject(i, saveLayer(layerFrames.get(i)));
+    for (int l =0; l < gif.nLayers; l++) {
+      lkf = new JSONArray();
+      global.setJSONArray("Layer "+l, lkf);
+      for (int f=0; f < gif.keyFrames; f++) {
+        int keyFrame = f+(l*gif.keyFrames);
+        global.getJSONArray("Layer "+l).setJSONObject(f, saveLayer(layerKeyFrames.get(keyFrame)));
+      }
     }
     saveJSONObject(global, path + fileName + ".json" );
   }
@@ -62,7 +68,7 @@ class FileIO {
   }
 
   Layer loadLayer(JSONObject tobeLoaded) {
-    Layer fromJSON = new Layer();
+    Layer fromJSON = new Layer(100);
     fromJSON.name = tobeLoaded.getString("name");
     fromJSON.id = tobeLoaded.getInt("id");
     fromJSON.kf = tobeLoaded.getInt("kf");
@@ -102,8 +108,11 @@ class FileIO {
     gif.keyFrames = int(global.getFloat(globals[3]));
     gif.nLayers = global.getInt(globals[5]);
     cBackground = global.getInt(globals[4]);
-    for (int i = 0; i < gif.keyFrames*gif.nLayers; i++) {
-      layerFrames.add(loadLayer(global.getJSONArray("keyFrames").getJSONObject(i)));
+    println(gif.nLayers); 
+    for (int l =0; l < gif.nLayers; l++) {     
+      for (int f=0; f < gif.keyFrames; f++) {     
+        layerKeyFrames.add(loadLayer(global.getJSONArray("Layer "+l).getJSONObject(f)));
+      }
     }
   }
 

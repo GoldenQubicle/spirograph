@@ -1,14 +1,18 @@
 class Controller {
   FileIO fileio = new FileIO();
-  Layer dummy = new Layer();
+  Layer dummy = new Layer(100);
+  int kfOld; 
 
   Controller() {
-    for (int i = 0; i < gif.keyFrames; i++) {
-      Layer kf = new Layer();
-      kf.id = layers.get(gui.layerID).id;
-      kf.kf = i;
-      kf.name =  "keyFrame "+ i;
-      layerFrames.add(layerSettings(kf, 0, 0));
+    for (int l=0; l < gif.nLayers; l++) {
+      for (int f=0; f < gif.keyFrames; f++) {
+        Layer dummy = new Layer(0);
+        dummy.name = layerActive.get(l).name;
+        dummy.id = layerActive.get(l).id;
+        dummy.kf = f; 
+        layerKeyFrames.add(layerSettings(dummy, l));
+        println(layerKeyFrames.size());
+      }
     }
   }
 
@@ -17,6 +21,7 @@ class Controller {
     case 0:
       // gif settings menu
       update = true;
+      kfOld = gif.keyFrames;
       gui.cp5.getGroup("ng").show();
       gui.cp5.getGroup("ng").bringToFront();
       gui.cp5.getController("GW").setValue(Width);
@@ -39,92 +44,123 @@ class Controller {
       // save gif settings  
       gui.cp5.getGroup("ng").hide();
       controller.fileio.fileName = gui.fileName.getText();
-      trimKeyFramesArray();
+      if (kfOld > gif.keyFrames) {
+        updateKeyFrames(2);
+      }
+      if (kfOld < gif.keyFrames) {
+        updateKeyFrames(3);
+      }
       fileio.saveJSON();     
       updateAniMatrixGUI();
       break;
     case 4:
       // new layer
-      Layer blank = new Layer();
-      layers.add(blank);
-      blank.id = layers.size();
-      blank.name = "Layer " + layers.size();     
+      Layer blank = new Layer(100);
+      layerActive.add(blank);
+      blank.id = layerActive.size();
+      blank.name = "Layer " + layerActive.size();      
+      updateKeyFrames(0);
       gui.layerSwitch.addItem(blank.name, blank);
-      for (int i = 0; i< gif.keyFrames; i++) {
-        Layer kf = new Layer();
-        kf.id = layers.size();
-        kf.kf = i;
-        kf.name =  "keyFrame "+ i;
-        layerFrames.add(layerSettings(kf, 0, 0));
-      }
-      gif.nLayers=+1;
+      gif.nLayers+=1;
       break;
     case 5:
       // copy layer
-      Layer copy = new Layer();
+      Layer copy = new Layer(100);
       int origin = int(gui.layerSwitch.getValue());      
-      layers.add(layerSettings(copy, origin, 0));
-      copy.id =  layers.size(); 
-      copy.name = ("Layer " + (layers.size()) + " - copy layer " + (int(gui.layerSwitch.getValue())+1));
+      layerActive.add(layerSettings(copy, origin));
+      copy.id =  layerActive.size(); 
+      copy.name = ("Layer " + (layerActive.size()) + " - copy layer " + (int(gui.layerSwitch.getValue())+1));
       gui.layerSwitch.addItem(copy.name, copy);
+      gif.nLayers+=1;
+      updateKeyFrames(0);
       break;
     case 6:
       // delete layer
       int del = int(gui.layerSwitch.getValue());
-      gui.layerSwitch.removeItem(layers.get(del).name);
-      layers.remove(del);
+      updateKeyFrames(1);     
+      gui.layerSwitch.removeItem(layerActive.get(del).name);
+      layerActive.remove(del);
+      gif.nLayers-=1;
       break;
     case 7:
       // load actual json file selected
       gui.cp5.getGroup("fs").hide();
-      update = true;
+      //update = true;
       gui.layerlock = true;
-      layers.clear();
-      layerFrames.clear();
+      layerActive.clear();
+      layerKeyFrames.clear();
       gui.layerSwitch.clear();
       gui.colorBackground.remove();      
       fileio.loadJSON(fileio.listOfFiles[int(gui.fileSelect.getValue())].getName());
       gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(fileio.global.getInt("colorBackground"));
       gui.fileName.setText(controller.fileio.fileName);
-      layers.add(layerFrames.get(0));
-      for (Layer myLayer : layers) {
-        gui.layerSwitch.addItem(myLayer.name, myLayer);
+      for (int l =0; l < gif.nLayers; l++) {
+        int frame = l*gif.keyFrames;
+        layerActive.add(layerKeyFrames.get(frame));
+        gui.layerSwitch.addItem(layerKeyFrames.get(frame).name, layerKeyFrames.get(frame));
       }
       updateAniMatrixGUI();
-      updateLayerGUI(0, 0);
+      updateLayerGUI(0);
       gui.layerlock = false;
       break;
     }
   }
 
-  void trimKeyFramesArray() {
-    if (gif.keyFrames > layerFrames.size()) {
-      int add =  gif.keyFrames - layerFrames.size();
-      for (int i =0; i < add; i++) {
-        Layer kf = new Layer();
-        kf.id = 1;
-        kf.kf = add + i;
-        layerFrames.add(layerSettings(kf, int(layerFrames.size()-1), 1));
+  void updateKeyFrames(int action) {
+    switch(action) {
+    case 0:
+      // add new & copied layer
+      for (int f =0; f < gif.keyFrames; f++) {
+        layerKeyFrames.add(layerSettings(layerActive.get(layerActive.size()-1), layerActive.size()-1));
+      }
+      break;
+    case 1:
+      // delete layer
+      int del = int(gui.layerSwitch.getValue());
+      int index = gif.keyFrames*(del+1)-1;
+      for (int f = index; f > (gif.keyFrames*del)-1; f--) {  
+        layerKeyFrames.remove(f);
+      }
+    case 2:
+      // trim keyFrames
+      int rangeDel = kfOld - gif.keyFrames;
+      for (int rangeEnd = layerKeyFrames.size()-1; rangeEnd > 0; rangeEnd-=kfOld) {
+        for (int r = 0; r < rangeDel; r++) { 
+          layerKeyFrames.remove(rangeEnd-r);
+        }
+      }
+      break;
+    case 3:
+      // add keyFrames
+      int rangeAdd = gif.keyFrames - kfOld;
+      int layerAdd = rangeAdd * gif.nLayers;
+      int sizeOld = layerKeyFrames.size();
+      int rep = 1;
+      for (int i = 0; i < layerAdd; i++) {
+        Layer dummy = new Layer(0);
+        layerKeyFrames.add(dummy);
+        println(layerKeyFrames.size());
+      }
+      for (int rangeStart = kfOld; rangeStart <= sizeOld; rangeStart+= kfOld) {
+        for (int layer = 0; layer < kfOld; layer++) {
+          int kfGet = rangeStart + layer;      
+          int kfSet = kfGet + rangeAdd;     
+          if (kfSet > layerKeyFrames.size()) {
+            continue;
+          }
+          layerKeyFrames.set(kfSet-1, layerKeyFrames.get(kfGet));
+          println(rangeAdd, rangeStart, kfGet, kfSet);
+        }
+        int getN = rangeStart - 1;
+        for (int n =0; n < (gif.keyFrames - kfOld); n++) {
+          int setN = rangeStart + n; 
+          layerKeyFrames.set(setN, layerKeyFrames.get(getN));
+          println(getN, setN, rep, (gif.keyFrames - kfOld));
+        }
+        rep+=1;
+        rangeAdd+=rangeAdd;
       }
     }
-    if (gif.keyFrames < layerFrames.size()) {
-      int sub = layerFrames.size();
-      for (int i = sub; i > gif.keyFrames; i--) {
-        layerFrames.remove(i-1);
-        fileio.global.getJSONArray("keyFrames").remove(i-1);
-      }
-    }
-  };
-
-  Layer layerSelect(int select, int getlayer) {  
-    Layer dummy = new Layer();
-    if (select == 0) {
-      dummy = layers.get(getlayer);
-    }
-    if (select == 1 ) {
-      dummy = layerFrames.get(getlayer);
-    }
-    return dummy;
   }
 
   void updateAniMatrixGUI() {
@@ -139,7 +175,7 @@ class Controller {
     gui.gifLength.setValue(gif.totalTime);
   }
 
-  void updateLayerGUI(int select, int get) {
+  void updateLayerGUI(int get) {
     if (gui.layerlock == true) {
       gui.gear0.remove();
       gui.gear1.remove();
@@ -147,51 +183,53 @@ class Controller {
       gui.gear3.remove();
       gui.colorFill.remove();
       gui.colorStroke.remove();
-      gui.gear0 = gui.cp5.addSlider2D("G0").setMinMax(-256, -256, 256, 256).setPosition(3, 240).setCaptionLabel("Radius Gear 0").setSize(150, 150).setValue(layerSelect(select, get).gear0.RX, layerSelect(select, get).gear0.RY);
-      gui.gear1 = gui.cp5.addSlider2D("G1").setMinMax(-256, -256, 256, 256).setPosition(158, 240).setCaptionLabel("Radius Gear 1").setSize(150, 150).setValue(layerSelect(select, get).gear1.RX, layerSelect(select, get).gear1.RY);
-      gui.gear2 = gui.cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(313, 240).setCaptionLabel("Radius Gear 2").setSize(150, 150).setValue(layerSelect(select, get).gear2.RX, layerSelect(select, get).gear2.RY);
-      gui.gear3 = gui.cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(468, 240).setCaptionLabel("Radius Gear 3").setSize(150, 150).setValue(layerSelect(select, get).gear3.RX, layerSelect(select, get).gear3.RY);   
-      gui.colorFill = gui.cp5.addColorWheel("Fill").setPosition(415, 3).setRGB(layerSelect(select, get).cFill);
-      gui.alphaFill.setValue(alpha(layerSelect(select, get).cFill));
-      gui.colorStroke = gui.cp5.addColorWheel("Stroke").setPosition(209, 3).setRGB(layerSelect(select, get).cStroke);
-      gui.alphaStroke.setValue(alpha(layerSelect(select, get).cStroke));
-      gui.blendMode.setValue(layerSelect(select, get).blendSelect); 
-      gui.fill.setState(layerSelect(select, get).fill);
-      gui.stroke.setState(layerSelect(select, get).stroke);
-      gui.lx.setValue(layerSelect(select, get).lx);
-      gui.ly.setValue(layerSelect(select, get).ly);
-      gui.sw.setValue(layerSelect(select, get).sw);
-      gui.petals1.setValue(layerSelect(select, get).gear1.P);
-      gui.petals2.setValue(layerSelect(select, get).gear2.P);
-      gui.petals3.setValue(layerSelect(select, get).gear3.P);
-      gui.G1r.setValue(layerSelect(select, get).gear1.rotate);
-      gui.G2r.setValue(layerSelect(select, get).gear2.rotate);
-      gui.G3r.setValue(layerSelect(select, get).gear3.rotate);
+      gui.gear0 = gui.cp5.addSlider2D("G0").setMinMax(-256, -256, 256, 256).setPosition(3, 240).setCaptionLabel("Radius Gear 0").setSize(150, 150).setValue(layerActive.get(get).gear0.RX, layerActive.get(get).gear0.RY);
+      gui.gear1 = gui.cp5.addSlider2D("G1").setMinMax(-256, -256, 256, 256).setPosition(158, 240).setCaptionLabel("Radius Gear 1").setSize(150, 150).setValue(layerActive.get(get).gear1.RX, layerActive.get(get).gear1.RY);
+      gui.gear2 = gui.cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(313, 240).setCaptionLabel("Radius Gear 2").setSize(150, 150).setValue(layerActive.get(get).gear2.RX, layerActive.get(get).gear2.RY);
+      gui.gear3 = gui.cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(468, 240).setCaptionLabel("Radius Gear 3").setSize(150, 150).setValue(layerActive.get(get).gear3.RX, layerActive.get(get).gear3.RY);   
+      gui.colorFill = gui.cp5.addColorWheel("Fill").setPosition(415, 3).setRGB(layerActive.get(get).cFill);
+      gui.alphaFill.setValue(alpha(layerActive.get(get).cFill));
+      gui.colorStroke = gui.cp5.addColorWheel("Stroke").setPosition(209, 3).setRGB(layerActive.get(get).cStroke);
+      gui.alphaStroke.setValue(alpha(layerActive.get(get).cStroke));
+      gui.blendMode.setValue(layerActive.get(get).blendSelect); 
+      gui.fill.setState(layerActive.get(get).fill);
+      gui.stroke.setState(layerActive.get(get).stroke);
+      gui.lx.setValue(layerActive.get(get).lx);
+      gui.ly.setValue(layerActive.get(get).ly);
+      gui.sw.setValue(layerActive.get(get).sw);
+      gui.petals1.setValue(layerActive.get(get).gear1.P);
+      gui.petals2.setValue(layerActive.get(get).gear2.P);
+      gui.petals3.setValue(layerActive.get(get).gear3.P);
+      gui.G1r.setValue(layerActive.get(get).gear1.rotate);
+      gui.G2r.setValue(layerActive.get(get).gear2.rotate);
+      gui.G3r.setValue(layerActive.get(get).gear3.rotate);
       for (int r = 0; r < gui.trigSwitch.size(); r++) {
-        gui.trigSwitch.get(r).activate(layerSelect(select, get).trig.get(gui.trigSwitch.get(r).getName()));
+        gui.trigSwitch.get(r).activate(layerActive.get(get).trig.get(gui.trigSwitch.get(r).getName()));
       }
       gui.layerID = get;
       gui.layerlock = false;
     }
   }
 
-  Layer layerSettings(Layer layer, int get, int select) {
+  Layer layerSettings(Layer layer, int get) {
+    layer.name = layerActive.get(get).name;
+    layer.id = layerActive.get(get).id;
     for (int i = 0; i < 4; i++) {
-      layer.gears[i].RX = layerSelect(select, get).gears[i].RX;  
-      layer.gears[i].RY = layerSelect(select, get).gears[i].RY;   
-      layer.gears[i].RZ = layerSelect(select, get).gears[i].RZ;
-      layer.gears[i].P = layerSelect(select, get).gears[i].P;
-      layer.gears[i].rotate = layerSelect(select, get).gears[i].rotate;
+      layer.gears[i].RX = layerActive.get(get).gears[i].RX;  
+      layer.gears[i].RY = layerActive.get(get).gears[i].RY;   
+      layer.gears[i].RZ = layerActive.get(get).gears[i].RZ;
+      layer.gears[i].P = layerActive.get(get).gears[i].P;
+      layer.gears[i].rotate = layerActive.get(get).gears[i].rotate;
     }
-    layer.cFill = layerSelect(select, get).cFill;
-    layer.cStroke = layerSelect(select, get).cStroke;
-    layer.fill = layerSelect(select, get).fill;
-    layer.stroke = layerSelect(select, get).stroke;
-    layer.lx = layerSelect(select, get).lx;
-    layer.ly = layerSelect(select, get).ly;
-    layer.sw = layerSelect(select, get).sw;
+    layer.cFill = layerActive.get(get).cFill;
+    layer.cStroke = layerActive.get(get).cStroke;
+    layer.fill = layerActive.get(get).fill;
+    layer.stroke = layerActive.get(get).stroke;
+    layer.lx = layerActive.get(get).lx;
+    layer.ly = layerActive.get(get).ly;
+    layer.sw = layerActive.get(get).sw;
     for (int r=0; r < gui.trigSwitch.size(); r++) {
-      layer.trig.set(gui.trigSwitch.get(r).getName(), layerSelect(select, get).trig.get(gui.trigSwitch.get(r).getName()));
+      layer.trig.set(gui.trigSwitch.get(r).getName(), layerActive.get(get).trig.get(gui.trigSwitch.get(r).getName()));
     }
     return layer;
   }

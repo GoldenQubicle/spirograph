@@ -11,13 +11,13 @@ class Layer {  //<>//
   int [] mode = {1, 2, 4, 16, 8, 64, 128, 256, 0};
   int blendSelect, id, kf;
 
-  Layer() {
+  Layer(float radius) {
     id = 1;
     name = "Layer 1";
     xyz = new PVector();
     xy2 = new PVector();
     gears = new Gears[4];
-    gear0 = new Gears(100, 100, 0);
+    gear0 = new Gears(radius, radius, 0);
     gear1 = new Gears(0, 0, 0);
     gear2 = new Gears(0, 0, 0);
     gear3 = new Gears(0, 0, 0);

@@ -115,7 +115,7 @@ class Trigger {
   }
 
   void aniType() {
-    for (Layer myLayer : layers) {
+    for (Layer myLayer : layerActive) {
       
       if (LayerParameter == 14 && myLayer.spheres3d == true) {
         ani = Ani.to(myLayer.gears[G], aniDuration, GearVars[GV], aniValue, easings[int(gui.cp5.getController("Easing"+"0"+Start+"0"+LayerParameter).getValue())]);
