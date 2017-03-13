@@ -24,7 +24,7 @@ class Animation {   //<>//
       }
     }
     triggers = new ArrayList();  
-    nLayers = 2;
+    nLayers = 1;
   }
 
   void Update() {

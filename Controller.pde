@@ -247,10 +247,12 @@ class Controller {
   }
 
   void toggleKeyFrames(int frame) {
+     println(layerActive.size(), layerKeyFrames.size());
     layerActive.clear();
     for (int f = frame; f < layerKeyFrames.size(); f+= gif.keyFrames) {
             layerActive.add(layerKeyFrames.get(f));
       }
+      println(layerActive.size(), layerKeyFrames.size());
        gui.layerlock = true;
        updateLayerGUI(0, int(gui.layerSwitch.getValue()));
     }

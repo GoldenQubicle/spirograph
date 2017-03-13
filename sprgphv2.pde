@@ -71,10 +71,10 @@ void setup() {
   layer_1.name = "Layer 1";
   layer_1.id = 1;
   layerActive.add(layer_1);
-  layer_2 = new Layer(150);
-  layer_2.name = "Layer 2";
-  layer_2.id = 2;
-  layerActive.add(layer_2);
+  //layer_2 = new Layer(150);
+  //layer_2.name = "Layer 2";
+  //layer_2.id = 2;
+  //layerActive.add(layer_2);
   surface.setTitle("Preview");
   surface.setResizable(true);
   cam = new PeasyCam(this, 512);
