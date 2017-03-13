@@ -2,7 +2,7 @@ class FileIO {
   String path = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\";
   String fileName = "default";
   JSONObject global, layer, gears, keyFrame;
-  JSONArray keyFrames, lkf;
+  JSONArray lkf;
   String[] globals = {"gifWidth", "gifHeight", "gifLength", "gifKeyFrames", "colorBackground", "Layers"};
   String [] Gears = {"Gear 0", "Gear 1", "Gear 2", "Gear 3"};
 
@@ -15,18 +15,17 @@ class FileIO {
     lkf = new JSONArray();
   }
 
-  void saveJSON() {
-    println(gif.nLayers);
+void saveJSON() {
     global.setInt(globals[0], Width);
     global.setInt(globals[1], Height);
     global.setFloat(globals[2], gif.totalTime);
     global.setFloat(globals[3], gif.keyFrames);
     global.setInt(globals[4], cBackground);
     global.setInt(globals[5], gif.nLayers);
-    for (int l =0; l < gif.nLayers; l++) {
+    for (int l = 0; l < gif.nLayers; l++) {
       lkf = new JSONArray();
       global.setJSONArray("Layer "+l, lkf);
-      for (int f=0; f < gif.keyFrames; f++) {
+      for (int f = 0; f < gif.keyFrames; f++) {
         int keyFrame = f+(l*gif.keyFrames);
         global.getJSONArray("Layer "+l).setJSONObject(f, saveLayer(layerKeyFrames.get(keyFrame)));
       }
@@ -108,7 +107,6 @@ class FileIO {
     gif.keyFrames = int(global.getFloat(globals[3]));
     gif.nLayers = global.getInt(globals[5]);
     cBackground = global.getInt(globals[4]);
-    println(gif.nLayers); 
     for (int l =0; l < gif.nLayers; l++) {     
       for (int f=0; f < gif.keyFrames; f++) {     
         layerKeyFrames.add(loadLayer(global.getJSONArray("Layer "+l).getJSONObject(f)));

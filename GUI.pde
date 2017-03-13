@@ -207,6 +207,7 @@ class GUI extends PApplet {   //<>//
     }
     if (theEvent.isFrom(keyFrames)) {  
       int frame = int(keyFrames.getValue());
+      controller.toggleKeyFrames(frame);
     }
     if (theEvent.isFrom(densityRanges) && layerlock == false) {
       densityRangeMax = densityRanges.getValue()* 10000;
@@ -336,7 +337,7 @@ class GUI extends PApplet {   //<>//
         int set = int(layerSwitch.getValue());
         //println(set);
         layerlock = true;
-        controller.updateLayerGUI(set);
+        controller.updateLayerGUI(0, set);
       }
     }
   }

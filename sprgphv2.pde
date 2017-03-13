@@ -71,9 +71,9 @@ void setup() {
   layer_1.name = "Layer 1";
   layer_1.id = 1;
   layerActive.add(layer_1);
-  //layer_2 = new Layer(150);
-  //layer_2.name = "Layer 2";
-  //layer_2.id = 2;
+  layer_2 = new Layer(150);
+  layer_2.name = "Layer 2";
+  layer_2.id = 2;
   layerActive.add(layer_2);
   surface.setTitle("Preview");
   surface.setResizable(true);
@@ -100,7 +100,7 @@ void draw() {
     surface.setSize(Width, Height);
     translate(Width/2, Height/2);
   }
-  for (int i = 0; i < gif.nLayers; i++) {
+  for (int i = 0; i < layerActive.size(); i++) {
     layerActive.get(i).display();
   }
 }
