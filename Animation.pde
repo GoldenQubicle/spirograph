@@ -39,25 +39,11 @@ class Animation {   //<>//
     triggers = new ArrayList();
   }
 
-  //void Update() {
-  //  cellWidth = matrixWidth/keyFrames; 
-  //  interval = int(totalTime/keyFrames); 
-  //  aniInterval = interval/1000; 
-  //  aniEnd = new int[keyFrames][layerVars]; 
-  //  aniInt = new int[keyFrames][layerVars]; 
-  //  for (int x = 0; x < keyFrames; x++) {
-  //    for (int y = 0; y < layerVars; y++) {
-  //      aniEnd[x][y] = x; 
-  //      aniInt[x][y] = 1;
-  //    }
-  //  }
-  //  gui.cp5.dispose(); 
-  //  gui.setup(); 
-  //  update= true;
-  //}
+  void updateTiming(){
+    interval = int(totalTime/keyFrames);     
+  }
 
   void aniStart(int theX, int theY) {
-
     for (Trigger myTrigger : triggers) {
       if (theX == myTrigger.Start) {
         myTrigger.ani();

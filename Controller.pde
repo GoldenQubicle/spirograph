@@ -4,7 +4,6 @@ class Controller {
   int kfOld;   
   Boolean [][] aniStartNew;
 
-
   Controller() {
     for (int l=0; l < gif.nLayers; l++) {
       for (int f=0; f < gif.keyFrames; f++) {
@@ -43,6 +42,7 @@ class Controller {
       break;
     case 3:
       // save gif settings  
+      gif.updateTiming();
       gui.cp5.getGroup("ng").hide();
       controller.fileio.fileName = gui.fileName.getText();
       if (kfOld > gif.keyFrames) {
@@ -93,8 +93,8 @@ class Controller {
       gui.layerSwitch.clear();
       gui.colorBackground.remove();      
       fileio.loadJSON(fileio.listOfFiles[int(gui.fileSelect.getValue())].getName());
-      gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(fileio.global.getInt("colorBackground"));
       gui.fileName.setText(controller.fileio.fileName);
+      gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(fileio.global.getInt("colorBackground"));
       for (int l =0; l < gif.nLayers; l++) {
         int frame = l*gif.keyFrames;
         layerActive.add(layerKeyFrames.get(frame));
@@ -220,7 +220,7 @@ class Controller {
       gui.keyFrames.addItem("KF" + (i+1), i);
       gui.keyFrames.getItem(i).getCaptionLabel().set("KF" + (i+1)).align(CENTER, CENTER);
     }
-    //gui.keyFrames.activate(0);
+    gui.Ani.setInterval(gif.interval);
     gui.Ani.setGrid(gif.keyFrames, gif.layerVars);
     gui.layerlock = true;
     updateMatrixLayerGUI(int(gui.layerSwitch.getValue()));
@@ -235,8 +235,7 @@ class Controller {
         }
       }
     }
-    //gui.layerlock = false;
-  }
+ }
 
   void updateLayerGUI(int array, int get) {
     if (gui.layerlock == true) {

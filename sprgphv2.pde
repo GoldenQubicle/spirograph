@@ -1,10 +1,9 @@
 /* //<>//
-ok so issue Im facing now: how & where to store data from the AniMatrix?
-obviously it shouldnt be part of the layer objects,  however, it does need to be saved in the layer JSONArray
-another question, what data do I actually need to save? The start of trigger, and than either the End, or the Interval - I can derive one from another if necesarry
-right, so this should probably be handled inside the animation class and / or in the trigger class
-so that when I switch layers, the controller should update the AniMatrix accordingly
-that said, obviously the triggers themselves need to act on all layerActive
+
+cant load 3d file properly, 3d toggle is not yet hooked up it seemd, tho shouldnt that be a global anyway?!
+move Scrollable list blend mode & layerswitch to near aniMatrix, in addition to stroke/fill, line x&y and sw
+
+
 
  couple more random ideas 
  - used spheres while in '2d' and apply rotate over x and y, probably pretty cool
