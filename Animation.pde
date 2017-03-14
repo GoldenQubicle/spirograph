@@ -1,85 +1,97 @@
 class Animation {   //<>//
 
-  int keyFrames, Variables, MatrixWidth, MatrixHeight, CellWidth, CellHeight, nLayers;
-  float totalTime, aniInterval, Interval;
-  int [][] AniEnd, AniInt;
+  int keyFrames, layerVars, matrixWidth, matrixHeight, cellWidth, cellHeight, nLayers, interval;
+  float totalTime, aniInterval;
+  int [][] aniEnd, aniInt;
   ArrayList<Trigger> triggers;
+  Boolean [][] aniStart, test;
+  ArrayList<Boolean[][]> layerAniStart = new ArrayList();
 
   Animation() {
-    totalTime = 4000;
+    nLayers = 2;
     keyFrames = 4;
-    Variables = 19; // one too many for top row matrix which needs to be active at all time
-    Interval = int(totalTime/keyFrames);
-    aniInterval = Interval/1000;
-    MatrixWidth = 500;
-    MatrixHeight = 400;
-    CellWidth = MatrixWidth/keyFrames;    
-    CellHeight = MatrixHeight/Variables;
-    AniEnd = new int[keyFrames][Variables];
-    AniInt = new int[keyFrames][Variables];
+    layerVars = 18; 
+    layerAniStart = new ArrayList();
+    for (int l = 0; l < nLayers; l++) {
+      aniStart = new Boolean [keyFrames][layerVars];
+      for(int f =0; f < keyFrames; f++){
+        for(int v = 0; v < layerVars; v++){
+       aniStart[f][v] = false;   
+        }
+      }
+      layerAniStart.add(aniStart);
+    }
+
+    totalTime = 4000; 
+    interval = int(totalTime/keyFrames); 
+    aniInterval = interval/1000; 
+    matrixWidth = 775; 
+    matrixHeight = 400; 
+    cellWidth = matrixWidth/keyFrames; 
+    cellHeight = matrixHeight/layerVars; 
+    aniEnd = new int[keyFrames][layerVars]; 
+    aniInt = new int[keyFrames][layerVars]; 
     for (int x = 0; x < keyFrames; x++) {
-      for (int y = 0; y < Variables; y++) {
-        AniEnd[x][y] = x;
-        AniInt[x][y] = 1;
+      for (int y = 0; y < layerVars; y++) {
+        aniEnd[x][y] = x; 
+        aniInt[x][y] = 1;
       }
     }
-    triggers = new ArrayList();  
-    nLayers = 1;
+    triggers = new ArrayList();
   }
 
   void Update() {
-    CellWidth = MatrixWidth/keyFrames;  
-    Interval = int(totalTime/keyFrames);
-    aniInterval = Interval/1000;
-    AniEnd = new int[keyFrames][Variables];
-    AniInt = new int[keyFrames][Variables];
+    cellWidth = matrixWidth/keyFrames; 
+    interval = int(totalTime/keyFrames); 
+    aniInterval = interval/1000; 
+    aniEnd = new int[keyFrames][layerVars]; 
+    aniInt = new int[keyFrames][layerVars]; 
     for (int x = 0; x < keyFrames; x++) {
-      for (int y = 0; y < Variables; y++) {
-        AniEnd[x][y] = x;
-        AniInt[x][y] = 1;
+      for (int y = 0; y < layerVars; y++) {
+        aniEnd[x][y] = x; 
+        aniInt[x][y] = 1;
       }
     }
-    gui.cp5.dispose();
-    gui.setup();
+    gui.cp5.dispose(); 
+    gui.setup(); 
     update= true;
   }
 
   void aniStart(int theX, int theY) {
-    if (theY > 0) {
-      for (Trigger myTrigger : triggers) {
-        if (theX == myTrigger.Start) {
-          myTrigger.ani();
-        }
+
+    for (Trigger myTrigger : triggers) {
+      if (theX == myTrigger.Start) {
+        myTrigger.ani();
       }
-    } else {
-      //gui.layerProperties.load(JSON+theX);
     }
   }
 
   void triggerArray() {
-    triggers.clear();
-    for (int y = 1; y < Variables; y++) {
+    //triggers.clear();
+    for (int y = 0; y < layerVars; y++) {
       for (int x = 0; x < keyFrames; x++) {
         if (gui.Ani.get(x, y) == true) {
-          Trigger Animate;
-          Animate = new Trigger(x, y, AniEnd[x][y]);
-          triggers.add(Animate);
+          println(gui.Ani.get(x, y)); 
+
+          //Trigger Animate;
+          //Animate = new Trigger(x, y, AniEnd[x][y]);
+          //triggers.add(Animate);
         }
       }
     }
   }
 
   void tabToggle() {
-    for (int y = 1; y < Variables; y++) {
+    for (int y = 1; y < layerVars; y++) {
       for (int x = 0; x < keyFrames; x++) {
         if (gui.Ani.get(x, y) == true) {
           gui.cp5.getController("Easing"+"0"+x+"0"+y).setVisible(true); 
-          gui.cp5.getController("add"+"0"+x+"0"+y).setVisible(true);
+          gui.cp5.getController("add"+"0"+x+"0"+y).setVisible(true); 
           gui.cp5.getController("minus"+"0"+x+"0"+y).setVisible(true);
         }  
         if (gui.Ani.get(x, y) == false) {
-          gui.cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false);
-          gui.cp5.getController("add"+"0"+x+"0"+y).setVisible(false);
+          gui.cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false); 
+          gui.cp5.getController("add"+"0"+x+"0"+y).setVisible(false); 
           gui.cp5.getController("minus"+"0"+x+"0"+y).setVisible(false);
         }
       }

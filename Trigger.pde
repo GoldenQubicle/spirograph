@@ -16,7 +16,7 @@ class Trigger {
     End = end;
     Interval = (End - Start) + 1;
     aniDuration = gif.aniInterval*Interval;
-    LS = gif.AniEnd[Start][LayerParameter];     
+    LS = gif.aniEnd[Start][LayerParameter];     
     //LayerState = loadJSONObject(JSON + LS  + ".json");
 
     if (LayerParameter == 1) {

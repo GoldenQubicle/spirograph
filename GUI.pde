@@ -41,6 +41,7 @@ class GUI extends PApplet {   //<>//
   } 
 
   public void setup() {
+
     layerID = 0;
     cp5 = new ControlP5(this);
     int rPanex = 630;
@@ -122,15 +123,14 @@ class GUI extends PApplet {   //<>//
     cp5.getController("LY").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("SW").getCaptionLabel().align(CENTER, CENTER);
     // density  
-    densityRanges = cp5.addRadioButton("density").setPosition(3, 425).setSize(60, 20).setItemsPerRow(10).addItem("1-10k", 1).addItem("10k-20k", 2).addItem("20k-30k", 3).addItem("30k-40k", 4)
+    densityRanges = cp5.addRadioButton("density").setPosition(3, 425).setSize(61, 20).setItemsPerRow(10).addItem("1-10k", 1).addItem("10k-20k", 2).addItem("20k-30k", 3).addItem("30k-40k", 4)
       .addItem("40k-50k", 5).addItem("50k-60k", 6).addItem("60k-70k", 7).addItem("70k-80k", 8).addItem("80k-90k", 9).addItem("90k-100k", 10);//.addItem("10001-11000", 11).addItem("11001-12000", 12).addItem("12001-13000", 13)
     //.addItem("103001-14000", 14).addItem("14001-15000", 15).addItem("15001-16000", 16).addItem("16001-17000", 17).addItem("17001-18000", 18).addItem("18001-19000", 19).addItem("19001-20000", 20);
     for (int i =0; i < 10; i++) {
       densityRanges.getItem(i).getCaptionLabel().align(CENTER, CENTER);
     }
-    density = cp5.addSlider("d").setPosition(3, 450).setSize(610, 20).setRange(densityRangeMin, densityRangeMax).setCaptionLabel("Density").setNumberOfTickMarks(101).showTickMarks(true).snapToTickMarks(true); 
+    density = cp5.addSlider("d").setPosition(3, 450).setSize(615, 20).setRange(densityRangeMin, densityRangeMax).setCaptionLabel("Density").setNumberOfTickMarks(101).showTickMarks(true).snapToTickMarks(true); 
     density.getCaptionLabel().align(CENTER, CENTER);
-
     // gears
     int size2d = 150;
     int posy = 240;
@@ -190,12 +190,34 @@ class GUI extends PApplet {   //<>//
       pox = pox + 155;
     }
     //radio button bar to toggle keyFrames
-    keyFrames = cp5.addRadioButton("kf").setPosition(3, 500).setSize((610/gif.keyFrames), 20).setItemsPerRow(gif.keyFrames);
+    keyFrames = cp5.addRadioButton("kf").setPosition(3, 500).setSize((gif.matrixWidth/gif.keyFrames), 20).setItemsPerRow(gif.keyFrames);
     for (int i = 0; i < gif.keyFrames; i++) {       
       keyFrames.addItem("KF" + (i+1), i);
       keyFrames.getItem(i).getCaptionLabel().set("KF" + (i+1)).align(CENTER, CENTER);
     }
     keyFrames.activate(0);
+
+    // actual matrix    
+    Ani = cp5.addMatrix("Matrix").setPosition(3, 525).setSize(gif.matrixWidth, gif.matrixHeight).setGap(2, 2).setMode(ControlP5.MULTIPLES)
+      .setInterval(gif.interval).setGrid(gif.keyFrames, gif.layerVars).set(0, 0, true).stop();
+    Ani.addCallback(new CallbackListener() {
+      public void controlEvent(CallbackEvent theEvent) { 
+        if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
+          for (int f = 0; f < gif.keyFrames; f++) {
+            for (int v = 0; v < gif.layerVars; v++) {
+              if (Ani.get(f, v) == true && layerlock == false) {
+                gif.layerAniStart.get(int(layerSwitch.getValue()))[f][v] = true;   
+              }
+            }
+          }
+        }
+      }
+    }
+    );
+    // aaand some labels
+    for (int i = 0; i < Labels.length; i++) {
+      Label =  cp5.addTextlabel("Label" + i).setPosition(gif.matrixWidth + 10, 510 + (gif.cellHeight*i)).setText(Labels[i]).moveTo("global");
+    }
   }
 
 
@@ -334,10 +356,12 @@ class GUI extends PApplet {   //<>//
         layerActive.get(layerID).gear3.RZ = gear3z.getValue();
       }
       if (theEvent.getController().equals(layerSwitch)) {
+        //if(layerID != int(layerSwitch.getValue())){
         int set = int(layerSwitch.getValue());
-        //println(set);
         layerlock = true;
+        controller.updateMatrixLayerGUI(set);
         controller.updateLayerGUI(0, set);
+        //}
       }
     }
   }
@@ -403,14 +427,7 @@ class GUI extends PApplet {   //<>//
   //    //Layer.remove(Easing, "Easing"+"0"+x+"0"+y);
   //  }
   //}
-  //// actual matrix
-  //Ani = cp5.addMatrix("Matrix").setPosition(10, 500).setSize(gif.MatrixWidth, gif.MatrixHeight). setGap(5, 5).setMode(ControlP5.MULTIPLES)
-  //  .setInterval(gif.Interval).setGrid(gif.LayerStates, gif.Variables).set(0, 0, true).stop();
-  //// aaand some labels
-  //for (int i = 0; i < Labels.length; i++) {
-  //  Label =  cp5.addTextlabel("Label" + i).setPosition(gif.MatrixWidth + 10, 505 + (gif.CellHeight*i)).setText(Labels[i]).moveTo("global");
-  //  Layer.remove(Label, "Label" + i);
-  //}
+
   //}
 
   void draw() {
@@ -418,40 +435,38 @@ class GUI extends PApplet {   //<>//
     background(190);
   }
 
-  //void keyPressed() {
-  //  if (key==' ') {     
-  //    if (play == false) {
-  //      gif.triggerArray();
-  //      cp5.get(Matrix.class, "Matrix").play();
-  //      cp5.get(Matrix.class, "Matrix").trigger(0);
-  //      play = true;
-  //    } else {
-  //      cp5.get(Matrix.class, "Matrix").pause();
-  //      play = false;
-  //    }
-  //    gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
-  //  }
-  //  if (key == 'q') { 
-  //    Layer.load(JSON+0);
-  //    gif.triggerArray();
-  //    cp5.get(Matrix.class, "Matrix").stop();
-  //    if (play == true) {
-  //      gif.triggerArray();
-  //      cp5.get(Matrix.class, "Matrix").play();
-  //    }
-  //  }
-  //}
+  void keyPressed() {
+    if (key==' ') {     
+      if (play == false) {
+        gif.triggerArray();
+        cp5.get(Matrix.class, "Matrix").play();
+        cp5.get(Matrix.class, "Matrix").trigger(0);
+        play = true;
+      } else {
+        cp5.get(Matrix.class, "Matrix").pause();
+        play = false;
+      }
+      //gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
+    }
+    if (key == 'q') { 
+      gif.triggerArray();
+      cp5.get(Matrix.class, "Matrix").stop();
+      if (play == true) {
+        gif.triggerArray();
+        cp5.get(Matrix.class, "Matrix").play();
+      }
+    }
+  }
 
-  //void Matrix(int theX, int theY) {
-  //  gif.aniStart(theX, theY);
-  //  if (theX == 0) {
-  //    Layer.load(JSON+0);
-  //  }
-  //}
+  void Matrix(int theX, int theY) {
+    //gif.aniStart(theX, theY);
 
-  //void controlEvent(ControlEvent theControlEvent) {
-  //  if (theControlEvent.isTab()) {
-  //    gif.tabToggle();
-  //  }
-  //}
+    println(theX, theY);
+  }
 }
+
+//void controlEvent(ControlEvent theControlEvent) {
+//  if (theControlEvent.isTab()) {
+//    gif.tabToggle();
+//  }
+//}
