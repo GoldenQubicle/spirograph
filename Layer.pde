@@ -29,7 +29,7 @@ class Layer {  //<>//
     ly = 2;
     cFill = color(random(155, 255), random(155, 255), random(155, 255));
     cStroke = color(random(155, 255), random(155, 255), random(155, 255));
-    density = 25000;
+    density = 2500;
     stroke = false;
     fill = true;
     lines = false;
@@ -99,7 +99,7 @@ class Layer {  //<>//
   }
 
   void radialColor(float x, float y) {
-    float X = map(x, -256, 256, -1, 1); // mapping here needs to be dynamic, i.e. dependent on radius gear0 - or rather overall radiuas?
+    float X = map(x, -256, 256, -1, 1); // mapping here needs to be dynamic, i.e. dependent on radius gear0 - or rather overall radius?
     float Y = map(y, -256, 256, -1, 1);
     float c = sq(X)+sq(Y);
     float lerp = sqrt(c);

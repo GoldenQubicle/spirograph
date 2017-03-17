@@ -6,7 +6,7 @@ class Animation {   //<>//
   ArrayList<Trigger> triggers;
   Boolean [][] aniStart, test;
   ArrayList<Boolean[][]> layerAniStart = new ArrayList();
-  int keyFrame;
+  int keyFrame, interval;
   Ani kf;
 
   Animation() {
@@ -30,11 +30,13 @@ class Animation {   //<>//
     }
 
 
-
+    // needs to be moved
     matrixWidth = 775; 
     matrixHeight = 400; 
     cellWidth = matrixWidth/keyFrames; 
     cellHeight = matrixHeight/layerVars; 
+    // 
+
     aniEnd = new int[keyFrames][layerVars]; 
     aniInt = new int[keyFrames][layerVars]; 
     for (int x = 0; x < keyFrames; x++) {
@@ -53,6 +55,8 @@ class Animation {   //<>//
   }
 
   void aniStart(int theX, int theY) {
+    // so since layerActive contains references to layerKeyFrames I may actually need another array with NEW layers - and then the start need to copy settings from keyFrame(0)
+    // on which the animation will actually act. And then on play, switch between layerActive (or rename to layerDisplay) and e.g. layerAnimate
     kf = Ani.to(layerActive.get(0).gears[1], aniFrames, "RX", layerKeyFrames.get(theX).gears[1].RX, Ani.LINEAR);
     kf.start();
     //println(theX);
@@ -79,17 +83,19 @@ class Animation {   //<>//
       }
     }
   }
+  
+  void testButtons(int x, int y){
+    
+  }
 
   void tabToggle() {
     for (int x = 0; x < keyFrames; x++) {
       for (int y = 0; y < layerVars; y++) {
-        if (gui.Ani.get(x, y) == true) {
-          println(x,y);
+        if (layerAniStart.get(int(gui.layerSwitch.getValue()))[x][y] == true) {
           gui.cp5.getController("Easing"+"0"+x+"0"+y).setVisible(true); 
           gui.cp5.getController("add"+"0"+x+"0"+y).setVisible(true); 
           gui.cp5.getController("minus"+"0"+x+"0"+y).setVisible(true);
-        }  
-        if (gui.Ani.get(x, y) == false) {
+        }  else {
           gui.cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false); 
           gui.cp5.getController("add"+"0"+x+"0"+y).setVisible(false); 
           gui.cp5.getController("minus"+"0"+x+"0"+y).setVisible(false);

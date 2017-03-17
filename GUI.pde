@@ -4,31 +4,28 @@ class GUI extends PApplet {   //<>//
   ControlP5 cp5;
   int layerID;
   boolean layerlock = false;
+  Matrix Ani;
   ColorWheel colorBackground, colorStroke, colorFill;
   Toggle stroke, fill, drawMode;
-  ScrollableList layerSwitch, blendMode, fileSelect;
-  String [] blendModes = {"Normal", "Add", "Subtract", "Darkest", "Lightest", "Exclusion", "Multiply", "Screen", "Replace"};
+  ScrollableList layerSwitch, blendMode, fileSelect, Easing;
+  Slider2D gear0, gear1, gear2, gear3;
+
   Slider gifWidth, gifHeight, gifLength, gifKeyFrames, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals1, petals2, petals3, alphaFill, alphaStroke, G1r, G2r, G3r, density; 
   Button gifSettings, gifSave, Load, Save, layerNew, layerCopy, layerDelete, Increase, Decrease;
   ArrayList <Button> menuGifLayer = new ArrayList<Button>();
-  Slider2D gear0, gear1, gear2, gear3;
   RadioButton trigX, trigY, trigZ, trigX2, trigY2, densityRanges, keyFrames;
   ArrayList <RadioButton> trigSwitch = new ArrayList<RadioButton>();
-  Textlabel trig;  
-  Textfield fileName;
+
   // using int variables to strip decimals for gui aethetic
   int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p1, p2, p3, as, af, g1r, g2r, g3r, d; 
   float densityRangeMin = 1;
   float densityRangeMax = 1000;
 
-  // not yet in use, however, lots of stuff in animation depends on it so therefor not commented out
-  ScrollableList Easing;
-  //Button Copy, SaveAll, Save
-  Matrix Ani;
-
-  Textlabel Label;
+  Textfield fileName;
+  Textlabel trig, Label;
   String [] Labels = {"", "Gear 0 X", "Gear 0 Y", "Gear 1 Petals", "Gear 1 X", "Gear 1 Y", "Gear 2 Petals", "Gear 2 X", "Gear 2 Y", "Gear 3 Petals", "Gear 3 X", "Gear 3 Y", "Line X", "Line Y", "StrokeWeight", "Connect G1", "Connect G2", "Connect G3", "Density"}; 
   String[] EasingNames = {"LINEAR", "QUAD_IN", "QUAD_OUT", "QUAD_IN_OUT", "CUBIC_IN", "CUBIC_IN_OUT", "CUBIC_OUT", "QUART_IN", "QUART_OUT", "QUART_IN_OUT", "QUINT_IN", "QUINT_OUT", "QUINT_IN_OUT", "SINE_IN", "SINE_OUT", "SINE_IN_OUT", "CIRC_IN", "CIRC_OUT", "CIRC_IN_OUT", "EXPO_IN", "EXPO_OUT", "EXPO_IN_OUT", "BACK_IN", "BACK_OUT", "BACK_IN_OUT", "BOUNCE_IN", "BOUNCE_OUT", "BOUNCE_IN_OUT", "ELASTIC_IN", "ELASTIC_OUT", "ELASTIC_IN_OUT"};
+  String [] blendModes = {"Normal", "Add", "Subtract", "Darkest", "Lightest", "Exclusion", "Multiply", "Screen", "Replace"};
 
   public GUI(PApplet theApplet) {
     super();
@@ -50,7 +47,7 @@ class GUI extends PApplet {   //<>//
     gifSettings = cp5.addButton("gifSettings").setPosition(rPanex+150, rPaneyMenu).setCaptionLabel("Settings").setId(0).moveTo("global");
     Save = cp5.addButton("Save").setPosition(rPanex+150, rPaneyMenu+25).setCaptionLabel("Save").setId(1).moveTo("global");
     Load = cp5.addButton("Load").setPosition(rPanex+150, rPaneyMenu+50).setCaptionLabel("Load").setId(2).moveTo("global");
-    cp5.addGroup("fs").setPosition(rPanex, 15).setSize(220, 135).setBackgroundColor(color(255)).setBarHeight(15).setCaptionLabel("Load File").disableCollapse().setBackgroundColor(0).hide();
+    cp5.addGroup("fs").setPosition(rPanex, 15).setSize(220, 135).setBackgroundColor(color(255)).setBarHeight(15).setCaptionLabel("Load File").disableCollapse().setBackgroundColor(0).hide().moveTo("global");
     fileSelect = cp5.addScrollableList("fileSelect").setPosition(15, 15).setSize(180, 85).setGroup("fs");//.hide();
     fileSelect.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
@@ -419,6 +416,7 @@ class GUI extends PApplet {   //<>//
         layerlock = true;
         controller.updateMatrixLayerGUI(set);
         controller.updateLayerGUI(0, set);
+        gif.tabToggle();
       }
     }
   }
