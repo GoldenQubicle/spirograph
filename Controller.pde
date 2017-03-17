@@ -42,7 +42,7 @@ class Controller {
       break;
     case 3:
       // save gif settings  
-      gif.updateTiming();
+      gif.updateAniMatrixTiming();
       gui.cp5.getGroup("ng").hide();
       controller.fileio.fileName = gui.fileName.getText();
       if (kfOld > gif.keyFrames) {
@@ -220,10 +220,10 @@ class Controller {
       gui.keyFrames.addItem("KF" + (i+1), i);
       gui.keyFrames.getItem(i).getCaptionLabel().set("KF" + (i+1)).align(CENTER, CENTER);
     }
-    gui.Ani.setInterval(gif.interval);
+    gui.Ani.setInterval(gif.aniMatrixTiming);
     gui.Ani.setGrid(gif.keyFrames, gif.layerVars);
     gui.layerlock = true;
-    updateMatrixLayerGUI(int(gui.layerSwitch.getValue()));
+    updateMatrixLayerGUI(0);
     gui.layerlock = false;
   }
 
@@ -231,7 +231,7 @@ class Controller {
     if (gui.layerlock == true) {
       for (int f = 0; f < gif.keyFrames; f++) {
         for (int v = 0; v < gif.layerVars; v++) {
-          gui.Ani.set(f, v, gif.layerAniStart.get(get)[f][v]);
+          gui.Ani.set(f, v, gif.layerAniStart.get(get)[f][v]); // falls over here because boolean array isnt updated yet, should be fixed when included in fileio
         }
       }
     }
@@ -245,13 +245,13 @@ class Controller {
       gui.gear3.remove();
       gui.colorFill.remove();
       gui.colorStroke.remove();
-      gui.gear0 = gui.cp5.addSlider2D("G0").setMinMax(-256, -256, 256, 256).setPosition(3, 240).setCaptionLabel("Radius Gear 0").setSize(150, 150).setValue(arraySelect(array, get).gear0.RX, arraySelect(array, get).gear0.RY);
-      gui.gear1 = gui.cp5.addSlider2D("G1").setMinMax(-256, -256, 256, 256).setPosition(158, 240).setCaptionLabel("Radius Gear 1").setSize(150, 150).setValue(arraySelect(array, get).gear1.RX, arraySelect(array, get).gear1.RY);
-      gui.gear2 = gui.cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(313, 240).setCaptionLabel("Radius Gear 2").setSize(150, 150).setValue(arraySelect(array, get).gear2.RX, arraySelect(array, get).gear2.RY);
-      gui.gear3 = gui.cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(468, 240).setCaptionLabel("Radius Gear 3").setSize(150, 150).setValue(arraySelect(array, get).gear3.RX, arraySelect(array, get).gear3.RY);   
-      gui.colorFill = gui.cp5.addColorWheel("Fill").setPosition(415, 3).setRGB(arraySelect(array, get).cFill);
+      gui.gear0 = gui.cp5.addSlider2D("G0").setMinMax(-256, -256, 256, 256).setPosition(3, 240).setCaptionLabel("Radius Gear 0").setSize(150, 150).setValue(arraySelect(array, get).gear0.RX, arraySelect(array, get).gear0.RY).moveTo("global");
+      gui.gear1 = gui.cp5.addSlider2D("G1").setMinMax(-256, -256, 256, 256).setPosition(158, 240).setCaptionLabel("Radius Gear 1").setSize(150, 150).setValue(arraySelect(array, get).gear1.RX, arraySelect(array, get).gear1.RY).moveTo("global");
+      gui.gear2 = gui.cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(313, 240).setCaptionLabel("Radius Gear 2").setSize(150, 150).setValue(arraySelect(array, get).gear2.RX, arraySelect(array, get).gear2.RY).moveTo("global");
+      gui.gear3 = gui.cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(468, 240).setCaptionLabel("Radius Gear 3").setSize(150, 150).setValue(arraySelect(array, get).gear3.RX, arraySelect(array, get).gear3.RY).moveTo("global");   
+      gui.colorFill = gui.cp5.addColorWheel("Fill").setPosition(415, 3).setRGB(arraySelect(array, get).cFill).moveTo("global");
       gui.alphaFill.setValue(alpha(arraySelect(array, get).cFill));
-      gui.colorStroke = gui.cp5.addColorWheel("Stroke").setPosition(209, 3).setRGB(arraySelect(array, get).cStroke);
+      gui.colorStroke = gui.cp5.addColorWheel("Stroke").setPosition(209, 3).setRGB(arraySelect(array, get).cStroke).moveTo("global");
       gui.alphaStroke.setValue(alpha(arraySelect(array, get).cStroke));
       gui.blendMode.setValue(arraySelect(array, get).blendSelect); 
       gui.fill.setState(arraySelect(array, get).fill);

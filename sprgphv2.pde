@@ -1,6 +1,7 @@
 /* //<>//
 
 cant load 3d file properly, 3d toggle is not yet hooked up it seemd, tho shouldnt that be a global anyway?!
+carefully trace layerlock, somewhere its not being set to false it seems
 move Scrollable list blend mode & layerswitch to near aniMatrix, in addition to stroke/fill, line x&y and sw
 
 
@@ -45,6 +46,7 @@ void settings() {
 
 void setup() {
   colorMode(RGB);
+  
   layerActive = new ArrayList();
   layer_1 = new Layer(75);
   layer_1.name = "Layer 1";
@@ -53,7 +55,7 @@ void setup() {
   layer_2 = new Layer(150);
   layer_2.name = "Layer 2";
   layer_2.id = 2;
-  layerActive.add(layer_2);
+  layerActive.add(layer_2);  
   surface.setTitle("Preview");
   surface.setResizable(true);
   cam = new PeasyCam(this, 512);
