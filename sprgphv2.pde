@@ -1,5 +1,8 @@
 /* //<>//
 
+want to have a function which adds / removes ani easing buttons when the aniStart is true, and removes when false, instead of setting them all up at once on boot
+
+
  cant load 3d file properly, 3d toggle is not yet hooked up it seemd, tho shouldnt that be a global anyway?!
  carefully trace layerlock, somewhere its not being set to false it seems
  move Scrollable list blend mode & layerswitch to near aniMatrix, in addition to stroke/fill, line x&y and sw

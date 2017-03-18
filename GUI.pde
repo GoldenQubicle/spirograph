@@ -208,7 +208,7 @@ class GUI extends PApplet {   //<>//
     }
     // actual matrix    
     Ani = cp5.addMatrix("Matrix").setPosition(3, 525).setSize(gif.matrixWidth, gif.matrixHeight).setGap(2, 2).setMode(ControlP5.MULTIPLES)
-      .setInterval(gif.aniMatrixTiming).setGrid(gif.keyFrames, gif.layerVars).set(0, 0, true).stop();
+      .setInterval(gif.aniMatrixTiming).setGrid(gif.keyFrames, gif.layerVars).stop(); //.set(0, 0, true);
     Ani.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) { 
         if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
@@ -216,6 +216,8 @@ class GUI extends PApplet {   //<>//
             for (int v = 0; v < gif.layerVars; v++) {
               if (Ani.get(f, v) == true && layerlock == false) {
                 gif.layerAniStart.get(int(layerSwitch.getValue()))[f][v] = true;
+              } else {
+                gif.layerAniStart.get(int(layerSwitch.getValue()))[f][v] = false;
               }
             }
           }
@@ -223,47 +225,15 @@ class GUI extends PApplet {   //<>//
       }
     }
     );
-    // easing tab
+    //easing tab
     for (int x = 0; x< gif.keyFrames; x++) {
       for (int y = 0; y < gif.layerVars; y++) {
         Easing = cp5.addScrollableList("Easing"+"0"+x+"0"+y).setPosition(10 + (x*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(gif.cellWidth).setHeight(100).setBarHeight(gif.cellHeight).setType(ScrollableList.DROPDOWN).close(); 
         Easing.addItems(EasingNames);
         cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false);
         cp5.getController("Easing"+"0"+x+"0"+y).moveTo("Ani Easing");
-
         Increase = cp5.addButton("add"+"0"+x+"0"+y).setPosition((10+gif.cellWidth) + (x*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(15).setCaptionLabel("+").setId(x);
-        cp5.getController("add"+"0"+x+"0"+y).addCallback(new CallbackListener() {
-          public void controlEvent(CallbackEvent theEvent) { 
-            if (theEvent.getAction()==ControlP5.ACTION_CLICK) {        
-              //int x = theEvent.getController().getId();
-              //int y = (int(theEvent.getController().getPosition()[1]) - 500)/gif.cellHeight;        
-              //gif.aniEnd[x][y] = gif.aniEnd[x][y] + int(theEvent.getController().getValue());
-              //int interval = gif.aniEnd[x][y] - x; 
-              //gif.aniInt[x][y] = interval;
-              //cp5.getController("Easing"+"0"+x+"0"+y).setWidth(gif.cellWidth + interval*gif.cellWidth);
-              //theEvent.getController().setPosition( ((10+gif.cellWidth) + (x*gif.cellWidth) + ((interval)*gif.cellWidth)), 500 + (y*gif.cellHeight));
-              //println(gif.aniEnd[x][y], interval);
-            }
-          }
-        }
-        );
         Decrease = cp5.addButton("minus"+"0"+x+"0"+y).setPosition((x*gif.cellWidth)-5, 525 + (y*gif.cellHeight)).setWidth(15).setCaptionLabel("-").setId(x);
-        cp5.getController("minus"+"0"+x+"0"+y).addCallback(new CallbackListener() {
-          public void controlEvent(CallbackEvent theEvent) { 
-            if (theEvent.getAction()==ControlP5.ACTION_CLICK) {        
-              //int x = theEvent.getController().getId();
-              //int y = (int(theEvent.getController().getPosition()[1]) - 500)/gif.cellHeight;        
-              //gif.aniEnd[x][y] = gif.aniEnd[x][y] - int(theEvent.getController().getValue());
-              //int interval = gif.aniEnd[x][y] - x;   
-              //gif.aniInt[x][y] = interval;
-              //cp5.getController("Easing"+"0"+x+"0"+y).setWidth(gif.cellWidth + interval*gif.cellWidth);
-              //int tempx = int(cp5.getController("add"+"0"+x+"0"+y).getPosition()[0]);
-              //cp5.getController("add"+"0"+x+"0"+y).setPosition( (tempx - gif.cellWidth), 500 + (y*gif.cellHeight));
-              //println(x, y, gif.aniEnd[x][y], interval);
-            }
-          }
-        }
-        );
         cp5.getController("minus"+"0"+x+"0"+y).setVisible(false);
         cp5.getController("minus"+"0"+x+"0"+y).moveTo("Ani Easing");
         cp5.getController("add"+"0"+x+"0"+y).setVisible(false);
@@ -272,11 +242,33 @@ class GUI extends PApplet {   //<>//
     }
   }
 
-
   void controlEvent(ControlEvent theEvent) {
+
+    for (int x = 0; x < gif.keyFrames; x++) {
+      for (int y = 0; y < gif.layerVars; y++) {
+        if (theEvent.getController().getName().equals("Easing"+"0"+x+"0"+y)) {
+          // pass getValue() into ani easing style somehow
+        }
+        if (theEvent.getController().getName().equals("add"+"0"+x+"0"+y)) {   
+          gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y] =   gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y]  + int(theEvent.getController().getValue());
+          int interval =   gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y]  - x; 
+          gif.layerAniInt.get(int(layerSwitch.getValue()))[x][y] = interval;
+          cp5.getController("Easing"+"0"+x+"0"+y).setWidth(gif.cellWidth + interval*gif.cellWidth);
+          theEvent.getController().setPosition( ((10+gif.cellWidth) + (x*gif.cellWidth) + ((interval)*gif.cellWidth)), 525 + (y*gif.cellHeight));
+        }
+        if (theEvent.getController().getName().equals("minus"+"0"+x+"0"+y)) {
+          gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y]  =   gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y]  - int(theEvent.getController().getValue());
+          int interval =   gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y] - x;   
+          gif.layerAniInt.get(int(layerSwitch.getValue()))[x][y]= interval;
+          cp5.getController("Easing"+"0"+x+"0"+y).setWidth(gif.cellWidth + interval*gif.cellWidth);
+          int tempx = int(cp5.getController("add"+"0"+x+"0"+y).getPosition()[0]);
+          cp5.getController("add"+"0"+x+"0"+y).setPosition( (tempx - gif.cellWidth), 525 + (y*gif.cellHeight));
+        }
+      }
+    }
+
     if (theEvent.isTab()) {
       gif.tabToggle();
-      println("check");
     }
     for (RadioButton R : trigSwitch) {
       if (theEvent.isFrom(R) && layerlock == false) {
@@ -376,11 +368,11 @@ class GUI extends PApplet {   //<>//
         layerActive.get(layerID).gear1.rotate = map(G1r.getValue(), 0, 100, 0, TAU);
       }
       if (theEvent.getController().equals(G2r)) {
-        //layerActive.get(layerID).gear2.speed = map(G2r.getValue(), 0, 100, -.000025, .0000025);
+        //layerActive.get(layerID).gear2.speed = map(G2r.getValue(), 0, 100, -.000025, .000025);
         layerActive.get(layerID).gear2.rotate = map(G2r.getValue(), 0, 100, 0, TAU);
       }
       if (theEvent.getController().equals(G3r)) {
-        //layerActive.get(layerID).gear3.speed = map(G3r.getValue(), 0, 100, -.00025, .000025);
+        //layerActive.get(layerID).gear3.speed = map(G3r.getValue(), 0, 100, -.000025, .000025);
         layerActive.get(layerID).gear3.rotate = map(G3r.getValue(), 0, 100, 0, TAU);
       }
       if (theEvent.getController().equals(gear0)) {
