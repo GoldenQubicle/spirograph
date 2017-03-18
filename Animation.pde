@@ -2,9 +2,10 @@ class Animation {   //<>//
 
   int keyFrames, layerVars, matrixWidth, matrixHeight, cellWidth, cellHeight, nLayers, aniMatrixTiming, keyFrame, interval;
   float totalTime, aniTotalFrames, aniFrames;
-  int [][] aniEnd, aniInt;
+  int [][] aniEnd, aniInt, aniEasing;
   ArrayList<int [][]> layerAniInt = new ArrayList();
   ArrayList<int [][]> layerAniEnd = new ArrayList();  
+  ArrayList<int [][]> layerAniEasing = new ArrayList(); 
   Boolean [][] aniStart;
   ArrayList<Boolean[][]> layerAniStart = new ArrayList();
 
@@ -25,17 +26,20 @@ class Animation {   //<>//
     for (int l = 0; l < nLayers; l++) {
       aniStart = new Boolean [keyFrames][layerVars];
       aniInt = new int[keyFrames][layerVars]; 
-      aniEnd = new int[keyFrames][layerVars]; 
+      aniEnd = new int[keyFrames][layerVars];
+      aniEasing = new int[keyFrames][layerVars]; 
       for (int f =0; f < keyFrames; f++) {
         for (int v = 0; v < layerVars; v++) {
           aniStart[f][v] = false;
           aniInt[f][v] = 1;
           aniEnd[f][v] = f;
+          aniEasing[f][v] = 0;
         }
       }
       layerAniStart.add(aniStart);
       layerAniInt.add(aniInt);
       layerAniEnd.add(aniEnd);
+      layerAniEasing.add(aniEasing);
     }
 
 
@@ -55,6 +59,32 @@ class Animation {   //<>//
     //  }
     //}
     //triggers = new ArrayList();
+  }
+  
+  
+  void setupArrays(){ 
+    layerAniStart.clear();
+    layerAniInt.clear();
+    layerAniEnd.clear();
+    layerAniEasing.clear();
+    for (int l = 0; l < nLayers; l++) {
+      aniStart = new Boolean [keyFrames][layerVars];
+      aniInt = new int[keyFrames][layerVars]; 
+      aniEnd = new int[keyFrames][layerVars];
+      aniEasing = new int[keyFrames][layerVars]; 
+      for (int f =0; f < keyFrames; f++) {
+        for (int v = 0; v < layerVars; v++) {
+          aniStart[f][v] = false;
+          aniInt[f][v] = 1;
+          aniEnd[f][v] = f;
+          aniEasing[f][v] = 0;
+        }
+      }
+      layerAniStart.add(aniStart);
+      layerAniInt.add(aniInt);
+      layerAniEnd.add(aniEnd);
+      layerAniEasing.add(aniEasing);
+    }    
   }
 
   void updateAniMatrixTiming() {

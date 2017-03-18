@@ -1,7 +1,7 @@
 class FileIO {
   String path = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\";
   String fileName = "default";
-  JSONObject global, layer, gears, keyFrame;
+  JSONObject global, layer, gears, keyFrame, aniValues, aniMatrix;
   JSONArray lkf;
   String[] globals = {"gifWidth", "gifHeight", "gifLength", "gifKeyFrames", "colorBackground", "Layers"};
   String [] Gears = {"Gear 0", "Gear 1", "Gear 2", "Gear 3"};
@@ -12,10 +12,11 @@ class FileIO {
   FileIO() {
     global = new JSONObject();
     keyFrame = new JSONObject();
+    aniMatrix =  new JSONObject();
     lkf = new JSONArray();
   }
 
-void saveJSON() {
+  void saveJSON() {
     global.setInt(globals[0], Width);
     global.setInt(globals[1], Height);
     global.setFloat(globals[2], gif.totalTime);
@@ -23,14 +24,34 @@ void saveJSON() {
     global.setInt(globals[4], cBackground);
     global.setInt(globals[5], gif.nLayers);
     for (int l = 0; l < gif.nLayers; l++) {
-      lkf = new JSONArray();
+      lkf = new JSONArray();  
       global.setJSONArray("Layer "+l, lkf);
       for (int f = 0; f < gif.keyFrames; f++) {
         int keyFrame = f+(l*gif.keyFrames);
         global.getJSONArray("Layer "+l).setJSONObject(f, saveLayer(layerKeyFrames.get(keyFrame)));
       }
+      global.getJSONArray("Layer "+l).setJSONObject(gif.keyFrames, saveAniMatrix(l));
     }
     saveJSONObject(global, path + fileName + ".json" );
+  }
+
+  JSONObject saveAniMatrix(int layer) {
+    int ani =1;
+    for (int f = 0; f < gif.keyFrames; f++) {
+      for (int v = 0; v < gif.layerVars; v++) {
+        if (gif.layerAniStart.get(layer)[f][v] == true) {    
+          aniValues = new JSONObject();
+          aniValues.setInt("start", f);
+          aniValues.setInt("parameter", v);
+          aniValues.setInt("intervals", gif.layerAniInt.get(layer)[f][v]);
+          aniValues.setInt("end", gif.layerAniEnd.get(layer)[f][v]);
+          aniValues.setInt("easing", gif.layerAniEasing.get(layer)[f][v]);
+          aniMatrix.setJSONObject("animation "+ani, aniValues);
+          ani+=1;
+        }
+      }
+    }
+    return aniMatrix;
   }
 
   JSONObject saveLayer(Layer tobeSaved) {
@@ -97,6 +118,15 @@ void saveJSON() {
     return fromJSON;
   }
 
+  void gifAniArrays(JSONObject aniMatrix, int layer) {
+    for (int i = 0; i < aniMatrix.size(); i++) {
+      gif.layerAniStart.get(layer)[aniMatrix.getJSONObject("animation "+ (i+1)).getInt("start")][aniMatrix.getJSONObject("animation "+ (i+1)).getInt("parameter")] = true;
+      gif.layerAniInt.get(layer)[aniMatrix.getJSONObject("animation "+ (i+1)).getInt("start")][aniMatrix.getJSONObject("animation "+ (i+1)).getInt("parameter")] = aniMatrix.getJSONObject("animation "+ (i+1)).getInt("intervals");
+      gif.layerAniEnd.get(layer)[aniMatrix.getJSONObject("animation "+ (i+1)).getInt("start")][aniMatrix.getJSONObject("animation "+ (i+1)).getInt("parameter")] = aniMatrix.getJSONObject("animation "+ (i+1)).getInt("end");
+      gif.layerAniEasing.get(layer)[aniMatrix.getJSONObject("animation "+ (i+1)).getInt("start")][aniMatrix.getJSONObject("animation "+ (i+1)).getInt("parameter")] = aniMatrix.getJSONObject("animation "+ (i+1)).getInt("easing");
+    }
+  }
+
   void loadJSON(String filename) { 
     String [] splitName = split(filename, '.');
     fileName = splitName[0];    
@@ -106,11 +136,13 @@ void saveJSON() {
     gif.totalTime = global.getFloat(globals[2]);
     gif.keyFrames = int(global.getFloat(globals[3]));
     gif.nLayers = global.getInt(globals[5]);
+    gif.setupArrays();
     cBackground = global.getInt(globals[4]);
     for (int l =0; l < gif.nLayers; l++) {     
       for (int f=0; f < gif.keyFrames; f++) {     
         layerKeyFrames.add(loadLayer(global.getJSONArray("Layer "+l).getJSONObject(f)));
       }
+      gifAniArrays(global.getJSONArray("Layer "+l).getJSONObject(gif.keyFrames), l);
     }
   }
 

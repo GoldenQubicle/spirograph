@@ -243,30 +243,6 @@ class GUI extends PApplet {   //<>//
   }
 
   void controlEvent(ControlEvent theEvent) {
-
-    for (int x = 0; x < gif.keyFrames; x++) {
-      for (int y = 0; y < gif.layerVars; y++) {
-        if (theEvent.getController().getName().equals("Easing"+"0"+x+"0"+y)) {
-          // pass getValue() into ani easing style somehow
-        }
-        if (theEvent.getController().getName().equals("add"+"0"+x+"0"+y)) {   
-          gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y] =   gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y]  + int(theEvent.getController().getValue());
-          int interval =   gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y]  - x; 
-          gif.layerAniInt.get(int(layerSwitch.getValue()))[x][y] = interval;
-          cp5.getController("Easing"+"0"+x+"0"+y).setWidth(gif.cellWidth + interval*gif.cellWidth);
-          theEvent.getController().setPosition( ((10+gif.cellWidth) + (x*gif.cellWidth) + ((interval)*gif.cellWidth)), 525 + (y*gif.cellHeight));
-        }
-        if (theEvent.getController().getName().equals("minus"+"0"+x+"0"+y)) {
-          gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y]  =   gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y]  - int(theEvent.getController().getValue());
-          int interval =   gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y] - x;   
-          gif.layerAniInt.get(int(layerSwitch.getValue()))[x][y]= interval;
-          cp5.getController("Easing"+"0"+x+"0"+y).setWidth(gif.cellWidth + interval*gif.cellWidth);
-          int tempx = int(cp5.getController("add"+"0"+x+"0"+y).getPosition()[0]);
-          cp5.getController("add"+"0"+x+"0"+y).setPosition( (tempx - gif.cellWidth), 525 + (y*gif.cellHeight));
-        }
-      }
-    }
-
     if (theEvent.isTab()) {
       gif.tabToggle();
     }
@@ -279,6 +255,32 @@ class GUI extends PApplet {   //<>//
       int frame = int(keyFrames.getValue());
       controller.toggleKeyFrames(frame);
     }
+
+    for (int x = 0; x < gif.keyFrames; x++) {
+      for (int y = 0; y < gif.layerVars; y++) {
+        if (theEvent.getController().getName().equals("Easing"+"0"+x+"0"+y)) {
+          gif.layerAniEasing.get(int(layerSwitch.getValue()))[x][y] = int(theEvent.getController().getValue());
+        }
+        if (theEvent.getController().getName().equals("add"+"0"+x+"0"+y)) {   
+          gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y] += int(theEvent.getController().getValue());
+          int interval =   gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y]  - x; 
+          gif.layerAniInt.get(int(layerSwitch.getValue()))[x][y] = interval;
+          cp5.getController("Easing"+"0"+x+"0"+y).setWidth(gif.cellWidth + interval*gif.cellWidth);
+          theEvent.getController().setPosition( ((10+gif.cellWidth) + (x*gif.cellWidth) + ((interval)*gif.cellWidth)), 525 + (y*gif.cellHeight));
+        }
+        if (theEvent.getController().getName().equals("minus"+"0"+x+"0"+y)) {
+          gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y] -= int(theEvent.getController().getValue());
+          int interval =   gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y] - x;   
+          gif.layerAniInt.get(int(layerSwitch.getValue()))[x][y]= interval;
+          cp5.getController("Easing"+"0"+x+"0"+y).setWidth(gif.cellWidth + interval*gif.cellWidth);
+          int tempx = int(cp5.getController("add"+"0"+x+"0"+y).getPosition()[0]);
+          cp5.getController("add"+"0"+x+"0"+y).setPosition( (tempx - gif.cellWidth), 525 + (y*gif.cellHeight));
+        }
+      }
+    }
+
+
+
     if (theEvent.isFrom(densityRanges) && layerlock == false) {
       densityRangeMax = densityRanges.getValue()* 10000;
       densityRangeMin = densityRangeMax - 10000;
