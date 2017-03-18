@@ -251,11 +251,16 @@ class GUI extends PApplet {   //<>//
         layerActive.get(layerID).trig.set(R.getName(), int(R.getValue()));
       }
     }
+    if (theEvent.isFrom(densityRanges) && layerlock == false) {
+      densityRangeMax = densityRanges.getValue()* 10000;
+      densityRangeMin = densityRangeMax - 10000;
+      density.setRange(densityRangeMin, densityRangeMax);
+      density.getCaptionLabel().align(CENTER, CENTER);
+    }
     if (theEvent.isFrom(keyFrames)) {  
       int frame = int(keyFrames.getValue());
       controller.toggleKeyFrames(frame);
     }
-
     for (int x = 0; x < gif.keyFrames; x++) {
       for (int y = 0; y < gif.layerVars; y++) {
         if (theEvent.getController().getName().equals("Easing"+"0"+x+"0"+y)) {
@@ -277,15 +282,6 @@ class GUI extends PApplet {   //<>//
           cp5.getController("add"+"0"+x+"0"+y).setPosition( (tempx - gif.cellWidth), 525 + (y*gif.cellHeight));
         }
       }
-    }
-
-
-
-    if (theEvent.isFrom(densityRanges) && layerlock == false) {
-      densityRangeMax = densityRanges.getValue()* 10000;
-      densityRangeMin = densityRangeMax - 10000;
-      density.setRange(densityRangeMin, densityRangeMax);
-      density.getCaptionLabel().align(CENTER, CENTER);
     }
     if (theEvent.getController().equals(gifWidth)) {
       Width = int(gifWidth.getValue());

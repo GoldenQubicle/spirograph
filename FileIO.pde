@@ -37,6 +37,7 @@ class FileIO {
 
   JSONObject saveAniMatrix(int layer) {
     int ani =1;
+    aniMatrix =  new JSONObject();
     for (int f = 0; f < gif.keyFrames; f++) {
       for (int v = 0; v < gif.layerVars; v++) {
         if (gif.layerAniStart.get(layer)[f][v] == true) {    

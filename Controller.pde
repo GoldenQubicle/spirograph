@@ -91,7 +91,7 @@ class Controller {
       gif.nLayers-=1;
       break;
     case 7:
-      // load actual json file selected
+      // load json file 
       gui.cp5.getGroup("fs").hide();
       update = true;
       gui.layerlock = true;
@@ -100,7 +100,6 @@ class Controller {
       gui.layerSwitch.clear();
       gui.colorBackground.remove();
       fileio.loadJSON(fileio.listOfFiles[int(gui.fileSelect.getValue())].getName());
-
       gui.fileName.setText(controller.fileio.fileName);
       gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(fileio.global.getInt("colorBackground")).moveTo("global");
       for (int l =0; l < gif.nLayers; l++) {
