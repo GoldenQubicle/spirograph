@@ -3,7 +3,7 @@ class FileIO {
   String fileName = "default";
   JSONObject global, layer, gears, keyFrame, aniValues, aniMatrix;
   JSONArray lkf;
-  String[] globals = {"gifWidth", "gifHeight", "gifLength", "gifKeyFrames", "colorBackground", "Layers"};
+  String[] globals = {"gifWidth", "gifHeight", "gifLength", "gifKeyFrames", "colorBackground", "Layers", "drawMode"};
   String [] Gears = {"Gear 0", "Gear 1", "Gear 2", "Gear 3"};
 
   File folder = new File(path);
@@ -23,6 +23,7 @@ class FileIO {
     global.setFloat(globals[3], gif.keyFrames);
     global.setInt(globals[4], cBackground);
     global.setInt(globals[5], gif.nLayers);
+    global.setBoolean(globals[6], spheres3d);
     for (int l = 0; l < gif.nLayers; l++) {
       lkf = new JSONArray();  
       global.setJSONArray("Layer "+l, lkf);
@@ -61,7 +62,7 @@ class FileIO {
     layer.setString("name", tobeSaved.name);
     layer.setInt("id", tobeSaved.id);
     layer.setInt("kf", tobeSaved.kf);
-    layer.setBoolean("3d", tobeSaved.spheres3d); 
+    //layer.setBoolean("3d", tobeSaved.spheres3d); 
     for (int i = 0; i < tobeSaved.gears.length; i++) {
       gears.setFloat(Gears[i] + " RX", tobeSaved.gears[i].RX);
       gears.setInt(Gears[i] + " trigX", tobeSaved.gears[i].trigX);
@@ -71,7 +72,7 @@ class FileIO {
       gears.setInt(Gears[i] + " trigY2", tobeSaved.gears[i].trigY2);
       gears.setFloat(Gears[i] + " RZ", tobeSaved.gears[i].RZ);
       gears.setInt(Gears[i] + " trigZ", tobeSaved.gears[i].trigZ);
-      gears.setFloat(Gears[i] + " Petals", tobeSaved.gears[i].P);
+      gears.setInt(Gears[i] + " Petals", tobeSaved.gears[i].P);
       gears.setFloat(Gears[i] + " Rotate", tobeSaved.gears[i].rotate);
       gears.setFloat(Gears[i] + " Move", tobeSaved.gears[i].speed);
     }; 
@@ -93,12 +94,12 @@ class FileIO {
     fromJSON.name = tobeLoaded.getString("name");
     fromJSON.id = tobeLoaded.getInt("id");
     fromJSON.kf = tobeLoaded.getInt("kf");
-    fromJSON.spheres3d = tobeLoaded.getBoolean("3d");
+    //fromJSON.spheres3d = tobeLoaded.getBoolean("3d");
     for (int i = 0; i < fromJSON.gears.length; i++) {
       fromJSON.gears[i].RX = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RX"); 
       fromJSON.gears[i].RY = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RY");
       fromJSON.gears[i].RZ = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RZ");
-      fromJSON.gears[i].P = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " Petals");
+      fromJSON.gears[i].P = tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " Petals");
       fromJSON.gears[i].rotate = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " Rotate");
       fromJSON.gears[i].speed = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " Move");
       fromJSON.trig.set("G"+i+"trigX", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigX")); 
@@ -139,6 +140,7 @@ class FileIO {
     gif.nLayers = global.getInt(globals[5]);
     gif.setupArrays();
     cBackground = global.getInt(globals[4]);
+    spheres3d = global.getBoolean(globals[6], spheres3d);
     for (int l =0; l < gif.nLayers; l++) {     
       for (int f=0; f < gif.keyFrames; f++) {     
         layerKeyFrames.add(loadLayer(global.getJSONArray("Layer "+l).getJSONObject(f)));

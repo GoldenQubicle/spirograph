@@ -6,7 +6,7 @@ class Layer {  //<>//
   Gears[] gears;
   Gears gear0, gear1, gear2, gear3;
   color cFill, cStroke;
-  boolean stroke, fill, lines, dots, spheres3d;
+  boolean stroke, fill, lines, dots;
   IntDict trig;
   int [] mode = {1, 2, 4, 16, 8, 64, 128, 256, 0};
   int blendSelect, id, kf;
@@ -113,7 +113,7 @@ class Layer {  //<>//
       Gears(theta, 0);
       xyz.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
       xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
-      radialColor(xyz.x, xyz.y);
+      //radialColor(xyz.x, xyz.y);
       strokeWeight(sw);
       ellipse(xyz.x, xyz.y, lx, ly);
     }
@@ -121,7 +121,7 @@ class Layer {  //<>//
 
   void Gears(float theta, float phi) {
     for (int g = 0; g < 4; g++) {
-      gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), trig.get("G"+g+"trigZ"), trig.get("G"+g+"trigX2"), trig.get("G"+g+"trigY2"), theta, phi, gear0.C, spheres3d);
+      gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), trig.get("G"+g+"trigZ"), trig.get("G"+g+"trigX2"), trig.get("G"+g+"trigY2"), theta, phi, gear0.C);
     }
   }
 
@@ -157,8 +157,8 @@ class Layer {  //<>//
 
 class Gears {
   PVector xyz;
-  float theta, phi, RX, RY, RZ, C, Connect, P, R, rotate, speed, cossintan;
-  int trigX = 0, trigY = 1, trigX2, trigY2, trigZ;
+  float theta, phi, RX, RY, RZ, C, Connect, R, rotate, speed, cossintan;
+  int trigX = 0, trigY = 1, trigX2, trigY2, trigZ, P;
 
   Gears(float rx, float ry, float rz) {
     xyz = new PVector();    
@@ -168,14 +168,14 @@ class Gears {
     R = 1/(P-1);
     C = ((RX+RY)/2) * TAU;
   }
-  void grinding(int trigx, int trigy, int trigz, int trigx2, int trigy2, float theta, float phi, float circumference, boolean threed) {
+  void grinding(int trigx, int trigy, int trigz, int trigx2, int trigy2, float theta, float phi, float circumference) {
     trigX = trigx;
     trigX2 = trigx2;
     trigY = trigy;
     trigY2 = trigy2;
     trigZ = trigz;
 
-    if (threed != true) {
+    if (spheres3d != true) {
       theta = ((TAU/circumference)*theta)+rotate;
       //rotateY(rotate);   
       //rotateX(move);
@@ -204,9 +204,14 @@ class Gears {
     }
     return cossintan;
   }
-
+  
+  int intRatio(){
+   int r = 1/(int(P)-1);
+   return r;
+  }
+  
   float Ratio() {
-    R = 1/((P-1));   
-    return (R);
+    R = 1/float((P-1));  
+    return R;
   }
 }

@@ -297,7 +297,7 @@ class Controller {
           gui.Easing.addItems( gui.EasingNames);
           gui.cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false);
           gui.cp5.getController("Easing"+"0"+x+"0"+y).moveTo("Ani Easing");
-           gui.cp5.getController("Easing"+"0"+x+"0"+y).setValue(float(gif.layerAniEasing.get(int(gui.layerSwitch.getValue()))[x][y]));
+          gui.cp5.getController("Easing"+"0"+x+"0"+y).setValue(float(gif.layerAniEasing.get(int(gui.layerSwitch.getValue()))[x][y]));
           gui.Increase = gui.cp5.addButton("add"+"0"+x+"0"+y).setPosition((10+gif.cellWidth) + (x*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(15).setCaptionLabel("+").setId(x);
           gui.Decrease = gui.cp5.addButton("minus"+"0"+x+"0"+y).setPosition((x*gif.cellWidth)-5, 525 + (y*gif.cellHeight)).setWidth(15).setCaptionLabel("-").setId(x);
           gui.cp5.getController("minus"+"0"+x+"0"+y).setVisible(false);
@@ -311,6 +311,7 @@ class Controller {
   }
 
   void updateMatrixGUI() {
+    gui.drawMode.setState(spheres3d);
     gui.gifKeyFrames.setValue(gif.keyFrames);
     gui.gifLength.setValue(gif.totalTime);
     gui.keyFrames.remove();   
@@ -330,7 +331,7 @@ class Controller {
     if (gui.layerlock == true) {
       for (int f = 0; f < gif.keyFrames; f++) {
         for (int v = 0; v < gif.layerVars; v++) {
-          gui.Ani.set(f, v, gif.layerAniStart.get(get)[f][v]); 
+          gui.Ani.set(f, v, gif.layerAniStart.get(get)[f][v]);
         }
       }
     }
@@ -363,10 +364,11 @@ class Controller {
       gui.petals3.setValue(arraySelect(array, get).gear3.P);
       gui.G1r.setValue(arraySelect(array, get).gear1.rotate);
       gui.G2r.setValue(arraySelect(array, get).gear2.rotate);
-      gui.G3r.setValue(arraySelect(array, get).gear3.rotate);
+      gui.G3r.setValue(arraySelect(array, get).gear3.rotate);      
       for (int r = 0; r < gui.trigSwitch.size(); r++) {
         gui.trigSwitch.get(r).activate(arraySelect(array, get).trig.get(gui.trigSwitch.get(r).getName()));
       }
+      gui.density.setValue(arraySelect(array, get).density);
       gui.layerID = get;
       gui.layerlock = false;
     }
@@ -390,6 +392,7 @@ class Controller {
     layer.lx = arraySelect(array, get).lx;
     layer.ly = arraySelect(array, get).ly;
     layer.sw = arraySelect(array, get).sw;
+    layer.density = arraySelect(array, get).density;
     for (int r=0; r < gui.trigSwitch.size(); r++) {
       layer.trig.set(gui.trigSwitch.get(r).getName(), arraySelect(array, get).trig.get(gui.trigSwitch.get(r).getName()));
     }
