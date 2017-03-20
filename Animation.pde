@@ -56,9 +56,12 @@ class Animation {   //<>//
     aniStart(renderKeyFrame); 
 
     for (Trigger myTrigger : triggers) {
-      if (myTrigger.Start == renderKeyFrame) {
+      if (renderKeyFrame == myTrigger.Start) {
+        myTrigger.ani.start();
         myTrigger.ani.pause();
-        myTrigger.ani.seek(aniSeek*frame);
+        myTrigger.render+=1;
+        myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.render);
+        //println(myTrigger.render*myTrigger.aniSeek);
       }
     }
 
@@ -76,52 +79,9 @@ class Animation {   //<>//
       renderFrame = 0;
       println("done rendering");
     }
-
-    println(frame, renderKeyFrame);
+    //println(frame, renderKeyFrame);
   }
 
-  void render() {
-    int keyFrame = 0;
-    int frame = 0;
-    int f = 0;
-    boolean kfStart = true;
-    float aniSeek = 1/aniTotalFrames;
-
-    for ( f = 0; f < aniTotalFrames; f++) {  
-      if (kfStart == true) {
-        aniStart(keyFrame); 
-        kfStart = false;
-      }
-      frame+=1;
-      println(aniSeek+(f*aniSeek), f);
-
-
-      //println("rendering frame " + (f+1) + " of " + int(aniTotalFrames), "keyFrame " + (keyFrame+1) + " has started");
-      if (frame == aniFrames) {
-        keyFrame+=1;
-        frame = 0;
-        kfStart = true;
-      }
-      if (keyFrame == keyFrames) {
-        kfStart = false;
-        println("render complete");
-        break;
-      }
-    }
-  }
-
-
-  void aniPausePlay() {
-
-    for (Trigger myTrigger : triggers) {
-      if (myTrigger.ani.isPlaying()) {     
-        //println(myTrigger.ani.isPlaying());
-        myTrigger.ani.pause();
-      } else if (myTrigger.ani.isEnded() == false) {
-        myTrigger.ani.resume();
-      }
-    }
-  }
 
   void setupArrays() { 
     layerAniStart.clear();

@@ -1,7 +1,7 @@
 /* //<>//
 
-loading bug on 60seconds.json with ani intervals
-need to work out aniSeek per ani. . .yikes
+loading bug with ani intervals
+in general, seems to be something still wrong with the ani intervals / timing
  
  soo. lets first bring back animation for gears, for both 2d & 3d. 
  Perhaps also consider splitting aniMatrix into shape (i.e. gears) and aesthetic (i.e. color, line, etc) collapsable menus, e.g. accordion 
