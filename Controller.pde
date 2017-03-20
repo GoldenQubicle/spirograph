@@ -410,7 +410,7 @@ class Controller {
     return dummy;
   }
 
-  void toggleKeyFrames(int frame) {
+  void toggleKeyFrames(int frame) {     
     layerActive.clear();
     for (int f = frame; f < layerKeyFrames.size(); f+= gif.keyFrames) {
       layerActive.add(layerKeyFrames.get(f));

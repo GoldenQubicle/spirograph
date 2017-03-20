@@ -10,7 +10,7 @@ class GUI extends PApplet {   //<>//
   ScrollableList layerSwitch, blendMode, fileSelect, Easing;
   Slider2D gear0, gear1, gear2, gear3;
   Slider gifWidth, gifHeight, gifLength, gifKeyFrames, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals1, petals2, petals3, alphaFill, alphaStroke, G1r, G2r, G3r, density; 
-  Button gifSettings, gifSave, Load, Save, layerNew, layerCopy, layerDelete, Increase, Decrease;
+  Button gifSettings, gifSave, Load, Save, layerNew, layerCopy, layerDelete, Increase, Decrease, saveFWD;
   ArrayList <Button> menuGifLayer = new ArrayList<Button>();
   RadioButton trigX, trigY, trigZ, trigX2, trigY2, densityRanges, keyFrames;
   ArrayList <RadioButton> trigSwitch = new ArrayList<RadioButton>();
@@ -192,7 +192,7 @@ class GUI extends PApplet {   //<>//
       keyFrames.getItem(i).getCaptionLabel().set("KF" + (i+1)).align(CENTER, CENTER);
     }
     keyFrames.activate(0);
-
+    saveFWD = cp5.addButton("saveFWD").setPosition(95, 480).setSize(50, 16);
     // ANIMATRIX TABS START HERE
     // make tabs
     cp5.getTab("default").setCaptionLabel("Matrix").setId(1);
@@ -258,6 +258,14 @@ class GUI extends PApplet {   //<>//
     if (theEvent.isFrom(keyFrames)) {  
       int frame = int(keyFrames.getValue());
       controller.toggleKeyFrames(frame);
+    }
+    if (theEvent.getController().equals(saveFWD)) {
+      int frame = int(keyFrames.getValue());
+      for (int f = frame; f < (gif.keyFrames); f++) {
+        int keyFrame = f + (int(gui.layerSwitch.getValue())*gif.keyFrames);
+        Layer New = new Layer(10);
+        layerKeyFrames.set(keyFrame, controller.copyLayerSettings(New, 1, frame+(int(layerSwitch.getValue())*gif.keyFrames)));
+      }
     }
     for (int x = 0; x < gif.keyFrames; x++) {
       for (int y = 0; y < gif.layerVars; y++) {
@@ -435,13 +443,28 @@ class GUI extends PApplet {   //<>//
         cp5.get(Matrix.class, "Matrix").play();
       }
     }
-     if (key == 'r') {
-       gif.render();
-     }
+
+
+    if (key == 'r') {
+      play = true;
+      render = true;
+      gif.renderStart = millis();
+      delay = gif.renderStart + 2500;
+
+      //gif.render();
+      //for (Trigger myTrigger : gif.triggers) {
+      //  if (myTrigger.ani.isPlaying()) {          
+      //    myTrigger.ani.pause();
+      //    cp5.get(Matrix.class, "Matrix").pause();
+      //  } else if(myTrigger.ani.isEnded() == false){
+      //    myTrigger.ani.resume();
+      //  }
+      //}
+    }
   }
 
   void Matrix(int theX, int theY) { 
-    gif.aniStart(theX, theY);
+    gif.aniStart(theX);
 
     //println(theX, theY);
   }

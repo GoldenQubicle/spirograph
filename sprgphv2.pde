@@ -1,5 +1,8 @@
 /* //<>//
 
+loading bug on 60seconds.json with ani intervals
+need to work out aniSeek per ani. . .yikes
+ 
  soo. lets first bring back animation for gears, for both 2d & 3d. 
  Perhaps also consider splitting aniMatrix into shape (i.e. gears) and aesthetic (i.e. color, line, etc) collapsable menus, e.g. accordion 
  
@@ -38,11 +41,11 @@ Layer layer_1, layer_2;
 ArrayList<Layer> layerActive =  new ArrayList();
 ArrayList<Layer> layerKeyFrames = new ArrayList();
 ArrayList<Layer> layerAnimate =  new ArrayList();
-boolean play, update, spheres3d;
+boolean play, update, spheres3d, render;
 int Width = 512;
 int Height = 512;
 color cBackground;
-
+float delay;
 void settings() {
   size(Width, Height, P3D);
   smooth(8);
@@ -76,6 +79,7 @@ void setup() {
   play = false;
   update = false;
   spheres3d = false;
+  render = false;
   //gifExport = new GifMaker(this, "export.gif");
 }
 
@@ -95,6 +99,21 @@ void draw() {
     for (int i = 0; i < layerAnimate.size(); i++) {
       layerAnimate.get(i).display();
     }
+  }
+
+  if (render == true) {
+    timer(millis());
+  }
+}
+
+void timer(float ms) {
+  if (ms > delay) {
+    render = false;
+  }
+  if (render == false) {
+    delay += 500;
+    gif.renderFrame+=1;    
+    gif.renderOnTimer(gif.renderFrame);  
   }
 }
 
