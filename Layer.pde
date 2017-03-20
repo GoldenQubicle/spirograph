@@ -109,15 +109,20 @@ class Layer {  //<>//
 
   void spiroMode() {    
     cam.setActive(false);
-    for (int theta = 0; theta < density; theta++) {
+    for (int theta = 0; theta <= density; theta++) {
       Gears(theta, 0);
       xyz.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
       xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
       //radialColor(xyz.x, xyz.y);
       strokeWeight(sw);
       ellipse(xyz.x, xyz.y, lx, ly);
+      if (theta == density && play == true) {
+        // so here want to call on write out funtion, and that in turn needs to set render to true
+        render = true;
+      }
     }
   }
+
 
   void Gears(float theta, float phi) {
     for (int g = 0; g < 4; g++) {
@@ -204,12 +209,12 @@ class Gears {
     }
     return cossintan;
   }
-  
-  int intRatio(){
-   int r = 1/(int(P)-1);
-   return r;
+
+  int intRatio() {
+    int r = 1/(int(P)-1);
+    return r;
   }
-  
+
   float Ratio() {
     R = 1/float((P-1));  
     return R;

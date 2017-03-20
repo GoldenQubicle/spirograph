@@ -46,41 +46,85 @@ class Animation {   //<>//
     cellWidth = matrixWidth/keyFrames; 
     cellHeight = matrixHeight/layerVars; 
     // 
+    
     triggers = new ArrayList();
+    renderKeyFrame = 0;
+    renderFrame = 0;
   }
 
 
-  void renderOnTimer(int frame) {
-    render = true;
-    fTemp+=1;
-    aniStart(renderKeyFrame); 
+  void renderLoop() {
+        
+    if (render == true) {
+      renderFrame+=1;
+      render = false;
+    }
+    if (render == false && play == true) {
+      fTemp+=1;
+      aniStart(renderKeyFrame); 
 
-    for (Trigger myTrigger : triggers) {
-      if (renderKeyFrame == myTrigger.Start) {
-        myTrigger.ani.start();
-        myTrigger.ani.pause();
+      for (Trigger myTrigger : triggers) {
+        if (myTrigger.Start == renderKeyFrame) {
+          myTrigger.ani.start();
+          myTrigger.ani.pause();
+        }
+        if (renderKeyFrame >= myTrigger.Start) {
+        //myTrigger.ani.pause();
         myTrigger.render+=1;
         myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.render);
-        //println(myTrigger.render*myTrigger.aniSeek);
+        //println(myTrigger.render, myTrigger.aniSeek*myTrigger.render, renderFrame);
+        }
       }
+      // setKeyFrame for aniStart
+      if (fTemp == aniFrames) {
+        renderKeyFrame+=1; 
+        fTemp = 0;
+      }
+      // check for end
+      if (renderFrame == aniTotalFrames) {
+        render = false;
+        play = false;
+        fTemp = 0;
+        renderKeyFrame = 0;
+        renderFrame = 0;
+        float end = millis() - renderStart;
+        println("done rendering in " + (end/1000) + " seconds" );
+      }
+      //println(renderFrame, aniTotalFrames);
     }
-
-    // setKeyFrame for aniStart
-    if (fTemp == aniFrames) {
-      renderKeyFrame+=1; 
-      fTemp = 0;
-    }
-    // check for end
-    if (frame == aniTotalFrames) {
-      render = false;
-      play = false;
-      fTemp = 0;
-      renderKeyFrame = 0;
-      renderFrame = 0;
-      println("done rendering");
-    }
-    //println(frame, renderKeyFrame);
   }
+
+//  void renderOnTimer(int frame) {
+//    render = true;
+//    fTemp+=1;
+//    aniStart(renderKeyFrame); 
+//    for (Trigger myTrigger : triggers) {
+//      if (renderKeyFrame == myTrigger.Start) {
+//        myTrigger.ani.start();
+//        myTrigger.ani.pause();
+//      }
+//      myTrigger.ani.pause();
+//      myTrigger.render+=1;
+//      myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.render);
+//      myTrigger.ani.pause();
+//      //println(myTrigger.render, myTrigger.aniSeek*myTrigger.render, frame);
+//    }
+//    // setKeyFrame for aniStart
+//    if (fTemp == aniFrames) {
+//      renderKeyFrame+=1; 
+//      fTemp = 0;
+//    }
+//    // check for end
+//    if (frame == aniTotalFrames) {
+//      render = false;
+//      play = false;
+//      fTemp = 0;
+//      renderKeyFrame = 0;
+//      renderFrame = 0;
+//      println("done rendering");
+//    }
+//    //println(frame, renderKeyFrame);
+//  }
 
 
   void setupArrays() { 

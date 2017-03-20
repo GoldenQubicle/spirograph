@@ -17,7 +17,7 @@ class Trigger {
     interval = (End - Start) + 1;
     aniDuration = gif.aniFrames*interval;
     aniSeek = 1 / aniDuration;
-    
+
     // gear parameters
     if (layerParameter == 0) {
       gear = 0;

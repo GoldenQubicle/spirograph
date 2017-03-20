@@ -95,6 +95,7 @@ class Controller {
       gui.cp5.getGroup("fs").hide();
       update = true;
       gui.layerlock = true;
+      layerAnimate.clear();
       layerActive.clear();
       layerKeyFrames.clear();
       gui.layerSwitch.clear();

@@ -1,16 +1,13 @@
 /* //<>//
-
-loading bug with ani intervals
-in general, seems to be something still wrong with the ani intervals / timing
+  
+  render / play boolean logic not up to par just yet
+  
+ loading bug with ani easing gui not updated properly
+ also add tickmarks to petal sliders 
  
- soo. lets first bring back animation for gears, for both 2d & 3d. 
- Perhaps also consider splitting aniMatrix into shape (i.e. gears) and aesthetic (i.e. color, line, etc) collapsable menus, e.g. accordion 
- 
- cant load 3d file properly, 3d toggle is not yet hooked up it seemd, tho shouldnt that be a global anyway?!
+ Perhaps consider splitting aniMatrix into shape (i.e. gears) and aesthetic (i.e. color, line, etc) collapsable menus, e.g. accordion  
  carefully trace layerlock, somewhere its not being set to false it seems
  move Scrollable list blend mode & layerswitch to near aniMatrix, in addition to stroke/fill, line x&y and sw
- 
- 
  
  couple more random ideas 
  - used spheres while in '2d' and apply rotate over x and y, probably pretty cool
@@ -62,7 +59,6 @@ void setup() {
   //layer_2.name = "Layer 2";
   //layer_2.id = 2;
   //layerActive.add(layer_2);  
-
   surface.setTitle("Preview");
   surface.setResizable(true);
   cam = new PeasyCam(this, 512);
@@ -90,6 +86,7 @@ void draw() {
     surface.setSize(Width, Height);
     translate(Width/2, Height/2);
   }
+  
   if (play == false) {
     for (int i = 0; i < layerActive.size(); i++) {
       layerActive.get(i).display();
@@ -100,22 +97,22 @@ void draw() {
       layerAnimate.get(i).display();
     }
   }
-
+  
   if (render == true) {
-    timer(millis());
+    gif.renderLoop();
   }
 }
 
-void timer(float ms) {
-  if (ms > delay) {
-    render = false;
-  }
-  if (render == false) {
-    delay += 500;
-    gif.renderFrame+=1;    
-    gif.renderOnTimer(gif.renderFrame);  
-  }
-}
+//void timer(float ms) {
+//  if (ms > delay) {
+//    render = false;
+//  }
+//  if (render == false) {
+//    delay += 500;
+//    gif.renderFrame+=1;    
+//    gif.renderOnTimer(gif.renderFrame);  
+//  }
+//}
 
 void keyPressed() {
   if (key==' ') {     

@@ -1,4 +1,4 @@
-class GUI extends PApplet {   //<>//
+class GUI extends PApplet {   //<>// //<>//
 
   PApplet parent;
   ControlP5 cp5;
@@ -449,8 +449,8 @@ class GUI extends PApplet {   //<>//
       play = true;
       render = true;
       gif.renderStart = millis();
-      delay = gif.renderStart + 2500;
-
+      //delay = gif.renderStart + 2500;
+       //gif.renderer();
       //gif.render();
       //for (Trigger myTrigger : gif.triggers) {
       //  if (myTrigger.ani.isPlaying()) {          
