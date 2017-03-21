@@ -116,10 +116,9 @@ class Layer {  //<>//
       //radialColor(xyz.x, xyz.y);
       strokeWeight(sw);
       ellipse(xyz.x, xyz.y, lx, ly);
-      if (theta == density && play == true) {
-        // so here want to call on write out funtion, and that in turn needs to set render to true
-        render = true;
-      }
+      //if (theta == density && play == true) {
+      //  gif.renderPImage();
+      //}
     }
   }
 

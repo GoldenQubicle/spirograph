@@ -1,9 +1,20 @@
 /* //<>//
   
-  render / play boolean logic not up to par just yet
+  need to work out render menu / program logic  
+  1) want to call renderLoop to interpolate keyFrames
+  2) want to render into PImage array and playback over it
+  3) want to actually save frames out as png
+  
+  hrmm. . possible performance improvement by ditching layerKeyFrames in favor on read/write directly from json
+  and possibly implement actual auto save on timer 
+  
+  use the aniSeek & renderloop to update interpolated keyFrames
+  
+  have a 'frame 0', which is display when none of the keyframes are toggled, and will act as the layer to act on for ani starts on 0
+  so the number of layers is keyFrames + 1
   
  loading bug with ani easing gui not updated properly
- also add tickmarks to petal sliders 
+ add tickmarks to petal sliders 
  
  Perhaps consider splitting aniMatrix into shape (i.e. gears) and aesthetic (i.e. color, line, etc) collapsable menus, e.g. accordion  
  carefully trace layerlock, somewhere its not being set to false it seems

@@ -10,6 +10,8 @@ class Animation {   //<>//
   ArrayList<Boolean[][]> layerAniStart = new ArrayList();
   ArrayList<Trigger> triggers;
   float renderStart;
+  PImage frame;
+  PImage[] frames; 
 
   Animation() {
     nLayers = 1;
@@ -19,7 +21,8 @@ class Animation {   //<>//
     aniMatrixTiming = int(totalTime/keyFrames);
     aniTotalFrames =  (totalTime/1000)*60 ;
     aniFrames = aniTotalFrames/keyFrames;
-
+    frames = new PImage[int(aniTotalFrames)];
+    
     for (int l = 0; l < nLayers; l++) {
       aniStart = new Boolean [keyFrames][layerVars];
       aniInt = new int[keyFrames][layerVars]; 
@@ -50,6 +53,22 @@ class Animation {   //<>//
     triggers = new ArrayList();
     renderKeyFrame = 0;
     renderFrame = 0;
+  }
+
+  void renderPImage(){
+    
+   PImage frame = createImage(Width, Height, ARGB);
+   
+   loadPixels();
+   frame.loadPixels();
+   frame.pixels = pixels;
+   frame.updatePixels();
+   frame.save("frame " + renderFrame + ".png");
+   frames[renderFrame] = frame;
+    
+    println("rendered frame " + renderFrame + " out of " + int(aniTotalFrames));
+    render = true;
+    
   }
 
 
