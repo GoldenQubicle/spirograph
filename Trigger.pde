@@ -18,62 +18,62 @@ class Trigger {
     aniDuration = gif.aniFrames*interval;
     aniSeek = 1 / aniDuration;
 
-    // gear parameters
-    if (layerParameter == 0) {
-      gear = 0;
-      gearVar = 0;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RX;
-    }
-    if (layerParameter == 1) {
-      gear = 0;
-      gearVar = 1;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RY;
-    }
-    if (layerParameter == 2) {
-      gear = 1;
-      gearVar = 2;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].P;
-    }
-    if (layerParameter == 3) {
-      gear = 1;
-      gearVar = 0;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RX;
-    }
-    if (layerParameter == 4) {
-      gear = 1;
-      gearVar = 1;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RY;
-    }
-    if (layerParameter == 5) {
-      gear = 2;
-      gearVar = 2;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].P;
-    }
-    if (layerParameter == 6) {
-      gear = 2;
-      gearVar = 0;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RX;
-    }
-    if (layerParameter == 7) {
-      gear = 2;
-      gearVar = 1;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RY;
-    }
-    if (layerParameter == 8) {
-      gear = 3;
-      gearVar = 2;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].P;
-    }
-    if (layerParameter == 9) {
-      gear = 3;
-      gearVar = 0;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RX;
-    }
-    if (layerParameter == 10) {
-      gear = 3;
-      gearVar = 1;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RY;
-    }
+    //// gear parameters
+    //if (layerParameter == 0) {
+    //  gear = 0;
+    //  gearVar = 0;
+    //  aniValue = layerKeyFrames.get(layerKF).gears[gear].RX;
+    //}
+    //if (layerParameter == 1) {
+    //  gear = 0;
+    //  gearVar = 1;
+    //  aniValue = layerKeyFrames.get(layerKF).gears[gear].RY;
+    //}
+    //if (layerParameter == 2) {
+    //  gear = 1;
+    //  gearVar = 2;
+    //  aniValue = layerKeyFrames.get(layerKF).gears[gear].P;
+    //}
+    //if (layerParameter == 3) {
+    //  gear = 1;
+    //  gearVar = 0;
+    //  aniValue = layerKeyFrames.get(layerKF).gears[gear].RX;
+    //}
+    //if (layerParameter == 4) {
+    //  gear = 1;
+    //  gearVar = 1;
+    //  aniValue = layerKeyFrames.get(layerKF).gears[gear].RY;
+    //}
+    //if (layerParameter == 5) {
+    //  gear = 2;
+    //  gearVar = 2;
+    //  aniValue = layerKeyFrames.get(layerKF).gears[gear].P;
+    //}
+    //if (layerParameter == 6) {
+    //  gear = 2;
+    //  gearVar = 0;
+    //  aniValue = layerKeyFrames.get(layerKF).gears[gear].RX;
+    //}
+    //if (layerParameter == 7) {
+    //  gear = 2;
+    //  gearVar = 1;
+    //  aniValue = layerKeyFrames.get(layerKF).gears[gear].RY;
+    //}
+    //if (layerParameter == 8) {
+    //  gear = 3;
+    //  gearVar = 2;
+    //  aniValue = layerKeyFrames.get(layerKF).gears[gear].P;
+    //}
+    //if (layerParameter == 9) {
+    //  gear = 3;
+    //  gearVar = 0;
+    //  aniValue = layerKeyFrames.get(layerKF).gears[gear].RX;
+    //}
+    //if (layerParameter == 10) {
+    //  gear = 3;
+    //  gearVar = 1;
+    //  aniValue = layerKeyFrames.get(layerKF).gears[gear].RY;
+    //}
     // layer parameters to follow below
 
     //if (layerParameter == 11) {

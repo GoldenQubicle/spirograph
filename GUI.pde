@@ -276,7 +276,7 @@ class GUI extends PApplet {   //<>// //<>//
       for (int f = frame; f < (gif.keyFrames); f++) {
         int keyFrame = f + (int(gui.layerSwitch.getValue())*gif.keyFrames);
         Layer New = new Layer(10);
-        layerKeyFrames.set(keyFrame, controller.copyLayerSettings(New, 1, frame+(int(layerSwitch.getValue())*gif.keyFrames)));
+        //layerKeyFrames.set(keyFrame, controller.copyLayerSettings(New, 1, frame+(int(layerSwitch.getValue())*gif.keyFrames)));
       }
     }
     for (int x = 0; x < gif.keyFrames; x++) {

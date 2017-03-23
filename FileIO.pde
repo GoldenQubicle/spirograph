@@ -29,7 +29,7 @@ class FileIO {
       global.setJSONArray("Layer "+l, lkf);
       for (int f = 0; f < gif.keyFrames; f++) {
         int keyFrame = f+(l*gif.keyFrames);
-        global.getJSONArray("Layer "+l).setJSONObject(f, saveLayer(layerKeyFrames.get(keyFrame)));
+        global.getJSONArray("Layer "+l).setJSONObject(f, saveLayer(layerActive.get(l)));
       }
       global.getJSONArray("Layer "+l).setJSONObject(gif.keyFrames, saveAniMatrix(l));
     }
@@ -152,7 +152,7 @@ class FileIO {
     spheres3d = global.getBoolean(globals[6], spheres3d);
     for (int l =0; l < gif.nLayers; l++) {     
       for (int f=0; f < gif.keyFrames; f++) {     
-        layerKeyFrames.add(loadLayer(global.getJSONArray("Layer "+l).getJSONObject(f)));
+        //layerKeyFrames.add(loadLayer(global.getJSONArray("Layer "+l).getJSONObject(f)));
       }
       gifAniArrays(global.getJSONArray("Layer "+l).getJSONObject(gif.keyFrames), l);
     }

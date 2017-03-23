@@ -67,7 +67,7 @@ GUI gui;
 Animation gif;
 Layer layer_1, layer_2;
 ArrayList<Layer> layerActive =  new ArrayList();
-ArrayList<Layer> layerKeyFrames = new ArrayList();
+//ArrayList<Layer> layerKeyFrames = new ArrayList();
 ArrayList<Layer> layerAnimate =  new ArrayList();
 boolean play, update, spheres3d, render;
 int Width = 512;
