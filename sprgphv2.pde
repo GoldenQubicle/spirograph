@@ -1,19 +1,39 @@
 /* //<>//
   
+  controller.switchKeyFrame(int layer, int setKeyFrame, int getKeyFrame){
+    saveKeyFrame(setKeyFrame) 
+    // write settings of active layer into JSON layerKeyFrame array
+    // retrieve settings from JSON layerKeyFrame array and write into active layer
+    // update the layerGUI
+  }
+  
+  switchLayer.switchLayer(int keyFrame, int setLayer, int getLayer){
+    
+  }
+  
+  add watermark / logo to display?!
+  
   need to work out render menu / program logic  
   1) want to call renderLoop to interpolate keyFrames
   2) want to render into PImage array and playback over it
   3) want to actually save frames out as png
   
+   loading bug with ani easing gui not updated properly 
+   actually seems more than just gui issue, not being able to save over when reloaded - for some reason
+
+  
   hrmm. . possible performance improvement by ditching layerKeyFrames in favor on read/write directly from json
+  about performance, wouldnt it be possible the playback is so slow now because its using the frame time mode?
+  i.e. its now being forced to display all frames, and hence no longer in sync with actual timing - hrm nope, seems to just be slow =)
+  so what if I switch back to default timing, since the renderer uses the seek function anyway, the notion of frames is bit obsolete
   and possibly implement actual auto save on timer 
+  
   
   use the aniSeek & renderloop to update interpolated keyFrames
   
   have a 'frame 0', which is display when none of the keyframes are toggled, and will act as the layer to act on for ani starts on 0
   so the number of layers is keyFrames + 1
   
- loading bug with ani easing gui not updated properly
  add tickmarks to petal sliders 
  
  Perhaps consider splitting aniMatrix into shape (i.e. gears) and aesthetic (i.e. color, line, etc) collapsable menus, e.g. accordion  
@@ -79,6 +99,7 @@ void setup() {
   Ani.init(this);
   Ani.noAutostart();
   Ani.setDefaultTimeMode(Ani.FRAMES);
+    //Ani.setDefaultTimeMode(Ani.SECONDS);
   gif = new Animation();  
   gui = new GUI(this);
   controller = new Controller();
@@ -112,6 +133,7 @@ void draw() {
   if (render == true) {
     gif.renderLoop();
   }
+  //println(render);
 }
 
 //void timer(float ms) {

@@ -116,9 +116,9 @@ class Layer {  //<>//
       //radialColor(xyz.x, xyz.y);
       strokeWeight(sw);
       ellipse(xyz.x, xyz.y, lx, ly);
-      //if (theta == density && play == true) {
-      //  gif.renderPImage();
-      //}
+      if (theta == density && play == true) {
+        gif.renderPImage();
+      }
     }
   }
 

@@ -36,6 +36,15 @@ class FileIO {
     saveJSONObject(global, path + fileName + ".json" );
   }
 
+  void saveKeyFrame(int layer, int keyFrame) {
+    global.getJSONArray("Layer "+layer).setJSONObject(keyFrame, saveLayer(layerActive.get(layer)));
+    saveJSONObject(global, path + fileName + ".json" );
+  }
+  
+  void loadKeyFrame(int layer, int keyFrame) {
+    layerActive.set(layer,loadLayer(global.getJSONArray("Layer " + layer).getJSONObject(keyFrame)));
+  }
+
   JSONObject saveAniMatrix(int layer) {
     int ani =1;
     aniMatrix =  new JSONObject();

@@ -21,9 +21,10 @@ class Animation {   //<>//
     aniMatrixTiming = int(totalTime/keyFrames);
     aniTotalFrames =  (totalTime/1000)*60 ;
     aniFrames = aniTotalFrames/keyFrames;
-    frames = new PImage[int(aniTotalFrames)];
+    frames = new PImage[int(aniTotalFrames)];     
     
-    for (int l = 0; l < nLayers; l++) {
+    
+    for (int l = 0; l < nLayers; l++) {          
       aniStart = new Boolean [keyFrames][layerVars];
       aniInt = new int[keyFrames][layerVars]; 
       aniEnd = new int[keyFrames][layerVars];
@@ -56,7 +57,7 @@ class Animation {   //<>//
   }
 
   void renderPImage(){
-    
+    //println("render image");
    PImage frame = createImage(Width, Height, ARGB);
    
    loadPixels();
@@ -68,6 +69,8 @@ class Animation {   //<>//
     
     println("rendered frame " + renderFrame + " out of " + int(aniTotalFrames));
     render = true;
+        //println("render image finished");
+
     
   }
 
@@ -78,6 +81,7 @@ class Animation {   //<>//
       renderFrame+=1;
       render = false;
     }
+    
     if (render == false && play == true) {
       fTemp+=1;
       aniStart(renderKeyFrame); 
@@ -91,7 +95,7 @@ class Animation {   //<>//
         //myTrigger.ani.pause();
         myTrigger.render+=1;
         myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.render);
-        //println(myTrigger.render, myTrigger.aniSeek*myTrigger.render, renderFrame);
+        println(myTrigger.render, myTrigger.aniSeek*myTrigger.render, renderFrame);
         }
       }
       // setKeyFrame for aniStart
@@ -109,7 +113,7 @@ class Animation {   //<>//
         float end = millis() - renderStart;
         println("done rendering in " + (end/1000) + " seconds" );
       }
-      //println(renderFrame, aniTotalFrames);
+      println(renderFrame, aniTotalFrames);
     }
   }
 

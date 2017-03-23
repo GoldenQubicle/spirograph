@@ -2,7 +2,7 @@ class GUI extends PApplet {   //<>// //<>//
 
   PApplet parent;
   ControlP5 cp5;
-  int layerID;
+  int layerID, kfID;
   boolean layerlock = false;
   Matrix Ani;
   ColorWheel colorBackground, colorStroke, colorFill;
@@ -37,7 +37,7 @@ class GUI extends PApplet {   //<>// //<>//
   } 
 
   public void setup() {
-
+    kfID = 0;
     layerID = 0;
     cp5 = new ControlP5(this);
     int rPanex = 630;
@@ -257,7 +257,17 @@ class GUI extends PApplet {   //<>// //<>//
     }
     if (theEvent.isFrom(keyFrames)) {  
       int frame = int(keyFrames.getValue());
-      controller.toggleKeyFrames(frame);
+    if(kfID != frame){
+      controller.fileio.saveKeyFrame(layerID, kfID);
+      controller.fileio.loadKeyFrame(layerID, frame);
+      kfID = frame;
+      layerlock = true;
+      controller.updateLayerGUI(0,layerID);
+    }
+
+
+
+      //controller.toggleKeyFrames(frame);
     }
     if (theEvent.getController().equals(saveFWD)) {
       int frame = int(keyFrames.getValue());
@@ -444,13 +454,13 @@ class GUI extends PApplet {   //<>// //<>//
       }
     }
 
-
     if (key == 'r') {
       play = true;
       render = true;
       gif.renderStart = millis();
+      //println("check");
       //delay = gif.renderStart + 2500;
-       //gif.renderer();
+      //gif.renderer();
       //gif.render();
       //for (Trigger myTrigger : gif.triggers) {
       //  if (myTrigger.ani.isPlaying()) {          
