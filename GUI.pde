@@ -257,13 +257,15 @@ class GUI extends PApplet {   //<>// //<>//
     }
     if (theEvent.isFrom(keyFrames)) {  
       int frame = int(keyFrames.getValue());
-    if(kfID != frame){
-      controller.fileio.saveKeyFrame(layerID, kfID);
-      controller.fileio.loadKeyFrame(layerID, frame);
-      kfID = frame;
-      layerlock = true;
-      controller.updateLayerGUI(0,layerID);
-    }
+      if (kfID != frame) {
+        controller.fileio.saveKeyFrame(layerID, kfID);
+        for (int layer = 0; layer < layerActive.size(); layer++) {
+          controller.fileio.loadKeyFrame(layer, frame);
+        }
+        kfID = frame;
+        layerlock = true;
+        controller.updateLayerGUI(0, layerID);
+      }
 
 
 
