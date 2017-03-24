@@ -1,16 +1,14 @@
 /* //<>//
+
+  sooo. . time for a massive cleanup and refactor
+  - delete all the unused arrays & variables
+  - make a sensible naming scheme
   
-  controller.switchKeyFrame(int layer, int setKeyFrame, int getKeyFrame){
-    saveKeyFrame(setKeyFrame) 
-    // write settings of active layer into JSON layerKeyFrame array
-    // retrieve settings from JSON layerKeyFrame array and write into active layer
-    // update the layerGUI
-  }
+  the animation class is going to hold all things related to ani in memory, i.e. the gui variables need to be moved
+  the controller is going to handle all gui updates, gif vars updates & save stuff, i.e. move newLayer() from animation to controller
+  the gui class is only going to call on the controller, i.e. move the keyframe save/load into the controller
   
-  switchLayer.switchLayer(int keyFrame, int setLayer, int getLayer){
-    
-  }
-  
+
   add watermark / logo to display?!
   
   need to work out render menu / program logic  
@@ -120,20 +118,20 @@ void draw() {
     translate(Width/2, Height/2);
   }
   
-  if (play == false) {
+  //if (play == false) {
     for (int i = 0; i < layerActive.size(); i++) {
       layerActive.get(i).display();
     }
-  }
-  if (play == true) {
-    for (int i = 0; i < layerAnimate.size(); i++) {
-      layerAnimate.get(i).display();
-    }
-  }
+  //}
+  //if (play == true) {
+  //  for (int i = 0; i < layerAnimate.size(); i++) {
+  //    layerAnimate.get(i).display();
+  //  }
+  //}
   
-  if (render == true) {
-    gif.renderLoop();
-  }
+  //if (render == true) {
+  //  gif.renderLoop();
+  //}
   //println(render);
 }
 

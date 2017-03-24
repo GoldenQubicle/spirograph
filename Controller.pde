@@ -69,7 +69,7 @@ class Controller {
       blank.id = layerActive.size();
       blank.name = "Layer " + layerActive.size();      
       updateAniArrays(0);
-      gui.layerSwitch.addItem(blank.name, blank).setValue(gif.nLayers-1);   
+      gui.layerSwitch.addItem(blank.name, blank).setValue(gif.nLayers-1);
       break;
     case 5:
       // copy layer
@@ -119,6 +119,8 @@ class Controller {
   void updateAniArrays(int action) {
     switch(action) {
     case 0:  // add new & copied layer
+      gif.newLayer();
+
       // update keyFrame array
       //for (int f =0; f < gif.keyFrames; f++) {
       //  Layer kfBLank = new Layer(10);

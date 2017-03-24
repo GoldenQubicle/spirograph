@@ -1,9 +1,9 @@
 class Animation {   //<>//
-  
+
   JSONArray LKF = new JSONArray();
   JSONObject keyFram = new JSONObject();
   JSONObject aniKeyFrames = new JSONObject();
-  
+
   int keyFrames, layerVars, matrixWidth, matrixHeight, cellWidth, cellHeight, nLayers, aniMatrixTiming, keyFrame, interval, renderFrame, renderKeyFrame, fTemp;
   float totalTime, aniTotalFrames, aniFrames, aniSeek;
   int [][] aniEnd, aniInt, aniEasing;
@@ -26,8 +26,8 @@ class Animation {   //<>//
     aniTotalFrames =  (totalTime/1000)*60 ;
     aniFrames = aniTotalFrames/keyFrames;
     frames = new PImage[int(aniTotalFrames)];     
-    
-    
+
+
     for (int l = 0; l < nLayers; l++) {    
       LKF = new JSONArray();
       aniKeyFrames.setJSONArray("Layer " + l, LKF);
@@ -59,46 +59,46 @@ class Animation {   //<>//
     cellWidth = matrixWidth/keyFrames; 
     cellHeight = matrixHeight/layerVars; 
     // 
-    
+
     triggers = new ArrayList();
     renderKeyFrame = 0;
     renderFrame = 0;
   }
 
-  void newLayer(){
-    for (int f =0; f < keyFrames; f++) {
-        keyFram = new JSONObject();
-        layerActive.get(nLayers-1).kf = f;
-        aniKeyFrames.getJSONArray("Layer " + nLayers).setJSONObject(f, controller.fileio.saveLayer(layerActive.get(nLayers-1))); 
+  void newLayer() {
+    LKF = new JSONArray();
+    aniKeyFrames.setJSONArray("Layer " + (nLayers-1), LKF);
+    for (int f = 0; f < keyFrames; f++) {
+      keyFram = new JSONObject();
+      layerActive.get(nLayers-1).kf = f;
+      aniKeyFrames.getJSONArray("Layer " + (nLayers-1)).setJSONObject(f, controller.fileio.saveLayer(layerActive.get(nLayers-1)));
     }
   }
 
-  void renderPImage(){
+  void renderPImage() {
     //println("render image");
-   PImage frame = createImage(Width, Height, ARGB);
-   
-   loadPixels();
-   frame.loadPixels();
-   frame.pixels = pixels;
-   frame.updatePixels();
-   frame.save("frame " + renderFrame + ".png");
-   frames[renderFrame] = frame;
-    
+    PImage frame = createImage(Width, Height, ARGB);
+
+    loadPixels();
+    frame.loadPixels();
+    frame.pixels = pixels;
+    frame.updatePixels();
+    frame.save("frame " + renderFrame + ".png");
+    frames[renderFrame] = frame;
+
     println("rendered frame " + renderFrame + " out of " + int(aniTotalFrames));
     render = true;
-        //println("render image finished");
-
-    
+    //println("render image finished");
   }
 
 
   void renderLoop() {
-        
+
     if (render == true) {
       renderFrame+=1;
       render = false;
     }
-    
+
     if (render == false && play == true) {
       fTemp+=1;
       aniStart(renderKeyFrame); 
@@ -109,10 +109,10 @@ class Animation {   //<>//
           myTrigger.ani.pause();
         }
         if (renderKeyFrame >= myTrigger.Start) {
-        //myTrigger.ani.pause();
-        myTrigger.render+=1;
-        myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.render);
-        println(myTrigger.render, myTrigger.aniSeek*myTrigger.render, renderFrame);
+          //myTrigger.ani.pause();
+          myTrigger.render+=1;
+          myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.render);
+          println(myTrigger.render, myTrigger.aniSeek*myTrigger.render, renderFrame);
         }
       }
       // setKeyFrame for aniStart
@@ -134,37 +134,37 @@ class Animation {   //<>//
     }
   }
 
-//  void renderOnTimer(int frame) {
-//    render = true;
-//    fTemp+=1;
-//    aniStart(renderKeyFrame); 
-//    for (Trigger myTrigger : triggers) {
-//      if (renderKeyFrame == myTrigger.Start) {
-//        myTrigger.ani.start();
-//        myTrigger.ani.pause();
-//      }
-//      myTrigger.ani.pause();
-//      myTrigger.render+=1;
-//      myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.render);
-//      myTrigger.ani.pause();
-//      //println(myTrigger.render, myTrigger.aniSeek*myTrigger.render, frame);
-//    }
-//    // setKeyFrame for aniStart
-//    if (fTemp == aniFrames) {
-//      renderKeyFrame+=1; 
-//      fTemp = 0;
-//    }
-//    // check for end
-//    if (frame == aniTotalFrames) {
-//      render = false;
-//      play = false;
-//      fTemp = 0;
-//      renderKeyFrame = 0;
-//      renderFrame = 0;
-//      println("done rendering");
-//    }
-//    //println(frame, renderKeyFrame);
-//  }
+  //  void renderOnTimer(int frame) {
+  //    render = true;
+  //    fTemp+=1;
+  //    aniStart(renderKeyFrame); 
+  //    for (Trigger myTrigger : triggers) {
+  //      if (renderKeyFrame == myTrigger.Start) {
+  //        myTrigger.ani.start();
+  //        myTrigger.ani.pause();
+  //      }
+  //      myTrigger.ani.pause();
+  //      myTrigger.render+=1;
+  //      myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.render);
+  //      myTrigger.ani.pause();
+  //      //println(myTrigger.render, myTrigger.aniSeek*myTrigger.render, frame);
+  //    }
+  //    // setKeyFrame for aniStart
+  //    if (fTemp == aniFrames) {
+  //      renderKeyFrame+=1; 
+  //      fTemp = 0;
+  //    }
+  //    // check for end
+  //    if (frame == aniTotalFrames) {
+  //      render = false;
+  //      play = false;
+  //      fTemp = 0;
+  //      renderKeyFrame = 0;
+  //      renderFrame = 0;
+  //      println("done rendering");
+  //    }
+  //    //println(frame, renderKeyFrame);
+  //  }
 
 
   void setupArrays() { 
@@ -213,10 +213,10 @@ class Animation {   //<>//
 
   void triggerArray() {
     triggers.clear();
-    layerAnimate.clear();
+    //layerAnimate.clear();
     for (int l = 0; l < nLayers; l++) { 
-      Layer animate = new Layer(10);
-      layerAnimate.add(controller.copyLayerSettings(animate, 0, l));
+      //Layer animate = new Layer(10);
+      //layerAnimate.add(controller.copyLayerSettings(animate, 0, l));
       //layerActive.clear();
       for (int x = 0; x < keyFrames; x++) {
         for (int y = 0; y < layerVars; y++) {
