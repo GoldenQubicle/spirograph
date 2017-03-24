@@ -258,6 +258,7 @@ class GUI extends PApplet {   //<>// //<>//
     if (theEvent.isFrom(keyFrames)) {  
       int frame = int(keyFrames.getValue());
       if (kfID != frame) {
+        layerActive.get(layerID).kf = kfID;
         controller.fileio.saveKeyFrame(layerID, kfID);
         for (int layer = 0; layer < layerActive.size(); layer++) {
           controller.fileio.loadKeyFrame(layer, frame);
@@ -266,18 +267,15 @@ class GUI extends PApplet {   //<>// //<>//
         layerlock = true;
         controller.updateLayerGUI(0, layerID);
       }
-
-
-
       //controller.toggleKeyFrames(frame);
     }
     if (theEvent.getController().equals(saveFWD)) {
       int frame = int(keyFrames.getValue());
-      for (int f = frame; f < (gif.keyFrames); f++) {
-        int keyFrame = f + (int(gui.layerSwitch.getValue())*gif.keyFrames);
-        Layer New = new Layer(10);
-        //layerKeyFrames.set(keyFrame, controller.copyLayerSettings(New, 1, frame+(int(layerSwitch.getValue())*gif.keyFrames)));
-      }
+      //for (int f = frame; f < (gif.keyFrames); f++) {
+      //  int keyFrame = f + (int(gui.layerSwitch.getValue())*gif.keyFrames);
+      //  Layer New = new Layer(10);
+      //  layerKeyFrames.set(keyFrame, controller.copyLayerSettings(New, 1, frame+(int(layerSwitch.getValue())*gif.keyFrames)));
+      //}
     }
     for (int x = 0; x < gif.keyFrames; x++) {
       for (int y = 0; y < gif.layerVars; y++) {

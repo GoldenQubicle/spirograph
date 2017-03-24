@@ -103,13 +103,11 @@ class Controller {
       fileio.loadJSON(fileio.listOfFiles[int(gui.fileSelect.getValue())].getName());
       gui.fileName.setText(controller.fileio.fileName);
       gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(fileio.global.getInt("colorBackground")).moveTo("global");
-      for (int l =0; l < gif.nLayers; l++) {
-        for (int f = 0; f < gif.keyFrames; f++) {
-          layerActive.add(fileio.loadLayer(fileio.global.getJSONArray("Layer " + l).getJSONObject(f)));
-          gui.layerSwitch.addItem(layerActive.get(0).name, layerActive.get(0));
-        }
-      }
       gif.updateAniMatrixTiming();
+      for (int l =0; l < gif.nLayers; l++) { 
+        gui.layerSwitch.addItem(layerActive.get(l).name, layerActive.get(l));
+      }
+      gui.layerSwitch.setValue(0);
       updateMatrixGUI();
       updateAniGUI(2);
       updateLayerGUI(0, 0);
@@ -322,6 +320,7 @@ class Controller {
       gui.keyFrames.addItem("KF" + (i+1), i);
       gui.keyFrames.getItem(i).getCaptionLabel().set("KF" + (i+1)).align(CENTER, CENTER);
     }
+    gui.keyFrames.activate(0);
     gui.Ani.setInterval(gif.aniMatrixTiming);
     gui.Ani.setGrid(gif.keyFrames, gif.layerVars);
     gui.layerlock = true;

@@ -1,5 +1,9 @@
 class Animation {   //<>//
-
+  
+  JSONArray LKF = new JSONArray();
+  JSONObject keyFram = new JSONObject();
+  JSONObject aniKeyFrames = new JSONObject();
+  
   int keyFrames, layerVars, matrixWidth, matrixHeight, cellWidth, cellHeight, nLayers, aniMatrixTiming, keyFrame, interval, renderFrame, renderKeyFrame, fTemp;
   float totalTime, aniTotalFrames, aniFrames, aniSeek;
   int [][] aniEnd, aniInt, aniEasing;
@@ -24,12 +28,17 @@ class Animation {   //<>//
     frames = new PImage[int(aniTotalFrames)];     
     
     
-    for (int l = 0; l < nLayers; l++) {          
+    for (int l = 0; l < nLayers; l++) {    
+      LKF = new JSONArray();
+      aniKeyFrames.setJSONArray("Layer " + l, LKF);
       aniStart = new Boolean [keyFrames][layerVars];
       aniInt = new int[keyFrames][layerVars]; 
       aniEnd = new int[keyFrames][layerVars];
       aniEasing = new int[keyFrames][layerVars]; 
       for (int f =0; f < keyFrames; f++) {
+        keyFram = new JSONObject();
+        layerActive.get(l).kf = f;
+        aniKeyFrames.getJSONArray("Layer " + l).setJSONObject(f, controller.fileio.saveLayer(layerActive.get(l))); 
         for (int v = 0; v < layerVars; v++) {
           aniStart[f][v] = false;
           aniInt[f][v] = 1;

@@ -100,9 +100,10 @@ void setup() {
   Ani.noAutostart();
   Ani.setDefaultTimeMode(Ani.FRAMES);
     //Ani.setDefaultTimeMode(Ani.SECONDS);
-  gif = new Animation();  
   gui = new GUI(this);
   controller = new Controller();
+    gif = new Animation();  
+
   cBackground = color(128, 128, 128);
   play = false;
   update = false;
