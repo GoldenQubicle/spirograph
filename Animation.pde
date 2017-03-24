@@ -65,6 +65,14 @@ class Animation {   //<>//
     renderFrame = 0;
   }
 
+  void newLayer(){
+    for (int f =0; f < keyFrames; f++) {
+        keyFram = new JSONObject();
+        layerActive.get(nLayers-1).kf = f;
+        aniKeyFrames.getJSONArray("Layer " + nLayers).setJSONObject(f, controller.fileio.saveLayer(layerActive.get(nLayers-1))); 
+    }
+  }
+
   void renderPImage(){
     //println("render image");
    PImage frame = createImage(Width, Height, ARGB);

@@ -50,11 +50,11 @@ class Controller {
       gui.cp5.getGroup("ng").hide();
       controller.fileio.fileName = gui.fileName.getText();
       if (kfOld > gif.keyFrames) {
-        updateKeyFrames(2);
+        updateAniArrays(2);
         updateAniGUI(0);
       }
       if (kfOld < gif.keyFrames) {
-        updateKeyFrames(3);
+        updateAniArrays(3);
         updateAniGUI(1);
       }
       fileio.global = new JSONObject();
@@ -63,13 +63,13 @@ class Controller {
       break;
     case 4:
       // new layer
+      gif.nLayers+=1;
       Layer blank = new Layer(100);
       layerActive.add(blank);
       blank.id = layerActive.size();
       blank.name = "Layer " + layerActive.size();      
-      updateKeyFrames(0);
-      gui.layerSwitch.addItem(blank.name, blank);
-      gif.nLayers+=1;
+      updateAniArrays(0);
+      gui.layerSwitch.addItem(blank.name, blank).setValue(gif.nLayers-1);   
       break;
     case 5:
       // copy layer
@@ -80,12 +80,12 @@ class Controller {
       copy.name = ("Layer " + (layerActive.size()) + " - copy layer " + (int(gui.layerSwitch.getValue())+1));
       gui.layerSwitch.addItem(copy.name, copy);
       gif.nLayers+=1;
-      updateKeyFrames(0);
+      updateAniArrays(0);
       break;
     case 6:
       // delete layer
       int del = int(gui.layerSwitch.getValue());
-      updateKeyFrames(1);     
+      updateAniArrays(1);     
       gui.layerSwitch.removeItem(layerActive.get(del).name);
       layerActive.remove(del);
       gif.nLayers-=1;
@@ -116,7 +116,7 @@ class Controller {
     }
   }
 
-  void updateKeyFrames(int action) {
+  void updateAniArrays(int action) {
     switch(action) {
     case 0:  // add new & copied layer
       // update keyFrame array
@@ -146,7 +146,7 @@ class Controller {
     case 1:
       // delete layer     
       int del = int(gui.layerSwitch.getValue());
-      int index = gif.keyFrames*(del+1)-1;
+      //int index = gif.keyFrames*(del+1)-1;
       //for (int f = index; f > (gif.keyFrames*del)-1; f--) {
       //  layerKeyFrames.remove(f);
       //}
@@ -156,7 +156,7 @@ class Controller {
       gif.layerAniEasing.remove(del);
       break;
     case 2: // trim keyFrames      
-      int rangeDel = kfOld - gif.keyFrames;
+      //int rangeDel = kfOld - gif.keyFrames;
       // update keyFrame array
       //for (int rangeEnd = layerKeyFrames.size()-1; rangeEnd > 0; rangeEnd-=kfOld) {
       //  for (int r = 0; r < rangeDel; r++) { 
@@ -184,8 +184,8 @@ class Controller {
       }
       break;
     case 3: // add keyFrames 
-      int range = gif.keyFrames - kfOld;
-      int layerAdd = range * gif.nLayers;
+      //int range = gif.keyFrames - kfOld;
+      //int layerAdd = range * gif.nLayers;
       //int sizeOld = layerKeyFrames.size();
       //// add dummies to set proper size of array
       //for (int i = 0; i < layerAdd; i++) {
