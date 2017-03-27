@@ -1,4 +1,11 @@
 /* //<>//
+ okidoki, so basic features are roughly implemented, however, streamlining & cleaning up proves a minefield
+ my thoughts are: the keyFrame & animate layer arrays are weighing things down and in theory should be possible to replace with json
+ that is: toggling keyFrames and switching layers BOTH are simple read / write operations
+ seconldy: in theory again I only need to know which matrix cell is active
+ in other words: atm it's having to loop over mutliple arrays which actually contain very little info
+ if I just store the start, end & easing style that should be sufficient to update the gui
+ moreover, the renderer isnt exaclty rendering aand. . lets face it, I really want to start something new. . . =)
  
  */
 
@@ -7,7 +14,9 @@ import controlP5.*;
 import dawesometoolkit.*;
 import de.looksgood.ani.*;
 import de.looksgood.ani.easing.*;
+//import gifAnimation.*;
 
+//GifMaker gifExport;
 PeasyCam cam;
 DawesomeToolkit ds;
 Controller controller;
@@ -15,12 +24,13 @@ GUI gui;
 Animation gif;
 Layer layer_1, layer_2;
 ArrayList<Layer> layerActive =  new ArrayList();
+ArrayList<Layer> layerKeyFrames = new ArrayList();
+ArrayList<Layer> layerAnimate =  new ArrayList();
 boolean play, update, spheres3d, render;
 int Width = 512;
 int Height = 512;
 color cBackground;
 float delay;
-
 void settings() {
   size(Width, Height, P3D);
   smooth(8);
@@ -45,29 +55,35 @@ void setup() {
   ds.enableLazySave('i', ".png");
   Ani.init(this);
   Ani.noAutostart();
-  Ani.setDefaultTimeMode(Ani.SECONDS);
+  Ani.setDefaultTimeMode(Ani.FRAMES);
+  gif = new Animation();  
   gui = new GUI(this);
   controller = new Controller();
-  gif = new Animation();  
   cBackground = color(128, 128, 128);
   play = false;
   update = false;
   spheres3d = false;
   render = false;
-  controller.fileio.saveJSON();
+  //gifExport = new GifMaker(this, "export.gif");
 }
 
 void draw() {
   background(cBackground);   
   //println(frameRate);
-
   if (update == true && Width != 512 || Height != 512) { 
     surface.setSize(Width, Height);
     translate(Width/2, Height/2);
   }
 
-  for (int i = 0; i < layerActive.size(); i++) {
-    layerActive.get(i).display();
+  if (play == false) {
+    for (int i = 0; i < layerActive.size(); i++) {
+      layerActive.get(i).display();
+    }
+  }
+  if (play == true) {
+    for (int i = 0; i < layerAnimate.size(); i++) {
+      layerAnimate.get(i).display();
+    }
   }
 
   //if (render == true) {

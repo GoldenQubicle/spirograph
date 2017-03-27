@@ -28,22 +28,12 @@ class FileIO {
       lkf = new JSONArray();  
       global.setJSONArray("Layer "+l, lkf);
       for (int f = 0; f < gif.keyFrames; f++) {
-        
-        global.getJSONArray("Layer "+l).setJSONObject(f, gif.layer.getJSONArray("Layer " + l).getJSONObject(f));
+        int keyFrame = f+(l*gif.keyFrames);
+        global.getJSONArray("Layer "+l).setJSONObject(f, saveLayer(layerKeyFrames.get(keyFrame)));
       }
       global.getJSONArray("Layer "+l).setJSONObject(gif.keyFrames, saveAniMatrix(l));
     }
     saveJSONObject(global, path + fileName + ".json" );
-  }
-
-  void saveKeyFrame(int layer, int keyFrame) {
-    gif.layer.getJSONArray("Layer " + layer).setJSONObject(keyFrame, saveLayer(layerActive.get(layer)));
-    global.getJSONArray("Layer "+layer).setJSONObject(keyFrame, gif.layer.getJSONArray("Layer " + layer).getJSONObject(keyFrame));
-    saveJSONObject(global, path + fileName + ".json" );
-  }
-
-  void loadKeyFrame(int layer, int keyFrame) {
-    layerActive.set(layer, loadLayer(global.getJSONArray("Layer " + layer).getJSONObject(keyFrame)));
   }
 
   JSONObject saveAniMatrix(int layer) {
@@ -72,6 +62,7 @@ class FileIO {
     layer.setString("name", tobeSaved.name);
     layer.setInt("id", tobeSaved.id);
     layer.setInt("kf", tobeSaved.kf);
+    //layer.setBoolean("3d", tobeSaved.spheres3d); 
     for (int i = 0; i < tobeSaved.gears.length; i++) {
       gears.setFloat(Gears[i] + " RX", tobeSaved.gears[i].RX);
       gears.setInt(Gears[i] + " trigX", tobeSaved.gears[i].trigX);
@@ -151,7 +142,9 @@ class FileIO {
     cBackground = global.getInt(globals[4]);
     spheres3d = global.getBoolean(globals[6], spheres3d);
     for (int l =0; l < gif.nLayers; l++) {     
-      layerActive.add(loadLayer(global.getJSONArray("Layer "+l).getJSONObject(0)));
+      for (int f=0; f < gif.keyFrames; f++) {     
+        layerKeyFrames.add(loadLayer(global.getJSONArray("Layer "+l).getJSONObject(f)));
+      }
       gifAniArrays(global.getJSONArray("Layer "+l).getJSONObject(gif.keyFrames), l);
     }
   }

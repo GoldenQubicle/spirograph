@@ -2,7 +2,7 @@ class GUI extends PApplet {   //<>// //<>//
 
   PApplet parent;
   ControlP5 cp5;
-  int layerID, kfID;
+  int layerID;
   boolean layerlock = false;
   Matrix Ani;
   ColorWheel colorBackground, colorStroke, colorFill;
@@ -37,7 +37,7 @@ class GUI extends PApplet {   //<>// //<>//
   } 
 
   public void setup() {
-    kfID = 0;
+
     layerID = 0;
     cp5 = new ControlP5(this);
     int rPanex = 630;
@@ -206,7 +206,7 @@ class GUI extends PApplet {   //<>// //<>//
     }
     // actual matrix    
     Ani = cp5.addMatrix("Matrix").setPosition(3, 525).setSize(gif.matrixWidth, gif.matrixHeight).setGap(2, 2).setMode(ControlP5.MULTIPLES)
-      .setInterval(gif.aniMatrixInterval).setGrid(gif.keyFrames, gif.layerVars).stop(); //.set(0, 0, true);
+      .setInterval(gif.aniMatrixTiming).setGrid(gif.keyFrames, gif.layerVars).stop(); //.set(0, 0, true);
     Ani.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) { 
         if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
@@ -257,26 +257,15 @@ class GUI extends PApplet {   //<>// //<>//
     }
     if (theEvent.isFrom(keyFrames)) {  
       int frame = int(keyFrames.getValue());
-      if (kfID != frame) {
-        layerActive.get(layerID).kf = kfID;
-        controller.fileio.saveKeyFrame(layerID, kfID);
-        for (int layer = 0; layer < layerActive.size(); layer++) {
-          controller.fileio.loadKeyFrame(layer, frame);
-        }
-        kfID = frame;
-        layerlock = true;
-        controller.updateLayerGUI(0, layerID);
-        println(kfID, frame);
-      }
-      //controller.toggleKeyFrames(frame);
+      controller.toggleKeyFrames(frame);
     }
     if (theEvent.getController().equals(saveFWD)) {
       int frame = int(keyFrames.getValue());
-      //for (int f = frame; f < (gif.keyFrames); f++) {
-      //  int keyFrame = f + (int(gui.layerSwitch.getValue())*gif.keyFrames);
-      //  Layer New = new Layer(10);
-      //  layerKeyFrames.set(keyFrame, controller.copyLayerSettings(New, 1, frame+(int(layerSwitch.getValue())*gif.keyFrames)));
-      //}
+      for (int f = frame; f < (gif.keyFrames); f++) {
+        int keyFrame = f + (int(gui.layerSwitch.getValue())*gif.keyFrames);
+        Layer New = new Layer(10);
+        layerKeyFrames.set(keyFrame, controller.copyLayerSettings(New, 1, frame+(int(layerSwitch.getValue())*gif.keyFrames)));
+      }
     }
     for (int x = 0; x < gif.keyFrames; x++) {
       for (int y = 0; y < gif.layerVars; y++) {
@@ -447,7 +436,6 @@ class GUI extends PApplet {   //<>// //<>//
       //gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
     if (key == 'q') { 
-      //controller.reset();
       gif.triggerArray();
       cp5.get(Matrix.class, "Matrix").stop();
       if (play == true) {
@@ -461,14 +449,12 @@ class GUI extends PApplet {   //<>// //<>//
       render = true;
       gif.renderStart = millis();
       //delay = gif.renderStart + 2500;
-      //gif.renderer();
+       //gif.renderer();
       //gif.render();
     }
   }
 
   void Matrix(int theX, int theY) { 
     gif.aniStart(theX);
-
-    //println(theX, theY);
   }
 } 
