@@ -7,7 +7,6 @@ class Trigger {
   String [] GearVars = {"RX", "RY", "P", "Connect", "RZ"};
   String [] LayerVars = {"LX", "LY", "SW", "PlotDots"};
 
-
   Trigger(int thex, int they, int end, int layer) {
     layerParameter = they;
     Start = thex;
@@ -15,20 +14,20 @@ class Trigger {
     layerGet = layer;
     layerKF = End + (layer*gif.keyFrames);
     interval = (End - Start) + 1;
-    aniDuration = gif.aniFrames*interval;
-    aniSeek = 1 / aniDuration;
+    aniDuration = gif.aniMatrixInterval*interval;
+    aniSeek = 1 / (60/interval);
 
     //// gear parameters
     if (layerParameter == 0) {
       gear = 0;
       gearVar = 0;
-      aniValue = gif.aniKeyFrames.getJSONArray("Layer " + layerGet).getJSONObject(layerKF).getJSONObject("Gears").getInt("Gear 0 RX");
+      aniValue = gif.layersKeyFrames.getJSONArray("Layer " + layerGet).getJSONObject(layerKF).getJSONObject("Gears").getInt("Gear 0 RX");
       //aniValue = layerKeyFrames.get(layerKF).gears[gear].RX;
     }
     if (layerParameter == 1) {
       gear = 0;
       gearVar = 1;
-        aniValue = gif.aniKeyFrames.getJSONArray("Layer " + layerGet).getJSONObject(layerKF).getJSONObject("Gears").getInt("Gear 0 RY");
+      aniValue = gif.layersKeyFrames.getJSONArray("Layer " + layerGet).getJSONObject(layerKF).getJSONObject("Gears").getInt("Gear 0 RY");
       //aniValue = layerKeyFrames.get(layerKF).gears[gear].RY;
     }
     //if (layerParameter == 2) {
@@ -76,8 +75,8 @@ class Trigger {
     //  gearVar = 1;
     //  aniValue = layerKeyFrames.get(layerKF).gears[gear].RY;
     //}
+    
     // layer parameters to follow below
-
     //if (layerParameter == 11) {
     //  LV = 0;
     //  aniValue = LayerState.getJSONObject(Parameter[7]).getFloat("value");
@@ -90,7 +89,6 @@ class Trigger {
     //  LV = 2;
     //  aniValue = LayerState.getJSONObject(Parameter[9]).getFloat("value");
     //}
-
     //if (layerParameter == 14) {
     //  G = 1;
     //  GV = 3;
@@ -112,19 +110,17 @@ class Trigger {
     //}
   }
 
-  void aniType() {
- 
-      if (layerParameter <= 10) {
-        ani = Ani.to(layerActive.get(layerGet).gears[gear], aniDuration, GearVars[gearVar], aniValue, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
-      } else {
-        ani = Ani.to(layerActive.get(layerGet), aniDuration, LayerVars[layerVar], aniValue, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
-      }
+  void aniType() { 
+    if (layerParameter <= 10) {
+      ani = Ani.to(layerActive.get(layerGet).gears[gear], aniDuration, GearVars[gearVar], aniValue, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
+    } else {
+      ani = Ani.to(layerActive.get(layerGet), aniDuration, LayerVars[layerVar], aniValue, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
     }
-  
+  }
+
 
   void ani() {
     aniType();
     ani.start();
-    //ani.pause();
   }
 }

@@ -206,16 +206,24 @@ class GUI extends PApplet {   //<>// //<>//
     }
     // actual matrix    
     Ani = cp5.addMatrix("Matrix").setPosition(3, 525).setSize(gif.matrixWidth, gif.matrixHeight).setGap(2, 2).setMode(ControlP5.MULTIPLES)
-      .setInterval(gif.aniMatrixTiming).setGrid(gif.keyFrames, gif.layerVars).stop(); //.set(0, 0, true);
+      .setInterval(gif.aniMatrixInterval).setGrid(gif.keyFrames, gif.layerVars).stop(); //.set(0, 0, true);
     Ani.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) { 
         if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
-          for (int f = 0; f < gif.keyFrames; f++) {
-            for (int v = 0; v < gif.layerVars; v++) {
-              if (Ani.get(f, v) == true && layerlock == false) {
-                gif.layerAniStart.get(int(layerSwitch.getValue()))[f][v] = true;
+          gif.layerAniStart.get(layerID).clear();
+          gif.layerAniVar.get(layerID).clear();
+          for (int x = 0; x < gif.keyFrames; x++) {
+            for (int y = 0; y < gif.layerVars; y++) {
+              if (Ani.get(x, y) == true && layerlock == false) {
+                gif.layerAniStart.get(layerID).append(x);
+                gif.layerAniVar.get(layerID).append(y);
+                cp5.getController("Easing"+"0"+x+"0"+y).setVisible(true);
+                cp5.getController("add"+"0"+x+"0"+y).setVisible(true);
+                cp5.getController("minus"+"0"+x+"0"+y).setVisible(true);
               } else {
-                gif.layerAniStart.get(int(layerSwitch.getValue()))[f][v] = false;
+                cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false);
+                cp5.getController("add"+"0"+x+"0"+y).setVisible(false);
+                cp5.getController("minus"+"0"+x+"0"+y).setVisible(false);
               }
             }
           }
@@ -242,7 +250,7 @@ class GUI extends PApplet {   //<>// //<>//
 
   void controlEvent(ControlEvent theEvent) {
     if (theEvent.isTab()) {
-      gif.tabToggle();
+      //gif.tabToggle();
     }
     for (RadioButton R : trigSwitch) {
       if (theEvent.isFrom(R) && layerlock == false) {
@@ -420,9 +428,10 @@ class GUI extends PApplet {   //<>// //<>//
       if (theEvent.getController().equals(layerSwitch)) {
         int set = int(layerSwitch.getValue());
         layerlock = true;
+        println(gif.layerAniStart.get(set).size());
         controller.updateMatrixLayerGUI(set);
         controller.updateLayerGUI(0, set);
-        gif.tabToggle();
+        //gif.tabToggle();
       }
     }
   }
@@ -453,33 +462,16 @@ class GUI extends PApplet {   //<>// //<>//
         cp5.get(Matrix.class, "Matrix").play();
       }
     }
-
     if (key == 'r') {
       play = true;
       render = true;
       gif.renderStart = millis();
-      //println("check");
-      //delay = gif.renderStart + 2500;
       //gif.renderer();
       //gif.render();
-      //for (Trigger myTrigger : gif.triggers) {
-      //  if (myTrigger.ani.isPlaying()) {          
-      //    myTrigger.ani.pause();
-      //    cp5.get(Matrix.class, "Matrix").pause();
-      //  } else if(myTrigger.ani.isEnded() == false){
-      //    myTrigger.ani.resume();
-      //  }
-      //}
     }
   }
 
   void Matrix(int theX, int theY) { 
     gif.aniStart(theX);
-
-    //println(theX, theY);
   }
 } 
-
-//void controlEvent(ControlEvent theControlEvent) {
-
-//}

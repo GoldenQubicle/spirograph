@@ -1,22 +1,12 @@
 class Controller {
   FileIO fileio = new FileIO();
-  Layer dummy = new Layer(100);
   int kfOld;   
-  Boolean [][] aniStartNew;
+  IntList aniStartNew;
   int [][] aniIntNew;
   int [][] aniEndNew;
   int [][] aniEasingNew;
 
   Controller() {
-    //for (int l=0; l < gif.nLayers; l++) {
-    //  for (int f=0; f < gif.keyFrames; f++) {
-    //    Layer dummy = new Layer(10);
-    //    dummy.name = layerActive.get(l).name;
-    //    dummy.id = layerActive.get(l).id;
-    //    dummy.kf = f; 
-    //    layerKeyFrames.add(copyLayerSettings(dummy, 0, l));
-    //  }
-    //}
   }
 
   void menuGifLayer(int buttonID) {
@@ -70,6 +60,9 @@ class Controller {
       blank.name = "Layer " + layerActive.size();      
       updateAniArrays(0);
       gui.layerSwitch.addItem(blank.name, blank).setValue(gif.nLayers-1);
+      fileio.saveJSON();
+      gui.layerlock = true;
+      updateLayerGUI(0, gif.nLayers-1);
       break;
     case 5:
       // copy layer
@@ -81,6 +74,7 @@ class Controller {
       gui.layerSwitch.addItem(copy.name, copy);
       gif.nLayers+=1;
       updateAniArrays(0);
+      fileio.saveJSON();
       break;
     case 6:
       // delete layer
@@ -89,15 +83,14 @@ class Controller {
       gui.layerSwitch.removeItem(layerActive.get(del).name);
       layerActive.remove(del);
       gif.nLayers-=1;
+      fileio.saveJSON();
       break;
     case 7:
       // load json file 
       gui.cp5.getGroup("fs").hide();
       update = true;
       gui.layerlock = true;
-      layerAnimate.clear();
       layerActive.clear();
-      //layerKeyFrames.clear();
       gui.layerSwitch.clear();
       gui.colorBackground.remove();
       fileio.loadJSON(fileio.listOfFiles[int(gui.fileSelect.getValue())].getName());
@@ -120,89 +113,68 @@ class Controller {
     switch(action) {
     case 0:  // add new & copied layer
       gif.newLayer();
+      gif.aniStart = new IntList();
+      gif.aniVar= new IntList();
+      gif.layerAniStart.add(gif.nLayers-1, gif.aniStart);
+      gif.layerAniVar.add(gif.nLayers-1, gif.aniStart);
 
-      // update keyFrame array
-      //for (int f =0; f < gif.keyFrames; f++) {
-      //  Layer kfBLank = new Layer(10);
-      //  layerKeyFrames.add(copyLayerSettings(kfBLank, 0, layerActive.size()-1));
-      //  layerKeyFrames.get(layerKeyFrames.size()-1).kf = f;
-      //}
       // add new ani arrays
-      gif.aniStart = new Boolean [gif.keyFrames][gif.layerVars];
+      //gif.aniStart = new Boolean [gif.keyFrames][gif.layerVars];      
       gif.aniInt = new int[gif.keyFrames][gif.layerVars]; 
       gif.aniEnd = new int[gif.keyFrames][gif.layerVars]; 
       gif.aniEasing = new int[gif.keyFrames][gif.layerVars]; 
       for (int f = 0; f < gif.keyFrames; f++) {
         for (int v = 0; v < gif.layerVars; v++) {
-          gif.aniStart[f][v] = false;
+          //gif.aniStart[f][v] = false;
+          gui.Ani.set(f, v, false);
           gif.aniInt[f][v] = 1;
           gif.aniEnd[f][v] = f;
           gif.aniEasing[f][v] = 0;
         }
       }
-      gif.layerAniStart.add(gif.aniStart);
+      //gif.layerAniStart.add(gif.aniStart);
       gif.layerAniInt.add(gif.aniInt);
       gif.layerAniEnd.add(gif.aniEnd);
       gif.layerAniEasing.add(gif.aniEasing);
       break;
     case 1:
       // delete layer     
-      int del = int(gui.layerSwitch.getValue());
-      //int index = gif.keyFrames*(del+1)-1;
-      //for (int f = index; f > (gif.keyFrames*del)-1; f--) {
-      //  layerKeyFrames.remove(f);
-      //}
+      int del = int(gui.layerSwitch.getValue()); 
       gif.layerAniStart.remove(del);
       gif.layerAniInt.remove(del);
       gif.layerAniEnd.remove(del);
       gif.layerAniEasing.remove(del);
       break;
-    case 2: // trim keyFrames      
-      //int rangeDel = kfOld - gif.keyFrames;
-      // update keyFrame array
-      //for (int rangeEnd = layerKeyFrames.size()-1; rangeEnd > 0; rangeEnd-=kfOld) {
-      //  for (int r = 0; r < rangeDel; r++) { 
-      //    layerKeyFrames.remove(rangeEnd-r);
-      //  }
-      //}      
-      // update ani arrays
+    case 2: // trim keyFrames         
       for (int l =0; l < gif.nLayers; l++) {
-        aniStartNew = new Boolean [gif.keyFrames][gif.layerVars];
+        //aniStartNew = new Boolean [gif.keyFrames][gif.layerVars];
         aniIntNew = new int[gif.keyFrames][gif.layerVars]; 
         aniEndNew = new int[gif.keyFrames][gif.layerVars];
         aniEasingNew = new int[gif.keyFrames][gif.layerVars]; 
         for (int f =0; f < gif.keyFrames; f++) {
           for (int v = 0; v < gif.layerVars; v++) {
-            aniStartNew[f][v] = gif.layerAniStart.get(l)[f][v];
+            //aniStartNew[f][v] = gif.layerAniStart.get(l)[f][v];
             aniIntNew [f][v] = gif.layerAniInt.get(l)[f][v];
             aniEndNew[f][v] = gif.layerAniEnd.get(l)[f][v];
             aniEasingNew[f][v] = gif.layerAniEasing.get(l)[f][v];
           }
         }
-        gif.layerAniStart.set(l, aniStartNew);
+        //gif.layerAniStart.set(l, aniStartNew);
         gif.layerAniInt.set(l, aniIntNew);
         gif.layerAniEnd.set(l, aniEndNew);
         gif.layerAniEasing.set(l, aniEasingNew);
       }
       break;
     case 3: // add keyFrames 
-      //int range = gif.keyFrames - kfOld;
-      //int layerAdd = range * gif.nLayers;
-      //int sizeOld = layerKeyFrames.size();
-      //// add dummies to set proper size of array
-      //for (int i = 0; i < layerAdd; i++) {
-      //  Layer dummy = new Layer(0);
-      //  layerKeyFrames.add(dummy);
-      //}
       // updating ani arrays
       for (int l =0; l < gif.nLayers; l++) {
-        aniStartNew = new Boolean [gif.keyFrames][gif.layerVars];
+        //aniStartNew = new Boolean [gif.keyFrames][gif.layerVars];
         aniIntNew = new int[gif.keyFrames][gif.layerVars]; 
         aniEndNew = new int[gif.keyFrames][gif.layerVars]; 
         aniEasingNew = new int[gif.keyFrames][gif.layerVars]; 
         for (int f = 0; f < kfOld; f++) {
           for (int v = 0; v < gif.layerVars; v++) {
-            aniStartNew[f][v] = gif.layerAniStart.get(l)[f][v];
+            //aniStartNew[f][v] = gif.layerAniStart.get(l)[f][v];
             aniIntNew [f][v] = gif.layerAniInt.get(l)[f][v];
             aniEndNew[f][v] = gif.layerAniEnd.get(l)[f][v];
             aniEasingNew[f][v] = gif.layerAniEasing.get(l)[f][v];
@@ -210,36 +182,17 @@ class Controller {
         }
         for (int f = kfOld; f < gif.keyFrames; f++) {
           for (int v = 0; v < gif.layerVars; v++) {
-            aniStartNew[f][v] = false;
+            //aniStartNew[f][v] = false;
             aniIntNew [f][v] = 1;
             aniEndNew[f][v] = f;
             aniEasingNew[f][v] = 0;
           }
         }
-        gif.layerAniStart.set(l, aniStartNew);
+        //gif.layerAniStart.set(l, aniStartNew);
         gif.layerAniInt.set(l, aniIntNew);
         gif.layerAniEnd.set(l, aniEndNew);
         gif.layerAniEasing.set(l, aniEasingNew);
-      }
-      // updating layerKeyFrame array
-      //int setLayer = 0;
-      //int getLayer = 0;
-      //int rangeAdd = range*gif.nLayers;
-      //for (int indexStart = sizeOld-1; indexStart > 0; indexStart-=kfOld) {
-      //  rangeAdd-=range;
-      //  for (int i = 0; i < kfOld; i++) {    
-      //    getLayer = indexStart - i;
-      //    setLayer = getLayer + rangeAdd;  
-      //    layerKeyFrames.set(setLayer, layerKeyFrames.get(getLayer));
-      //  }
-      //  setLayer = setLayer + kfOld-1;
-      //  for (int c = 0; c < range; c++) {          
-      //    int copyLayer = setLayer+c+1;
-      //    Layer kfNew = new Layer(10);
-      //    layerKeyFrames.set(copyLayer, copyLayerSettings(kfNew, 1, setLayer));
-      //    layerKeyFrames.get(copyLayer).kf = kfOld + c;
-      //  }
-      //}
+      }      
       break;
     }
   }
@@ -323,19 +276,18 @@ class Controller {
       gui.keyFrames.getItem(i).getCaptionLabel().set("KF" + (i+1)).align(CENTER, CENTER);
     }
     gui.keyFrames.activate(0);
-    gui.Ani.setInterval(gif.aniMatrixTiming);
+    gui.Ani.setInterval(gif.aniMatrixInterval);
     gui.Ani.setGrid(gif.keyFrames, gif.layerVars);
-    gui.layerlock = true;
-    updateMatrixLayerGUI(0);
-    gui.layerlock = false;
+    //gui.layerlock = true;
+    //updateMatrixLayerGUI(0);
+    //gui.layerlock = false;
   }
 
   void updateMatrixLayerGUI(int get) {
     if (gui.layerlock == true) {
-      for (int f = 0; f < gif.keyFrames; f++) {
-        for (int v = 0; v < gif.layerVars; v++) {
-          gui.Ani.set(f, v, gif.layerAniStart.get(get)[f][v]);
-        }
+      gui.Ani.clear();
+      for (int i = 0; i < gif.layerAniStart.get(get).size(); i++) {
+        gui.Ani.set(gif.layerAniStart.get(get).get(i), gif.layerAniVar.get(get).get(i), true);
       }
     }
   }
@@ -412,13 +364,4 @@ class Controller {
     }
     return dummy;
   }
-
-  //void toggleKeyFrames(int frame) {     
-  //  layerActive.clear();
-  //  for (int f = frame; f < layerKeyFrames.size(); f+= gif.keyFrames) {
-  //    layerActive.add(layerKeyFrames.get(f));
-  //  }
-  //  gui.layerlock = true;
-  //  updateLayerGUI(0, int(gui.layerSwitch.getValue()));
-  //}
 }
