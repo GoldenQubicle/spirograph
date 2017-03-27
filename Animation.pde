@@ -1,20 +1,19 @@
 class Animation {   //<>//
-  JSONObject layersKeyFrames = new JSONObject();
-  JSONArray layer = new JSONArray();
+
+  JSONArray layerKeyFrames = new JSONArray();
   JSONObject keyFrame = new JSONObject();
+  JSONObject layer = new JSONObject();
+
   int keyFrames, layerVars, matrixWidth, matrixHeight, cellWidth, cellHeight, nLayers, aniMatrixInterval, renderFrame, renderKeyFrame, fTemp;
-  float totalTime, aniTotalFrames, aniFrames, aniSeek, renderStart;
+  float totalTime, aniTotalFrames, aniFrames, aniSeek;
   int [][] aniEnd, aniInt, aniEasing;
   ArrayList<int [][]> layerAniInt = new ArrayList();
   ArrayList<int [][]> layerAniEnd = new ArrayList();  
   ArrayList<int [][]> layerAniEasing = new ArrayList(); 
-  //Boolean [][] aniStart;
-  IntList aniStart;
-  IntList aniVar;
-  ArrayList<IntList> layerAniStart = new ArrayList();
-  ArrayList<IntList> layerAniVar = new ArrayList();
-
+  Boolean [][] aniStart;
+  ArrayList<Boolean[][]> layerAniStart = new ArrayList();
   ArrayList<Trigger> triggers;
+  float renderStart;
   PImage frame;
   PImage[] frames; 
 
@@ -26,53 +25,52 @@ class Animation {   //<>//
     aniMatrixInterval = int(totalTime/keyFrames);
     //aniTotalFrames =  (totalTime/1000)*60 ;
     //aniFrames = aniTotalFrames/keyFrames;
-
-    frames = new PImage[int(aniTotalFrames)]; 
+    frames = new PImage[int(aniTotalFrames)];     
 
     for (int l = 0; l < nLayers; l++) {    
-      layer = new JSONArray();
-      layersKeyFrames.setJSONArray("Layer " + l, layer);
-      aniStart = new IntList();
-      aniVar = new IntList();
-
+      layerKeyFrames = new JSONArray();
+      layer.setJSONArray("Layer " + l, layerKeyFrames);
+      aniStart = new Boolean [keyFrames][layerVars];
       aniInt = new int[keyFrames][layerVars]; 
       aniEnd = new int[keyFrames][layerVars];
       aniEasing = new int[keyFrames][layerVars]; 
       for (int f =0; f < keyFrames; f++) {
         keyFrame = new JSONObject();
         layerActive.get(l).kf = f;
-        layersKeyFrames.getJSONArray("Layer " + l).setJSONObject(f, controller.fileio.saveLayer(layerActive.get(l))); 
+        layer.getJSONArray("Layer " + l).setJSONObject(f, controller.fileio.saveLayer(layerActive.get(l))); 
         for (int v = 0; v < layerVars; v++) {
+          aniStart[f][v] = false;
           aniInt[f][v] = 1;
           aniEnd[f][v] = f;
           aniEasing[f][v] = 0;
         }
       }
       layerAniStart.add(aniStart);
-      layerAniVar.add(aniVar);
       layerAniInt.add(aniInt);
       layerAniEnd.add(aniEnd);
       layerAniEasing.add(aniEasing);
     }
     aniSeek = 1 / aniTotalFrames;
-    triggers = new ArrayList();
-    renderKeyFrame = 0;
-    renderFrame = 0;
 
     // needs to be moved
     matrixWidth = 775; 
     matrixHeight = 400; 
     cellWidth = matrixWidth/keyFrames; 
-    cellHeight = matrixHeight/layerVars;
+    cellHeight = matrixHeight/layerVars; 
+    // 
+
+    triggers = new ArrayList();
+    renderKeyFrame = 0;
+    renderFrame = 0;
   }
 
   void newLayer() {
-    layer = new JSONArray();
-    layersKeyFrames.setJSONArray("Layer " + (nLayers-1), layer);
+    layerKeyFrames = new JSONArray();
+    layer.setJSONArray("Layer " + (nLayers-1), layerKeyFrames);
     for (int f = 0; f < keyFrames; f++) {
       keyFrame = new JSONObject();
       layerActive.get(nLayers-1).kf = f;
-      layersKeyFrames.getJSONArray("Layer " + (nLayers-1)).setJSONObject(f, controller.fileio.saveLayer(layerActive.get(nLayers-1)));
+      layer.getJSONArray("Layer " + (nLayers-1)).setJSONObject(f, controller.fileio.saveLayer(layerActive.get(nLayers-1)));
     }
   }
 
@@ -90,10 +88,12 @@ class Animation {   //<>//
 
 
   void renderLoop() {
+
     if (render == true) {
       renderFrame+=1;
       render = false;
     }
+
     if (render == false && play == true) {
       fTemp+=1;
       aniStart(renderKeyFrame); 
@@ -135,14 +135,13 @@ class Animation {   //<>//
     layerAniEnd.clear();
     layerAniEasing.clear();
     for (int l = 0; l < nLayers; l++) {
-      //aniStart = new Boolean [keyFrames][layerVars];
-      aniStart = new IntList();
+      aniStart = new Boolean [keyFrames][layerVars];
       aniInt = new int[keyFrames][layerVars]; 
       aniEnd = new int[keyFrames][layerVars];
       aniEasing = new int[keyFrames][layerVars]; 
       for (int f =0; f < keyFrames; f++) {
         for (int v = 0; v < layerVars; v++) {
-          //aniStart[f][v] = false;
+          aniStart[f][v] = false;
           aniInt[f][v] = 1;
           aniEnd[f][v] = f;
           aniEasing[f][v] = 0;
@@ -175,42 +174,40 @@ class Animation {   //<>//
   }
 
   void triggerArray() {
-    //triggers.clear();
-
-
+    triggers.clear();
+    //layerAnimate.clear();
     for (int l = 0; l < nLayers; l++) { 
-      for (int i = 0; i < layerAniStart.get(l).size(); i++) {
-        println(layerAniStart.get(l).get(i), layerAniVar.get(l).get(i));
+      //Layer animate = new Layer(10);
+      //layerAnimate.add(controller.copyLayerSettings(animate, 0, l));
+      //layerActive.clear();
+      for (int x = 0; x < keyFrames; x++) {
+        for (int y = 0; y < layerVars; y++) {
+          if (layerAniStart.get(l)[x][y] == true) {
+            Trigger Animate;
+            Animate = new Trigger(x, y, layerAniEnd.get(l)[x][y], l);
+            println(x, y, layerAniEnd.get(l)[x][y], l);
+            triggers.add(Animate);
+            //println(triggers.size());
+          }
+        }
       }
-
-      //for (int x = 0; x < keyFrames; x++) {
-      //  for (int y = 0; y < layerVars; y++) {
-      //if (layerAniStart.get(l)[x][y] == true) {
-      //Trigger Animate;
-      //Animate = new Trigger(x, y, layerAniEnd.get(l)[x][y], l);
-      //println(x, y, layerAniEnd.get(l)[x][y], l);
-      //triggers.add(Animate);
-      //println(triggers.size());
-      //}
-      //}
-      //}
     }
   }
 
-  //void tabToggle() {
-  //  for (int x = 0; x < keyFrames; x++) {
-  //    for (int y = 0; y < layerVars; y++) {
-  //      if (layerAniStart.get(int(gui.layerSwitch.getValue()))[x][y] == true) {
-  //        gui.cp5.getController("Easing"+"0"+x+"0"+y).setVisible(true); 
-  //        gui.cp5.getController("add"+"0"+x+"0"+y).setVisible(true); 
-  //        gui.cp5.getController("minus"+"0"+x+"0"+y).setVisible(true);
-  //      }
-  //      if (layerAniStart.get(int(gui.layerSwitch.getValue()))[x][y] == false) {
-  //        gui.cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false); 
-  //        gui.cp5.getController("add"+"0"+x+"0"+y).setVisible(false); 
-  //        gui.cp5.getController("minus"+"0"+x+"0"+y).setVisible(false);
-  //      }
-  //    }
-  //  }
-  //}
+  void tabToggle() {
+    for (int x = 0; x < keyFrames; x++) {
+      for (int y = 0; y < layerVars; y++) {
+        if (layerAniStart.get(int(gui.layerSwitch.getValue()))[x][y] == true) {
+          gui.cp5.getController("Easing"+"0"+x+"0"+y).setVisible(true); 
+          gui.cp5.getController("add"+"0"+x+"0"+y).setVisible(true); 
+          gui.cp5.getController("minus"+"0"+x+"0"+y).setVisible(true);
+        }
+        if (layerAniStart.get(int(gui.layerSwitch.getValue()))[x][y] == false) {
+          gui.cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false); 
+          gui.cp5.getController("add"+"0"+x+"0"+y).setVisible(false); 
+          gui.cp5.getController("minus"+"0"+x+"0"+y).setVisible(false);
+        }
+      }
+    }
+  }
 }

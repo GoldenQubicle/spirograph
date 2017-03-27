@@ -210,20 +210,12 @@ class GUI extends PApplet {   //<>// //<>//
     Ani.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) { 
         if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
-          gif.layerAniStart.get(layerID).clear();
-          gif.layerAniVar.get(layerID).clear();
-          for (int x = 0; x < gif.keyFrames; x++) {
-            for (int y = 0; y < gif.layerVars; y++) {
-              if (Ani.get(x, y) == true && layerlock == false) {
-                gif.layerAniStart.get(layerID).append(x);
-                gif.layerAniVar.get(layerID).append(y);
-                cp5.getController("Easing"+"0"+x+"0"+y).setVisible(true);
-                cp5.getController("add"+"0"+x+"0"+y).setVisible(true);
-                cp5.getController("minus"+"0"+x+"0"+y).setVisible(true);
+          for (int f = 0; f < gif.keyFrames; f++) {
+            for (int v = 0; v < gif.layerVars; v++) {
+              if (Ani.get(f, v) == true && layerlock == false) {
+                gif.layerAniStart.get(int(layerSwitch.getValue()))[f][v] = true;
               } else {
-                cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false);
-                cp5.getController("add"+"0"+x+"0"+y).setVisible(false);
-                cp5.getController("minus"+"0"+x+"0"+y).setVisible(false);
+                gif.layerAniStart.get(int(layerSwitch.getValue()))[f][v] = false;
               }
             }
           }
@@ -250,7 +242,7 @@ class GUI extends PApplet {   //<>// //<>//
 
   void controlEvent(ControlEvent theEvent) {
     if (theEvent.isTab()) {
-      //gif.tabToggle();
+      gif.tabToggle();
     }
     for (RadioButton R : trigSwitch) {
       if (theEvent.isFrom(R) && layerlock == false) {
@@ -274,6 +266,7 @@ class GUI extends PApplet {   //<>// //<>//
         kfID = frame;
         layerlock = true;
         controller.updateLayerGUI(0, layerID);
+        println(kfID, frame);
       }
       //controller.toggleKeyFrames(frame);
     }
@@ -428,10 +421,9 @@ class GUI extends PApplet {   //<>// //<>//
       if (theEvent.getController().equals(layerSwitch)) {
         int set = int(layerSwitch.getValue());
         layerlock = true;
-        println(gif.layerAniStart.get(set).size());
         controller.updateMatrixLayerGUI(set);
         controller.updateLayerGUI(0, set);
-        //gif.tabToggle();
+        gif.tabToggle();
       }
     }
   }
@@ -455,6 +447,7 @@ class GUI extends PApplet {   //<>// //<>//
       //gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
     if (key == 'q') { 
+      //controller.reset();
       gif.triggerArray();
       cp5.get(Matrix.class, "Matrix").stop();
       if (play == true) {
@@ -462,10 +455,12 @@ class GUI extends PApplet {   //<>// //<>//
         cp5.get(Matrix.class, "Matrix").play();
       }
     }
+
     if (key == 'r') {
       play = true;
       render = true;
       gif.renderStart = millis();
+      //delay = gif.renderStart + 2500;
       //gif.renderer();
       //gif.render();
     }
@@ -473,5 +468,7 @@ class GUI extends PApplet {   //<>// //<>//
 
   void Matrix(int theX, int theY) { 
     gif.aniStart(theX);
+
+    //println(theX, theY);
   }
 } 

@@ -1,5 +1,4 @@
 /* //<>//
-
  
  */
 
@@ -20,6 +19,7 @@ boolean play, update, spheres3d, render;
 int Width = 512;
 int Height = 512;
 color cBackground;
+float delay;
 
 void settings() {
   size(Width, Height, P3D);
@@ -60,6 +60,7 @@ void setup() {
 void draw() {
   background(cBackground);   
   //println(frameRate);
+
   if (update == true && Width != 512 || Height != 512) { 
     surface.setSize(Width, Height);
     translate(Width/2, Height/2);
@@ -74,7 +75,16 @@ void draw() {
   //}
 }
 
-
+//void timer(float ms) {
+//  if (ms > delay) {
+//    render = false;
+//  }
+//  if (render == false) {
+//    delay += 500;
+//    gif.renderFrame+=1;    
+//    gif.renderOnTimer(gif.renderFrame);  
+//  }
+//}
 
 void keyPressed() {
   if (key==' ') {     

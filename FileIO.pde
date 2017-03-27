@@ -1,7 +1,7 @@
 class FileIO {
   String path = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\";
   String fileName = "default";
-  JSONObject global, layer, gears, aniValues, aniMatrix;
+  JSONObject global, layer, gears, keyFrame, aniValues, aniMatrix;
   JSONArray lkf;
   String[] globals = {"gifWidth", "gifHeight", "gifLength", "gifKeyFrames", "colorBackground", "Layers", "drawMode"};
   String [] Gears = {"Gear 0", "Gear 1", "Gear 2", "Gear 3"};
@@ -11,7 +11,8 @@ class FileIO {
 
   FileIO() {
     global = new JSONObject();
-   aniMatrix =  new JSONObject();
+    keyFrame = new JSONObject();
+    aniMatrix =  new JSONObject();
     lkf = new JSONArray();
   }
 
@@ -28,7 +29,7 @@ class FileIO {
       global.setJSONArray("Layer "+l, lkf);
       for (int f = 0; f < gif.keyFrames; f++) {
         
-        global.getJSONArray("Layer "+l).setJSONObject(f, gif.layersKeyFrames.getJSONArray("Layer " + l).getJSONObject(f));
+        global.getJSONArray("Layer "+l).setJSONObject(f, gif.layer.getJSONArray("Layer " + l).getJSONObject(f));
       }
       global.getJSONArray("Layer "+l).setJSONObject(gif.keyFrames, saveAniMatrix(l));
     }
@@ -36,13 +37,12 @@ class FileIO {
   }
 
   void saveKeyFrame(int layer, int keyFrame) {
-    gif.layersKeyFrames.getJSONArray("Layer " + layer).setJSONObject(keyFrame, saveLayer(layerActive.get(layer)));
-    global.getJSONArray("Layer "+layer).setJSONObject(keyFrame, gif.layersKeyFrames.getJSONArray("Layer " + layer).getJSONObject(keyFrame));
+    gif.layer.getJSONArray("Layer " + layer).setJSONObject(keyFrame, saveLayer(layerActive.get(layer)));
+    global.getJSONArray("Layer "+layer).setJSONObject(keyFrame, gif.layer.getJSONArray("Layer " + layer).getJSONObject(keyFrame));
     saveJSONObject(global, path + fileName + ".json" );
   }
 
   void loadKeyFrame(int layer, int keyFrame) {
-    
     layerActive.set(layer, loadLayer(global.getJSONArray("Layer " + layer).getJSONObject(keyFrame)));
   }
 
@@ -51,7 +51,7 @@ class FileIO {
     aniMatrix =  new JSONObject();
     for (int f = 0; f < gif.keyFrames; f++) {
       for (int v = 0; v < gif.layerVars; v++) {
-        //if (gif.layerAniStart.get(layer)[f][v] == true) {    
+        if (gif.layerAniStart.get(layer)[f][v] == true) {    
           aniValues = new JSONObject();
           aniValues.setInt("start", f);
           aniValues.setInt("parameter", v);
@@ -62,7 +62,7 @@ class FileIO {
           ani+=1;
         }
       }
-    //}
+    }
     return aniMatrix;
   }
 
@@ -131,7 +131,7 @@ class FileIO {
 
   void gifAniArrays(JSONObject aniMatrix, int layer) {
     for (int i = 0; i < aniMatrix.size(); i++) {
-      //gif.layerAniStart.get(layer)[aniMatrix.getJSONObject("animation "+ (i+1)).getInt("start")][aniMatrix.getJSONObject("animation "+ (i+1)).getInt("parameter")] = true;
+      gif.layerAniStart.get(layer)[aniMatrix.getJSONObject("animation "+ (i+1)).getInt("start")][aniMatrix.getJSONObject("animation "+ (i+1)).getInt("parameter")] = true;
       gif.layerAniInt.get(layer)[aniMatrix.getJSONObject("animation "+ (i+1)).getInt("start")][aniMatrix.getJSONObject("animation "+ (i+1)).getInt("parameter")] = aniMatrix.getJSONObject("animation "+ (i+1)).getInt("intervals");
       gif.layerAniEnd.get(layer)[aniMatrix.getJSONObject("animation "+ (i+1)).getInt("start")][aniMatrix.getJSONObject("animation "+ (i+1)).getInt("parameter")] = aniMatrix.getJSONObject("animation "+ (i+1)).getInt("end");
       gif.layerAniEasing.get(layer)[aniMatrix.getJSONObject("animation "+ (i+1)).getInt("start")][aniMatrix.getJSONObject("animation "+ (i+1)).getInt("parameter")] = aniMatrix.getJSONObject("animation "+ (i+1)).getInt("easing");
