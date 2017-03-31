@@ -19,8 +19,12 @@ class Animation {   //<>//
     totalTime = 4000; 
     keyFrames = 4;
     aniMatrixTiming = int(totalTime/keyFrames);
-    aniTotalFrames =  (totalTime/1000)*60 ;
-    aniFrames = aniTotalFrames/keyFrames;
+    
+    aniTotalFrames =  (totalTime/1000)*60 ; // being used in renderer
+    
+    //aniFrames = aniTotalFrames/keyFrames;
+    
+    
     frames = new PImage[int(aniTotalFrames)];
 
     for (int l = 0; l < nLayers; l++) {

@@ -368,16 +368,16 @@ class GUI extends PApplet {   //<>// //<>//
         layerActive.get(layerID).gear3.P = int(petals3.getValue());
       }
       if (theEvent.getController().equals(G1r)) {
-        //layerActive.get(layerID).gear1.speed = map(G1r.getValue(), 0, 100, -.000025, .000025);
-        layerActive.get(layerID).gear1.rotate = map(G1r.getValue(), 0, 100, 0, TAU);
+        layerActive.get(layerID).gear1.speed = map(G1r.getValue(), 0, 100, -.000025, .000025);
+        //layerActive.get(layerID).gear1.rotate = map(G1r.getValue(), 0, 100, 0, TAU);
       }
       if (theEvent.getController().equals(G2r)) {
-        //layerActive.get(layerID).gear2.speed = map(G2r.getValue(), 0, 100, -.000025, .000025);
-        layerActive.get(layerID).gear2.rotate = map(G2r.getValue(), 0, 100, 0, TAU);
+        layerActive.get(layerID).gear2.speed = map(G2r.getValue(), 0, 100, -.000025, .000025);
+        //layerActive.get(layerID).gear2.rotate = map(G2r.getValue(), 0, 100, 0, TAU);
       }
       if (theEvent.getController().equals(G3r)) {
-        //layerActive.get(layerID).gear3.speed = map(G3r.getValue(), 0, 100, -.000025, .000025);
-        layerActive.get(layerID).gear3.rotate = map(G3r.getValue(), 0, 100, 0, TAU);
+        layerActive.get(layerID).gear3.speed = map(G3r.getValue(), 0, 100, -.000025, .000025);
+        //layerActive.get(layerID).gear3.rotate = map(G3r.getValue(), 0, 100, 0, TAU);
       }
       if (theEvent.getController().equals(gear0)) {
         layerActive.get(layerID).gear0.RX = gear0.getArrayValue(0);
@@ -412,6 +412,7 @@ class GUI extends PApplet {   //<>// //<>//
         layerlock = true;
         controller.updateMatrixLayerGUI(set);
         controller.updateLayerGUI(0, set);
+        controller.updateAniGUI(2,set);
         gif.tabToggle();
       }
     }

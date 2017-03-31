@@ -31,6 +31,7 @@ int Width = 512;
 int Height = 512;
 color cBackground;
 float delay;
+
 void settings() {
   size(Width, Height, P3D);
   smooth(8);
@@ -55,7 +56,8 @@ void setup() {
   ds.enableLazySave('i', ".png");
   Ani.init(this);
   Ani.noAutostart();
-  Ani.setDefaultTimeMode(Ani.FRAMES);
+  //Ani.setDefaultTimeMode(Ani.FRAMES);
+  Ani.setDefaultTimeMode(Ani.SECONDS);
   gif = new Animation();  
   gui = new GUI(this);
   controller = new Controller();

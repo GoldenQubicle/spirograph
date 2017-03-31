@@ -51,11 +51,11 @@ class Controller {
       controller.fileio.fileName = gui.fileName.getText();
       if (kfOld > gif.keyFrames) {
         updateKeyFrames(2);
-        updateAniGUI(0);
+        updateAniGUI(0,0);
       }
       if (kfOld < gif.keyFrames) {
         updateKeyFrames(3);
-        updateAniGUI(1);
+        updateAniGUI(1,0);
       }
       fileio.global = new JSONObject();
       fileio.saveJSON();  
@@ -110,7 +110,7 @@ class Controller {
       }
       gif.updateAniMatrixTiming();
       updateMatrixGUI();
-      updateAniGUI(2);
+      updateAniGUI(2,0);
       updateLayerGUI(0, 0);
       gui.layerlock = false;
       break;
@@ -243,7 +243,7 @@ class Controller {
     }
   }
 
-  void updateAniGUI(int action) {
+  void updateAniGUI(int action, int layer) {
     switch(action) {
     case 0:
       // remove ani buttons
@@ -291,15 +291,15 @@ class Controller {
       }
       break;
     case 2:
-      //update on JSON load
+      //update on JSON load / layerswitch
       for (int x = 0; x< gif.keyFrames; x++) {
         for (int y = 0; y < gif.layerVars; y++) {
-          gui.Easing =  gui.cp5.addScrollableList("Easing"+"0"+x+"0"+y).setPosition(10 + (x*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(gif.cellWidth).setHeight(100).setBarHeight(gif.cellHeight).setType(ScrollableList.DROPDOWN).close(); 
+          gui.Easing =  gui.cp5.addScrollableList("Easing"+"0"+x+"0"+y).setPosition(10 + (x*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(gif.cellWidth + gif.cellWidth * gif.layerAniInt.get(layer)[x][y]).setHeight(100).setBarHeight(gif.cellHeight).setType(ScrollableList.DROPDOWN).close(); 
           gui.Easing.addItems( gui.EasingNames);
           gui.cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false);
           gui.cp5.getController("Easing"+"0"+x+"0"+y).moveTo("Ani Easing");
-          gui.cp5.getController("Easing"+"0"+x+"0"+y).setValue(float(gif.layerAniEasing.get(int(gui.layerSwitch.getValue()))[x][y]));
-          gui.Increase = gui.cp5.addButton("add"+"0"+x+"0"+y).setPosition((10+gif.cellWidth) + (x*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(15).setCaptionLabel("+").setId(x);
+          gui.cp5.getController("Easing"+"0"+x+"0"+y).setValue(float(gif.layerAniEasing.get(layer)[x][y]));
+          gui.Increase = gui.cp5.addButton("add"+"0"+x+"0"+y).setPosition((10+gif.cellWidth) + (x*gif.cellWidth) + ((gif.layerAniInt.get(layer)[x][y])*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(15).setCaptionLabel("+").setId(x);
           gui.Decrease = gui.cp5.addButton("minus"+"0"+x+"0"+y).setPosition((x*gif.cellWidth)-5, 525 + (y*gif.cellHeight)).setWidth(15).setCaptionLabel("-").setId(x);
           gui.cp5.getController("minus"+"0"+x+"0"+y).setVisible(false);
           gui.cp5.getController("minus"+"0"+x+"0"+y).moveTo("Ani Easing");

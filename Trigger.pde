@@ -15,9 +15,10 @@ class Trigger {
     layerGet = layer;
     layerKF = End + (layer*gif.keyFrames);
     interval = (End - Start) + 1;
-    aniDuration = gif.aniFrames*interval;
+    aniDuration = (gif.aniMatrixTiming/1000)*interval;
     aniSeek = 1 / aniDuration;
-
+    
+    println(aniDuration);
     // gear parameters
     if (layerParameter == 0) {
       gear = 0;
