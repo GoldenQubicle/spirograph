@@ -69,7 +69,6 @@ class Animation {   //<>//
     frame.updatePixels();
     frame.save("frame " + renderFrame + ".png");
     frames[renderFrame] = frame;
-
     println("rendered frame " + renderFrame + " out of " + int(aniTotalFrames));
     render = true;
   }
@@ -92,9 +91,9 @@ class Animation {   //<>//
         }
         if (renderKeyFrame >= myTrigger.Start) {
           //myTrigger.ani.pause();
-          myTrigger.render+=1;
-          myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.render);
-          //println(myTrigger.render, myTrigger.aniSeek*myTrigger.render, renderFrame);
+          myTrigger.renderFrame+=1;
+          myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.renderFrame);
+          //println(myTrigger.renderFrame, myTrigger.aniSeek*myTrigger.renderFrame, renderFrame);
         }
       }
       // setKeyFrame for aniStart

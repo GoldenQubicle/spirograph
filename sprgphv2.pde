@@ -1,12 +1,11 @@
 /* //<>//
- okidoki, so basic features are roughly implemented, however, streamlining & cleaning up proves a minefield
- my thoughts are: the keyFrame & animate layer arrays are weighing things down and in theory should be possible to replace with json
- that is: toggling keyFrames and switching layers BOTH are simple read / write operations
- seconldy: in theory again I only need to know which matrix cell is active
- in other words: atm it's having to loop over mutliple arrays which actually contain very little info
- if I just store the start, end & easing style that should be sufficient to update the gui
- moreover, the renderer isnt exaclty rendering aand. . lets face it, I really want to start something new. . . =)
+okay there is some really funky bug in the way intervals are handled 
  
+ why in the name of jesus titty fucking christ doesnt it animate in 3d?!
+ 
+ aaaand theres a weird bug when toggling the gear trig completely off
+ 
+ honestly . . I should refactor . . 
  */
 
 import peasy.*;
@@ -82,15 +81,15 @@ void draw() {
       layerActive.get(i).display();
     }
   }
-  if (play == true) {
+  if (play == true) { //<>//
     for (int i = 0; i < layerAnimate.size(); i++) {
       layerAnimate.get(i).display();
     }
   }
 
-  //if (render == true) {
-  //  gif.renderLoop();
-  //}
+  if (render == true) {
+    gif.renderLoop();
+  }
 }
 
 //void timer(float ms) {

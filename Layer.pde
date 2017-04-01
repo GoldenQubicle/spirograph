@@ -30,8 +30,8 @@ class Layer {  //<>//
     cFill = color(random(155, 255), random(155, 255), random(155, 255));
     cStroke = color(random(155, 255), random(155, 255), random(155, 255));
     density = 2500;
-    stroke = false;
-    fill = true;
+    stroke = true;
+    fill = false;
     lines = false;
     dots = false;
     sw = 2;
@@ -78,7 +78,7 @@ class Layer {  //<>//
     cam.setActive(true);
     lights();  
     density = 500;       
-    for (int t = 0; t < density; t+=2) {
+    for (int t = 0; t <= density; t+=2) {
       theta = (TAU/density)*t;
       for (int p = 0; p < density; p+=2) {
         phi = (PI/density)*p;
@@ -87,13 +87,16 @@ class Layer {  //<>//
         xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
         xyz.z = gear0.xyz.z + gear1.xyz.z + gear2.xyz.z + gear3.xyz.z;
         stroke(cFill);
-        strokeWeight(sw);
-        point(xyz.x, xyz.y, xyz.z);   
-        //pushMatrix();
-        //translate(xyz.x, xyz.y, xyz.z);
-        //sphere(3);
-        //sphereDetail(3);
-        //popMatrix();
+        strokeWeight(10);
+        //point(xyz.x, xyz.y, xyz.z);   
+        pushMatrix();
+        translate(xyz.x, xyz.y, xyz.z);
+        sphere(3);
+        sphereDetail(10);
+        popMatrix();
+      }
+      if (t == density && play == true) {
+        gif.renderPImage();
       }
     }
   }
@@ -115,7 +118,8 @@ class Layer {  //<>//
       xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
       //radialColor(xyz.x, xyz.y);
       strokeWeight(sw);
-      ellipse(xyz.x, xyz.y, lx, ly);
+      //ellipse(xyz.x, xyz.y, lx, ly);
+      point(xyz.x, xyz.y);
       //if (theta == density && play == true) {
       //  gif.renderPImage();
       //}

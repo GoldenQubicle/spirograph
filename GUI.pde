@@ -437,7 +437,7 @@ class GUI extends PApplet {   //<>// //<>//
       //gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
     if (key == 'q') { 
-      gif.triggerArray();
+      gif.triggerArray(); //<>//
       cp5.get(Matrix.class, "Matrix").stop();
       if (play == true) {
         gif.triggerArray();
