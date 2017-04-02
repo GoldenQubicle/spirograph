@@ -87,17 +87,17 @@ class Layer {  //<>//
         xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
         xyz.z = gear0.xyz.z + gear1.xyz.z + gear2.xyz.z + gear3.xyz.z;
         stroke(cFill);
-        strokeWeight(10);
-        //point(xyz.x, xyz.y, xyz.z);   
-        pushMatrix();
-        translate(xyz.x, xyz.y, xyz.z);
-        sphere(3);
-        sphereDetail(10);
-        popMatrix();
+        strokeWeight(sw);
+        point(xyz.x, xyz.y, xyz.z);   
+        //pushMatrix();
+        //translate(xyz.x, xyz.y, xyz.z);
+        //sphere(3);
+        //sphereDetail(10);
+        //popMatrix();
       }
-      if (t == density && play == true) {
-        gif.renderPImage();
-      }
+      //if (t == density && play == true) {
+      //  gif.renderPImage();
+      //}
     }
   }
 
@@ -129,7 +129,7 @@ class Layer {  //<>//
 
   void Gears(float theta, float phi) {
     for (int g = 0; g < 4; g++) {
-      gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), trig.get("G"+g+"trigZ"), trig.get("G"+g+"trigX2"), trig.get("G"+g+"trigY2"), theta, phi, gear0.C);
+      gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), trig.get("G"+g+"trigZ"), trig.get("G"+g+"trigX2"), trig.get("G"+g+"trigY2"), theta, phi, density);
     }
   }
 
@@ -176,7 +176,7 @@ class Gears {
     R = 1/(P-1);
     C = ((RX+RY)/2) * TAU;
   }
-  void grinding(int trigx, int trigy, int trigz, int trigx2, int trigy2, float theta, float phi, float circumference) {
+  void grinding(int trigx, int trigy, int trigz, int trigx2, int trigy2, float theta, float phi, float density) {
     trigX = trigx;
     trigX2 = trigx2;
     trigY = trigy;
@@ -184,7 +184,7 @@ class Gears {
     trigZ = trigz;
 
     if (spheres3d != true) {
-      theta = ((TAU/circumference)*theta)+rotate;
+      theta = ((TAU/density)*theta)+rotate;
       //rotateY(rotate);   
       //rotateX(move);
       xyz.x = cossintan(trigX, theta)*RX;

@@ -123,7 +123,7 @@ class Controller {
       // update keyFrame array
       for (int f =0; f < gif.keyFrames; f++) {
         Layer kfBLank = new Layer(10);
-        layerKeyFrames.add(copyLayerSettings(kfBLank, 0, layerActive.size()-1));
+        layerKeyFrames.add(copyLayerSettings(kfBLank, 1, (layerActive.size()-1)*f));
         layerKeyFrames.get(layerKeyFrames.size()-1).kf = f;
       }
       // add new ani arrays
@@ -386,6 +386,7 @@ class Controller {
       layer.gears[i].P = arraySelect(array, get).gears[i].P;
       layer.gears[i].rotate = arraySelect(array, get).gears[i].rotate;
     }
+    layer.blendSelect = arraySelect(array, get).blendSelect;
     layer.cFill = arraySelect(array, get).cFill;
     layer.cStroke = arraySelect(array, get).cStroke;
     layer.fill = arraySelect(array, get).fill;

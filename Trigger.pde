@@ -15,9 +15,10 @@ class Trigger {
     layerGet = layer;
     layerKF = End + (layer*gif.keyFrames);
     interval = (End - Start) + 1;
-    aniDuration = (float(gif.aniMatrixTiming)/1000)*interval;
+    //aniDuration = (float(gif.aniMatrixTiming)/1000)*interval;
+    aniDuration = gif.aniFrames*interval;
     
-    aniSeek = 1 / (aniDuration*60);
+    aniSeek = 1 / aniDuration;
     
     //println(aniDuration, gif.aniMatrixTiming/1000);
     

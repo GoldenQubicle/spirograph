@@ -1,7 +1,7 @@
-class Animation {   //<>//
+class Animation {   //<>// //<>//
 
   int keyFrames, layerVars, matrixWidth, matrixHeight, cellWidth, cellHeight, nLayers, aniMatrixTiming, renderFrame, renderKeyFrame, fTemp;
-  float totalTime, aniTotalFrames, aniFrames, aniSeek;
+  float totalTime, aniTotalFrames, aniFrames;
   int [][] aniEnd, aniInt, aniEasing;
   ArrayList<int [][]> layerAniInt = new ArrayList();
   ArrayList<int [][]> layerAniEnd = new ArrayList();  
@@ -19,12 +19,12 @@ class Animation {   //<>//
     totalTime = 4000; 
     keyFrames = 4;
     aniMatrixTiming = int(totalTime/keyFrames);
-    
+
     aniTotalFrames =  (totalTime/1000)*60 ; // being used in renderer
-    
-    //aniFrames = aniTotalFrames/keyFrames;
-    
-    
+
+    aniFrames = aniTotalFrames/keyFrames;
+
+
     frames = new PImage[int(aniTotalFrames)];
 
     for (int l = 0; l < nLayers; l++) {
@@ -45,7 +45,7 @@ class Animation {   //<>//
       layerAniEnd.add(aniEnd);
       layerAniEasing.add(aniEasing);
     }
-    aniSeek = 1 / aniTotalFrames;
+
 
     // needs to be moved
     matrixWidth = 775; 
@@ -85,15 +85,17 @@ class Animation {   //<>//
       aniStart(renderKeyFrame); 
 
       for (Trigger myTrigger : triggers) {
-        if (myTrigger.Start == renderKeyFrame) {
-          myTrigger.ani.start();
-          myTrigger.ani.pause();
-        }
-        if (renderKeyFrame >= myTrigger.Start) {
+        //if (myTrigger.Start == renderKeyFrame && myTrigger.ani.isPlaying() == false) {
+        //  myTrigger.ani.start();
+        //  myTrigger.ani.pause();
+        //  println("trigger start" + renderKeyFrame); 
+        //}
+        if (myTrigger.Start <= renderKeyFrame ) {
           //myTrigger.ani.pause();
-          myTrigger.renderFrame+=1;
           myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.renderFrame);
-          //println(myTrigger.renderFrame, myTrigger.aniSeek*myTrigger.renderFrame, renderFrame);
+          myTrigger.renderFrame+=1;
+
+          //println(myTrigger.aniSeek*myTrigger.renderFrame);
         }
       }
       // setKeyFrame for aniStart
@@ -145,14 +147,11 @@ class Animation {   //<>//
     aniTotalFrames =  (totalTime/1000)*60 ;
     aniFrames = aniTotalFrames/keyFrames;
     cellWidth = matrixWidth/keyFrames;
-    aniSeek = 1 / aniTotalFrames;
     frames = new PImage[int(aniTotalFrames)];
-
     //println(aniTotalFrames);
   }
 
   void aniStart(int theX) {
-
     for (Trigger myTrigger : triggers) {
       if (theX == myTrigger.Start) {
         //myTrigger.ani.start();

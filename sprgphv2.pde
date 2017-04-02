@@ -1,11 +1,12 @@
 /* //<>//
-okay there is some really funky bug in the way intervals are handled 
+ renderer needs to be intergrated into gui / controller logic
+ beforehand, move some layer settings (density / color) into sort of global
+ or rather more often than not, when I adjust those, I want it to apply over all keyframes
+ also, when copying layer, Id expect all keyframes to be copied as well
  
- why in the name of jesus titty fucking christ doesnt it animate in 3d?!
+ theres a weird bug when toggling the gear trig completely off
  
- aaaand theres a weird bug when toggling the gear trig completely off
- 
- honestly . . I should refactor . . 
+
  */
 
 import peasy.*;
@@ -55,8 +56,8 @@ void setup() {
   ds.enableLazySave('i', ".png");
   Ani.init(this);
   Ani.noAutostart();
-  //Ani.setDefaultTimeMode(Ani.FRAMES);
-  Ani.setDefaultTimeMode(Ani.SECONDS);
+  Ani.setDefaultTimeMode(Ani.FRAMES);
+  //Ani.setDefaultTimeMode(Ani.SECONDS);
   gif = new Animation();  
   gui = new GUI(this);
   controller = new Controller();
@@ -81,15 +82,15 @@ void draw() {
       layerActive.get(i).display();
     }
   }
-  if (play == true) { //<>//
+  if (play == true) {
     for (int i = 0; i < layerAnimate.size(); i++) {
       layerAnimate.get(i).display();
     }
   }
 
-  if (render == true) {
-    gif.renderLoop();
-  }
+  //if (render == true) {
+  //  gif.renderLoop(); //<>//
+  //}
 }
 
 //void timer(float ms) {
