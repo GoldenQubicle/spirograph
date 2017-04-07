@@ -378,7 +378,7 @@ class Controller {
   Layer copyLayerSettings(Layer layer, int array, int get) {
     layer.name = arraySelect(array, get).name;
     layer.id = arraySelect(array, get).id;
-    //layer.kf =  arraySelect(array, get).kf;
+    layer.kf =  arraySelect(array, get).kf;
     for (int i = 0; i < 4; i++) {
       layer.gears[i].RX = arraySelect(array, get).gears[i].RX;  
       layer.gears[i].RY = arraySelect(array, get).gears[i].RY;   

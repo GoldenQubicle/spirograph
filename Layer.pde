@@ -120,7 +120,7 @@ class Layer {  //<>//
       strokeWeight(sw);
       ellipse(xyz.x, xyz.y, lx, ly);
       //point(xyz.x, xyz.y);
-      if (theta == density && play == true) {
+      if (theta == density && render == true) {
         gif.renderPImage();
       }
     }
@@ -189,10 +189,10 @@ class Gears {
       //rotateX(move);
       xyz.x = cossintan(trigX, theta)*RX;
       xyz.y = cossintan(trigY, theta)*RY;
-      rotate = rotate + speed;      
-      if (rotate > TAU || rotate < -TAU) {
-        rotate = 0;
-      }
+      //rotate = rotate + speed;      
+      //if (rotate > TAU || rotate < -TAU) {
+      //  rotate = 0;
+      //}
     } else {
       xyz.x = cossintan(trigX, theta)*cossintan(trigX2, phi)*RX;
       xyz.y = cossintan(trigY, theta)*cossintan(trigY2, phi)*RY;

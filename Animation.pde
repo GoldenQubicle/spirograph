@@ -76,7 +76,7 @@ class Animation {   //<>// //<>//
       renderFrame+=1;
       render = false;
     }
-    if (render == false && play == true) {
+    if (render == false) {
       fTemp+=1;
       aniStart(renderKeyFrame); 
       for (Trigger myTrigger : triggers) {
@@ -97,6 +97,7 @@ class Animation {   //<>// //<>//
         renderKeyFrame+=1; 
         fTemp = 0;
       }
+      render = true;
       // check for end
       if (renderFrame == aniTotalFrames) {
         render = false;

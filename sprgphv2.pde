@@ -1,5 +1,17 @@
 /* //<>//
 
+new render class which handles all thing rendering
+  - renderLoop obviously
+  - save out as png (simple loop over PImage array)
+  - playback over PIamage array
+  - interpolate keyFrames 
+  
+to speed things up I want not rebuild the whole trigger array everytime, rather check first if there're any changes
+if so: remove, add or update triggers (so this is rud soo probably in controller class?)
+and then only re-render and replace the appriate PImages frames in the array
+
+
+
 sort out the controller logic with regard to renderer for easier debuggin of said renderer
 
 so basically, want to have somekind of 'lock' to indicate wheter changes made apply to all frames, only affect going forward or the single keyframe worked upon
@@ -84,7 +96,7 @@ void draw() {
     translate(Width/2, Height/2);
   }
 
-  if (play == false) {
+  if (play == false) { //<>//
     for (int i = 0; i < layerActive.size(); i++) {
       layerActive.get(i).display();
     }
@@ -94,7 +106,6 @@ void draw() {
       layerAnimate.get(i).display();
     }
   }
-
   if (render == true) { //<>//
     gif.renderLoop();
   }
