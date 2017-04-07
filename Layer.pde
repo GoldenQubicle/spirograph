@@ -118,11 +118,11 @@ class Layer {  //<>//
       xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
       //radialColor(xyz.x, xyz.y);
       strokeWeight(sw);
-      //ellipse(xyz.x, xyz.y, lx, ly);
-      point(xyz.x, xyz.y);
-      //if (theta == density && play == true) {
-      //  gif.renderPImage();
-      //}
+      ellipse(xyz.x, xyz.y, lx, ly);
+      //point(xyz.x, xyz.y);
+      if (theta == density && play == true) {
+        gif.renderPImage();
+      }
     }
   }
 

@@ -5,7 +5,7 @@ class Trigger {
   int Start, End, layerKF, layerParameter, gear, gearVar, layerVar, layerGet;
   float aniDuration, aniValue, aniSeek, renderFrame, interval;
   String [] GearVars = {"RX", "RY", "P", "Connect", "RZ"};
-  String [] LayerVars = {"LX", "LY", "SW", "PlotDots"};
+  String [] LayerVars = {"LX", "LY", "SW", "Density"};
 
 
   Trigger(int thex, int they, int end, int layer) {

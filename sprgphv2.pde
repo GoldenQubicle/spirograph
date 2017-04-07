@@ -1,11 +1,18 @@
 /* //<>//
+
+sort out the controller logic with regard to renderer for easier debuggin of said renderer
+
+so basically, want to have somekind of 'lock' to indicate wheter changes made apply to all frames, only affect going forward or the single keyframe worked upon
+
+rework gui while sorting that logic out
+
  renderer needs to be intergrated into gui / controller logic
  beforehand, move some layer settings (density / color) into sort of global
  or rather more often than not, when I adjust those, I want it to apply over all keyframes
  also, when copying layer, Id expect all keyframes to be copied as well
  
  theres a weird bug when toggling the gear trig completely off
- 
+ camera / offset not correct in 3d
 
  */
 
@@ -88,9 +95,9 @@ void draw() {
     }
   }
 
-  //if (render == true) {
-  //  gif.renderLoop(); //<>//
-  //}
+  if (render == true) { //<>//
+    gif.renderLoop();
+  }
 }
 
 //void timer(float ms) {

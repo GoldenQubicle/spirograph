@@ -1,6 +1,6 @@
 class Animation {   //<>// //<>//
 
-  int keyFrames, layerVars, matrixWidth, matrixHeight, cellWidth, cellHeight, nLayers, aniMatrixTiming, renderFrame, renderKeyFrame, fTemp;
+  int keyFrames, layerVars, matrixWidth, matrixHeight, cellWidth, cellHeight, nLayers, aniMatrixTiming, renderFrame, renderKeyFrame, fTemp, fps;
   float totalTime, aniTotalFrames, aniFrames;
   int [][] aniEnd, aniInt, aniEasing;
   ArrayList<int [][]> layerAniInt = new ArrayList();
@@ -20,11 +20,10 @@ class Animation {   //<>// //<>//
     keyFrames = 4;
     aniMatrixTiming = int(totalTime/keyFrames);
 
-    aniTotalFrames =  (totalTime/1000)*60 ; // being used in renderer
-
-    aniFrames = aniTotalFrames/keyFrames;
-
-
+    fps = 60;
+    aniTotalFrames =  (totalTime/1000)*fps ; // being used in renderer
+    aniFrames = round(aniTotalFrames/keyFrames);
+    aniTotalFrames = aniFrames * keyFrames;
     frames = new PImage[int(aniTotalFrames)];
 
     for (int l = 0; l < nLayers; l++) {
@@ -60,9 +59,7 @@ class Animation {   //<>// //<>//
   }
 
   void renderPImage() {
-
     PImage frame = createImage(Width, Height, ARGB);
-
     loadPixels();
     frame.loadPixels();
     frame.pixels = pixels;
@@ -75,7 +72,6 @@ class Animation {   //<>// //<>//
 
 
   void renderLoop() {
-
     if (render == true) {
       renderFrame+=1;
       render = false;
@@ -83,18 +79,16 @@ class Animation {   //<>// //<>//
     if (render == false && play == true) {
       fTemp+=1;
       aniStart(renderKeyFrame); 
-
       for (Trigger myTrigger : triggers) {
-        //if (myTrigger.Start == renderKeyFrame && myTrigger.ani.isPlaying() == false) {
-        //  myTrigger.ani.start();
-        //  myTrigger.ani.pause();
-        //  println("trigger start" + renderKeyFrame); 
-        //}
+        if (renderKeyFrame == myTrigger.Start && myTrigger.ani.isPlaying() == false) {
+          myTrigger.ani.start();
+          myTrigger.ani.pause();
+          println("trigger start" + renderKeyFrame);
+        }
         if (myTrigger.Start <= renderKeyFrame ) {
           //myTrigger.ani.pause();
           myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.renderFrame);
           myTrigger.renderFrame+=1;
-
           //println(myTrigger.aniSeek*myTrigger.renderFrame);
         }
       }
@@ -113,7 +107,6 @@ class Animation {   //<>// //<>//
         float end = millis() - renderStart;
         println("done rendering in " + (end/1000) + " seconds" );
       }
-      //println(renderFrame, aniTotalFrames);
     }
   }
 
@@ -145,10 +138,10 @@ class Animation {   //<>// //<>//
   void updateAniMatrixTiming() {
     aniMatrixTiming = int(totalTime/keyFrames);
     aniTotalFrames =  (totalTime/1000)*60 ;
-    aniFrames = aniTotalFrames/keyFrames;
+    aniFrames = round(aniTotalFrames/keyFrames);
+    aniTotalFrames = aniFrames * keyFrames;
     cellWidth = matrixWidth/keyFrames;
     frames = new PImage[int(aniTotalFrames)];
-    //println(aniTotalFrames);
   }
 
   void aniStart(int theX) {
