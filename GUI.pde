@@ -5,7 +5,7 @@ class GUI extends PApplet { //<>//
   boolean layerlock = false;
   Matrix Ani;
   ColorWheel colorBackground, colorStroke, colorFill;
-  Toggle stroke, fill, drawMode;
+  Toggle stroke, fill, drawMode, keyFrameAll, keyFrameFWD, keyFrameSingle;
   ScrollableList layerSwitch, blendMode, fileSelect, Easing;
   Slider2D gear0, gear1, gear2, gear3;
   Slider gifWidth, gifHeight, gifLength, gifKeyFrames, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals0, petals1, petals2, petals3, alphaFill, alphaStroke, G0r, G1r, G2r, G3r, density; 
@@ -36,7 +36,6 @@ class GUI extends PApplet { //<>//
   } 
 
   public void setup() {
-
     layerID = 0;
     cp5 = new ControlP5(this);
     int rPanex = 630;
@@ -194,7 +193,14 @@ class GUI extends PApplet { //<>//
       keyFrames.getItem(i).getCaptionLabel().set("KF" + (i+1)).align(CENTER, CENTER);
     }
     keyFrames.activate(0);
-    saveFWD = cp5.addButton("saveFWD").setPosition(95, 480).setSize(50, 16);
+    //saveFWD = cp5.addButton("saveFWD").setPosition(95, 480).setSize(50, 16);
+    keyFrameFWD = cp5.addToggle("KFfwd").setPosition(95, 480).setSize(50, 16);
+    keyFrameAll = cp5.addToggle("KFall").setPosition(147, 480).setSize(50, 16);
+    //keyFrameSingle = cp5.addToggle("KFSingle").setPosition(210, 480).setSize(50, 16);    
+    cp5.getController("KFfwd").getCaptionLabel().align(CENTER, CENTER);  
+    cp5.getController("KFall").getCaptionLabel().align(CENTER, CENTER);  
+    //cp5.getController("KFSingle").getCaptionLabel().align(CENTER, CENTER);  
+
     // ANIMATRIX TABS START HERE
     // make tabs
     cp5.getTab("default").setCaptionLabel("Matrix").setId(1);
@@ -243,6 +249,7 @@ class GUI extends PApplet { //<>//
   }
 
   void controlEvent(ControlEvent theEvent) {
+
     if (theEvent.isTab()) {
       gif.tabToggle();
     }
@@ -261,14 +268,14 @@ class GUI extends PApplet { //<>//
       int frame = int(keyFrames.getValue());
       controller.toggleKeyFrames(frame);
     }
-    if (theEvent.getController().equals(saveFWD)) {
-      int frame = int(keyFrames.getValue());
-      for (int f = frame; f < (gif.keyFrames); f++) {
-        int keyFrame = f + (int(gui.layerSwitch.getValue())*gif.keyFrames);
-        Layer New = new Layer(10);
-        layerKeyFrames.set(keyFrame, controller.copyLayerSettings(New, 1, frame+(int(layerSwitch.getValue())*gif.keyFrames)));
-      }
-    }
+    //if (theEvent.getController().equals(saveFWD)) {
+    //  int frame = int(keyFrames.getValue());
+    //  for (int f = frame; f < (gif.keyFrames); f++) {
+    //    int keyFrame = f + (int(gui.layerSwitch.getValue())*gif.keyFrames);
+    //    Layer New = new Layer(10);
+    //    layerKeyFrames.set(keyFrame, controller.copyLayerSettings(New, 1, frame+(int(layerSwitch.getValue())*gif.keyFrames)));
+    //  }
+    //}
     for (int x = 0; x < gif.keyFrames; x++) {
       for (int y = 0; y < gif.layerVars; y++) {
         if (theEvent.getController().getName().equals("Easing"+"0"+x+"0"+y)) {
@@ -332,85 +339,99 @@ class GUI extends PApplet { //<>//
     if (theEvent.getController().equals(colorBackground)) {
       cBackground = colorBackground.getRGB();
     }
+
+    // layer controls start here
     if (layerlock == false) {
+      // set selection of keyFrames worked upon
+      float selection = 0; 
+      if (keyFrameFWD.getState() == true) {
+        selection = gif.keyFrames - keyFrames.getValue();
+      }
+      if (keyFrameAll.getState() == true) {
+        selection = gif.keyFrames;
+      }
+      // gear controllers
+      for (int g = 0; g < 4; g++) {
+        if (theEvent.getController().getName().equals("G" + g)) {
+          layerActive.get(layerID).gears[g].RX = theEvent.getController().getArrayValue(0);
+          layerActive.get(layerID).gears[g].RY = theEvent.getController().getArrayValue(1);
+          for (int i = int(selection); i >= 0; i--) {
+            layerKeyFrames.get(gif.keyFrames - i).gears[g].RX = theEvent.getController().getArrayValue(0);
+            layerKeyFrames.get(gif.keyFrames - i).gears[g].RY = theEvent.getController().getArrayValue(1);
+          }
+        }
+        if (theEvent.getController().getName().equals("p" + g)) {
+          layerActive.get(layerID).gears[g].P = int(theEvent.getController().getValue());
+          for (int i = int(selection); i >= 0; i--) {
+            layerKeyFrames.get(gif.keyFrames - i).gears[g].P = int(theEvent.getController().getValue());
+          }
+        }
+        if (theEvent.getController().equals("g"+g+"r")) {
+          layerActive.get(layerID).gears[g].rotate = theEvent.getController().getValue();        
+          for (int i = int(selection); i >= 0; i--) {
+            layerKeyFrames.get(gif.keyFrames - i).gears[g].rotate  = theEvent.getController().getValue();
+          }
+        }
+        if (theEvent.getController().equals("G"+g+"z")) {
+          layerActive.get(layerID).gears[g].RZ = theEvent.getController().getValue();
+          for (int i = int(selection); i >= 0; i--) {
+            layerKeyFrames.get(gif.keyFrames - i).gears[g].RZ  = theEvent.getController().getValue();
+          }
+        }
+      }
       if (theEvent.getController().equals(density)) {
         layerActive.get(layerID).density = int(density.getValue());
+        for (int i = int(selection); i >= 0; i--) {
+          layerKeyFrames.get(gif.keyFrames - i).density  = int(density.getValue());
+        }
       }      
       if (theEvent.getController().equals(blendMode)) {
         layerActive.get(layerID).blendSelect = int(blendMode.getValue());
+        for (int i = int(selection); i >= 0; i--) {
+          layerKeyFrames.get(gif.keyFrames - i).blendSelect  = int(theEvent.getController().getValue());
+        }
       }
       if (theEvent.getController().equals(colorStroke)  || theEvent.getController().equals(alphaStroke)) {
         layerActive.get(layerID).cStroke = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
+        for (int i = int(selection); i >= 0; i--) {
+          layerKeyFrames.get(gif.keyFrames - i).cStroke  = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
+        }
       }
       if (theEvent.getController().equals(colorFill) || theEvent.getController().equals(alphaFill)) {
         layerActive.get(layerID).cFill = color(colorFill.r(), colorFill.g(), colorFill.b(), int(alphaFill.getValue()));
+        for (int i = int(selection); i >= 0; i--) {
+          layerKeyFrames.get(gif.keyFrames - i).cFill  = color(colorFill.r(), colorFill.g(), colorFill.b(), int(alphaFill.getValue()));
+        }
       }
       if (theEvent.getController().equals(stroke)) {
         layerActive.get(layerID).stroke = stroke.getState();
+        for (int i = int(selection); i >= 0; i--) {
+          layerKeyFrames.get(gif.keyFrames - i).stroke  = stroke.getState();
+        }
       }
       if (theEvent.getController().equals(fill)) {
         layerActive.get(layerID).fill = fill.getState();
+        for (int i = int(selection); i >= 0; i--) {
+          layerKeyFrames.get(gif.keyFrames - i).fill  = fill.getState();
+        }
       }
       if (theEvent.getController().equals(lx)) {
         layerActive.get(layerID).lx = lx.getValue();
+        for (int i = int(selection); i >= 0; i--) {
+          layerKeyFrames.get(gif.keyFrames - i).lx  = lx.getValue();
+        }
       }
       if (theEvent.getController().equals(ly)) {
         layerActive.get(layerID).ly = ly.getValue();
+        for (int i = int(selection); i >= 0; i--) {
+          layerKeyFrames.get(gif.keyFrames - i).ly  = ly.getValue();
+        }
       }
       if (theEvent.getController().equals(sw)) {
         layerActive.get(layerID).sw = sw.getValue();
-      }
-      if (theEvent.getController().equals(petals0)) {
-        layerActive.get(layerID).gear0.P = int(petals0.getValue());
-      }
-      if (theEvent.getController().equals(petals1)) {
-        layerActive.get(layerID).gear1.P = int(petals1.getValue());
-      }
-      if (theEvent.getController().equals(petals2)) {
-        layerActive.get(layerID).gear2.P = int(petals2.getValue());
-      }
-      if (theEvent.getController().equals(petals3)) {
-        layerActive.get(layerID).gear3.P = int(petals3.getValue());
-      }
-      if (theEvent.getController().equals(G0r)) {
-        layerActive.get(layerID).gear0.rotate = G0r.getValue();
-      }
-      if (theEvent.getController().equals(G1r)) {
-        layerActive.get(layerID).gear1.rotate = G1r.getValue();
-      }
-      if (theEvent.getController().equals(G2r)) {
-        layerActive.get(layerID).gear2.rotate = G2r.getValue();
-      }
-      if (theEvent.getController().equals(G3r)) {
-        layerActive.get(layerID).gear3.rotate = G3r.getValue();
-      }
-      if (theEvent.getController().equals(gear0)) {
-        layerActive.get(layerID).gear0.RX = gear0.getArrayValue(0);
-        layerActive.get(layerID).gear0.RY = gear0.getArrayValue(1);
-      }
-      if (theEvent.getController().equals(gear1)) {
-        layerActive.get(layerID).gear1.RX = gear1.getArrayValue(0);
-        layerActive.get(layerID).gear1.RY = gear1.getArrayValue(1);
-      }
-      if (theEvent.getController().equals(gear2)) {
-        layerActive.get(layerID).gear2.RX = gear2.getArrayValue(0);
-        layerActive.get(layerID).gear2.RY = gear2.getArrayValue(1);
-      }
-      if (theEvent.getController().equals(gear3)) {
-        layerActive.get(layerID).gear3.RX = gear3.getArrayValue(0);
-        layerActive.get(layerID).gear3.RY = gear3.getArrayValue(1);
-      }
-      if (theEvent.getController().equals(gear0z)) {
-        layerActive.get(layerID).gear0.RZ = gear0z.getValue();
-      }
-      if (theEvent.getController().equals(gear1z)) {
-        layerActive.get(layerID).gear1.RZ = gear1z.getValue();
-      }
-      if (theEvent.getController().equals(gear2z)) {
-        layerActive.get(layerID).gear2.RZ = gear2z.getValue();
-      }
-      if (theEvent.getController().equals(gear3z)) {
-        layerActive.get(layerID).gear3.RZ = gear3z.getValue();
+        for (int i = int(selection); i >= 0; i--) {
+          layerKeyFrames.get(gif.keyFrames - i).sw  = sw.getValue();
+        }
       }
       if (theEvent.getController().equals(layerSwitch)) {
         int set = int(layerSwitch.getValue());

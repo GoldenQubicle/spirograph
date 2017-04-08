@@ -77,10 +77,6 @@ class Animation {    //<>//
       fTemp+=1;
       aniStart(renderKeyFrame); 
       for (Trigger myTrigger : triggers) {
-        if (renderKeyFrame == myTrigger.Start && myTrigger.ani.isPlaying() == false) {
-          myTrigger.ani.start();
-          myTrigger.ani.pause();
-        }
         if (myTrigger.Start <= renderKeyFrame ) {
           myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.renderFrame);
           myTrigger.renderFrame+=1;

@@ -51,11 +51,11 @@ class Controller {
       controller.fileio.fileName = gui.fileName.getText();
       if (kfOld > gif.keyFrames) {
         updateKeyFrames(2);
-        updateAniGUI(0,0);
+        updateAniGUI(0, 0);
       }
       if (kfOld < gif.keyFrames) {
         updateKeyFrames(3);
-        updateAniGUI(1,0);
+        updateAniGUI(1, 0);
       }
       fileio.global = new JSONObject();
       fileio.saveJSON();  
@@ -110,7 +110,7 @@ class Controller {
       }
       gif.updateAniMatrixTiming();
       updateMatrixGUI();
-      updateAniGUI(2,0);
+      updateAniGUI(2, 0);
       updateLayerGUI(0, 0);
       gui.layerlock = false;
       break;
@@ -360,9 +360,11 @@ class Controller {
       gui.lx.setValue(arraySelect(array, get).lx);
       gui.ly.setValue(arraySelect(array, get).ly);
       gui.sw.setValue(arraySelect(array, get).sw);
+      gui.petals0.setValue(arraySelect(array, get).gear0.P);
       gui.petals1.setValue(arraySelect(array, get).gear1.P);
       gui.petals2.setValue(arraySelect(array, get).gear2.P);
       gui.petals3.setValue(arraySelect(array, get).gear3.P);
+      gui.G0r.setValue(arraySelect(array, get).gear0.rotate);
       gui.G1r.setValue(arraySelect(array, get).gear1.rotate);
       gui.G2r.setValue(arraySelect(array, get).gear2.rotate);
       gui.G3r.setValue(arraySelect(array, get).gear3.rotate);      
