@@ -1,5 +1,4 @@
 class Layer {  //<>//
-
   String name;
   PVector xyz, xy2;  
   float theta, phi, lx, ly, density, sw, connectLines;
@@ -126,7 +125,6 @@ class Layer {  //<>//
     }
   }
 
-
   void Gears(float theta, float phi) {
     for (int g = 0; g < 4; g++) {
       gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), trig.get("G"+g+"trigZ"), trig.get("G"+g+"trigX2"), trig.get("G"+g+"trigY2"), theta, phi, density);
@@ -165,7 +163,7 @@ class Layer {  //<>//
 
 class Gears {
   PVector xyz;
-  float theta, phi, RX, RY, RZ, C, Connect, R, rotate, speed, cossintan;
+  float theta, phi, RX, RY, RZ, Connect, R, rotate, speed, cossintan;
   int trigX = 0, trigY = 1, trigX2, trigY2, trigZ, P;
 
   Gears(float rx, float ry, float rz) {
@@ -173,9 +171,8 @@ class Gears {
     RX = rx;
     RY = ry;
     RZ = rz;
-    R = 1/(P-1);
-    C = ((RX+RY)/2) * TAU;
   }
+  
   void grinding(int trigx, int trigy, int trigz, int trigx2, int trigy2, float theta, float phi, float density) {
     trigX = trigx;
     trigX2 = trigx2;
@@ -211,11 +208,6 @@ class Gears {
       cossintan = tan(theta/Ratio());
     }
     return cossintan;
-  }
-
-  int intRatio() {
-    int r = 1/(int(P)-1);
-    return r;
   }
 
   float Ratio() {

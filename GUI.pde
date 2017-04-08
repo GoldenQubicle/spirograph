@@ -1,5 +1,4 @@
-class GUI extends PApplet {   //<>// //<>// //<>//
-
+class GUI extends PApplet { //<>//
   PApplet parent;
   ControlP5 cp5;
   int layerID;
@@ -9,14 +8,14 @@ class GUI extends PApplet {   //<>// //<>// //<>//
   Toggle stroke, fill, drawMode;
   ScrollableList layerSwitch, blendMode, fileSelect, Easing;
   Slider2D gear0, gear1, gear2, gear3;
-  Slider gifWidth, gifHeight, gifLength, gifKeyFrames, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals1, petals2, petals3, alphaFill, alphaStroke, G0r, G1r, G2r, G3r, density; 
+  Slider gifWidth, gifHeight, gifLength, gifKeyFrames, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals0, petals1, petals2, petals3, alphaFill, alphaStroke, G0r, G1r, G2r, G3r, density; 
   Button gifSettings, gifSave, Load, Save, layerNew, layerCopy, layerDelete, Increase, Decrease, saveFWD;
   ArrayList <Button> menuGifLayer = new ArrayList<Button>();
   RadioButton trigX, trigY, trigZ, trigX2, trigY2, densityRanges, keyFrames;
   ArrayList <RadioButton> trigSwitch = new ArrayList<RadioButton>();
 
   // using int variables to strip decimals for gui aethetic
-  int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p1, p2, p3, as, af, g0r, g1r, g2r, g3r, d; 
+  int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p0, p1, p2, p3, as, af, g0r, g1r, g2r, g3r, d; 
   float densityRangeMin = 1;
   float densityRangeMax = 1000;
 
@@ -120,8 +119,7 @@ class GUI extends PApplet {   //<>// //<>// //<>//
     cp5.getController("SW").getCaptionLabel().align(CENTER, CENTER);
     // density  
     densityRanges = cp5.addRadioButton("density").setPosition(3, 425).setSize(61, 20).setItemsPerRow(10).addItem("1-10k", 1).addItem("10k-20k", 2).addItem("20k-30k", 3).addItem("30k-40k", 4)
-      .addItem("40k-50k", 5).addItem("50k-60k", 6).addItem("60k-70k", 7).addItem("70k-80k", 8).addItem("80k-90k", 9).addItem("90k-100k", 10).moveTo("global");//.addItem("10001-11000", 11).addItem("11001-12000", 12).addItem("12001-13000", 13)
-    //.addItem("103001-14000", 14).addItem("14001-15000", 15).addItem("15001-16000", 16).addItem("16001-17000", 17).addItem("17001-18000", 18).addItem("18001-19000", 19).addItem("19001-20000", 20);
+      .addItem("40k-50k", 5).addItem("50k-60k", 6).addItem("60k-70k", 7).addItem("70k-80k", 8).addItem("80k-90k", 9).addItem("90k-100k", 10).moveTo("global");
     for (int i =0; i < 10; i++) {
       densityRanges.getItem(i).getCaptionLabel().align(CENTER, CENTER);
     }
@@ -139,6 +137,7 @@ class GUI extends PApplet {   //<>// //<>// //<>//
     gear1z = cp5.addSlider("G1z").setRange(-256, 256).setPosition(158, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 1 Z").hide().moveTo("global"); //.setValue(layers.get(id).gear1.RZ);
     gear2z = cp5.addSlider("G2z").setRange(-256, 256).setPosition(313, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 2 Z").hide().moveTo("global");//.setValue(layers.get(id).gear2.RZ);
     gear3z = cp5.addSlider("G3z").setRange(-256, 256).setPosition(468, posy + size2d + 20).setSize(size2d, 10).setCaptionLabel("Gear 3 Z").hide().moveTo("global");//.setValue(layers.get(id).gear3.RZ);
+    petals0 = cp5.addSlider("p0").setPosition(rPanex, posy-15).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 0 Petals").moveTo("global"); 
     petals1 = cp5.addSlider("p1").setPosition(rPanex, posy).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 1 Petals").moveTo("global"); 
     petals2 = cp5.addSlider("p2").setPosition(rPanex, posy+15).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 2 Petals").moveTo("global");
     petals3 = cp5.addSlider("p3").setPosition(rPanex, posy+30).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 3 Petals").moveTo("global");        
@@ -146,11 +145,11 @@ class GUI extends PApplet {   //<>// //<>// //<>//
     G1r = cp5.addSlider("g1r").setPosition(rPanex, posy+60).setSize(200, 10).setRange(-TAU, TAU).setNumberOfTickMarks(9).snapToTickMarks(true).setCaptionLabel("Gear 1 Rotate").moveTo("global"); 
     G2r = cp5.addSlider("g2r").setPosition(rPanex, posy+75).setSize(200, 10).setRange(-TAU, TAU).setNumberOfTickMarks(9).snapToTickMarks(true).setCaptionLabel("Gear 2 Rotate").moveTo("global");
     G3r = cp5.addSlider("g3r").setPosition(rPanex, posy+90).setSize(200, 10).setRange(-TAU, TAU).setNumberOfTickMarks(9).snapToTickMarks(true).setCaptionLabel("Gear 3 Rotate").moveTo("global"); 
-
     cp5.getController("G0z").getCaptionLabel().align(CENTER, BOTTOM);  
     cp5.getController("G1z").getCaptionLabel().align(CENTER, BOTTOM);
     cp5.getController("G2z").getCaptionLabel().align(CENTER, BOTTOM);
     cp5.getController("G3z").getCaptionLabel().align(CENTER, BOTTOM);
+    cp5.getController("p0").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("p1").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("p2").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("p3").getCaptionLabel().align(CENTER, CENTER);
@@ -361,6 +360,9 @@ class GUI extends PApplet {   //<>// //<>// //<>//
       if (theEvent.getController().equals(sw)) {
         layerActive.get(layerID).sw = sw.getValue();
       }
+      if (theEvent.getController().equals(petals0)) {
+        layerActive.get(layerID).gear0.P = int(petals0.getValue());
+      }
       if (theEvent.getController().equals(petals1)) {
         layerActive.get(layerID).gear1.P = int(petals1.getValue());
       }
@@ -437,7 +439,6 @@ class GUI extends PApplet {   //<>// //<>// //<>//
         cp5.get(Matrix.class, "Matrix").pause();
         play = false;
       }
-      //gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
     }
     if (key == 'q') { 
       gif.triggerArray();
@@ -447,14 +448,10 @@ class GUI extends PApplet {   //<>// //<>// //<>//
         cp5.get(Matrix.class, "Matrix").play();
       }
     }
-
     if (key == 'r') {
       play = true;
       render = true;
       gif.renderStart = millis();
-      //delay = gif.renderStart + 2500;
-      //gif.renderer();
-      //gif.render();
     }
   }
 

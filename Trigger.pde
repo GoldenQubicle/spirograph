@@ -1,12 +1,10 @@
 class Trigger {
-
   Ani ani;
   Easing[] easings = { Ani.LINEAR, Ani.QUAD_IN, Ani.QUAD_OUT, Ani.QUAD_IN_OUT, Ani.CUBIC_IN, Ani.CUBIC_IN_OUT, Ani.CUBIC_OUT, Ani.QUART_IN, Ani.QUART_OUT, Ani.QUART_IN_OUT, Ani.QUINT_IN, Ani.QUINT_OUT, Ani.QUINT_IN_OUT, Ani.SINE_IN, Ani.SINE_OUT, Ani.SINE_IN_OUT, Ani.CIRC_IN, Ani.CIRC_OUT, Ani.CIRC_IN_OUT, Ani.EXPO_IN, Ani.EXPO_OUT, Ani.EXPO_IN_OUT, Ani.BACK_IN, Ani.BACK_OUT, Ani.BACK_IN_OUT, Ani.BOUNCE_IN, Ani.BOUNCE_OUT, Ani.BOUNCE_IN_OUT, Ani.ELASTIC_IN, Ani.ELASTIC_OUT, Ani.ELASTIC_IN_OUT};
   int Start, End, layerKF, layerParameter, gear, gearVar, layerVar, layerGet;
   float aniDuration, aniValue, aniSeek, renderFrame, interval;
   String [] GearVars = {"RX", "RY", "P", "Connect", "RZ", "rotate"};
   String [] LayerVars = {"LX", "LY", "SW", "Density"};
-
 
   Trigger(int thex, int they, int end, int layer) {
     layerParameter = they;
@@ -15,12 +13,8 @@ class Trigger {
     layerGet = layer;
     layerKF = End + (layer*gif.keyFrames);
     interval = (End - Start) + 1;
-    //aniDuration = (float(gif.aniMatrixTiming)/1000)*interval;
     aniDuration = gif.aniFrames*interval;
-
     aniSeek = 1 / aniDuration;
-
-    //println(aniDuration, gif.aniMatrixTiming/1000);
 
     // gear parameters
     if (layerParameter == 0) {
@@ -132,7 +126,6 @@ class Trigger {
   }
 
   void aniType() {
-
     if (layerParameter <= 13) {
       ani = Ani.to(layerAnimate.get(layerGet).gears[gear], aniDuration, GearVars[gearVar], aniValue, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
     } else {
@@ -140,10 +133,8 @@ class Trigger {
     }
   }
 
-
   void ani() {
     aniType();
     ani.start();
-    //ani.pause();
   }
 }

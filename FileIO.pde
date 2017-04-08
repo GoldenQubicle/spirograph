@@ -62,7 +62,6 @@ class FileIO {
     layer.setString("name", tobeSaved.name);
     layer.setInt("id", tobeSaved.id);
     layer.setInt("kf", tobeSaved.kf);
-    //layer.setBoolean("3d", tobeSaved.spheres3d); 
     for (int i = 0; i < tobeSaved.gears.length; i++) {
       gears.setFloat(Gears[i] + " RX", tobeSaved.gears[i].RX);
       gears.setInt(Gears[i] + " trigX", tobeSaved.gears[i].trigX);
@@ -94,7 +93,6 @@ class FileIO {
     fromJSON.name = tobeLoaded.getString("name");
     fromJSON.id = tobeLoaded.getInt("id");
     fromJSON.kf = tobeLoaded.getInt("kf");
-    //fromJSON.spheres3d = tobeLoaded.getBoolean("3d");
     for (int i = 0; i < fromJSON.gears.length; i++) {
       fromJSON.gears[i].RX = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RX"); 
       fromJSON.gears[i].RY = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RY");

@@ -1,10 +1,25 @@
 /* //<>//
+Controller
+  - receives input and executes commands
+  - updates GUI  
 
-new render class which handles all thing rendering
-  - renderLoop obviously
-  - save out as png (simple loop over PImage array)
-  - playback over PIamage array
-  - interpolate keyFrames 
+CurrenState 
+  - add/remove keyframes
+  - add/remove time
+  - resize surface
+  - add/copy/delete layer
+  - update triggerAra
+  
+Animation
+  - move setupArrays & updateAniMatrixTiming to CurrenState
+  - flexible renderLoop, i.e. checks for new/changed triggers (would this check be performed in contoller, and then triggerArray in CurrentState?) 
+  - interpolate keyFrames
+  - playback over PImage[]
+
+fileIO
+  - save/load JSON
+  - save PNG
+
   
 to speed things up I want not rebuild the whole trigger array everytime, rather check first if there're any changes
 if so: remove, add or update triggers (so this is rud soo probably in controller class?)
@@ -33,9 +48,7 @@ import controlP5.*;
 import dawesometoolkit.*;
 import de.looksgood.ani.*;
 import de.looksgood.ani.easing.*;
-//import gifAnimation.*;
 
-//GifMaker gifExport;
 PeasyCam cam;
 DawesomeToolkit ds;
 Controller controller;
@@ -76,7 +89,6 @@ void setup() {
   Ani.init(this);
   Ani.noAutostart();
   Ani.setDefaultTimeMode(Ani.FRAMES);
-  //Ani.setDefaultTimeMode(Ani.SECONDS);
   gif = new Animation();  
   gui = new GUI(this);
   controller = new Controller();
@@ -85,7 +97,6 @@ void setup() {
   update = false;
   spheres3d = false;
   render = false;
-  //gifExport = new GifMaker(this, "export.gif");
 }
 
 void draw() {
@@ -111,6 +122,7 @@ void draw() {
   }
 }
 
+// keep this timer for now, could be usefull later for playback over PImage[]
 //void timer(float ms) {
 //  if (ms > delay) {
 //    render = false;
@@ -131,7 +143,6 @@ void keyPressed() {
       gui.cp5.get(Matrix.class, "Matrix").pause();
       play = false;
     }
-    //gui.cp5.get(Toggle.class, "Play/Pause").setState(play);
   }
   if (key == 'q') {
     gui.cp5.get(Matrix.class, "Matrix").stop();

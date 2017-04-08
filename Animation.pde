@@ -1,4 +1,4 @@
-class Animation {   //<>// //<>//
+class Animation {    //<>//
 
   int keyFrames, layerVars, matrixWidth, matrixHeight, cellWidth, cellHeight, nLayers, aniMatrixTiming, renderFrame, renderKeyFrame, fTemp, fps;
   float totalTime, aniTotalFrames, aniFrames;
@@ -19,12 +19,15 @@ class Animation {   //<>// //<>//
     totalTime = 4000; 
     keyFrames = 4;
     aniMatrixTiming = int(totalTime/keyFrames);
+    triggers = new ArrayList();
 
     fps = 60;
-    aniTotalFrames =  (totalTime/1000)*fps ; // being used in renderer
+    aniTotalFrames =  (totalTime/1000)*fps ; 
     aniFrames = round(aniTotalFrames/keyFrames);
     aniTotalFrames = aniFrames * keyFrames;
     frames = new PImage[int(aniTotalFrames)];
+    renderKeyFrame = 0;
+    renderFrame = 0;
 
     for (int l = 0; l < nLayers; l++) {
       aniStart = new Boolean [keyFrames][layerVars];
@@ -44,18 +47,11 @@ class Animation {   //<>// //<>//
       layerAniEnd.add(aniEnd);
       layerAniEasing.add(aniEasing);
     }
-
-
-    // needs to be moved
+    // values used for aniMatrix tabs in GUI, should prolly be moved at some point
     matrixWidth = 775; 
     matrixHeight = 400; 
     cellWidth = matrixWidth/keyFrames; 
     cellHeight = matrixHeight/layerVars; 
-    // 
-
-    triggers = new ArrayList();
-    renderKeyFrame = 0;
-    renderFrame = 0;
   }
 
   void renderPImage() {
@@ -76,28 +72,24 @@ class Animation {   //<>// //<>//
       renderFrame+=1;
       render = false;
     }
+    
     if (render == false) {
       fTemp+=1;
       aniStart(renderKeyFrame); 
       for (Trigger myTrigger : triggers) {
-        if (renderKeyFrame == myTrigger.Start && myTrigger.ani.isPlaying() == false) {
-          myTrigger.ani.start();
-          myTrigger.ani.pause();
-          println("trigger start" + renderKeyFrame);
-        }
         if (myTrigger.Start <= renderKeyFrame ) {
-          //myTrigger.ani.pause();
           myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.renderFrame);
           myTrigger.renderFrame+=1;
-          //println(myTrigger.aniSeek*myTrigger.renderFrame);
         }
       }
+      
       // setKeyFrame for aniStart
       if (fTemp == aniFrames) {
         renderKeyFrame+=1; 
         fTemp = 0;
       }
       render = true;
+      
       // check for end
       if (renderFrame == aniTotalFrames) {
         render = false;
@@ -148,7 +140,6 @@ class Animation {   //<>// //<>//
   void aniStart(int theX) {
     for (Trigger myTrigger : triggers) {
       if (theX == myTrigger.Start) {
-        //myTrigger.ani.start();
         myTrigger.ani();
       }
     }
@@ -160,15 +151,12 @@ class Animation {   //<>// //<>//
     for (int l = 0; l < nLayers; l++) { 
       Layer animate = new Layer(10);
       layerAnimate.add(controller.copyLayerSettings(animate, 0, l));
-      //layerActive.clear();
       for (int x = 0; x < keyFrames; x++) {
         for (int y = 0; y < layerVars; y++) {
           if (layerAniStart.get(l)[x][y] == true) {
             Trigger Animate;
             Animate = new Trigger(x, y, layerAniEnd.get(l)[x][y], l);
-            //println(x, y, layerAniEnd.get(l)[x][y], l);
             triggers.add(Animate);
-            //println(triggers.size());
           }
         }
       }
