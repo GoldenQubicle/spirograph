@@ -113,7 +113,7 @@ class FileIO {
     fromJSON.lx = tobeLoaded.getFloat("Line X");
     fromJSON.ly = tobeLoaded.getFloat("Line Y"); 
     fromJSON.sw = tobeLoaded.getFloat("strokeWeight");
-    fromJSON.density = tobeLoaded.getFloat("density");
+    fromJSON.density = tobeLoaded.getInt("density");
     fromJSON.blendSelect = tobeLoaded.getInt("blendMode"); 
     return fromJSON;
   }

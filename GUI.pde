@@ -334,7 +334,7 @@ class GUI extends PApplet { //<>//
     }
     if (layerlock == false) {
       if (theEvent.getController().equals(density)) {
-        layerActive.get(layerID).density = density.getValue();
+        layerActive.get(layerID).density = int(density.getValue());
       }      
       if (theEvent.getController().equals(blendMode)) {
         layerActive.get(layerID).blendSelect = int(blendMode.getValue());

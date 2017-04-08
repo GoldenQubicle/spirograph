@@ -1,4 +1,24 @@
 /* //<>//
+
+soo, this upset below is nice and all, but actually not necesarry at the moment to start restructering and/or refactoring
+that is to say, everything works as it should 
+instead focus on more pressing issue, namely how to handle updating / interpolating keyFrames settings
+
+User story
+- when I have all frames selected active, a change to e.g. color is applied to all frames, regardless whether there's a change to trigger
+- when I have selected frame 6 <= end changes made to e.g. radius gear 2 are applied to frame 7,8,9, etc
+
+so, in terms of updating keyFrames there're 3 cases
+1 changes made on all frames 
+2 changes made on frame <= end
+3 changes made to single frame
+
+case 3 is basically how it's working now
+so question is: how to propogate the changed parameter to the approriate keyFrames in case 1 & 2
+that is: simply running the keyFrames through copyLayerSettings is obviously not going to work
+so, is it possible to do a comparison of layer objects?
+
+
 Controller
   - receives input and executes commands
   - updates GUI  
@@ -20,26 +40,8 @@ fileIO
   - save/load JSON
   - save PNG
 
-  
-to speed things up I want not rebuild the whole trigger array everytime, rather check first if there're any changes
-if so: remove, add or update triggers (so this is rud soo probably in controller class?)
-and then only re-render and replace the appriate PImages frames in the array
-
-
-
-sort out the controller logic with regard to renderer for easier debuggin of said renderer
-
-so basically, want to have somekind of 'lock' to indicate wheter changes made apply to all frames, only affect going forward or the single keyframe worked upon
-
-rework gui while sorting that logic out
-
- renderer needs to be intergrated into gui / controller logic
- beforehand, move some layer settings (density / color) into sort of global
- or rather more often than not, when I adjust those, I want it to apply over all keyframes
- also, when copying layer, Id expect all keyframes to be copied as well
- 
- theres a weird bug when toggling the gear trig completely off
- camera / offset not correct in 3d
+ BUGS
+ controls freeze when toggling the gear trig completely off
 
  */
 

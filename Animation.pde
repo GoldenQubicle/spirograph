@@ -51,7 +51,7 @@ class Animation {    //<>//
     matrixWidth = 775; 
     matrixHeight = 400; 
     cellWidth = matrixWidth/keyFrames; 
-    cellHeight = matrixHeight/layerVars; 
+    cellHeight = matrixHeight/layerVars;
   }
 
   void renderPImage() {
@@ -72,24 +72,28 @@ class Animation {    //<>//
       renderFrame+=1;
       render = false;
     }
-    
+
     if (render == false) {
       fTemp+=1;
       aniStart(renderKeyFrame); 
       for (Trigger myTrigger : triggers) {
+        if (renderKeyFrame == myTrigger.Start && myTrigger.ani.isPlaying() == false) {
+          myTrigger.ani.start();
+          myTrigger.ani.pause();
+        }
         if (myTrigger.Start <= renderKeyFrame ) {
           myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.renderFrame);
           myTrigger.renderFrame+=1;
         }
       }
-      
+
       // setKeyFrame for aniStart
       if (fTemp == aniFrames) {
         renderKeyFrame+=1; 
         fTemp = 0;
       }
       render = true;
-      
+
       // check for end
       if (renderFrame == aniTotalFrames) {
         render = false;

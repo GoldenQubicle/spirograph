@@ -1,14 +1,14 @@
 class Layer {  //<>//
   String name;
   PVector xyz, xy2;  
-  float theta, phi, lx, ly, density, sw, connectLines;
+  float theta, phi, lx, ly, sw, connectLines;
   Gears[] gears;
   Gears gear0, gear1, gear2, gear3;
   color cFill, cStroke;
   boolean stroke, fill, lines, dots;
   IntDict trig;
   int [] mode = {1, 2, 4, 16, 8, 64, 128, 256, 0};
-  int blendSelect, id, kf;
+  int blendSelect, id, kf, density;
 
   Layer(float radius) {
     id = 1;
