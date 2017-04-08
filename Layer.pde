@@ -122,6 +122,9 @@ class Layer {  //<>//
       if (theta == density && render == true) {
         gif.renderPImage();
       }
+      if (theta == density && renderKeyFrames == true) {
+        gif.renderLayer();
+      }
     }
   }
 
@@ -172,7 +175,7 @@ class Gears {
     RY = ry;
     RZ = rz;
   }
-  
+
   void grinding(int trigx, int trigy, int trigz, int trigx2, int trigy2, float theta, float phi, float density) {
     trigX = trigx;
     trigX2 = trigx2;

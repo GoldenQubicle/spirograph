@@ -1,48 +1,48 @@
-/* //<>//
+/* //<>// //<>// //<>//
 
-soo, this upset below is nice and all, but actually not necesarry at the moment to start restructering and/or refactoring
-that is to say, everything works as it should 
-instead focus on more pressing issue, namely how to handle updating / interpolating keyFrames settings
-
-User story
-- when I have all frames selected active, a change to e.g. color is applied to all frames, regardless whether there's a change to trigger
-- when I have selected frame 6 <= end changes made to e.g. radius gear 2 are applied to frame 7,8,9, etc
-
-so, in terms of updating keyFrames there're 3 cases
-1 changes made on all frames 
-2 changes made on frame <= end
-3 changes made to single frame
-
-case 3 is basically how it's working now
-so question is: how to propogate the changed parameter to the approriate keyFrames in case 1 & 2
-that is: simply running the keyFrames through copyLayerSettings is obviously not going to work
-so, is it possible to do a comparison of layer objects?
-
-
-Controller
-  - receives input and executes commands
-  - updates GUI  
-
-CurrenState 
-  - add/remove keyframes
-  - add/remove time
-  - resize surface
-  - add/copy/delete layer
-  - update triggerAra
-  
-Animation
-  - move setupArrays & updateAniMatrixTiming to CurrenState
-  - flexible renderLoop, i.e. checks for new/changed triggers (would this check be performed in contoller, and then triggerArray in CurrentState?) 
-  - interpolate keyFrames
-  - playback over PImage[]
-
-fileIO
-  - save/load JSON
-  - save PNG
-
+ soo, this upset below is nice and all, but actually not necesarry at the moment to start restructering and/or refactoring
+ that is to say, everything works as it should 
+ instead focus on more pressing issue, namely how to handle updating / interpolating keyFrames settings
+ 
+ User story
+ - when I have all frames selected active, a change to e.g. color is applied to all frames, regardless whether there's a change to trigger
+ - when I have selected frame 6 <= end changes made to e.g. radius gear 2 are applied to frame 7,8,9, etc
+ 
+ so, in terms of updating keyFrames there're 3 cases
+ 1 changes made on all frames 
+ 2 changes made on frame <= end
+ 3 changes made to single frame
+ 
+ case 3 is basically how it's working now
+ so question is: how to propogate the changed parameter to the approriate keyFrames in case 1 & 2
+ that is: simply running the keyFrames through copyLayerSettings is obviously not going to work
+ so, is it possible to do a comparison of layer objects?
+ 
+ 
+ Controller
+ - receives input and executes commands
+ - updates GUI  
+ 
+ CurrenState 
+ - add/remove keyframes
+ - add/remove time
+ - resize surface
+ - add/copy/delete layer
+ - update triggerAra
+ 
+ Animation
+ - move setupArrays & updateAniMatrixTiming to CurrenState
+ - flexible renderLoop, i.e. checks for new/changed triggers (would this check be performed in contoller, and then triggerArray in CurrentState?) 
+ - interpolate keyFrames
+ - playback over PImage[]
+ 
+ fileIO
+ - save/load JSON
+ - save PNG
+ 
  BUGS
  controls freeze when toggling the gear trig completely off
-
+ 
  */
 
 import peasy.*;
@@ -60,7 +60,7 @@ Layer layer_1, layer_2;
 ArrayList<Layer> layerActive =  new ArrayList();
 ArrayList<Layer> layerKeyFrames = new ArrayList();
 ArrayList<Layer> layerAnimate =  new ArrayList();
-boolean play, update, spheres3d, render;
+boolean play, update, spheres3d, render, renderKeyFrames;
 int Width = 512;
 int Height = 512;
 color cBackground;
@@ -99,6 +99,7 @@ void setup() {
   update = false;
   spheres3d = false;
   render = false;
+  renderKeyFrames = false;
 }
 
 void draw() {
@@ -109,7 +110,7 @@ void draw() {
     translate(Width/2, Height/2);
   }
 
-  if (play == false) { //<>//
+  if (play == false) {
     for (int i = 0; i < layerActive.size(); i++) {
       layerActive.get(i).display();
     }
@@ -119,8 +120,11 @@ void draw() {
       layerAnimate.get(i).display();
     }
   }
-  if (render == true) { //<>//
+  if (render == true) {
     gif.renderLoop();
+  }
+  if (renderKeyFrames == true) {
+    gif.renderKeyFrames();
   }
 }
 

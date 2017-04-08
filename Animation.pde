@@ -64,6 +64,39 @@ class Animation {    //<>//
     frames[renderFrame] = frame;
     println("rendered frame " + renderFrame + " out of " + int(aniTotalFrames));
     render = true;
+    //renderKeyFrames = true;
+  }
+
+  void renderLayer() {
+    Layer interpolated = new Layer(10);
+    layerKeyFrames.set(renderKeyFrame, controller.copyLayerSettings(interpolated, 2, gui.layerID));  
+    renderKeyFrames = true;
+  }
+
+  void renderKeyFrames() {    
+    if (renderKeyFrames) {
+      renderKeyFrames = false;
+      //render = false;
+    }
+    if (renderKeyFrames == false) {
+      aniStart(renderKeyFrame); 
+      for (Trigger myTrigger : triggers) {
+        if (myTrigger.Start <= renderKeyFrame ) {
+          myTrigger.renderFrame+=int(aniFrames);
+          myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.renderFrame);    
+          myTrigger.renderFrame+=(myTrigger.aniDuration/myTrigger.interval);
+        }
+      }
+      //render = true;
+      renderKeyFrames = true;
+      renderKeyFrame+=1;
+
+      if (renderKeyFrame == keyFrames) {
+        renderKeyFrames = false;
+        play = false;
+        println("staaaph");
+      }
+    }
   }
 
 

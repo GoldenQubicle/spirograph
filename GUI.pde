@@ -474,6 +474,14 @@ class GUI extends PApplet { //<>//
       render = true;
       gif.renderStart = millis();
     }
+       if (key == 'k') {
+      play = true;
+      //render = true;
+      renderKeyFrames = true;
+      gif.renderStart = millis();
+    }
+    
+    
   }
 
   void Matrix(int theX, int theY) { 

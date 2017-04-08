@@ -411,6 +411,9 @@ class Controller {
     if (select == 1 ) {
       dummy = layerKeyFrames.get(getlayer);
     }
+     if (select == 2 ) {
+      dummy = layerAnimate.get(getlayer);
+    }
     return dummy;
   }
 
