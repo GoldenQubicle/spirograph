@@ -28,7 +28,6 @@ class Animation {    //<>//
     frames = new PImage[int(aniTotalFrames)];
     renderKeyFrame = 0;
     renderFrame = 0;
-
     for (int l = 0; l < nLayers; l++) {
       aniStart = new Boolean [keyFrames][layerVars];
       aniInt = new int[keyFrames][layerVars]; 
@@ -54,6 +53,16 @@ class Animation {    //<>//
     cellHeight = matrixHeight/layerVars;
   }
 
+  void playback(int f) {   
+      PImage frame_pb = createImage(Width, Height, ARGB);
+      frame_pb.loadPixels();
+      frames[f].loadPixels();      
+      frame_pb.pixels = frames[f].pixels;
+      frame_pb.updatePixels();
+      image(frame_pb, -Width/2, -Height/2);      
+   
+  }
+
   void renderPImage() {
     PImage frame = createImage(Width, Height, ARGB);
     loadPixels();
@@ -69,7 +78,9 @@ class Animation {    //<>//
 
   void renderLayer() {
     Layer interpolated = new Layer(10);
-    layerKeyFrames.set(renderKeyFrame, controller.copyLayerSettings(interpolated, 2, gui.layerID));  
+    for (int i = 0; i < nLayers; i++) {
+      layerKeyFrames.set(renderKeyFrame + (i*keyFrames), controller.copyLayerSettings(interpolated, 2, i));
+    }
     renderKeyFrames = true;
   }
 
@@ -94,7 +105,7 @@ class Animation {    //<>//
       if (renderKeyFrame == keyFrames) {
         renderKeyFrames = false;
         play = false;
-        println("staaaph");
+        renderKeyFrame = 0;
       }
     }
   }

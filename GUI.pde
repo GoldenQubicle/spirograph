@@ -193,7 +193,7 @@ class GUI extends PApplet { //<>//
       keyFrames.getItem(i).getCaptionLabel().set("KF" + (i+1)).align(CENTER, CENTER);
     }
     keyFrames.activate(0);
-    //saveFWD = cp5.addButton("saveFWD").setPosition(95, 480).setSize(50, 16);
+    saveFWD = cp5.addButton("saveFWD").setPosition(199, 480).setSize(50, 16);
     keyFrameFWD = cp5.addToggle("KFfwd").setPosition(95, 480).setSize(50, 16);
     keyFrameAll = cp5.addToggle("KFall").setPosition(147, 480).setSize(50, 16);
     //keyFrameSingle = cp5.addToggle("KFSingle").setPosition(210, 480).setSize(50, 16);    
@@ -268,14 +268,14 @@ class GUI extends PApplet { //<>//
       int frame = int(keyFrames.getValue());
       controller.toggleKeyFrames(frame);
     }
-    //if (theEvent.getController().equals(saveFWD)) {
-    //  int frame = int(keyFrames.getValue());
-    //  for (int f = frame; f < (gif.keyFrames); f++) {
-    //    int keyFrame = f + (int(gui.layerSwitch.getValue())*gif.keyFrames);
-    //    Layer New = new Layer(10);
-    //    layerKeyFrames.set(keyFrame, controller.copyLayerSettings(New, 1, frame+(int(layerSwitch.getValue())*gif.keyFrames)));
-    //  }
-    //}
+    if (theEvent.getController().equals(saveFWD)) {
+      int frame = int(keyFrames.getValue());
+      for (int f = frame; f < (gif.keyFrames); f++) {
+        int keyFrame = f + (int(gui.layerSwitch.getValue())*gif.keyFrames);
+        Layer New = new Layer(10);
+        layerKeyFrames.set(keyFrame, controller.copyLayerSettings(New, 1, frame+(int(layerSwitch.getValue())*gif.keyFrames)));
+      }
+    }
     for (int x = 0; x < gif.keyFrames; x++) {
       for (int y = 0; y < gif.layerVars; y++) {
         if (theEvent.getController().getName().equals("Easing"+"0"+x+"0"+y)) {
@@ -366,13 +366,13 @@ class GUI extends PApplet { //<>//
             layerKeyFrames.get(gif.keyFrames - i).gears[g].P = int(theEvent.getController().getValue());
           }
         }
-        if (theEvent.getController().equals("g"+g+"r")) {
-          layerActive.get(layerID).gears[g].rotate = theEvent.getController().getValue();        
+        if (theEvent.getController().getName().equals("g" + g + "r")) {
+          layerActive.get(layerID).gears[g].rotate = theEvent.getController().getValue();   
           for (int i = int(selection); i >= 0; i--) {
             layerKeyFrames.get(gif.keyFrames - i).gears[g].rotate  = theEvent.getController().getValue();
           }
         }
-        if (theEvent.getController().equals("G"+g+"z")) {
+        if (theEvent.getController().getName().equals("G"+g+"z")) {
           layerActive.get(layerID).gears[g].RZ = theEvent.getController().getValue();
           for (int i = int(selection); i >= 0; i--) {
             layerKeyFrames.get(gif.keyFrames - i).gears[g].RZ  = theEvent.getController().getValue();
@@ -474,14 +474,22 @@ class GUI extends PApplet { //<>//
       render = true;
       gif.renderStart = millis();
     }
-       if (key == 'k') {
+    if (key == 'k') {
       play = true;
       //render = true;
       renderKeyFrames = true;
       gif.renderStart = millis();
     }
-    
-    
+    if (key == 'p') {
+
+      if (playback == true) {
+        playback = false;
+      } else {
+        playback = true;
+      }
+      gif.renderStart = millis();
+      println(playback);
+    }
   }
 
   void Matrix(int theX, int theY) { 

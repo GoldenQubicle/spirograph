@@ -121,7 +121,7 @@ class Controller {
     switch(action) {
     case 0:  // add new & copied layer
       // update keyFrame array
-      for (int f =0; f < gif.keyFrames; f++) {
+      for (int f = 0; f < gif.keyFrames; f++) {
         Layer kfBLank = new Layer(10);
         layerKeyFrames.add(copyLayerSettings(kfBLank, 1, (layerActive.size()-1)*f));
         layerKeyFrames.get(layerKeyFrames.size()-1).kf = f;
@@ -421,6 +421,7 @@ class Controller {
     layerActive.clear();
     for (int f = frame; f < layerKeyFrames.size(); f+= gif.keyFrames) {
       layerActive.add(layerKeyFrames.get(f));
+      println(layerKeyFrames.size(), f);
     }
     gui.layerlock = true;
     updateLayerGUI(0, int(gui.layerSwitch.getValue()));
