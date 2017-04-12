@@ -5,7 +5,7 @@ class GUI extends PApplet { //<>//
   boolean layerlock = false;
   Matrix Ani;
   ColorWheel colorBackground, colorStroke, colorFill;
-  Toggle stroke, fill, drawMode, keyFrameAll, keyFrameFWD, keyFrameSingle;
+  Toggle stroke, fill, drawMode, keyFrameAll, keyFrameFWD;
   ScrollableList layerSwitch, blendMode, fileSelect, Easing;
   Slider2D gear0, gear1, gear2, gear3;
   Slider gifWidth, gifHeight, gifLength, gifKeyFrames, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals0, petals1, petals2, petals3, alphaFill, alphaStroke, G0r, G1r, G2r, G3r, density; 
@@ -18,10 +18,14 @@ class GUI extends PApplet { //<>//
   int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p0, p1, p2, p3, as, af, g0r, g1r, g2r, g3r, d; 
   float densityRangeMin = 1;
   float densityRangeMax = 1000;
-
   Textfield fileName;
   Textlabel trig, Label;
-  String [] labelGears2d = {"Gear 0 X", "Gear 0 Y", "Gear 1 Petals", "Gear 1 X", "Gear 1 Y", "Gear 2 Petals", "Gear 2 X", "Gear 2 Y", "Gear 3 Petals", "Gear 3 X", "Gear 3 Y", "Gears 1 Rotate", "Gears 2 Rotate", "Gears 3 Rotate" } ;//"Line X", "Line Y", "StrokeWeight", "Connect G1", "Connect G2", "Connect G3", "Density"}; 
+  Textarea renderMessage;
+  String [] labelsAniMatrix = {"Gear 0 X", "Gear 0 Y", "Gear 0 Petals", "Gear 0 Rotate",
+                            "Gear 1 X", "Gear 1 Y", "Gear 1 Petals", "Gear 1 Rotate",
+                            "Gear 2 X", "Gear 2 Y", "Gear 2 Petals", "Gear 2 Rotate",
+                            "Gear 3 X", "Gear 3 Y", "Gear 3 Petals", "Gear 3 Rotate", 
+                            "line X", "line Y", "StrokeWeight", "color Fill", "color Stroke"};
   String[] EasingNames = {"LINEAR", "QUAD_IN", "QUAD_OUT", "QUAD_IN_OUT", "CUBIC_IN", "CUBIC_IN_OUT", "CUBIC_OUT", "QUART_IN", "QUART_OUT", "QUART_IN_OUT", "QUINT_IN", "QUINT_OUT", "QUINT_IN_OUT", "SINE_IN", "SINE_OUT", "SINE_IN_OUT", "CIRC_IN", "CIRC_OUT", "CIRC_IN_OUT", "EXPO_IN", "EXPO_OUT", "EXPO_IN_OUT", "BACK_IN", "BACK_OUT", "BACK_IN_OUT", "BOUNCE_IN", "BOUNCE_OUT", "BOUNCE_IN_OUT", "ELASTIC_IN", "ELASTIC_OUT", "ELASTIC_IN_OUT"};
   String [] blendModes = {"Normal", "Add", "Subtract", "Darkest", "Lightest", "Exclusion", "Multiply", "Screen", "Replace"};
 
@@ -45,7 +49,7 @@ class GUI extends PApplet { //<>//
     Save = cp5.addButton("Save").setPosition(rPanex+150, rPaneyMenu+25).setCaptionLabel("Save").setId(1).moveTo("global");
     Load = cp5.addButton("Load").setPosition(rPanex+150, rPaneyMenu+50).setCaptionLabel("Load").setId(2).moveTo("global");
     cp5.addGroup("fs").setPosition(rPanex, 15).setSize(220, 135).setBackgroundColor(color(255)).setBarHeight(15).setCaptionLabel("Load File").disableCollapse().setBackgroundColor(0).hide().moveTo("global");
-    fileSelect = cp5.addScrollableList("fileSelect").setPosition(15, 15).setSize(180, 85).setGroup("fs");//.hide();
+    fileSelect = cp5.addScrollableList("fileSelect").setPosition(15, 15).setSize(180, 85).setGroup("fs");
     fileSelect.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
         if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
@@ -56,7 +60,7 @@ class GUI extends PApplet { //<>//
       }
     }
     );
-    // new gif menu
+    //settings menu
     cp5.addGroup("ng").setPosition(rPanex, 15).setSize(220, 135).setBackgroundColor(color(255)).setBarHeight(15).setCaptionLabel("GIF setting").disableCollapse().setBackgroundColor(0).hide().moveTo("global");
     gifWidth = cp5.addSlider("GW").setPosition(10, 10).setRange(200, 1920).setGroup("ng").setCaptionLabel("Width");
     gifHeight = cp5.addSlider("GH").setPosition(10, 25).setRange(200, 1920).setGroup("ng").setCaptionLabel("Height");
@@ -193,14 +197,12 @@ class GUI extends PApplet { //<>//
       keyFrames.getItem(i).getCaptionLabel().set("KF" + (i+1)).align(CENTER, CENTER);
     }
     keyFrames.activate(0);
-    saveFWD = cp5.addButton("saveFWD").setPosition(199, 480).setSize(50, 16);
-    keyFrameFWD = cp5.addToggle("KFfwd").setPosition(95, 480).setSize(50, 16);
-    keyFrameAll = cp5.addToggle("KFall").setPosition(147, 480).setSize(50, 16);
-    //keyFrameSingle = cp5.addToggle("KFSingle").setPosition(210, 480).setSize(50, 16);    
+    saveFWD = cp5.addButton("saveFWD").setPosition(199, 480).setSize(50, 16).moveTo("global");
+    keyFrameFWD = cp5.addToggle("KFfwd").setPosition(95, 480).setSize(50, 16).moveTo("global");
+    keyFrameAll = cp5.addToggle("KFall").setPosition(147, 480).setSize(50, 16).moveTo("global");
     cp5.getController("KFfwd").getCaptionLabel().align(CENTER, CENTER);  
     cp5.getController("KFall").getCaptionLabel().align(CENTER, CENTER);  
-    //cp5.getController("KFSingle").getCaptionLabel().align(CENTER, CENTER);  
-
+    
     // ANIMATRIX TABS START HERE
     // make tabs
     cp5.getTab("default").setCaptionLabel("Matrix").setId(1);
@@ -209,12 +211,12 @@ class GUI extends PApplet { //<>//
     cp5.getTab("Ani Easing").activateEvent(true).setId(2);
     cp5.getWindow().setPositionOfTabs(10, 480);
     //  labels
-    for (int i = 0; i < labelGears2d.length; i++) {
-      Label =  cp5.addTextlabel("Label" + i).setPosition(gif.matrixWidth + 10, 530 + (gif.cellHeight*i)).setText(labelGears2d[i]).moveTo("global");
+    for (int i = 0; i < labelsAniMatrix.length; i++) {
+      Label =  cp5.addTextlabel("Label" + i).setPosition(gif.matrixWidth + 10, 530 + (gif.cellHeight*i)).setText(labelsAniMatrix[i]).moveTo("global");
     }
     // actual matrix    
     Ani = cp5.addMatrix("Matrix").setPosition(3, 525).setSize(gif.matrixWidth, gif.matrixHeight).setGap(2, 2).setMode(ControlP5.MULTIPLES)
-      .setInterval(gif.aniMatrixTiming).setGrid(gif.keyFrames, gif.layerVars).stop(); //.set(0, 0, true);
+      .setInterval(gif.aniMatrixTiming).setGrid(gif.keyFrames, gif.layerVars).stop(); 
     Ani.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) { 
         if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
@@ -246,10 +248,10 @@ class GUI extends PApplet { //<>//
         cp5.getController("add"+"0"+x+"0"+y).moveTo("Ani Easing");
       }
     }
+    renderMessage = cp5.addTextarea("message").setPosition(600, 480).setSize(200, 20).setText("");
   }
 
   void controlEvent(ControlEvent theEvent) {
-
     if (theEvent.isTab()) {
       gif.tabToggle();
     }
@@ -353,17 +355,17 @@ class GUI extends PApplet { //<>//
       // gear controllers
       for (int g = 0; g < 4; g++) {
         if (theEvent.getController().getName().equals("G" + g)) {
-          layerActive.get(layerID).gears[g].RX = theEvent.getController().getArrayValue(0);
-          layerActive.get(layerID).gears[g].RY = theEvent.getController().getArrayValue(1);
+          layerActive.get(layerID).gears[g].rX = theEvent.getController().getArrayValue(0);
+          layerActive.get(layerID).gears[g].rY = theEvent.getController().getArrayValue(1);
           for (int i = int(selection); i >= 0; i--) {
-            layerKeyFrames.get(gif.keyFrames - i).gears[g].RX = theEvent.getController().getArrayValue(0);
-            layerKeyFrames.get(gif.keyFrames - i).gears[g].RY = theEvent.getController().getArrayValue(1);
+            layerKeyFrames.get(gif.keyFrames - i).gears[g].rX = theEvent.getController().getArrayValue(0);
+            layerKeyFrames.get(gif.keyFrames - i).gears[g].rY = theEvent.getController().getArrayValue(1);
           }
         }
         if (theEvent.getController().getName().equals("p" + g)) {
-          layerActive.get(layerID).gears[g].P = int(theEvent.getController().getValue());
+          layerActive.get(layerID).gears[g].petals = int(theEvent.getController().getValue());
           for (int i = int(selection); i >= 0; i--) {
-            layerKeyFrames.get(gif.keyFrames - i).gears[g].P = int(theEvent.getController().getValue());
+            layerKeyFrames.get(gif.keyFrames - i).gears[g].petals = int(theEvent.getController().getValue());
           }
         }
         if (theEvent.getController().getName().equals("g" + g + "r")) {
@@ -373,9 +375,9 @@ class GUI extends PApplet { //<>//
           }
         }
         if (theEvent.getController().getName().equals("G"+g+"z")) {
-          layerActive.get(layerID).gears[g].RZ = theEvent.getController().getValue();
+          layerActive.get(layerID).gears[g].rZ = theEvent.getController().getValue();
           for (int i = int(selection); i >= 0; i--) {
-            layerKeyFrames.get(gif.keyFrames - i).gears[g].RZ  = theEvent.getController().getValue();
+            layerKeyFrames.get(gif.keyFrames - i).gears[g].rZ  = theEvent.getController().getValue();
           }
         }
       }
@@ -452,7 +454,6 @@ class GUI extends PApplet { //<>//
   void keyPressed() {
     if (key==' ') {     
       if (play == false) {
-        //gif.triggerArray();
         cp5.get(Matrix.class, "Matrix").play();
         cp5.get(Matrix.class, "Matrix").trigger(0);
         play = true;
@@ -473,22 +474,22 @@ class GUI extends PApplet { //<>//
       play = true;
       render = true;
       gif.renderStart = millis();
+      gif.aniStart(0);
     }
     if (key == 'k') {
       play = true;
-      //render = true;
       renderKeyFrames = true;
       gif.renderStart = millis();
+      gif.aniStart(0);
+
     }
     if (key == 'p') {
-
       if (playback == true) {
         playback = false;
       } else {
         playback = true;
       }
       gif.renderStart = millis();
-      println(playback);
     }
   }
 

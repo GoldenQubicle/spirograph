@@ -15,7 +15,7 @@ class Animation {    //<>//
 
   Animation() {
     nLayers = 1;
-    layerVars = 18; 
+    layerVars = 21; 
     totalTime = 4000; 
     keyFrames = 4;
     aniMatrixTiming = int(totalTime/keyFrames);
@@ -48,19 +48,14 @@ class Animation {    //<>//
     }
     // values used for aniMatrix tabs in GUI, should prolly be moved at some point
     matrixWidth = 775; 
-    matrixHeight = 400; 
+    matrixHeight = 420; 
     cellWidth = matrixWidth/keyFrames; 
     cellHeight = matrixHeight/layerVars;
   }
 
-  void playback(int f) {   
-      PImage frame_pb = createImage(Width, Height, ARGB);
-      frame_pb.loadPixels();
-      frames[f].loadPixels();      
-      frame_pb.pixels = frames[f].pixels;
-      frame_pb.updatePixels();
-      image(frame_pb, -Width/2, -Height/2);      
-   
+  void playback(int f) {       
+    frames[f].loadPixels();      
+    image(frames[f], -Width/2, -Height/2);
   }
 
   void renderPImage() {
@@ -70,10 +65,9 @@ class Animation {    //<>//
     frame.pixels = pixels;
     frame.updatePixels();
     frame.save("frame " + renderFrame + ".png");
-    frames[renderFrame] = frame;
-    println("rendered frame " + renderFrame + " out of " + int(aniTotalFrames));
+    frames[renderFrame] = loadImage("frame " + renderFrame + ".png");
+    gui.renderMessage.setText( "rendered frame " + renderFrame + " out of " + int(aniTotalFrames));
     render = true;
-    //renderKeyFrames = true;
   }
 
   void renderLayer() {
@@ -87,7 +81,6 @@ class Animation {    //<>//
   void renderKeyFrames() {    
     if (renderKeyFrames) {
       renderKeyFrames = false;
-      //render = false;
     }
     if (renderKeyFrames == false) {
       aniStart(renderKeyFrame); 
@@ -97,11 +90,9 @@ class Animation {    //<>//
           myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.renderFrame);    
           myTrigger.renderFrame+=(myTrigger.aniDuration/myTrigger.interval);
         }
-      }
-      //render = true;
-      renderKeyFrames = true;
+      }      
       renderKeyFrame+=1;
-
+      renderKeyFrames = true;
       if (renderKeyFrame == keyFrames) {
         renderKeyFrames = false;
         play = false;
@@ -110,30 +101,27 @@ class Animation {    //<>//
     }
   }
 
-
   void renderLoop() {
     if (render == true) {
       renderFrame+=1;
       render = false;
     }
-
     if (render == false) {
-      fTemp+=1;
-      aniStart(renderKeyFrame); 
-      for (Trigger myTrigger : triggers) {
+      fTemp+=1;         
+      for (Trigger myTrigger : triggers) {          
         if (myTrigger.Start <= renderKeyFrame ) {
           myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.renderFrame);
           myTrigger.renderFrame+=1;
+          //println(myTrigger.renderFrame, myTrigger.aniSeek*myTrigger.renderFrame, layerAnimate.get(0).gears[3].rX);
         }
       }
-
       // setKeyFrame for aniStart
       if (fTemp == aniFrames) {
         renderKeyFrame+=1; 
+        aniStart(renderKeyFrame);   
         fTemp = 0;
       }
       render = true;
-
       // check for end
       if (renderFrame == aniTotalFrames) {
         render = false;
@@ -142,7 +130,7 @@ class Animation {    //<>//
         renderKeyFrame = 0;
         renderFrame = 0;
         float end = millis() - renderStart;
-        println("done rendering in " + (end/1000) + " seconds" );
+        gui.renderMessage.setText("done rendering in " + (end/1000) + " seconds" );
       }
     }
   }

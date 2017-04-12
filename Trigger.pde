@@ -3,8 +3,8 @@ class Trigger {
   Easing[] easings = { Ani.LINEAR, Ani.QUAD_IN, Ani.QUAD_OUT, Ani.QUAD_IN_OUT, Ani.CUBIC_IN, Ani.CUBIC_IN_OUT, Ani.CUBIC_OUT, Ani.QUART_IN, Ani.QUART_OUT, Ani.QUART_IN_OUT, Ani.QUINT_IN, Ani.QUINT_OUT, Ani.QUINT_IN_OUT, Ani.SINE_IN, Ani.SINE_OUT, Ani.SINE_IN_OUT, Ani.CIRC_IN, Ani.CIRC_OUT, Ani.CIRC_IN_OUT, Ani.EXPO_IN, Ani.EXPO_OUT, Ani.EXPO_IN_OUT, Ani.BACK_IN, Ani.BACK_OUT, Ani.BACK_IN_OUT, Ani.BOUNCE_IN, Ani.BOUNCE_OUT, Ani.BOUNCE_IN_OUT, Ani.ELASTIC_IN, Ani.ELASTIC_OUT, Ani.ELASTIC_IN_OUT};
   int Start, End, layerKF, layerParameter, gear, gearVar, layerVar, layerGet;
   float aniDuration, aniValue, aniSeek, renderFrame, interval, renderKeyFrame;
-  String [] GearVars = {"RX", "RY", "P", "Connect", "RZ", "rotate"};
-  String [] LayerVars = {"LX", "LY", "SW", "Density"};
+  String [] GearVars = {"rX", "rY", "petals", "rotate", "connect", "rZ"};
+  String [] LayerVars = {"lx", "ly", "sw", "cFill", "cStroke", "density"};
 
   Trigger(int thex, int they, int end, int layer) {
     layerParameter = they;
@@ -15,120 +15,115 @@ class Trigger {
     interval = (End - Start) + 1;
     aniDuration = gif.aniFrames*interval;
     aniSeek = 1 / aniDuration;
-
+    renderFrame = 0;
+   
     // gear parameters
     if (layerParameter == 0) {
       gear = 0;
       gearVar = 0;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RX;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].rX;
     }
     if (layerParameter == 1) {
       gear = 0;
       gearVar = 1;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RY;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].rY;
     }
     if (layerParameter == 2) {
-      gear = 1;
+      gear = 0;
       gearVar = 2;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].P;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].petals;
     }
     if (layerParameter == 3) {
-      gear = 1;
-      gearVar = 0;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RX;
+      gear = 0;
+      gearVar = 3;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].rotate;
     }
     if (layerParameter == 4) {
       gear = 1;
-      gearVar = 1;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RY;
+      gearVar = 0;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].rX;
     }
     if (layerParameter == 5) {
-      gear = 2;
-      gearVar = 2;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].P;
+      gear = 1;
+      gearVar = 1;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].rY;
     }
     if (layerParameter == 6) {
-      gear = 2;
-      gearVar = 0;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RX;
+      gear = 1;
+      gearVar = 2;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].petals;
     }
     if (layerParameter == 7) {
-      gear = 2;
-      gearVar = 1;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RY;
+      gear = 1;
+      gearVar = 3;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].rotate;
     }
     if (layerParameter == 8) {
-      gear = 3;
-      gearVar = 2;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].P;
+      gear = 2;
+      gearVar = 0;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].rX;
     }
     if (layerParameter == 9) {
-      gear = 3;
-      gearVar = 0;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RX;
+      gear = 2;
+      gearVar = 1;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].rY;
     }
     if (layerParameter == 10) {
-      gear = 3;
-      gearVar = 1;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].RY;
+      gear = 2;
+      gearVar = 2;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].petals;
     }
     if (layerParameter == 11) {
-      gear = 1;
-      gearVar = 5;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].rotate ;
+      gear = 2;
+      gearVar = 3;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].rotate;
     }
     if (layerParameter == 12) {
-      gear = 2;
-      gearVar = 5;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].rotate ;
+      gear = 3;
+      gearVar = 0;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].rX;
     }
     if (layerParameter == 13) {
       gear = 3;
-      gearVar = 5;
-      aniValue = layerKeyFrames.get(layerKF).gears[gear].rotate ;
+      gearVar = 1;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].rY;
     }
-
-
-    // layer parameters to follow below
-
-    //if (layerParameter == 11) {
-    //  LV = 0;
-    //  aniValue = LayerState.getJSONObject(Parameter[7]).getFloat("value");
-    //}
-    //if (layerParameter == 12) {
-    //  LV = 1;
-    //  aniValue = LayerState.getJSONObject(Parameter[8]).getFloat("value");
-    //}
-    //if (layerParameter == 13) {
-    //  LV = 2;
-    //  aniValue = LayerState.getJSONObject(Parameter[9]).getFloat("value");
-    //}
-
-    //if (layerParameter == 14) {
-    //  G = 1;
-    //  GV = 3;
-    //  aniValue = LayerState.getJSONObject(Parameter[10]).getFloat("value");
-    //}
-    //if (layerParameter == 15) {
-    //  G = 2;
-    //  GV = 3;
-    //  aniValue = LayerState.getJSONObject(Parameter[11]).getFloat("value");
-    //}
-    //if (layerParameter == 16) {
-    //  G = 3;
-    //  GV = 3;
-    //  aniValue = LayerState.getJSONObject(Parameter[12]).getFloat("value");
-    //}
-    //if (layerParameter == 17) {
-    //  aniValue = LayerState.getJSONObject(Parameter[13]).getFloat("value");
-    //  LV = 3;
-    //}
+    if (layerParameter == 14) {
+      gear = 3;
+      gearVar = 2;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].petals;
+    }
+    if (layerParameter == 15) {
+      gear = 3;
+      gearVar = 3;
+      aniValue = layerKeyFrames.get(layerKF).gears[gear].rotate;
+    }
+    if (layerParameter == 16) {
+      layerVar = 0;
+      aniValue = layerKeyFrames.get(layerKF).lx;
+    }
+    if (layerParameter == 17) {
+      layerVar = 1;
+      aniValue = layerKeyFrames.get(layerKF).ly;
+    }
+    if (layerParameter == 18) {
+      layerVar = 2;
+      aniValue = layerKeyFrames.get(layerKF).sw;
+    }
+    if (layerParameter == 19) {
+      layerVar = 3;
+      aniValue = layerKeyFrames.get(layerKF).cFill;
+    }
+    if (layerParameter == 20) {
+      layerVar = 4;
+      aniValue = layerKeyFrames.get(layerKF).cStroke;
+    }
   }
 
   void aniType() {
-    if (layerParameter <= 13) {
+    if (layerParameter <= 15) {
       ani = Ani.to(layerAnimate.get(layerGet).gears[gear], aniDuration, GearVars[gearVar], aniValue, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
-    } else {
+    } else {      
       ani = Ani.to(layerAnimate.get(layerGet), aniDuration, LayerVars[layerVar], aniValue, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
     }
   }

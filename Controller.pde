@@ -346,10 +346,10 @@ class Controller {
       gui.gear3.remove();
       gui.colorFill.remove();
       gui.colorStroke.remove();
-      gui.gear0 = gui.cp5.addSlider2D("G0").setMinMax(-256, -256, 256, 256).setPosition(3, 240).setCaptionLabel("Radius Gear 0").setSize(150, 150).setValue(arraySelect(array, get).gear0.RX, arraySelect(array, get).gear0.RY).moveTo("global");
-      gui.gear1 = gui.cp5.addSlider2D("G1").setMinMax(-256, -256, 256, 256).setPosition(158, 240).setCaptionLabel("Radius Gear 1").setSize(150, 150).setValue(arraySelect(array, get).gear1.RX, arraySelect(array, get).gear1.RY).moveTo("global");
-      gui.gear2 = gui.cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(313, 240).setCaptionLabel("Radius Gear 2").setSize(150, 150).setValue(arraySelect(array, get).gear2.RX, arraySelect(array, get).gear2.RY).moveTo("global");
-      gui.gear3 = gui.cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(468, 240).setCaptionLabel("Radius Gear 3").setSize(150, 150).setValue(arraySelect(array, get).gear3.RX, arraySelect(array, get).gear3.RY).moveTo("global");   
+      gui.gear0 = gui.cp5.addSlider2D("G0").setMinMax(-256, -256, 256, 256).setPosition(3, 240).setCaptionLabel("Radius Gear 0").setSize(150, 150).setValue(arraySelect(array, get).gear0.rX, arraySelect(array, get).gear0.rY).moveTo("global");
+      gui.gear1 = gui.cp5.addSlider2D("G1").setMinMax(-256, -256, 256, 256).setPosition(158, 240).setCaptionLabel("Radius Gear 1").setSize(150, 150).setValue(arraySelect(array, get).gear1.rX, arraySelect(array, get).gear1.rY).moveTo("global");
+      gui.gear2 = gui.cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(313, 240).setCaptionLabel("Radius Gear 2").setSize(150, 150).setValue(arraySelect(array, get).gear2.rX, arraySelect(array, get).gear2.rY).moveTo("global");
+      gui.gear3 = gui.cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(468, 240).setCaptionLabel("Radius Gear 3").setSize(150, 150).setValue(arraySelect(array, get).gear3.rX, arraySelect(array, get).gear3.rY).moveTo("global");   
       gui.colorFill = gui.cp5.addColorWheel("Fill").setPosition(415, 3).setRGB(arraySelect(array, get).cFill).moveTo("global");
       gui.alphaFill.setValue(alpha(arraySelect(array, get).cFill));
       gui.colorStroke = gui.cp5.addColorWheel("Stroke").setPosition(209, 3).setRGB(arraySelect(array, get).cStroke).moveTo("global");
@@ -360,10 +360,10 @@ class Controller {
       gui.lx.setValue(arraySelect(array, get).lx);
       gui.ly.setValue(arraySelect(array, get).ly);
       gui.sw.setValue(arraySelect(array, get).sw);
-      gui.petals0.setValue(arraySelect(array, get).gear0.P);
-      gui.petals1.setValue(arraySelect(array, get).gear1.P);
-      gui.petals2.setValue(arraySelect(array, get).gear2.P);
-      gui.petals3.setValue(arraySelect(array, get).gear3.P);
+      gui.petals0.setValue(arraySelect(array, get).gear0.petals);
+      gui.petals1.setValue(arraySelect(array, get).gear1.petals);
+      gui.petals2.setValue(arraySelect(array, get).gear2.petals);
+      gui.petals3.setValue(arraySelect(array, get).gear3.petals);
       gui.G0r.setValue(arraySelect(array, get).gear0.rotate);
       gui.G1r.setValue(arraySelect(array, get).gear1.rotate);
       gui.G2r.setValue(arraySelect(array, get).gear2.rotate);
@@ -382,10 +382,10 @@ class Controller {
     layer.id = arraySelect(array, get).id;
     layer.kf =  arraySelect(array, get).kf;
     for (int i = 0; i < 4; i++) {
-      layer.gears[i].RX = arraySelect(array, get).gears[i].RX;  
-      layer.gears[i].RY = arraySelect(array, get).gears[i].RY;   
-      layer.gears[i].RZ = arraySelect(array, get).gears[i].RZ;
-      layer.gears[i].P = arraySelect(array, get).gears[i].P;
+      layer.gears[i].rX = arraySelect(array, get).gears[i].rX;  
+      layer.gears[i].rY = arraySelect(array, get).gears[i].rY;   
+      layer.gears[i].rZ = arraySelect(array, get).gears[i].rZ;
+      layer.gears[i].petals = arraySelect(array, get).gears[i].petals;
       layer.gears[i].rotate = arraySelect(array, get).gears[i].rotate;
     }
     layer.blendSelect = arraySelect(array, get).blendSelect;

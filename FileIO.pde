@@ -1,5 +1,6 @@
 class FileIO {
-  String path = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\";
+  //String path = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\";
+  String path = "C:\\GQ\\Spirograph_vb1\\data\\"; // path for compiled app
   String fileName = "default";
   JSONObject global, layer, gears, keyFrame, aniValues, aniMatrix;
   JSONArray lkf;
@@ -63,15 +64,15 @@ class FileIO {
     layer.setInt("id", tobeSaved.id);
     layer.setInt("kf", tobeSaved.kf);
     for (int i = 0; i < tobeSaved.gears.length; i++) {
-      gears.setFloat(Gears[i] + " RX", tobeSaved.gears[i].RX);
+      gears.setFloat(Gears[i] + " RX", tobeSaved.gears[i].rX);
       gears.setInt(Gears[i] + " trigX", tobeSaved.gears[i].trigX);
       gears.setInt(Gears[i] + " trigX2", tobeSaved.gears[i].trigX2);
-      gears.setFloat(Gears[i] + " RY", tobeSaved.gears[i].RY);
+      gears.setFloat(Gears[i] + " RY", tobeSaved.gears[i].rY);
       gears.setInt(Gears[i] + " trigY", tobeSaved.gears[i].trigY);
       gears.setInt(Gears[i] + " trigY2", tobeSaved.gears[i].trigY2);
-      gears.setFloat(Gears[i] + " RZ", tobeSaved.gears[i].RZ);
+      gears.setFloat(Gears[i] + " RZ", tobeSaved.gears[i].rZ);
       gears.setInt(Gears[i] + " trigZ", tobeSaved.gears[i].trigZ);
-      gears.setInt(Gears[i] + " Petals", tobeSaved.gears[i].P);
+      gears.setInt(Gears[i] + " Petals", tobeSaved.gears[i].petals);
       gears.setFloat(Gears[i] + " Rotate", tobeSaved.gears[i].rotate);
       gears.setFloat(Gears[i] + " Move", tobeSaved.gears[i].speed);
     }; 
@@ -94,10 +95,10 @@ class FileIO {
     fromJSON.id = tobeLoaded.getInt("id");
     fromJSON.kf = tobeLoaded.getInt("kf");
     for (int i = 0; i < fromJSON.gears.length; i++) {
-      fromJSON.gears[i].RX = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RX"); 
-      fromJSON.gears[i].RY = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RY");
-      fromJSON.gears[i].RZ = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RZ");
-      fromJSON.gears[i].P = tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " Petals");
+      fromJSON.gears[i].rX = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RX"); 
+      fromJSON.gears[i].rY = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RY");
+      fromJSON.gears[i].rZ = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " RZ");
+      fromJSON.gears[i].petals = tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " Petals");
       fromJSON.gears[i].rotate = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " Rotate");
       fromJSON.gears[i].speed = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " Move");
       fromJSON.trig.set("G"+i+"trigX", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigX")); 

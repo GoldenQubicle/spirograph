@@ -1,18 +1,25 @@
-/* //<>// //<>// //<>// //<>// //<>//
+/* //<>//
  
- 
- 
+ok so couple of long term goals
+when/if Im gonna refactor as outlined below, CurrentState (i.e. Model class) must have a robust update function, i.e.
+have logic functions which work out changes for keyFrames, timing AND Triggers
+- with regard keyFrames, atm storing these in one array, which is really annoying to work with. Moreover, data is already stored in JSON
+  so it should be possible to represent keyFrames by simply read/write data directly from JSON, instead of representing it as seperate Layer objects
+- with regard triggers, atm its storing way more data than necessary, i.e. only need active Matrix cells & end values of ani
+
+ Obviously, the various render functions in Animation should be consolidated into oneother as the only difference is the value for aniSeek
+ Even more obvious: multiple layer support is still not properly implemented . . 
  
  Controller
  - receives input and executes commands
  - updates GUI  
  
- CurrenState 
+ CurrentState 
  - add/remove keyframes
  - add/remove time
  - resize surface
  - add/copy/delete layer
- - update triggerAra
+ - update triggerArrat
  
  Animation
  - move setupArrays & updateAniMatrixTiming to CurrenState
@@ -89,7 +96,7 @@ void setup() {
 
 void draw() {
   background(cBackground);   
-  //println(frameRate);
+  
   if (update == true && Width != 512 || Height != 512) { 
     surface.setSize(Width, Height);
     translate(Width/2, Height/2);
@@ -112,21 +119,25 @@ void draw() {
     gif.renderKeyFrames();
   }
 
-  if (playback == true) { //<>//
+  if (playback == true) {
+    blendMode(BLEND);
+    gif.playback(gif.fTemp);
     timer(millis());
   }
 }
 
-// keep this timer for now, could be usefull later for playback over PImage[]
+
 void timer(float ms) {
   if (ms > (gif.renderStart + delay)) {
     next = true;
   }
   if (next == true) {
-    delay += 160;
+    delay += 16;
     gif.fTemp+=1;
-    println(gif.fTemp);
-    gif.playback(gif.fTemp);
+    if (gif.fTemp == gif.aniTotalFrames) {
+      playback = false;
+      gif.fTemp = 0;
+    }
     next = false;
   }
 }

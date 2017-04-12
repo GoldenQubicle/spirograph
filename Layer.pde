@@ -29,8 +29,8 @@ class Layer {  //<>//
     cFill = color(random(155, 255), random(155, 255), random(155, 255));
     cStroke = color(random(155, 255), random(155, 255), random(155, 255));
     density = 2500;
-    stroke = true;
-    fill = false;
+    stroke = false;
+    fill = true;
     lines = false;
     dots = false;
     sw = 2;
@@ -111,7 +111,7 @@ class Layer {  //<>//
 
   void spiroMode() {    
     cam.setActive(false);
-    for (int theta = 0; theta <= density; theta++) {
+    for (int theta = 0; theta < density; theta++) {
       Gears(theta, 0);
       xyz.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
       xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
@@ -119,7 +119,7 @@ class Layer {  //<>//
       strokeWeight(sw);
       ellipse(xyz.x, xyz.y, lx, ly);
       //point(xyz.x, xyz.y);
-      if (theta == density && render == true) {
+      if (theta == (density-1) && render == true) {
         gif.renderPImage();
       }
       if (theta == density && renderKeyFrames == true) {
@@ -136,13 +136,13 @@ class Layer {  //<>//
 
   void Lines() {
     for (int G = 0; G < gears.length; G++) {
-      for (float i = 0; i < gears[G].P; i++) {
-        theta = (TAU/gears[G].P)*i; 
-        phi = (TAU/gears[G].P)*(i+gears[G].Connect);
-        xyz.x =  cos(theta)*gear0.RX + cos(theta/gear1.Ratio())*gear1.RX + cos(theta/gear2.Ratio())*gear2.RX + cos(theta/gear3.Ratio())*gear3.RX;
-        xyz.y =  sin(theta)*gear0.RY + sin(theta/gear1.Ratio())*gear1.RY + sin(theta/gear2.Ratio())*gear2.RY  + sin(theta/gear3.Ratio())*gear3.RY;
-        xy2.x =  cos(phi)*gear0.RX + cos(phi/gear1.Ratio())*gear1.RX + cos(phi/gear2.Ratio())*gear2.RX + cos(phi/gear3.Ratio())*gear3.RX;
-        xy2.y =  sin(phi)*gear0.RY + sin(phi/gear1.Ratio())*gear1.RY + sin(phi/gear2.Ratio())*gear2.RY  + sin(phi/gear3.Ratio())*gear3.RY;
+      for (float i = 0; i < gears[G].petals; i++) {
+        theta = (TAU/gears[G].petals)*i; 
+        phi = (TAU/gears[G].petals)*(i+gears[G].connect);
+        xyz.x =  cos(theta)*gear0.rX + cos(theta/gear1.Ratio())*gear1.rX + cos(theta/gear2.Ratio())*gear2.rX + cos(theta/gear3.Ratio())*gear3.rX;
+        xyz.y =  sin(theta)*gear0.rY + sin(theta/gear1.Ratio())*gear1.rY + sin(theta/gear2.Ratio())*gear2.rY  + sin(theta/gear3.Ratio())*gear3.rY;
+        xy2.x =  cos(phi)*gear0.rX + cos(phi/gear1.Ratio())*gear1.rX + cos(phi/gear2.Ratio())*gear2.rX + cos(phi/gear3.Ratio())*gear3.rX;
+        xy2.y =  sin(phi)*gear0.rY + sin(phi/gear1.Ratio())*gear1.rY + sin(phi/gear2.Ratio())*gear2.rY  + sin(phi/gear3.Ratio())*gear3.rY;
         strokeCap(ROUND);
         strokeJoin(ROUND);
         strokeWeight(sw);
@@ -153,10 +153,10 @@ class Layer {  //<>//
 
   void Dots() {
     for (int G = 0; G < gears.length; G++) {
-      for (float i = 0; i < gears[G].P; i++) {
-        theta = (TAU/gears[G].P)*(i);
-        xyz.x = cos(theta)*gear0.RX + cos(theta/gear1.Ratio())*gear1.RX + cos(theta/gear2.Ratio())*gear2.RX + cos(theta/gear3.Ratio())*gear3.RX;
-        xyz.y = sin(theta)*gear0.RY + sin(theta/gear1.Ratio())*gear1.RY + sin(theta/gear2.Ratio())*gear2.RY  + sin(theta/gear3.Ratio())*gear3.RY;
+      for (float i = 0; i < gears[G].petals; i++) {
+        theta = (TAU/gears[G].petals)*(i);
+        xyz.x = cos(theta)*gear0.rX + cos(theta/gear1.Ratio())*gear1.rX + cos(theta/gear2.Ratio())*gear2.rX + cos(theta/gear3.Ratio())*gear3.rX;
+        xyz.y = sin(theta)*gear0.rY + sin(theta/gear1.Ratio())*gear1.rY + sin(theta/gear2.Ratio())*gear2.rY  + sin(theta/gear3.Ratio())*gear3.rY;
         strokeWeight(sw);
         ellipse(xyz.x, xyz.y, lx, ly);
       }
@@ -166,14 +166,14 @@ class Layer {  //<>//
 
 class Gears {
   PVector xyz;
-  float theta, phi, RX, RY, RZ, Connect, R, rotate, speed, cossintan;
-  int trigX = 0, trigY = 1, trigX2, trigY2, trigZ, P;
+  float theta, phi, rX, rY, rZ, connect, ratio, rotate, speed, cossintan;
+  int trigX = 0, trigY = 1, trigX2, trigY2, trigZ, petals;
 
   Gears(float rx, float ry, float rz) {
     xyz = new PVector();    
-    RX = rx;
-    RY = ry;
-    RZ = rz;
+    rX = rx;
+    rY = ry;
+    rZ = rz;
   }
 
   void grinding(int trigx, int trigy, int trigz, int trigx2, int trigy2, float theta, float phi, float density) {
@@ -187,16 +187,16 @@ class Gears {
       theta = ((TAU/density)*theta)+rotate;
       //rotateY(rotate);   
       //rotateX(move);
-      xyz.x = cossintan(trigX, theta)*RX;
-      xyz.y = cossintan(trigY, theta)*RY;
+      xyz.x = cossintan(trigX, theta)*rX;
+      xyz.y = cossintan(trigY, theta)*rY;
       //rotate = rotate + speed;      
       //if (rotate > TAU || rotate < -TAU) {
       //  rotate = 0;
       //}
     } else {
-      xyz.x = cossintan(trigX, theta)*cossintan(trigX2, phi)*RX;
-      xyz.y = cossintan(trigY, theta)*cossintan(trigY2, phi)*RY;
-      xyz.z = cossintan(trigZ, phi)*RZ;
+      xyz.x = cossintan(trigX, theta)*cossintan(trigX2, phi)*rX;
+      xyz.y = cossintan(trigY, theta)*cossintan(trigY2, phi)*rY;
+      xyz.z = cossintan(trigZ, phi)*rZ;
     }
   }
 
@@ -214,7 +214,7 @@ class Gears {
   }
 
   float Ratio() {
-    R = 1/float((P-1));  
-    return R;
+    ratio = 1/float((petals-1));  
+    return ratio;
   }
 }
