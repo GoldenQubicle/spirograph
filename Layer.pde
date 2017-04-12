@@ -45,33 +45,33 @@ class Layer {  //<>//
     }
   }
 
-  void display() {     
-    blendMode(mode[blendSelect]);
-    if (fill == true) {      
-      fill(cFill);
-    }
-    if (fill == false) {
-      noFill();
-    }
-    if (stroke == true) {
-      stroke(cStroke);
-    }
-    if (stroke == false) {
-      noStroke();
-    }
-    if (dots == true && lines == true) {
-      Dots();
-      Lines();
-    } else if (lines == true) {
-      Lines();
-    } else if (dots == true) {
-      Dots();
-    } else if (spheres3d == true) {
-      sphere3d();
-    } else {    
-      spiroMode();
-    }
-  }
+  //void display() {     
+  //  blendMode(mode[blendSelect]);
+  //  if (fill == true) {      
+  //    fill(cFill);
+  //  }
+  //  if (fill == false) {
+  //    noFill();
+  //  }
+  //  if (stroke == true) {
+  //    stroke(cStroke);
+  //  }
+  //  if (stroke == false) {
+  //    noStroke();
+  //  }
+  //  if (dots == true && lines == true) {
+  //    Dots();
+  //    Lines();
+  //  } else if (lines == true) {
+  //    Lines();
+  //  } else if (dots == true) {
+  //    Dots();
+  //  } else if (spheres3d == true) {
+  //    sphere3d();
+  //  } else {    
+  //    //spiroMode();
+  //  }
+  //}
 
   void sphere3d() {
     cam.setActive(true);
@@ -109,24 +109,24 @@ class Layer {  //<>//
     fill(interA);
   }
 
-  void spiroMode() {    
-    cam.setActive(false);
-    for (int theta = 0; theta < density; theta++) {
-      Gears(theta, 0);
-      xyz.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
-      xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
-      //radialColor(xyz.x, xyz.y);
-      strokeWeight(sw);
-      ellipse(xyz.x, xyz.y, lx, ly);
-      //point(xyz.x, xyz.y);
-      if (theta == (density-1) && render == true) {
-        gif.renderPImage();
-      }
-      if (theta == density && renderKeyFrames == true) {
-        gif.renderLayer();
-      }
-    }
-  }
+  //void spiroMode() {    
+  //  cam.setActive(false);
+  //  for (int theta = 0; theta < density; theta++) {
+  //    Gears(theta, 0);
+  //    xyz.x = gear0.xyz.x + gear1.xyz.x + gear2.xyz.x + gear3.xyz.x;
+  //    xyz.y = gear0.xyz.y + gear1.xyz.y + gear2.xyz.y + gear3.xyz.y;
+  //    //radialColor(xyz.x, xyz.y);
+  //    strokeWeight(sw);
+  //    ellipse(xyz.x, xyz.y, lx, ly);
+  //    //point(xyz.x, xyz.y);
+  //    if (theta == (density-1) && render == true) {
+  //      gif.renderPImage();
+  //    }
+  //    if (theta == density && renderKeyFrames == true) {
+  //      gif.renderLayer();
+  //    }
+  //  }
+  //}
 
   void Gears(float theta, float phi) {
     for (int g = 0; g < 4; g++) {

@@ -1,12 +1,30 @@
 /* //<>//
+roadmap - in order of severity
+ - additional gear controls : lockXY, resetTo0, castFloat - data & logic & gui
+ - fix color transitions - data & logic
+ - implement multiple layer key editting - logic
+ - check-check-double-check multiple layer ani x consequetive ani - logic 
+ - add line & dot mode back in - logic & gui
+ - add radial color toggle - gui
+ - finalise gui - gui
  
-ok so couple of long term goals
-when/if Im gonna refactor as outlined below, CurrentState (i.e. Model class) must have a robust update function, i.e.
-have logic functions which work out changes for keyFrames, timing AND Triggers
-- with regard keyFrames, atm storing these in one array, which is really annoying to work with. Moreover, data is already stored in JSON
-  so it should be possible to represent keyFrames by simply read/write data directly from JSON, instead of representing it as seperate Layer objects
-- with regard triggers, atm its storing way more data than necessary, i.e. only need active Matrix cells & end values of ani
-
+ possibly add background color to aniMatrix
+ possibly figure out how to put toggles (e.g. stroke, fill) to use with keyframes
+ possibly add density to aniMatrix
+ 
+ known bugs
+ - controls freeze when toggling the gear trigs completely off
+ - aniInterval gui not correct,  off by one error somewhere
+ - in compiled app controls freeze upon new file save
+ 
+ -------------------------------------------------------------------------------------------------------------------------- 
+ ok so couple of long term goals
+ when/if Im gonna refactor as outlined below, CurrentState (i.e. Model class) must have a robust update function, i.e.
+ have logic functions which work out changes for keyFrames, timing AND Triggers
+ - with regard keyFrames, atm storing these in one array, which is really annoying to work with. Moreover, data is already stored in JSON
+ so it should be possible to represent keyFrames by simply read/write data directly from JSON, instead of representing it as seperate Layer objects
+ - with regard triggers, atm its storing way more data than necessary, i.e. only need active Matrix cells & end values of ani
+ 
  Obviously, the various render functions in Animation should be consolidated into oneother as the only difference is the value for aniSeek
  Even more obvious: multiple layer support is still not properly implemented . . 
  
@@ -30,10 +48,7 @@ have logic functions which work out changes for keyFrames, timing AND Triggers
  fileIO
  - save/load JSON
  - save PNG
- 
- BUGS
- controls freeze when toggling the gear trig completely off
- 
+
  */
 
 import peasy.*;
@@ -47,6 +62,7 @@ DawesomeToolkit ds;
 Controller controller;
 GUI gui;
 Animation gif;
+Display preview;
 Layer layer_1, layer_2;
 ArrayList<Layer> layerActive =  new ArrayList();
 ArrayList<Layer> layerKeyFrames = new ArrayList();
@@ -64,7 +80,7 @@ void settings() {
 
 void setup() {
   colorMode(RGB);
-
+  preview = new Display();
   layer_1 = new Layer(75);
   layer_1.name = "Layer 1";
   layer_1.id = 1;
@@ -96,7 +112,7 @@ void setup() {
 
 void draw() {
   background(cBackground);   
-  
+
   if (update == true && Width != 512 || Height != 512) { 
     surface.setSize(Width, Height);
     translate(Width/2, Height/2);
@@ -104,12 +120,14 @@ void draw() {
 
   if (play == false && playback == false) {
     for (int i = 0; i < layerActive.size(); i++) {
-      layerActive.get(i).display();
+      //layerActive.get(i).display();
+      preview.display(layerActive.get(i));
     }
   }
   if (play == true  && playback == false) {
     for (int i = 0; i < layerAnimate.size(); i++) {
-      layerAnimate.get(i).display();
+      //layerAnimate.get(i).display();
+      preview.display(layerAnimate.get(i));
     }
   }
   if (render == true) {
