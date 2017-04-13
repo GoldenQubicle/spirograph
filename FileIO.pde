@@ -22,7 +22,7 @@ class FileIO {
     global.setInt(globals[1], Height);
     global.setFloat(globals[2], gif.totalTime);
     global.setFloat(globals[3], gif.keyFrames);
-    global.setInt(globals[4], cBackground);
+    global.setFloat(globals[4], cBackground);
     global.setInt(globals[5], gif.nLayers);
     global.setBoolean(globals[6], spheres3d);
     for (int l = 0; l < gif.nLayers; l++) {
@@ -75,12 +75,14 @@ class FileIO {
       gears.setInt(Gears[i] + " Petals", tobeSaved.gears[i].petals);
       gears.setFloat(Gears[i] + " Rotate", tobeSaved.gears[i].rotate);
       gears.setFloat(Gears[i] + " Move", tobeSaved.gears[i].speed);
+      gears.setFloat(Gears[i] + " Connect", tobeSaved.gears[i].connect);
     }; 
     layer.setJSONObject("Gears", gears);      
     layer.setInt("colorFill", tobeSaved.cFill);
     layer.setBoolean("Fill", tobeSaved.fill); 
     layer.setInt("colorStroke", tobeSaved.cStroke);
     layer.setBoolean("Stroke", tobeSaved.stroke);
+    layer.setBoolean("drawMode", tobeSaved.lines);
     layer.setFloat("Line X", tobeSaved.lx);
     layer.setFloat("Line Y", tobeSaved.ly);
     layer.setFloat("strokeWeight", tobeSaved.sw);
@@ -101,6 +103,7 @@ class FileIO {
       fromJSON.gears[i].petals = tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " Petals");
       fromJSON.gears[i].rotate = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " Rotate");
       fromJSON.gears[i].speed = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " Move");
+      fromJSON.gears[i].connect = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " Connect");
       fromJSON.trig.set("G"+i+"trigX", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigX")); 
       fromJSON.trig.set("G"+i+"trigX2", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigX2")); 
       fromJSON.trig.set("G"+i+"trigY", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigY")); 
@@ -108,9 +111,18 @@ class FileIO {
       fromJSON.trig.set("G"+i+"trigZ", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigZ"));
     }
     fromJSON.cFill = tobeLoaded.getInt("colorFill");
+    fromJSON.fillR = red(fromJSON.cFill);
+    fromJSON.fillG = green(fromJSON.cFill);
+    fromJSON.fillB = blue(fromJSON.cFill);
+    fromJSON.fillA = alpha(fromJSON.cFill);
     fromJSON.fill = tobeLoaded.getBoolean("Fill");
     fromJSON.cStroke = tobeLoaded.getInt("colorStroke");
+    fromJSON.strokeR = red(fromJSON.cStroke);
+    fromJSON.strokeG = green(fromJSON.cStroke);
+    fromJSON.strokeB = blue(fromJSON.cStroke);
+    fromJSON.strokeA = alpha(fromJSON.cStroke);
     fromJSON.stroke = tobeLoaded.getBoolean("Stroke");
+    fromJSON.lines = tobeLoaded.getBoolean("drawMode");
     fromJSON.lx = tobeLoaded.getFloat("Line X");
     fromJSON.ly = tobeLoaded.getFloat("Line Y"); 
     fromJSON.sw = tobeLoaded.getFloat("strokeWeight");

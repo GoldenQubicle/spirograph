@@ -8,24 +8,24 @@ class GUI extends PApplet { //<>//
   Toggle stroke, fill, drawMode, keyFrameAll, keyFrameFWD;
   ScrollableList layerSwitch, blendMode, fileSelect, Easing;
   Slider2D gear0, gear1, gear2, gear3;
-  Slider gifWidth, gifHeight, gifLength, gifKeyFrames, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals0, petals1, petals2, petals3, alphaFill, alphaStroke, G0r, G1r, G2r, G3r, density; 
+  Slider gifWidth, gifHeight, gifLength, gifKeyFrames, lx, ly, sw, gear0z, gear1z, gear2z, gear3z, petals0, petals1, petals2, petals3, alphaFill, alphaStroke, G0r, G1r, G2r, G3r, density, g0c, g1c, g2c, g3c; 
   Button gifSettings, gifSave, Load, Save, layerNew, layerCopy, layerDelete, Increase, Decrease, saveFWD;
   ArrayList <Button> menuGifLayer = new ArrayList<Button>();
   RadioButton trigX, trigY, trigZ, trigX2, trigY2, densityRanges, keyFrames;
   ArrayList <RadioButton> trigSwitch = new ArrayList<RadioButton>();
 
   // using int variables to strip decimals for gui aethetic
-  int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p0, p1, p2, p3, as, af, g0r, g1r, g2r, g3r, d; 
+  int LX, LY, SW, GW, GH, ms, i, g0z, g1z, g2z, g3z, p0, p1, p2, p3, as, af, g0r, g1r, g2r, g3r, d, g0C, g1C, g2C, g3C; 
   float densityRangeMin = 1;
   float densityRangeMax = 1000;
   Textfield fileName;
   Textlabel trig, Label;
   Textarea renderMessage;
-  String [] labelsAniMatrix = {"Gear 0 X", "Gear 0 Y", "Gear 0 Petals", "Gear 0 Rotate",
-                            "Gear 1 X", "Gear 1 Y", "Gear 1 Petals", "Gear 1 Rotate",
-                            "Gear 2 X", "Gear 2 Y", "Gear 2 Petals", "Gear 2 Rotate",
-                            "Gear 3 X", "Gear 3 Y", "Gear 3 Petals", "Gear 3 Rotate", 
-                            "line X", "line Y", "StrokeWeight", "color Fill", "color Stroke"};
+  String [] labelsAniMatrix = {"Gear 0 X", "Gear 0 Y", "Gear 0 Petals", "Gear 0 Rotate", 
+    "Gear 1 X", "Gear 1 Y", "Gear 1 Petals", "Gear 1 Rotate", 
+    "Gear 2 X", "Gear 2 Y", "Gear 2 Petals", "Gear 2 Rotate", 
+    "Gear 3 X", "Gear 3 Y", "Gear 3 Petals", "Gear 3 Rotate", 
+    "line X", "line Y", "StrokeWeight", "color Fill", "color Stroke"};
   String[] EasingNames = {"LINEAR", "QUAD_IN", "QUAD_OUT", "QUAD_IN_OUT", "CUBIC_IN", "CUBIC_IN_OUT", "CUBIC_OUT", "QUART_IN", "QUART_OUT", "QUART_IN_OUT", "QUINT_IN", "QUINT_OUT", "QUINT_IN_OUT", "SINE_IN", "SINE_OUT", "SINE_IN_OUT", "CIRC_IN", "CIRC_OUT", "CIRC_IN_OUT", "EXPO_IN", "EXPO_OUT", "EXPO_IN_OUT", "BACK_IN", "BACK_OUT", "BACK_IN_OUT", "BOUNCE_IN", "BOUNCE_OUT", "BOUNCE_IN_OUT", "ELASTIC_IN", "ELASTIC_OUT", "ELASTIC_IN_OUT"};
   String [] blendModes = {"Normal", "Add", "Subtract", "Darkest", "Lightest", "Exclusion", "Multiply", "Screen", "Replace"};
 
@@ -103,7 +103,7 @@ class GUI extends PApplet { //<>//
       );
     }
     // colors, line & stroke
-    drawMode = cp5.addToggle("drawMode").setPosition(rPanex, 3).setSize(50, 20).setValue(false).setMode(ControlP5.SWITCH).setCaptionLabel("  3D           2D").moveTo("global");
+    drawMode = cp5.addToggle("drawMode").setPosition(rPanex, 3).setSize(50, 20).setValue(false).setMode(ControlP5.SWITCH).setCaptionLabel("lines   spiro").moveTo("global");
     colorBackground = cp5.addColorWheel("Background").setPosition(3, 3).setValue(128).moveTo("global");
     colorStroke = cp5.addColorWheel("Stroke").setPosition(209, 3).setValue(128).moveTo("global");
     colorFill = cp5.addColorWheel("Fill").setPosition(415, 3).setValue(128).moveTo("global");
@@ -111,9 +111,9 @@ class GUI extends PApplet { //<>//
     alphaFill = cp5.addSlider("af").setPosition(415, 220).setSize(200, 10).setRange(0, 255).setValue(255).setCaptionLabel("alpha").moveTo("global");   
     fill = cp5.addToggle("fill").setPosition(rPanex, 40).setSize(20, 20).setState(true).moveTo("global");
     stroke = cp5.addToggle("stroke").setPosition(rPanex+30, 40).setSize(20, 20).setState(false).moveTo("global").moveTo("global");
-    lx = cp5.addSlider("LX").setPosition(rPanex, 165).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Width").moveTo("global");  
-    ly = cp5.addSlider("LY").setPosition(rPanex, 180).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Height").moveTo("global"); 
-    sw = cp5.addSlider("SW").setPosition(rPanex, 195).setSize(200, 10).setRange(0, 200).setCaptionLabel("Stroke Weight").moveTo("global");    
+    lx = cp5.addSlider("LX").setPosition(rPanex, 100).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Width").moveTo("global");  
+    ly = cp5.addSlider("LY").setPosition(rPanex, 115).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Height").moveTo("global"); 
+    sw = cp5.addSlider("SW").setPosition(rPanex, 130).setSize(200, 10).setRange(0, 200).setCaptionLabel("Stroke Weight").moveTo("global");    
     blendMode = cp5.addScrollableList("blendMode").setPosition(rPanex, 80).setWidth(70).setType(ScrollableList.DROPDOWN).setCaptionLabel("blendMode").setOpen(false).addItems(blendModes).moveTo("global");
     cp5.getController("as").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("af").getCaptionLabel().align(CENTER, CENTER);
@@ -143,7 +143,11 @@ class GUI extends PApplet { //<>//
     petals0 = cp5.addSlider("p0").setPosition(rPanex, posy-15).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 0 Petals").moveTo("global"); 
     petals1 = cp5.addSlider("p1").setPosition(rPanex, posy).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 1 Petals").moveTo("global"); 
     petals2 = cp5.addSlider("p2").setPosition(rPanex, posy+15).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 2 Petals").moveTo("global");
-    petals3 = cp5.addSlider("p3").setPosition(rPanex, posy+30).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 3 Petals").moveTo("global");        
+    petals3 = cp5.addSlider("p3").setPosition(rPanex, posy+30).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 3 Petals").moveTo("global"); 
+    g0c = cp5.addSlider("g0C").setPosition(rPanex, posy-75).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 0 Connect").moveTo("global"); 
+    g1c = cp5.addSlider("g1C").setPosition(rPanex, posy-60).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 1 Connect").moveTo("global"); 
+    g2c = cp5.addSlider("g2C").setPosition(rPanex, posy-45).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 2 Connect").moveTo("global"); 
+    g3c = cp5.addSlider("g3C").setPosition(rPanex, posy-30).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 3 Connect").moveTo("global"); 
     G0r = cp5.addSlider("g0r").setPosition(rPanex, posy+45).setSize(200, 10).setRange(-TAU, TAU).setNumberOfTickMarks(9).snapToTickMarks(true).setCaptionLabel("Gear 0 Rotate").moveTo("global"); 
     G1r = cp5.addSlider("g1r").setPosition(rPanex, posy+60).setSize(200, 10).setRange(-TAU, TAU).setNumberOfTickMarks(9).snapToTickMarks(true).setCaptionLabel("Gear 1 Rotate").moveTo("global"); 
     G2r = cp5.addSlider("g2r").setPosition(rPanex, posy+75).setSize(200, 10).setRange(-TAU, TAU).setNumberOfTickMarks(9).snapToTickMarks(true).setCaptionLabel("Gear 2 Rotate").moveTo("global");
@@ -160,6 +164,11 @@ class GUI extends PApplet { //<>//
     cp5.getController("g1r").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("g2r").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("g3r").getCaptionLabel().align(CENTER, CENTER);
+    cp5.getController("g0C").getCaptionLabel().align(CENTER, CENTER);
+    cp5.getController("g1C").getCaptionLabel().align(CENTER, CENTER);
+    cp5.getController("g2C").getCaptionLabel().align(CENTER, CENTER);
+    cp5.getController("g3C").getCaptionLabel().align(CENTER, CENTER);
+
     // cos sin tan Switches    
     int poy = 0;
     int pox = 0;
@@ -202,7 +211,7 @@ class GUI extends PApplet { //<>//
     keyFrameAll = cp5.addToggle("KFall").setPosition(147, 480).setSize(50, 16).moveTo("global");
     cp5.getController("KFfwd").getCaptionLabel().align(CENTER, CENTER);  
     cp5.getController("KFall").getCaptionLabel().align(CENTER, CENTER);  
-    
+
     // ANIMATRIX TABS START HERE
     // make tabs
     cp5.getTab("default").setCaptionLabel("Matrix").setId(1);
@@ -312,32 +321,33 @@ class GUI extends PApplet { //<>//
     if (theEvent.getController().equals(gifKeyFrames)) {
       gif.keyFrames = int(gifKeyFrames.getValue());
     }
-    if (theEvent.getController().equals(drawMode)) {
-      spheres3d = drawMode.getState();
-      for (int i =0; i < 4; i++) {
-        if (drawMode.getState() == true) {
-          density.hide();
-          densityRanges.hide();
-          cp5.getController("G"+i+"z").show();
-          cp5.get(RadioButton.class, "G" + i + "trigZ").activate(0).show();
-          cp5.get(RadioButton.class, "G" + i + "trigX2").activate(1).show();
-          cp5.get(RadioButton.class, "G" + i + "trigY2").activate(1).show();
-          cp5.getController("g" + i + "z").show();
-          cp5.getController("g" + i + "x2").show();
-          cp5.getController("g" + i + "y2").show();
-        } else {
-          density.show();
-          densityRanges.show();
-          cp5.getController("G"+i+"z").hide();
-          cp5.get(RadioButton.class, "G" + i + "trigZ").hide();
-          cp5.get(RadioButton.class, "G" + i + "trigX2").hide();
-          cp5.get(RadioButton.class, "G" + i + "trigY2").hide();
-          cp5.getController("g" + i + "z").hide();
-          cp5.getController("g" + i + "x2").hide();
-          cp5.getController("g" + i + "y2").hide();
-        }
-      }
-    }
+    // old code for 3d not in use atm
+    //if (theEvent.getController().equals(drawMode)) {      
+    //spheres3d = drawMode.getState();
+    //for (int i =0; i < 4; i++) {
+    //  if (drawMode.getState() == true) {
+    //    density.hide();
+    //    densityRanges.hide();
+    //    cp5.getController("G"+i+"z").show();
+    //    cp5.get(RadioButton.class, "G" + i + "trigZ").activate(0).show();
+    //    cp5.get(RadioButton.class, "G" + i + "trigX2").activate(1).show();
+    //    cp5.get(RadioButton.class, "G" + i + "trigY2").activate(1).show();
+    //    cp5.getController("g" + i + "z").show();
+    //    cp5.getController("g" + i + "x2").show();
+    //    cp5.getController("g" + i + "y2").show();
+    //  } else {
+    //    density.show();
+    //    densityRanges.show();
+    //    cp5.getController("G"+i+"z").hide();
+    //    cp5.get(RadioButton.class, "G" + i + "trigZ").hide();
+    //    cp5.get(RadioButton.class, "G" + i + "trigX2").hide();
+    //    cp5.get(RadioButton.class, "G" + i + "trigY2").hide();
+    //    cp5.getController("g" + i + "z").hide();
+    //    cp5.getController("g" + i + "x2").hide();
+    //    cp5.getController("g" + i + "y2").hide();
+    //  }
+    //}
+    //}
     if (theEvent.getController().equals(colorBackground)) {
       cBackground = colorBackground.getRGB();
     }
@@ -345,95 +355,145 @@ class GUI extends PApplet { //<>//
     // layer controls start here
     if (layerlock == false) {
       // set selection of keyFrames worked upon
-      float selection = 0; 
+      float range = 0; 
+      float start = 0;
       if (keyFrameFWD.getState() == true) {
-        selection = gif.keyFrames - keyFrames.getValue();
+        range = gif.keyFrames - keyFrames.getValue();
+        start = keyFrames.getValue()+((layerSwitch.getValue())*gif.keyFrames);
       }
       if (keyFrameAll.getState() == true) {
-        selection = gif.keyFrames;
-      }
+        range = gif.keyFrames;
+        start = layerSwitch.getValue()*gif.keyFrames;
+      } 
       // gear controllers
       for (int g = 0; g < 4; g++) {
         if (theEvent.getController().getName().equals("G" + g)) {
           layerActive.get(layerID).gears[g].rX = theEvent.getController().getArrayValue(0);
           layerActive.get(layerID).gears[g].rY = theEvent.getController().getArrayValue(1);
-          for (int i = int(selection); i >= 0; i--) {
-            layerKeyFrames.get(gif.keyFrames - i).gears[g].rX = theEvent.getController().getArrayValue(0);
-            layerKeyFrames.get(gif.keyFrames - i).gears[g].rY = theEvent.getController().getArrayValue(1);
+          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+            for (int i = 0; i <= range; i++) {         
+              layerKeyFrames.get(int(start+i)).gears[g].rX = theEvent.getController().getArrayValue(0);
+              layerKeyFrames.get(int(start+i)).gears[g].rY = theEvent.getController().getArrayValue(1);
+            }
           }
         }
         if (theEvent.getController().getName().equals("p" + g)) {
           layerActive.get(layerID).gears[g].petals = int(theEvent.getController().getValue());
-          for (int i = int(selection); i >= 0; i--) {
-            layerKeyFrames.get(gif.keyFrames - i).gears[g].petals = int(theEvent.getController().getValue());
+          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+            for (int i = 0; i <= range; i++) {  
+              layerKeyFrames.get(int(start+i)).gears[g].petals = int(theEvent.getController().getValue());
+            }
+          }
+        }
+        if (theEvent.getController().getName().equals("g" + g + "C")) {
+          layerActive.get(layerID).gears[g].connect = theEvent.getController().getValue();
+          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+            for (int i = 0; i <= range; i++) {  
+              layerKeyFrames.get(int(start+i)).gears[g].connect = int(theEvent.getController().getValue());
+            }
           }
         }
         if (theEvent.getController().getName().equals("g" + g + "r")) {
           layerActive.get(layerID).gears[g].rotate = theEvent.getController().getValue();   
-          for (int i = int(selection); i >= 0; i--) {
-            layerKeyFrames.get(gif.keyFrames - i).gears[g].rotate  = theEvent.getController().getValue();
+          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+            for (int i = 0; i <= range; i++) {                
+              layerKeyFrames.get(int(start+i)).gears[g].rotate  = theEvent.getController().getValue();
+            }
           }
         }
         if (theEvent.getController().getName().equals("G"+g+"z")) {
           layerActive.get(layerID).gears[g].rZ = theEvent.getController().getValue();
-          for (int i = int(selection); i >= 0; i--) {
-            layerKeyFrames.get(gif.keyFrames - i).gears[g].rZ  = theEvent.getController().getValue();
+          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+            for (int i = 0; i <= range; i++) {  
+              layerKeyFrames.get(int(start+i)).gears[g].rZ  = theEvent.getController().getValue();
+            }
           }
         }
       }
       if (theEvent.getController().equals(density)) {
         layerActive.get(layerID).density = int(density.getValue());
-        for (int i = int(selection); i >= 0; i--) {
-          layerKeyFrames.get(gif.keyFrames - i).density  = int(density.getValue());
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i <= range; i++) {  
+            layerKeyFrames.get(int(start+i)).density  = int(density.getValue());
+          }
         }
-      }      
+      }
       if (theEvent.getController().equals(blendMode)) {
         layerActive.get(layerID).blendSelect = int(blendMode.getValue());
-        for (int i = int(selection); i >= 0; i--) {
-          layerKeyFrames.get(gif.keyFrames - i).blendSelect  = int(theEvent.getController().getValue());
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i <= range; i++) {  
+            layerKeyFrames.get(int(start+i)).blendSelect  = int(theEvent.getController().getValue());
+          }
         }
       }
       if (theEvent.getController().equals(colorStroke)  || theEvent.getController().equals(alphaStroke)) {
-        layerActive.get(layerID).cStroke = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
-        for (int i = int(selection); i >= 0; i--) {
-          layerKeyFrames.get(gif.keyFrames - i).cStroke  = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
+        layerActive.get(layerID).strokeR = colorStroke.r();
+        layerActive.get(layerID).strokeG = colorStroke.g();
+        layerActive.get(layerID).strokeB = colorStroke.b();
+        layerActive.get(layerID).strokeA = alphaStroke.getValue();
+        layerActive.get(layerID).cStroke = color(layerActive.get(layerID).strokeR, layerActive.get(layerID).strokeG, layerActive.get(layerID).strokeB, layerActive.get(layerID).strokeA);
+        //layerActive.get(layerID).cStroke = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i <= range; i++) {  
+            layerKeyFrames.get(int(start+i)).cStroke  = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
+          }
         }
       }
       if (theEvent.getController().equals(colorFill) || theEvent.getController().equals(alphaFill)) {
-        layerActive.get(layerID).cFill = color(colorFill.r(), colorFill.g(), colorFill.b(), int(alphaFill.getValue()));
-        for (int i = int(selection); i >= 0; i--) {
-          layerKeyFrames.get(gif.keyFrames - i).cFill  = color(colorFill.r(), colorFill.g(), colorFill.b(), int(alphaFill.getValue()));
+        layerActive.get(layerID).fillR = colorFill.r();
+        layerActive.get(layerID).fillG = colorFill.g();
+        layerActive.get(layerID).fillB = colorFill.b();
+        layerActive.get(layerID).fillA = alphaFill.getValue();
+        layerActive.get(layerID).cFill = color( layerActive.get(layerID).fillR, layerActive.get(layerID).fillG, layerActive.get(layerID).fillB, layerActive.get(layerID).fillA);
+        //layerActive.get(layerID).cFill = color(colorFill.r(), colorFill.g(), colorFill.b(), int(alphaFill.getValue()));
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i <= range; i++) {  
+            layerKeyFrames.get(int(start+i)).cFill  = color(colorFill.r(), colorFill.g(), colorFill.b(), int(alphaFill.getValue()));
+          }
         }
       }
       if (theEvent.getController().equals(stroke)) {
         layerActive.get(layerID).stroke = stroke.getState();
-        for (int i = int(selection); i >= 0; i--) {
-          layerKeyFrames.get(gif.keyFrames - i).stroke  = stroke.getState();
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i <= range; i++) {  
+            layerKeyFrames.get(int(start+i)).stroke  = stroke.getState();
+          }
         }
       }
       if (theEvent.getController().equals(fill)) {
         layerActive.get(layerID).fill = fill.getState();
-        for (int i = int(selection); i >= 0; i--) {
-          layerKeyFrames.get(gif.keyFrames - i).fill  = fill.getState();
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i <= range; i++) {  
+            layerKeyFrames.get(int(start+i)).fill  = fill.getState();
+          }
         }
       }
       if (theEvent.getController().equals(lx)) {
         layerActive.get(layerID).lx = lx.getValue();
-        for (int i = int(selection); i >= 0; i--) {
-          layerKeyFrames.get(gif.keyFrames - i).lx  = lx.getValue();
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i <= range; i++) {  
+            layerKeyFrames.get(int(start+i)).lx  = lx.getValue();
+          }
         }
       }
       if (theEvent.getController().equals(ly)) {
         layerActive.get(layerID).ly = ly.getValue();
-        for (int i = int(selection); i >= 0; i--) {
-          layerKeyFrames.get(gif.keyFrames - i).ly  = ly.getValue();
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i <= range; i++) {  
+            layerKeyFrames.get(int(start+i)).ly  = ly.getValue();
+          }
         }
       }
       if (theEvent.getController().equals(sw)) {
         layerActive.get(layerID).sw = sw.getValue();
-        for (int i = int(selection); i >= 0; i--) {
-          layerKeyFrames.get(gif.keyFrames - i).sw  = sw.getValue();
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i <= range; i++) {  
+            layerKeyFrames.get(int(start+i)).sw  = sw.getValue();
+          }
         }
+      }
+      if (theEvent.getController().equals(drawMode)) {  
+        layerActive.get(layerID).lines = drawMode.getState();
       }
       if (theEvent.getController().equals(layerSwitch)) {
         int set = int(layerSwitch.getValue());
@@ -481,7 +541,6 @@ class GUI extends PApplet { //<>//
       renderKeyFrames = true;
       gif.renderStart = millis();
       gif.aniStart(0);
-
     }
     if (key == 'p') {
       if (playback == true) {

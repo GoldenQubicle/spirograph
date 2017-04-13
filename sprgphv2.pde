@@ -1,13 +1,17 @@
 /* //<>//
-roadmap - in order of severity
- - additional gear controls : lockXY, resetTo0, castFloat - data & logic & gui
- - fix color transitions - data & logic
- - implement multiple layer key editting - logic
- - check-check-double-check multiple layer ani x consequetive ani - logic 
- - add line & dot mode back in - logic & gui
- - add radial color toggle - gui
- - finalise gui - gui
+must have
+- save/load multiple layers - its wonky atm and dunno why it borked :/
+- multiple layer key editting - DONE
+- multiple layer ani x consequetive ani - CHECKED & DONE
+- color transitions - DONE
+- line mode - DONE
+
+should have
+- additional gear controls : lockXY, resetTo0, castFloat
+- radial color 
+- better gui
  
+nice to have 
  possibly add background color to aniMatrix
  possibly figure out how to put toggles (e.g. stroke, fill) to use with keyframes
  possibly add density to aniMatrix

@@ -110,9 +110,15 @@ class Animation {    //<>//
       fTemp+=1;         
       for (Trigger myTrigger : triggers) {          
         if (myTrigger.Start <= renderKeyFrame ) {
-          myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.renderFrame);
+          if (myTrigger.layerParameter == 19 ||myTrigger.layerParameter == 20) {
+            myTrigger.aniR.seek(myTrigger.aniSeek*myTrigger.renderFrame);
+            myTrigger.aniG.seek(myTrigger.aniSeek*myTrigger.renderFrame);
+            myTrigger.aniB.seek(myTrigger.aniSeek*myTrigger.renderFrame);
+            myTrigger.aniR.seek(myTrigger.aniSeek*myTrigger.renderFrame);
+          } else {
+            myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.renderFrame);
+          }
           myTrigger.renderFrame+=1;
-          //println(myTrigger.renderFrame, myTrigger.aniSeek*myTrigger.renderFrame, layerAnimate.get(0).gears[3].rX);
         }
       }
       // setKeyFrame for aniStart

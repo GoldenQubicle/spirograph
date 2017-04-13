@@ -1,10 +1,11 @@
 class Trigger {
-  Ani ani;
+  Ani ani, aniR, aniG, aniB, aniA;
   Easing[] easings = { Ani.LINEAR, Ani.QUAD_IN, Ani.QUAD_OUT, Ani.QUAD_IN_OUT, Ani.CUBIC_IN, Ani.CUBIC_IN_OUT, Ani.CUBIC_OUT, Ani.QUART_IN, Ani.QUART_OUT, Ani.QUART_IN_OUT, Ani.QUINT_IN, Ani.QUINT_OUT, Ani.QUINT_IN_OUT, Ani.SINE_IN, Ani.SINE_OUT, Ani.SINE_IN_OUT, Ani.CIRC_IN, Ani.CIRC_OUT, Ani.CIRC_IN_OUT, Ani.EXPO_IN, Ani.EXPO_OUT, Ani.EXPO_IN_OUT, Ani.BACK_IN, Ani.BACK_OUT, Ani.BACK_IN_OUT, Ani.BOUNCE_IN, Ani.BOUNCE_OUT, Ani.BOUNCE_IN_OUT, Ani.ELASTIC_IN, Ani.ELASTIC_OUT, Ani.ELASTIC_IN_OUT};
   int Start, End, layerKF, layerParameter, gear, gearVar, layerVar, layerGet;
   float aniDuration, aniValue, aniSeek, renderFrame, interval, renderKeyFrame;
   String [] GearVars = {"rX", "rY", "petals", "rotate", "connect", "rZ"};
   String [] LayerVars = {"lx", "ly", "sw", "cFill", "cStroke", "density"};
+  float r, g, b, a;
 
   Trigger(int thex, int they, int end, int layer) {
     layerParameter = they;
@@ -16,7 +17,7 @@ class Trigger {
     aniDuration = gif.aniFrames*interval;
     aniSeek = 1 / aniDuration;
     renderFrame = 0;
-   
+
     // gear parameters
     if (layerParameter == 0) {
       gear = 0;
@@ -111,18 +112,34 @@ class Trigger {
       aniValue = layerKeyFrames.get(layerKF).sw;
     }
     if (layerParameter == 19) {
-      layerVar = 3;
-      aniValue = layerKeyFrames.get(layerKF).cFill;
+      r = layerKeyFrames.get(layerKF).fillR;
+      g = layerKeyFrames.get(layerKF).fillG;
+      b = layerKeyFrames.get(layerKF).fillB;
+      a = layerKeyFrames.get(layerKF).fillA;
     }
     if (layerParameter == 20) {
-      layerVar = 4;
-      aniValue = layerKeyFrames.get(layerKF).cStroke;
+      r = layerKeyFrames.get(layerKF).strokeR;
+      g = layerKeyFrames.get(layerKF).strokeG;
+      b = layerKeyFrames.get(layerKF).strokeB;
+      a = layerKeyFrames.get(layerKF).strokeA;
     }
   }
 
   void aniType() {
     if (layerParameter <= 15) {
       ani = Ani.to(layerAnimate.get(layerGet).gears[gear], aniDuration, GearVars[gearVar], aniValue, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
+    } 
+    if (layerParameter == 19) {
+      aniR = Ani.to(layerAnimate.get(layerGet), aniDuration, "fillR", r, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
+      aniG = Ani.to(layerAnimate.get(layerGet), aniDuration, "fillG", g, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
+      aniB = Ani.to(layerAnimate.get(layerGet), aniDuration, "fillB", b, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
+      aniA = Ani.to(layerAnimate.get(layerGet), aniDuration, "fillA", a, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
+    }
+    if (layerParameter == 20) {
+      aniR = Ani.to(layerAnimate.get(layerGet), aniDuration, "strokeR", r, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
+      aniG = Ani.to(layerAnimate.get(layerGet), aniDuration, "strokeG", g, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
+      aniB = Ani.to(layerAnimate.get(layerGet), aniDuration, "strokeB", b, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
+      aniA = Ani.to(layerAnimate.get(layerGet), aniDuration, "strokeA", a, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
     } else {      
       ani = Ani.to(layerAnimate.get(layerGet), aniDuration, LayerVars[layerVar], aniValue, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
     }
@@ -130,6 +147,13 @@ class Trigger {
 
   void ani() {
     aniType();
-    ani.start();
+    if (layerParameter == 19 || layerParameter == 20) {
+      aniR.start();
+      aniG.start();
+      aniB.start();
+      aniA.start();
+    } else {
+      ani.start();
+    }
   }
 }

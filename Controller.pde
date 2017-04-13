@@ -102,7 +102,7 @@ class Controller {
       gui.colorBackground.remove();
       fileio.loadJSON(fileio.listOfFiles[int(gui.fileSelect.getValue())].getName());
       gui.fileName.setText(controller.fileio.fileName);
-      gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(fileio.global.getInt("colorBackground")).moveTo("global");
+      gui.colorBackground = gui.cp5.addColorWheel("Background").setPosition(3, 3).setRGB(cBackground).moveTo("global");
       for (int l =0; l < gif.nLayers; l++) {
         int frame = l*gif.keyFrames;
         layerActive.add(layerKeyFrames.get(frame));
@@ -124,7 +124,6 @@ class Controller {
       for (int f = 0; f < gif.keyFrames; f++) {
         Layer kfBLank = new Layer(10);
         layerKeyFrames.add(copyLayerSettings(kfBLank, 1, (layerActive.size()-1)*f));
-        layerKeyFrames.get(layerKeyFrames.size()-1).kf = f;
       }
       // add new ani arrays
       gif.aniStart = new Boolean [gif.keyFrames][gif.layerVars];
@@ -357,6 +356,7 @@ class Controller {
       gui.blendMode.setValue(arraySelect(array, get).blendSelect); 
       gui.fill.setState(arraySelect(array, get).fill);
       gui.stroke.setState(arraySelect(array, get).stroke);
+      gui.drawMode.setState(arraySelect(array, get).lines);
       gui.lx.setValue(arraySelect(array, get).lx);
       gui.ly.setValue(arraySelect(array, get).ly);
       gui.sw.setValue(arraySelect(array, get).sw);
@@ -367,7 +367,11 @@ class Controller {
       gui.G0r.setValue(arraySelect(array, get).gear0.rotate);
       gui.G1r.setValue(arraySelect(array, get).gear1.rotate);
       gui.G2r.setValue(arraySelect(array, get).gear2.rotate);
-      gui.G3r.setValue(arraySelect(array, get).gear3.rotate);      
+      gui.G3r.setValue(arraySelect(array, get).gear3.rotate);
+      gui.g0c.setValue(arraySelect(array, get).gear0.connect);
+      gui.g1c.setValue(arraySelect(array, get).gear1.connect);
+      gui.g2c.setValue(arraySelect(array, get).gear2.connect);
+      gui.g3c.setValue(arraySelect(array, get).gear3.connect);   
       for (int r = 0; r < gui.trigSwitch.size(); r++) {
         gui.trigSwitch.get(r).activate(arraySelect(array, get).trig.get(gui.trigSwitch.get(r).getName()));
       }
@@ -387,12 +391,22 @@ class Controller {
       layer.gears[i].rZ = arraySelect(array, get).gears[i].rZ;
       layer.gears[i].petals = arraySelect(array, get).gears[i].petals;
       layer.gears[i].rotate = arraySelect(array, get).gears[i].rotate;
+      layer.gears[i].connect = arraySelect(array, get).gears[i].connect;
     }
     layer.blendSelect = arraySelect(array, get).blendSelect;
     layer.cFill = arraySelect(array, get).cFill;
     layer.cStroke = arraySelect(array, get).cStroke;
     layer.fill = arraySelect(array, get).fill;
+    layer.fillR = arraySelect(array, get).fillR;
+    layer.fillG = arraySelect(array, get).fillG;
+    layer.fillB = arraySelect(array, get).fillB;
+    layer.fillA = arraySelect(array, get).fillA;
     layer.stroke = arraySelect(array, get).stroke;
+    layer.strokeR = arraySelect(array, get).strokeR;
+    layer.strokeG = arraySelect(array, get).strokeG;
+    layer.strokeB = arraySelect(array, get).strokeB;
+    layer.strokeA = arraySelect(array, get).strokeA;
+    layer.lines =  arraySelect(array, get).lines;
     layer.lx = arraySelect(array, get).lx;
     layer.ly = arraySelect(array, get).ly;
     layer.sw = arraySelect(array, get).sw;
@@ -411,7 +425,7 @@ class Controller {
     if (select == 1 ) {
       dummy = layerKeyFrames.get(getlayer);
     }
-     if (select == 2 ) {
+    if (select == 2 ) {
       dummy = layerAnimate.get(getlayer);
     }
     return dummy;
