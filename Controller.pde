@@ -123,7 +123,7 @@ class Controller {
       // update keyFrame array
       for (int f = 0; f < gif.keyFrames; f++) {
         Layer kfBLank = new Layer(10);
-        layerKeyFrames.add(copyLayerSettings(kfBLank, 1, (layerActive.size()-1)*f));
+        layerKeyFrames.add(copyLayerSettings(kfBLank, 1, layerActive.size()*f));
       }
       // add new ani arrays
       gif.aniStart = new Boolean [gif.keyFrames][gif.layerVars];

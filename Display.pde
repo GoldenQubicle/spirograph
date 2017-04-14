@@ -37,6 +37,12 @@ class Display {
           strokeJoin(ROUND);
           strokeWeight(toDraw.sw);
           line(xyz.x, xyz.y, xy2.x, xy2.y);
+          if (render == true) {
+            gif.renderPImage();
+          }
+          if (renderKeyFrames == true) {
+            gif.renderLayer();
+          }
         }
       }
     } else {
@@ -51,7 +57,7 @@ class Display {
         if (theta == (toDraw.density-1) && render == true) {
           gif.renderPImage();
         }
-        if (theta == toDraw.density && renderKeyFrames == true) {
+        if (theta == (toDraw.density-1) && renderKeyFrames == true) {
           gif.renderLayer();
         }
       }

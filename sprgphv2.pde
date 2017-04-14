@@ -1,6 +1,8 @@
 /* //<>//
 must have
-- save/load multiple layers - its wonky atm and dunno why it borked :/
+
+- keylock during input filename
+
 - multiple layer key editting - DONE
 - multiple layer ani x consequetive ani - CHECKED & DONE
 - color transitions - DONE
@@ -10,11 +12,13 @@ should have
 - additional gear controls : lockXY, resetTo0, castFloat
 - radial color 
 - better gui
+- fire individual triggers 
  
 nice to have 
  possibly add background color to aniMatrix
  possibly figure out how to put toggles (e.g. stroke, fill) to use with keyframes
  possibly add density to aniMatrix
+ possibly insert new keyFrame rather than append, i.e. 1old-1insert-2insert-2old-3insert-4insert
  
  known bugs
  - controls freeze when toggling the gear trigs completely off
@@ -31,6 +35,9 @@ nice to have
  
  Obviously, the various render functions in Animation should be consolidated into oneother as the only difference is the value for aniSeek
  Even more obvious: multiple layer support is still not properly implemented . . 
+ 
+ GUI 
+ - multiple controller objects and/or groups in seperate functions which can be called by controller to update
  
  Controller
  - receives input and executes commands

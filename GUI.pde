@@ -371,16 +371,17 @@ class GUI extends PApplet { //<>//
           layerActive.get(layerID).gears[g].rX = theEvent.getController().getArrayValue(0);
           layerActive.get(layerID).gears[g].rY = theEvent.getController().getArrayValue(1);
           if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-            for (int i = 0; i <= range; i++) {         
+            for (int i = 0; i < range; i++) {         
               layerKeyFrames.get(int(start+i)).gears[g].rX = theEvent.getController().getArrayValue(0);
               layerKeyFrames.get(int(start+i)).gears[g].rY = theEvent.getController().getArrayValue(1);
+                      println(range, start, start+i);
             }
           }
         }
         if (theEvent.getController().getName().equals("p" + g)) {
           layerActive.get(layerID).gears[g].petals = int(theEvent.getController().getValue());
           if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-            for (int i = 0; i <= range; i++) {  
+            for (int i = 0; i < range; i++) {  
               layerKeyFrames.get(int(start+i)).gears[g].petals = int(theEvent.getController().getValue());
             }
           }
@@ -388,7 +389,7 @@ class GUI extends PApplet { //<>//
         if (theEvent.getController().getName().equals("g" + g + "C")) {
           layerActive.get(layerID).gears[g].connect = theEvent.getController().getValue();
           if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-            for (int i = 0; i <= range; i++) {  
+            for (int i = 0; i < range; i++) {  
               layerKeyFrames.get(int(start+i)).gears[g].connect = int(theEvent.getController().getValue());
             }
           }
@@ -396,7 +397,7 @@ class GUI extends PApplet { //<>//
         if (theEvent.getController().getName().equals("g" + g + "r")) {
           layerActive.get(layerID).gears[g].rotate = theEvent.getController().getValue();   
           if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-            for (int i = 0; i <= range; i++) {                
+            for (int i = 0; i < range; i++) {                
               layerKeyFrames.get(int(start+i)).gears[g].rotate  = theEvent.getController().getValue();
             }
           }
@@ -404,7 +405,7 @@ class GUI extends PApplet { //<>//
         if (theEvent.getController().getName().equals("G"+g+"z")) {
           layerActive.get(layerID).gears[g].rZ = theEvent.getController().getValue();
           if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-            for (int i = 0; i <= range; i++) {  
+            for (int i = 0; i < range; i++) {  
               layerKeyFrames.get(int(start+i)).gears[g].rZ  = theEvent.getController().getValue();
             }
           }
@@ -413,7 +414,7 @@ class GUI extends PApplet { //<>//
       if (theEvent.getController().equals(density)) {
         layerActive.get(layerID).density = int(density.getValue());
         if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-          for (int i = 0; i <= range; i++) {  
+          for (int i = 0; i < range; i++) {  
             layerKeyFrames.get(int(start+i)).density  = int(density.getValue());
           }
         }
@@ -421,7 +422,7 @@ class GUI extends PApplet { //<>//
       if (theEvent.getController().equals(blendMode)) {
         layerActive.get(layerID).blendSelect = int(blendMode.getValue());
         if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-          for (int i = 0; i <= range; i++) {  
+          for (int i = 0; i < range; i++) {  
             layerKeyFrames.get(int(start+i)).blendSelect  = int(theEvent.getController().getValue());
           }
         }
@@ -434,8 +435,8 @@ class GUI extends PApplet { //<>//
         layerActive.get(layerID).cStroke = color(layerActive.get(layerID).strokeR, layerActive.get(layerID).strokeG, layerActive.get(layerID).strokeB, layerActive.get(layerID).strokeA);
         //layerActive.get(layerID).cStroke = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
         if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-          for (int i = 0; i <= range; i++) {  
-            layerKeyFrames.get(int(start+i)).cStroke  = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
+          for (int i = 0; i < range; i++) {  
+            layerKeyFrames.get(int(start+i)).cStroke = color(layerActive.get(layerID).strokeR, layerActive.get(layerID).strokeG, layerActive.get(layerID).strokeB, layerActive.get(layerID).strokeA);
           }
         }
       }
@@ -444,18 +445,18 @@ class GUI extends PApplet { //<>//
         layerActive.get(layerID).fillG = colorFill.g();
         layerActive.get(layerID).fillB = colorFill.b();
         layerActive.get(layerID).fillA = alphaFill.getValue();
-        layerActive.get(layerID).cFill = color( layerActive.get(layerID).fillR, layerActive.get(layerID).fillG, layerActive.get(layerID).fillB, layerActive.get(layerID).fillA);
+        layerActive.get(layerID).cFill = color(layerActive.get(layerID).fillR, layerActive.get(layerID).fillG, layerActive.get(layerID).fillB, layerActive.get(layerID).fillA);
         //layerActive.get(layerID).cFill = color(colorFill.r(), colorFill.g(), colorFill.b(), int(alphaFill.getValue()));
         if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-          for (int i = 0; i <= range; i++) {  
-            layerKeyFrames.get(int(start+i)).cFill  = color(colorFill.r(), colorFill.g(), colorFill.b(), int(alphaFill.getValue()));
+          for (int i = 0; i < range; i++) {  
+            layerKeyFrames.get(int(start+i)).cFill = color(layerActive.get(layerID).fillR, layerActive.get(layerID).fillG, layerActive.get(layerID).fillB, layerActive.get(layerID).fillA);
           }
         }
       }
       if (theEvent.getController().equals(stroke)) {
         layerActive.get(layerID).stroke = stroke.getState();
         if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-          for (int i = 0; i <= range; i++) {  
+          for (int i = 0; i < range; i++) {  
             layerKeyFrames.get(int(start+i)).stroke  = stroke.getState();
           }
         }
@@ -463,7 +464,7 @@ class GUI extends PApplet { //<>//
       if (theEvent.getController().equals(fill)) {
         layerActive.get(layerID).fill = fill.getState();
         if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-          for (int i = 0; i <= range; i++) {  
+          for (int i = 0; i < range; i++) {  
             layerKeyFrames.get(int(start+i)).fill  = fill.getState();
           }
         }
@@ -471,7 +472,7 @@ class GUI extends PApplet { //<>//
       if (theEvent.getController().equals(lx)) {
         layerActive.get(layerID).lx = lx.getValue();
         if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-          for (int i = 0; i <= range; i++) {  
+          for (int i = 0; i < range; i++) {  
             layerKeyFrames.get(int(start+i)).lx  = lx.getValue();
           }
         }
@@ -479,7 +480,7 @@ class GUI extends PApplet { //<>//
       if (theEvent.getController().equals(ly)) {
         layerActive.get(layerID).ly = ly.getValue();
         if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-          for (int i = 0; i <= range; i++) {  
+          for (int i = 0; i < range; i++) {  
             layerKeyFrames.get(int(start+i)).ly  = ly.getValue();
           }
         }
@@ -487,7 +488,7 @@ class GUI extends PApplet { //<>//
       if (theEvent.getController().equals(sw)) {
         layerActive.get(layerID).sw = sw.getValue();
         if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-          for (int i = 0; i <= range; i++) {  
+          for (int i = 0; i < range; i++) {  
             layerKeyFrames.get(int(start+i)).sw  = sw.getValue();
           }
         }

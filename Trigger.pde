@@ -128,20 +128,18 @@ class Trigger {
   void aniType() {
     if (layerParameter <= 15) {
       ani = Ani.to(layerAnimate.get(layerGet).gears[gear], aniDuration, GearVars[gearVar], aniValue, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
-    } 
-    if (layerParameter == 19) {
+    } else if (layerParameter >= 16 && layerParameter <=18) {
+      ani = Ani.to(layerAnimate.get(layerGet), aniDuration, LayerVars[layerVar], aniValue, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
+    } else if (layerParameter == 19) {
       aniR = Ani.to(layerAnimate.get(layerGet), aniDuration, "fillR", r, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
       aniG = Ani.to(layerAnimate.get(layerGet), aniDuration, "fillG", g, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
       aniB = Ani.to(layerAnimate.get(layerGet), aniDuration, "fillB", b, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
       aniA = Ani.to(layerAnimate.get(layerGet), aniDuration, "fillA", a, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
-    }
-    if (layerParameter == 20) {
+    } else if (layerParameter == 20) {
       aniR = Ani.to(layerAnimate.get(layerGet), aniDuration, "strokeR", r, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
       aniG = Ani.to(layerAnimate.get(layerGet), aniDuration, "strokeG", g, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
       aniB = Ani.to(layerAnimate.get(layerGet), aniDuration, "strokeB", b, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
       aniA = Ani.to(layerAnimate.get(layerGet), aniDuration, "strokeA", a, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
-    } else {      
-      ani = Ani.to(layerAnimate.get(layerGet), aniDuration, LayerVars[layerVar], aniValue, easings[gif.layerAniEasing.get(layerGet)[Start][layerParameter]]);
     }
   }
 
@@ -153,7 +151,7 @@ class Trigger {
       aniB.start();
       aniA.start();
     } else {
-      ani.start();
+    ani.start();
     }
   }
 }
