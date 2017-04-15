@@ -18,7 +18,7 @@ class GUI extends PApplet { //<>//
   int LX, LY, SW, GW, GH, ms, i, p0, p1, p2, p3, as, af, g0r, g1r, g2r, g3r, d, g0C, g1C, g2C, g3C; 
   float densityRangeMin = 1;
   float densityRangeMax = 1000;
-  Textfield fileName, g0x, g0y;
+  Textfield fileName, g0x, g0y, g1x, g1y, g2x, g2y, g3x, g3y;
   Textlabel trig, Label;
   Textarea renderMessage;
   String [] labelsAniMatrix = {"Gear 0 X", "Gear 0 Y", "Gear 0 Petals", "Gear 0 Rotate", 
@@ -138,9 +138,22 @@ class GUI extends PApplet { //<>//
     gear2 = cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(posx+(155*2), posy).setCaptionLabel("Radius Gear 2").setSize(size2d, size2d).moveTo("global");//.setValue(layers.get(id).gear2.RX, layers.get(id).gear2.RY);
     gear3 = cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(posx+(155*3), posy).setCaptionLabel("Radius Gear 3").setSize(size2d, size2d).moveTo("global");//.setValue(layers.get(id).gear3.RX, layers.get(id).gear3.RY);    
 
-    g0x = cp5.addTextfield("G0x").setPosition(posx, posy+165).setSize(60, 15).setText(str(gear0.getArrayValue(0))).moveTo("global");
-    g0y = cp5.addTextfield("G0y").setPosition(posx+70, posy+165).setSize(60, 15).setText(str(gear0.getArrayValue(1))).moveTo("global");
-
+    g0x = cp5.addTextfield("G0x").setPosition(posx+15, posy+165).setSize(30, 15).setText(nf(gear0.getArrayValue(0))).moveTo("global").setCaptionLabel("x  ");
+    g0y = cp5.addTextfield("G0y").setPosition(posx+70, posy+165).setSize(30, 15).setText(nf(gear0.getArrayValue(1))).moveTo("global").setCaptionLabel("y  ");
+    g1x = cp5.addTextfield("G1x").setPosition(posx+15+155, posy+165).setSize(30, 15).setText(nf(gear1.getArrayValue(0))).moveTo("global").setCaptionLabel("x  ");
+    g1y = cp5.addTextfield("G1y").setPosition(posx+70+155, posy+165).setSize(30, 15).setText(nf(gear1.getArrayValue(1))).moveTo("global").setCaptionLabel("y  ");
+    g2x = cp5.addTextfield("G2x").setPosition(posx+15+310, posy+165).setSize(30, 15).setText(nf(gear2.getArrayValue(0))).moveTo("global").setCaptionLabel("x  ");
+    g2y = cp5.addTextfield("G2y").setPosition(posx+70+310, posy+165).setSize(30, 15).setText(nf(gear2.getArrayValue(1))).moveTo("global").setCaptionLabel("y  ");
+    g3x = cp5.addTextfield("G3x").setPosition(posx+15+465, posy+165).setSize(30, 15).setText(nf(gear3.getArrayValue(0))).moveTo("global").setCaptionLabel("x  ");
+    g3y = cp5.addTextfield("G3y").setPosition(posx+70+465, posy+165).setSize(30, 15).setText(nf(gear3.getArrayValue(1))).moveTo("global").setCaptionLabel("y  ");
+    cp5.getController("G0x").getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, CENTER);
+    cp5.getController("G0y").getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, CENTER);
+    cp5.getController("G1x").getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, CENTER);
+    cp5.getController("G1y").getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, CENTER);
+    cp5.getController("G2x").getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, CENTER);
+    cp5.getController("G2y").getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, CENTER);
+    cp5.getController("G3x").getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, CENTER);
+    cp5.getController("G3y").getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, CENTER);
     petals0 = cp5.addSlider("p0").setPosition(rPanex, posy-15).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 0 Petals").moveTo("global"); 
     petals1 = cp5.addSlider("p1").setPosition(rPanex, posy).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 1 Petals").moveTo("global"); 
     petals2 = cp5.addSlider("p2").setPosition(rPanex, posy+15).setSize(200, 10).setRange(0, 200).setCaptionLabel("Gear 2 Petals").moveTo("global");
@@ -323,210 +336,217 @@ class GUI extends PApplet { //<>//
         range = gif.keyFrames;
         start = layerSwitch.getValue()*gif.keyFrames;
       } 
-
-
-      // new gear controllers to be integrated
+      // textfield update radii gears
       g0x.setText(str(layerActive.get(layerID).gears[0].rX));
       g0y.setText(str(layerActive.get(layerID).gears[0].rY));
-
-      if (theEvent.getController().equals(g0x)) {
-        layerActive.get(layerID).gears[0].rX = float(g0x.getStringValue());
-        layerlock = true;
-        controller.updateLayerGUI(0, layerID);
-      }
-      
-        // gear controllers
-        for (int g = 0; g < 4; g++) {
-          if (theEvent.getController().getName().equals("G" + g)) {
-            layerActive.get(layerID).gears[g].rX = theEvent.getController().getArrayValue(0);
-            layerActive.get(layerID).gears[g].rY = theEvent.getController().getArrayValue(1);
-            if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-              for (int i = 0; i < range; i++) {         
-                layerKeyFrames.get(int(start+i)).gears[g].rX = theEvent.getController().getArrayValue(0);
-                layerKeyFrames.get(int(start+i)).gears[g].rY = theEvent.getController().getArrayValue(1);
-              }
-            }
-          }
-          if (theEvent.getController().getName().equals("p" + g)) {
-            layerActive.get(layerID).gears[g].petals = int(theEvent.getController().getValue());
-            if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-              for (int i = 0; i < range; i++) {  
-                layerKeyFrames.get(int(start+i)).gears[g].petals = int(theEvent.getController().getValue());
-              }
-            }
-          }
-          if (theEvent.getController().getName().equals("g" + g + "C")) {
-            layerActive.get(layerID).gears[g].connect = theEvent.getController().getValue();
-            if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-              for (int i = 0; i < range; i++) {  
-                layerKeyFrames.get(int(start+i)).gears[g].connect = int(theEvent.getController().getValue());
-              }
-            }
-          }
-          if (theEvent.getController().getName().equals("g" + g + "r")) {
-            layerActive.get(layerID).gears[g].rotate = theEvent.getController().getValue();   
-            if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-              for (int i = 0; i < range; i++) {                
-                layerKeyFrames.get(int(start+i)).gears[g].rotate  = theEvent.getController().getValue();
-              }
-            }
-          }
-          if (theEvent.getController().getName().equals("G"+g+"z")) {
-            layerActive.get(layerID).gears[g].rZ = theEvent.getController().getValue();
-            if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-              for (int i = 0; i < range; i++) {  
-                layerKeyFrames.get(int(start+i)).gears[g].rZ  = theEvent.getController().getValue();
-              }
-            }
-          }
-        }
-        if (theEvent.getController().equals(density)) {
-          layerActive.get(layerID).density = int(density.getValue());
-          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-            for (int i = 0; i < range; i++) {  
-              layerKeyFrames.get(int(start+i)).density  = int(density.getValue());
-            }
-          }
-        }
-        if (theEvent.getController().equals(blendMode)) {
-          layerActive.get(layerID).blendSelect = int(blendMode.getValue());
-          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-            for (int i = 0; i < range; i++) {  
-              layerKeyFrames.get(int(start+i)).blendSelect  = int(theEvent.getController().getValue());
-            }
-          }
-        }
-        if (theEvent.getController().equals(colorStroke)  || theEvent.getController().equals(alphaStroke)) {
-          layerActive.get(layerID).strokeR = colorStroke.r();
-          layerActive.get(layerID).strokeG = colorStroke.g();
-          layerActive.get(layerID).strokeB = colorStroke.b();
-          layerActive.get(layerID).strokeA = alphaStroke.getValue();
-          layerActive.get(layerID).cStroke = color(layerActive.get(layerID).strokeR, layerActive.get(layerID).strokeG, layerActive.get(layerID).strokeB, layerActive.get(layerID).strokeA);
-          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-            for (int i = 0; i < range; i++) {  
-              layerKeyFrames.get(int(start+i)).strokeR = colorStroke.r();
-              layerKeyFrames.get(int(start+i)).strokeG = colorStroke.g();
-              layerKeyFrames.get(int(start+i)).strokeB = colorStroke.b();
-              layerKeyFrames.get(int(start+i)).strokeA = alphaStroke.getValue();
-            }
-          }
-        }
-        if (theEvent.getController().equals(colorFill) || theEvent.getController().equals(alphaFill)) {
-          layerActive.get(layerID).fillR = colorFill.r();
-          layerActive.get(layerID).fillG = colorFill.g();
-          layerActive.get(layerID).fillB = colorFill.b();
-          layerActive.get(layerID).fillA = alphaFill.getValue();
-          layerActive.get(layerID).cFill = color(layerActive.get(layerID).fillR, layerActive.get(layerID).fillG, layerActive.get(layerID).fillB, layerActive.get(layerID).fillA);
-          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-            for (int i = 0; i < range; i++) { 
-              layerKeyFrames.get(int(start+i)).fillR = colorFill.r();
-              layerKeyFrames.get(int(start+i)).fillG = colorFill.g();
-              layerKeyFrames.get(int(start+i)).fillB = colorFill.b();
-              layerKeyFrames.get(int(start+i)).fillA = alphaFill.getValue();
-            }
-          }
-        }
-        if (theEvent.getController().equals(stroke)) {
-          layerActive.get(layerID).stroke = stroke.getState();
-          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-            for (int i = 0; i < range; i++) {  
-              layerKeyFrames.get(int(start+i)).stroke  = stroke.getState();
-            }
-          }
-        }
-        if (theEvent.getController().equals(fill)) {
-          layerActive.get(layerID).fill = fill.getState();
-          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-            for (int i = 0; i < range; i++) {  
-              layerKeyFrames.get(int(start+i)).fill  = fill.getState();
-            }
-          }
-        }
-        if (theEvent.getController().equals(lx)) {
-          layerActive.get(layerID).lx = lx.getValue();
-          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-            for (int i = 0; i < range; i++) {  
-              layerKeyFrames.get(int(start+i)).lx  = lx.getValue();
-            }
-          }
-        }
-        if (theEvent.getController().equals(ly)) {
-          layerActive.get(layerID).ly = ly.getValue();
-          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-            for (int i = 0; i < range; i++) {  
-              layerKeyFrames.get(int(start+i)).ly  = ly.getValue();
-            }
-          }
-        }
-        if (theEvent.getController().equals(sw)) {
-          layerActive.get(layerID).sw = sw.getValue();
-          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-            for (int i = 0; i < range; i++) {  
-              layerKeyFrames.get(int(start+i)).sw  = sw.getValue();
-            }
-          }
-        }
-        if (theEvent.getController().equals(drawMode)) {  
-          layerActive.get(layerID).lines = drawMode.getState();
-        }
-        if (theEvent.getController().equals(layerSwitch)) {
-          int set = int(layerSwitch.getValue());
+      g1x.setText(str(layerActive.get(layerID).gears[1].rX));
+      g1y.setText(str(layerActive.get(layerID).gears[1].rY));
+      g2x.setText(str(layerActive.get(layerID).gears[2].rX));
+      g2y.setText(str(layerActive.get(layerID).gears[2].rY));
+      g3x.setText(str(layerActive.get(layerID).gears[3].rX));
+      g3y.setText(str(layerActive.get(layerID).gears[3].rY));      
+      // gear controllers
+      for (int g = 0; g < 4; g++) {   
+        if (theEvent.getController().getName().equals("G" + g + "x")) {
+          layerActive.get(layerID).gears[g].rX = float(theEvent.getController().getStringValue());
           layerlock = true;
-          controller.updateMatrixLayerGUI(set);
-          controller.updateLayerGUI(0, set);
-          controller.updateAniGUI(2, set);
-          gif.tabToggle();
+          controller.updateLayerGUI(0, layerID);
+        }
+        if (theEvent.getController().getName().equals("G" + g + "y")) {
+          layerActive.get(layerID).gears[g].rY = float(theEvent.getController().getStringValue());
+          layerlock = true;
+          controller.updateLayerGUI(0, layerID);
+        }
+        if (theEvent.getController().getName().equals("G" + g)) {
+          layerActive.get(layerID).gears[g].rX = int(theEvent.getController().getArrayValue(0));
+          layerActive.get(layerID).gears[g].rY = int(theEvent.getController().getArrayValue(1));
+          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+            for (int i = 0; i < range; i++) {         
+              layerKeyFrames.get(int(start+i)).gears[g].rX = theEvent.getController().getArrayValue(0);
+              layerKeyFrames.get(int(start+i)).gears[g].rY = theEvent.getController().getArrayValue(1);
+            }
+          }
+        }
+        if (theEvent.getController().getName().equals("p" + g)) {
+          layerActive.get(layerID).gears[g].petals = int(theEvent.getController().getValue());
+          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+            for (int i = 0; i < range; i++) {  
+              layerKeyFrames.get(int(start+i)).gears[g].petals = int(theEvent.getController().getValue());
+            }
+          }
+        }
+        if (theEvent.getController().getName().equals("g" + g + "C")) {
+          layerActive.get(layerID).gears[g].connect = theEvent.getController().getValue();
+          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+            for (int i = 0; i < range; i++) {  
+              layerKeyFrames.get(int(start+i)).gears[g].connect = int(theEvent.getController().getValue());
+            }
+          }
+        }
+        if (theEvent.getController().getName().equals("g" + g + "r")) {
+          layerActive.get(layerID).gears[g].rotate = theEvent.getController().getValue();   
+          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+            for (int i = 0; i < range; i++) {                
+              layerKeyFrames.get(int(start+i)).gears[g].rotate  = theEvent.getController().getValue();
+            }
+          }
+        }
+        if (theEvent.getController().getName().equals("G"+g+"z")) {
+          layerActive.get(layerID).gears[g].rZ = theEvent.getController().getValue();
+          if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+            for (int i = 0; i < range; i++) {  
+              layerKeyFrames.get(int(start+i)).gears[g].rZ  = theEvent.getController().getValue();
+            }
+          }
         }
       }
-    }
-
-    void draw() {
-      blendMode(BLEND);
-      background(190);
-    }
-
-    void keyPressed() {
-      if (key==' ') {     
-        if (play == false) {
-          cp5.get(Matrix.class, "Matrix").play();
-          cp5.get(Matrix.class, "Matrix").trigger(0);
-          play = true;
-        } else {
-          cp5.get(Matrix.class, "Matrix").pause();
-          play = false;
+      if (theEvent.getController().equals(density)) {
+        layerActive.get(layerID).density = int(density.getValue());
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i < range; i++) {  
+            layerKeyFrames.get(int(start+i)).density  = int(density.getValue());
+          }
         }
       }
-      if (key == 'q') { 
+      if (theEvent.getController().equals(blendMode)) {
+        layerActive.get(layerID).blendSelect = int(blendMode.getValue());
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i < range; i++) {  
+            layerKeyFrames.get(int(start+i)).blendSelect  = int(theEvent.getController().getValue());
+          }
+        }
+      }
+      if (theEvent.getController().equals(colorStroke)  || theEvent.getController().equals(alphaStroke)) {
+        layerActive.get(layerID).strokeR = colorStroke.r();
+        layerActive.get(layerID).strokeG = colorStroke.g();
+        layerActive.get(layerID).strokeB = colorStroke.b();
+        layerActive.get(layerID).strokeA = alphaStroke.getValue();
+        layerActive.get(layerID).cStroke = color(layerActive.get(layerID).strokeR, layerActive.get(layerID).strokeG, layerActive.get(layerID).strokeB, layerActive.get(layerID).strokeA);
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i < range; i++) {  
+            layerKeyFrames.get(int(start+i)).strokeR = colorStroke.r();
+            layerKeyFrames.get(int(start+i)).strokeG = colorStroke.g();
+            layerKeyFrames.get(int(start+i)).strokeB = colorStroke.b();
+            layerKeyFrames.get(int(start+i)).strokeA = alphaStroke.getValue();
+          }
+        }
+      }
+      if (theEvent.getController().equals(colorFill) || theEvent.getController().equals(alphaFill)) {
+        layerActive.get(layerID).fillR = colorFill.r();
+        layerActive.get(layerID).fillG = colorFill.g();
+        layerActive.get(layerID).fillB = colorFill.b();
+        layerActive.get(layerID).fillA = alphaFill.getValue();
+        layerActive.get(layerID).cFill = color(layerActive.get(layerID).fillR, layerActive.get(layerID).fillG, layerActive.get(layerID).fillB, layerActive.get(layerID).fillA);
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i < range; i++) { 
+            layerKeyFrames.get(int(start+i)).fillR = colorFill.r();
+            layerKeyFrames.get(int(start+i)).fillG = colorFill.g();
+            layerKeyFrames.get(int(start+i)).fillB = colorFill.b();
+            layerKeyFrames.get(int(start+i)).fillA = alphaFill.getValue();
+          }
+        }
+      }
+      if (theEvent.getController().equals(stroke)) {
+        layerActive.get(layerID).stroke = stroke.getState();
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i < range; i++) {  
+            layerKeyFrames.get(int(start+i)).stroke  = stroke.getState();
+          }
+        }
+      }
+      if (theEvent.getController().equals(fill)) {
+        layerActive.get(layerID).fill = fill.getState();
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i < range; i++) {  
+            layerKeyFrames.get(int(start+i)).fill  = fill.getState();
+          }
+        }
+      }
+      if (theEvent.getController().equals(lx)) {
+        layerActive.get(layerID).lx = lx.getValue();
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i < range; i++) {  
+            layerKeyFrames.get(int(start+i)).lx  = lx.getValue();
+          }
+        }
+      }
+      if (theEvent.getController().equals(ly)) {
+        layerActive.get(layerID).ly = ly.getValue();
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i < range; i++) {  
+            layerKeyFrames.get(int(start+i)).ly  = ly.getValue();
+          }
+        }
+      }
+      if (theEvent.getController().equals(sw)) {
+        layerActive.get(layerID).sw = sw.getValue();
+        if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
+          for (int i = 0; i < range; i++) {  
+            layerKeyFrames.get(int(start+i)).sw  = sw.getValue();
+          }
+        }
+      }
+      if (theEvent.getController().equals(drawMode)) {  
+        layerActive.get(layerID).lines = drawMode.getState();
+      }
+      if (theEvent.getController().equals(layerSwitch)) {
+        int set = int(layerSwitch.getValue());
+        layerlock = true;
+        controller.updateMatrixLayerGUI(set);
+        controller.updateLayerGUI(0, set);
+        controller.updateAniGUI(2, set);
+        gif.tabToggle();
+      }
+    }
+  }
+
+  void draw() {
+    blendMode(BLEND);
+    background(190);
+  }
+
+  void keyPressed() {
+    if (key==' ') {     
+      if (play == false) {
+        cp5.get(Matrix.class, "Matrix").play();
+        cp5.get(Matrix.class, "Matrix").trigger(0);
+        play = true;
+      } else {
+        cp5.get(Matrix.class, "Matrix").pause();
+        play = false;
+      }
+    }
+    if (key == 'q') { 
+      gif.triggerArray();
+      cp5.get(Matrix.class, "Matrix").stop();
+      if (play == true) {
         gif.triggerArray();
-        cp5.get(Matrix.class, "Matrix").stop();
-        if (play == true) {
-          gif.triggerArray();
-          cp5.get(Matrix.class, "Matrix").play();
-        }
-      }
-      if (key == 'r') {
-        play = true;
-        render = true;
-        gif.renderStart = millis();
-        gif.aniStart(0);
-      }
-      if (key == 'k') {
-        play = true;
-        renderKeyFrames = true;
-        gif.renderStart = millis();
-        gif.aniStart(0);
-      }
-      if (key == 'p') {
-        if (playback == true) {
-          playback = false;
-        } else {
-          playback = true;
-        }
-        gif.renderStart = millis();
+        cp5.get(Matrix.class, "Matrix").play();
       }
     }
+    if (key == 'r') {
+      play = true;
+      render = true;
+      gif.renderStart = millis();
+      gif.aniStart(0);
+    }
+    if (key == 'k') {
+      play = true;
+      renderKeyFrames = true;
+      gif.renderStart = millis();
+      gif.aniStart(0);
+    }
+    if (key == 'p') {
+      if (playback == true) {
+        playback = false;
+      } else {
+        playback = true;
+      }
+      gif.renderStart = millis();
+    }
+  }
 
-    void Matrix(int theX, int theY) { 
-      gif.aniStart(theX);
-    }
-  } 
+  void Matrix(int theX, int theY) { 
+    gif.aniStart(theX);
+  }
+} 

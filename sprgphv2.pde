@@ -9,7 +9,7 @@ must have
  - line mode - DONE
  
  should have
- - additional gear controls : lockXY, resetTo0, castFloat, toggle for petals/connect in lineMode
+ - additional gear controls : lockXY, resetTo0 // DONE w text input
  - radial color 
  - better gui
  - fire individual triggers 

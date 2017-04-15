@@ -373,6 +373,13 @@ class Controller {
       gui.g2c.setValue(arraySelect(array, get).gear2.connect);
       gui.g3c.setValue(arraySelect(array, get).gear3.connect);  
       gui.g0x.setText(str(gui.gear0.getArrayValue(0)));
+      gui.g0y.setText(str(gui.gear0.getArrayValue(1)));
+      gui.g1x.setText(str(gui.gear1.getArrayValue(0)));
+      gui.g1y.setText(str(gui.gear1.getArrayValue(1)));
+      gui.g2x.setText(str(gui.gear2.getArrayValue(0)));
+      gui.g2y.setText(str(gui.gear2.getArrayValue(1)));
+      gui.g3x.setText(str(gui.gear3.getArrayValue(0)));
+      gui.g3y.setText(str(gui.gear3.getArrayValue(1)));
       for (int r = 0; r < gui.trigSwitch.size(); r++) {
         gui.trigSwitch.get(r).activate(arraySelect(array, get).trig.get(gui.trigSwitch.get(r).getName()));
       }

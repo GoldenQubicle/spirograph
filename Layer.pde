@@ -38,7 +38,7 @@ class Layer {  //<>//
     strokeB = blue(cStroke);
     strokeA = alpha(cStroke);
     density = 2500;
-    stroke = true;
+    stroke = false;
     fill = true;
     lines = false;
     dots = false;
