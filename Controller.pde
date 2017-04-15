@@ -371,7 +371,8 @@ class Controller {
       gui.g0c.setValue(arraySelect(array, get).gear0.connect);
       gui.g1c.setValue(arraySelect(array, get).gear1.connect);
       gui.g2c.setValue(arraySelect(array, get).gear2.connect);
-      gui.g3c.setValue(arraySelect(array, get).gear3.connect);   
+      gui.g3c.setValue(arraySelect(array, get).gear3.connect);  
+      gui.g0x.setText(str(gui.gear0.getArrayValue(0)));
       for (int r = 0; r < gui.trigSwitch.size(); r++) {
         gui.trigSwitch.get(r).activate(arraySelect(array, get).trig.get(gui.trigSwitch.get(r).getName()));
       }
@@ -435,7 +436,7 @@ class Controller {
     layerActive.clear();
     for (int f = frame; f < layerKeyFrames.size(); f+= gif.keyFrames) {
       layerActive.add(layerKeyFrames.get(f));
-      println(layerKeyFrames.size(), f);
+      //println(layerKeyFrames.size(), f);
     }
     gui.layerlock = true;
     updateLayerGUI(0, int(gui.layerSwitch.getValue()));

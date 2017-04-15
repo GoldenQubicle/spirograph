@@ -47,10 +47,7 @@ class Layer {  //<>//
     trig = new IntDict();
     for (int g = 0; g < 4; g++) {
       trig.set("G"+g+"trigX", gears[g].trigX);
-      trig.set("G"+g+"trigX2", gears[g].trigX2);
       trig.set("G"+g+"trigY", gears[g].trigY);
-      trig.set("G"+g+"trigY2", gears[g].trigY2);
-      trig.set("G"+g+"trigZ", gears[g].trigZ);
     }
   }
 
@@ -65,7 +62,7 @@ class Layer {  //<>//
 
   void Gears(float theta, float phi) {
     for (int g = 0; g < 4; g++) {
-      gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), trig.get("G"+g+"trigZ"), trig.get("G"+g+"trigX2"), trig.get("G"+g+"trigY2"), theta, phi, density, lines);
+      gears[g].grinding(trig.get("G"+g+"trigX"), trig.get("G"+g+"trigY"), theta, phi, density, lines);
     }
   }
 }
@@ -73,7 +70,8 @@ class Layer {  //<>//
 class Gears {
   PVector xyz, xy2;
   float theta, phi, rX, rY, rZ, connect, ratio, rotate, speed, cossintan;
-  int trigX = 0, trigY = 1, trigX2, trigY2, trigZ, petals;
+  int trigX = 0, trigY = 1, petals;
+  boolean cast = false;
 
   Gears(float rx, float ry, float rz) {
     xyz = new PVector();    
@@ -84,12 +82,9 @@ class Gears {
     connect = 2;
   }
 
-  void grinding(int trigx, int trigy, int trigz, int trigx2, int trigy2, float theta, float phi, float density, boolean lines) {
+  void grinding(int trigx, int trigy, float theta, float phi, float density, boolean lines) {
     trigX = trigx;
-    trigX2 = trigx2;
     trigY = trigy;
-    trigY2 = trigy2;
-    trigZ = trigz;
 
     if (lines == true) {
       theta+=rotate;
@@ -125,7 +120,13 @@ class Gears {
   }
 
   float Ratio() {
-    ratio = 1/float((petals-1));  
+    //if (cast == false) {
+      ratio = 1/(float(petals-1));
+    //}
+    //if (cast == true) {
+    //  petalCast = float(petals);
+    //  ratio = 1/(petalCast-1);
+    //}
     return ratio;
   }
 }

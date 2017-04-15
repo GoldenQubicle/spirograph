@@ -66,12 +66,9 @@ class FileIO {
     for (int i = 0; i < tobeSaved.gears.length; i++) {
       gears.setFloat(Gears[i] + " RX", tobeSaved.gears[i].rX);
       gears.setInt(Gears[i] + " trigX", tobeSaved.gears[i].trigX);
-      gears.setInt(Gears[i] + " trigX2", tobeSaved.gears[i].trigX2);
       gears.setFloat(Gears[i] + " RY", tobeSaved.gears[i].rY);
       gears.setInt(Gears[i] + " trigY", tobeSaved.gears[i].trigY);
-      gears.setInt(Gears[i] + " trigY2", tobeSaved.gears[i].trigY2);
       gears.setFloat(Gears[i] + " RZ", tobeSaved.gears[i].rZ);
-      gears.setInt(Gears[i] + " trigZ", tobeSaved.gears[i].trigZ);
       gears.setInt(Gears[i] + " Petals", tobeSaved.gears[i].petals);
       gears.setFloat(Gears[i] + " Rotate", tobeSaved.gears[i].rotate);
       gears.setFloat(Gears[i] + " Move", tobeSaved.gears[i].speed);
@@ -105,10 +102,7 @@ class FileIO {
       fromJSON.gears[i].speed = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " Move");
       fromJSON.gears[i].connect = tobeLoaded.getJSONObject("Gears").getFloat(Gears[i] + " Connect");
       fromJSON.trig.set("G"+i+"trigX", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigX")); 
-      fromJSON.trig.set("G"+i+"trigX2", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigX2")); 
       fromJSON.trig.set("G"+i+"trigY", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigY")); 
-      fromJSON.trig.set("G"+i+"trigY2", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigY2"));
-      fromJSON.trig.set("G"+i+"trigZ", tobeLoaded.getJSONObject("Gears").getInt(Gears[i] + " trigZ"));
     }
     fromJSON.cFill = tobeLoaded.getInt("colorFill");
     fromJSON.fillR = red(fromJSON.cFill);
