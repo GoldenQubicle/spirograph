@@ -1,20 +1,20 @@
 /* //<>//
 must have
-
-- keylock during input filename
-
-- multiple layer key editting - DONE
-- multiple layer ani x consequetive ani - CHECKED & DONE
-- color transitions - DONE
-- line mode - DONE
-
-should have
-- additional gear controls : lockXY, resetTo0, castFloat
-- radial color 
-- better gui
-- fire individual triggers 
  
-nice to have 
+ - keylock during input filename
+ - copy layer, also copies ani
+ - multiple layer key editting - DONE
+ - multiple layer ani x consequetive ani - CHECKED & DONE
+ - color transitions - DONE
+ - line mode - DONE
+ 
+ should have
+ - additional gear controls : lockXY, resetTo0, castFloat, toggle for petals/connect in lineMode
+ - radial color 
+ - better gui
+ - fire individual triggers 
+ 
+ nice to have 
  possibly add background color to aniMatrix
  possibly figure out how to put toggles (e.g. stroke, fill) to use with keyframes
  possibly add density to aniMatrix
@@ -59,7 +59,7 @@ nice to have
  fileIO
  - save/load JSON
  - save PNG
-
+ 
  */
 
 import peasy.*;
@@ -115,7 +115,7 @@ void setup() {
   cBackground = color(128, 128, 128);
   play = false;
   update = false;
-  spheres3d = false;
+  //spheres3d = false;
   render = false;
   renderKeyFrames = false;
   playback = false;
@@ -131,13 +131,11 @@ void draw() {
 
   if (play == false && playback == false) {
     for (int i = 0; i < layerActive.size(); i++) {
-      //layerActive.get(i).display();
       preview.display(layerActive.get(i));
     }
   }
   if (play == true  && playback == false) {
     for (int i = 0; i < layerAnimate.size(); i++) {
-      //layerAnimate.get(i).display();
       preview.display(layerAnimate.get(i));
     }
   }
@@ -147,14 +145,12 @@ void draw() {
   if (renderKeyFrames == true) {
     gif.renderKeyFrames();
   }
-
   if (playback == true) {
     blendMode(BLEND);
     gif.playback(gif.fTemp);
     timer(millis());
   }
 }
-
 
 void timer(float ms) {
   if (ms > (gif.renderStart + delay)) {
@@ -163,7 +159,7 @@ void timer(float ms) {
   if (next == true) {
     delay += 16;
     gif.fTemp+=1;
-    if (gif.fTemp == gif.aniTotalFrames) {
+    if (gif.fTemp == gif.aniTotalFrames-1) {
       playback = false;
       gif.fTemp = 0;
     }

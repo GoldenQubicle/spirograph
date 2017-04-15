@@ -63,13 +63,13 @@ class Controller {
       break;
     case 4:
       // new layer
+      gif.nLayers+=1;
       Layer blank = new Layer(100);
       layerActive.add(blank);
       blank.id = layerActive.size();
       blank.name = "Layer " + layerActive.size();      
       updateKeyFrames(0);
       gui.layerSwitch.addItem(blank.name, blank);
-      gif.nLayers+=1;
       break;
     case 5:
       // copy layer
@@ -122,8 +122,8 @@ class Controller {
     case 0:  // add new & copied layer
       // update keyFrame array
       for (int f = 0; f < gif.keyFrames; f++) {
-        Layer kfBLank = new Layer(10);
-        layerKeyFrames.add(copyLayerSettings(kfBLank, 1, layerActive.size()*f));
+        Layer kfBLank = new Layer(10);  
+        layerKeyFrames.add(copyLayerSettings(kfBLank, 0, gif.nLayers-1));
       }
       // add new ani arrays
       gif.aniStart = new Boolean [gif.keyFrames][gif.layerVars];
@@ -311,7 +311,7 @@ class Controller {
   }
 
   void updateMatrixGUI() {
-    gui.drawMode.setState(spheres3d);
+    //gui.drawMode.setState(spheres3d);
     gui.gifKeyFrames.setValue(gif.keyFrames);
     gui.gifLength.setValue(gif.totalTime);
     gui.keyFrames.remove();   

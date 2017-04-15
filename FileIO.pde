@@ -24,7 +24,7 @@ class FileIO {
     global.setFloat(globals[3], gif.keyFrames);
     global.setFloat(globals[4], cBackground);
     global.setInt(globals[5], gif.nLayers);
-    global.setBoolean(globals[6], spheres3d);
+    //global.setBoolean(globals[6], spheres3d);
     for (int l = 0; l < gif.nLayers; l++) {
       lkf = new JSONArray();  
       global.setJSONArray("Layer "+l, lkf);
@@ -151,7 +151,7 @@ class FileIO {
     gif.nLayers = global.getInt(globals[5]);
     gif.setupArrays();
     cBackground = global.getInt(globals[4]);
-    spheres3d = global.getBoolean(globals[6], spheres3d);
+    //spheres3d = global.getBoolean(globals[6], spheres3d);
     for (int l =0; l < gif.nLayers; l++) {     
       for (int f=0; f < gif.keyFrames; f++) {     
         layerKeyFrames.add(loadLayer(global.getJSONArray("Layer "+l).getJSONObject(f)));

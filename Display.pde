@@ -22,7 +22,6 @@ class Display {
     if (toDraw.stroke == false) {
       noStroke();
     }
-
     if (toDraw.lines == true) {
       for (int G = 0; G < toDraw.gears.length; G++) {
         for (float i = 0; i < toDraw.gears[G].petals; i++) {
@@ -37,12 +36,6 @@ class Display {
           strokeJoin(ROUND);
           strokeWeight(toDraw.sw);
           line(xyz.x, xyz.y, xy2.x, xy2.y);
-          if (render == true) {
-            gif.renderPImage();
-          }
-          if (renderKeyFrames == true) {
-            gif.renderLayer();
-          }
         }
       }
     } else {
@@ -53,13 +46,7 @@ class Display {
         xyz.y = toDraw.gear0.xyz.y + toDraw.gear1.xyz.y + toDraw.gear2.xyz.y + toDraw.gear3.xyz.y;
         strokeWeight(toDraw.sw);
         ellipse(xyz.x, xyz.y, toDraw.lx, toDraw.ly);
-        //point(xyz.x, xyz.y);
-        if (theta == (toDraw.density-1) && render == true) {
-          gif.renderPImage();
-        }
-        if (theta == (toDraw.density-1) && renderKeyFrames == true) {
-          gif.renderLayer();
-        }
+        //point(xyz.x, xyz.y);     
       }
     }
   }

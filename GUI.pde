@@ -374,7 +374,6 @@ class GUI extends PApplet { //<>//
             for (int i = 0; i < range; i++) {         
               layerKeyFrames.get(int(start+i)).gears[g].rX = theEvent.getController().getArrayValue(0);
               layerKeyFrames.get(int(start+i)).gears[g].rY = theEvent.getController().getArrayValue(1);
-                      println(range, start, start+i);
             }
           }
         }
@@ -433,10 +432,12 @@ class GUI extends PApplet { //<>//
         layerActive.get(layerID).strokeB = colorStroke.b();
         layerActive.get(layerID).strokeA = alphaStroke.getValue();
         layerActive.get(layerID).cStroke = color(layerActive.get(layerID).strokeR, layerActive.get(layerID).strokeG, layerActive.get(layerID).strokeB, layerActive.get(layerID).strokeA);
-        //layerActive.get(layerID).cStroke = color(colorStroke.r(), colorStroke.g(), colorStroke.b(), int(alphaStroke.getValue()));
         if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
           for (int i = 0; i < range; i++) {  
-            layerKeyFrames.get(int(start+i)).cStroke = color(layerActive.get(layerID).strokeR, layerActive.get(layerID).strokeG, layerActive.get(layerID).strokeB, layerActive.get(layerID).strokeA);
+            layerKeyFrames.get(int(start+i)).strokeR = colorStroke.r();
+            layerKeyFrames.get(int(start+i)).strokeG = colorStroke.g();
+            layerKeyFrames.get(int(start+i)).strokeB = colorStroke.b();
+            layerKeyFrames.get(int(start+i)).strokeA = alphaStroke.getValue();
           }
         }
       }
@@ -446,10 +447,12 @@ class GUI extends PApplet { //<>//
         layerActive.get(layerID).fillB = colorFill.b();
         layerActive.get(layerID).fillA = alphaFill.getValue();
         layerActive.get(layerID).cFill = color(layerActive.get(layerID).fillR, layerActive.get(layerID).fillG, layerActive.get(layerID).fillB, layerActive.get(layerID).fillA);
-        //layerActive.get(layerID).cFill = color(colorFill.r(), colorFill.g(), colorFill.b(), int(alphaFill.getValue()));
         if (keyFrameFWD.getState() == true || keyFrameAll.getState() == true) {
-          for (int i = 0; i < range; i++) {  
-            layerKeyFrames.get(int(start+i)).cFill = color(layerActive.get(layerID).fillR, layerActive.get(layerID).fillG, layerActive.get(layerID).fillB, layerActive.get(layerID).fillA);
+          for (int i = 0; i < range; i++) { 
+            layerKeyFrames.get(int(start+i)).fillR = colorFill.r();
+            layerKeyFrames.get(int(start+i)).fillG = colorFill.g();
+            layerKeyFrames.get(int(start+i)).fillB = colorFill.b();
+            layerKeyFrames.get(int(start+i)).fillA = alphaFill.getValue();
           }
         }
       }

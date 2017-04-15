@@ -65,7 +65,7 @@ class Animation {    //<>//
     frame.pixels = pixels;
     frame.updatePixels();
     frame.save("frame " + renderFrame + ".png");
-    frames[renderFrame] = loadImage("frame " + renderFrame + ".png");
+    frames[renderFrame-1] = loadImage("frame " + renderFrame + ".png");
     gui.renderMessage.setText( "rendered frame " + renderFrame + " out of " + int(aniTotalFrames));
     render = true;
   }
@@ -79,7 +79,8 @@ class Animation {    //<>//
   }
 
   void renderKeyFrames() {    
-    if (renderKeyFrames) {
+    if (renderKeyFrames == true) {
+      renderKeyFrame+=1;
       renderKeyFrames = false;
     }
     if (renderKeyFrames == false) {
@@ -87,16 +88,24 @@ class Animation {    //<>//
       for (Trigger myTrigger : triggers) {
         if (myTrigger.Start <= renderKeyFrame ) {
           myTrigger.renderFrame+=int(aniFrames);
-          myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.renderFrame);    
-          myTrigger.renderFrame+=(myTrigger.aniDuration/myTrigger.interval);
+          if (myTrigger.layerParameter == 19 ||myTrigger.layerParameter == 20) {
+            myTrigger.aniR.seek(myTrigger.aniSeek*myTrigger.renderFrame);
+            myTrigger.aniG.seek(myTrigger.aniSeek*myTrigger.renderFrame);
+            myTrigger.aniB.seek(myTrigger.aniSeek*myTrigger.renderFrame);
+            myTrigger.aniR.seek(myTrigger.aniSeek*myTrigger.renderFrame);
+          } else {
+            myTrigger.ani.seek(myTrigger.aniSeek*myTrigger.renderFrame);    
+            myTrigger.renderFrame+=(myTrigger.aniDuration/myTrigger.interval);
+          }
         }
-      }      
-      renderKeyFrame+=1;
-      renderKeyFrames = true;
+      }
+      //renderKeyFrames = true;
       if (renderKeyFrame == keyFrames) {
         renderKeyFrames = false;
         play = false;
         renderKeyFrame = 0;
+      } else {
+        renderLayer();
       }
     }
   }
@@ -126,8 +135,7 @@ class Animation {    //<>//
         renderKeyFrame+=1; 
         aniStart(renderKeyFrame);   
         fTemp = 0;
-      }
-      render = true;
+      }           
       // check for end
       if (renderFrame == aniTotalFrames) {
         render = false;
@@ -137,6 +145,8 @@ class Animation {    //<>//
         renderFrame = 0;
         float end = millis() - renderStart;
         gui.renderMessage.setText("done rendering in " + (end/1000) + " seconds" );
+      } else {
+        renderPImage();
       }
     }
   }
