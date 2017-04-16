@@ -20,7 +20,6 @@ class Animation {    //<>//
     keyFrames = 4;
     aniMatrixTiming = int(totalTime/keyFrames);
     triggers = new ArrayList();
-
     fps = 60;
     aniTotalFrames =  (totalTime/1000)*fps ; 
     aniFrames = round(aniTotalFrames/keyFrames);
@@ -71,8 +70,8 @@ class Animation {    //<>//
   }
 
   void renderLayer() {
-    Layer interpolated = new Layer(10);
     for (int i = 0; i < nLayers; i++) {
+      Layer interpolated = new Layer(10);
       layerKeyFrames.set(renderKeyFrame + (i*keyFrames), controller.copyLayerSettings(interpolated, 2, i));
     }
     renderKeyFrames = true;
@@ -186,9 +185,9 @@ class Animation {    //<>//
   }
 
   void aniStart(int theX) {
-    for (Trigger myTrigger : triggers) {
+     for (Trigger myTrigger : triggers) {
       if (theX == myTrigger.Start) {
-        myTrigger.ani();
+        myTrigger.ani();        
       }
     }
   }

@@ -120,13 +120,7 @@ class Gears {
   }
 
   float Ratio() {
-    //if (cast == false) {
       ratio = 1/(float(petals-1));
-    //}
-    //if (cast == true) {
-    //  petalCast = float(petals);
-    //  ratio = 1/(petalCast-1);
-    //}
     return ratio;
   }
 }

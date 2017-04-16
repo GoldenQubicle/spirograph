@@ -73,14 +73,14 @@ class Controller {
       break;
     case 5:
       // copy layer
+      gif.nLayers+=1;
       Layer copy = new Layer(100);
       int origin = int(gui.layerSwitch.getValue());      
       layerActive.add(copyLayerSettings(copy, 0, origin));
       copy.id =  layerActive.size(); 
       copy.name = ("Layer " + (layerActive.size()) + " - copy layer " + (int(gui.layerSwitch.getValue())+1));
       gui.layerSwitch.addItem(copy.name, copy);
-      gif.nLayers+=1;
-      updateKeyFrames(0);
+      updateKeyFrames(-1);
       break;
     case 6:
       // delete layer
@@ -94,7 +94,7 @@ class Controller {
       // load json file 
       gui.cp5.getGroup("fs").hide();
       update = true;
-      gui.layerlock = true;
+      gui.layerLock = true;
       layerAnimate.clear();
       layerActive.clear();
       layerKeyFrames.clear();
@@ -111,15 +111,39 @@ class Controller {
       gif.updateAniMatrixTiming();
       updateMatrixGUI();
       updateAniGUI(2, 0);
-      updateLayerGUI(0, 0);
-      gui.layerlock = false;
+      //updateLayerGUI(0, 0);
+      gui.layerLock = false;
       break;
     }
   }
 
   void updateKeyFrames(int action) {
     switch(action) {
-    case 0:  // add new & copied layer
+    case -1: // copy layer
+      for (int f = 0; f < gif.keyFrames; f++) {
+        Layer kfBLank = new Layer(10);  
+        layerKeyFrames.add(copyLayerSettings(kfBLank, 1, f));
+      }
+      // add new ani arrays
+      gif.aniStart = new Boolean [gif.keyFrames][gif.layerVars];
+      gif.aniInt = new int[gif.keyFrames][gif.layerVars]; 
+      gif.aniEnd = new int[gif.keyFrames][gif.layerVars]; 
+      gif.aniEasing = new int[gif.keyFrames][gif.layerVars]; 
+      for (int f = 0; f < gif.keyFrames; f++) {
+        for (int v = 0; v < gif.layerVars; v++) {
+          gif.aniStart[f][v] = gif.layerAniStart.get(int(gui.layerSwitch.getValue()))[f][v];
+          gif.aniInt[f][v] = gif.layerAniInt.get(int(gui.layerSwitch.getValue()))[f][v];
+          gif.aniEnd[f][v] = gif.layerAniEnd.get(int(gui.layerSwitch.getValue()))[f][v];
+          gif.aniEasing[f][v] = gif.layerAniEasing.get(int(gui.layerSwitch.getValue()))[f][v];
+        }
+      }
+      gif.layerAniStart.add(gif.aniStart);
+      gif.layerAniInt.add(gif.aniInt);
+      gif.layerAniEnd.add(gif.aniEnd);
+      gif.layerAniEasing.add(gif.aniEasing); 
+      break;
+
+    case 0:  // add new layer
       // update keyFrame array
       for (int f = 0; f < gif.keyFrames; f++) {
         Layer kfBLank = new Layer(10);  
@@ -292,13 +316,13 @@ class Controller {
     case 2:
       //update on JSON load / layerswitch
       for (int x = 0; x< gif.keyFrames; x++) {
-        for (int y = 0; y < gif.layerVars; y++) {
-          gui.Easing =  gui.cp5.addScrollableList("Easing"+"0"+x+"0"+y).setPosition(10 + (x*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(gif.cellWidth + gif.cellWidth * gif.layerAniInt.get(layer)[x][y]).setHeight(100).setBarHeight(gif.cellHeight).setType(ScrollableList.DROPDOWN).close(); 
+        for (int y = 0; y < gif.layerVars; y++) {        
+          gui.Easing =  gui.cp5.addScrollableList("Easing"+"0"+x+"0"+y).setPosition(10 + (x*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(gif.cellWidth * gif.layerAniInt.get(layer)[x][y]).setHeight(100).setBarHeight(gif.cellHeight).setType(ScrollableList.DROPDOWN).close(); 
           gui.Easing.addItems( gui.EasingNames);
           gui.cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false);
           gui.cp5.getController("Easing"+"0"+x+"0"+y).moveTo("Ani Easing");
           gui.cp5.getController("Easing"+"0"+x+"0"+y).setValue(float(gif.layerAniEasing.get(layer)[x][y]));
-          gui.Increase = gui.cp5.addButton("add"+"0"+x+"0"+y).setPosition((10+gif.cellWidth) + (x*gif.cellWidth) + ((gif.layerAniInt.get(layer)[x][y])*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(15).setCaptionLabel("+").setId(x);
+          gui.Increase = gui.cp5.addButton("add"+"0"+x+"0"+y).setPosition(10 + (x*gif.cellWidth) + ((gif.layerAniInt.get(layer)[x][y])*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(15).setCaptionLabel("+").setId(x);
           gui.Decrease = gui.cp5.addButton("minus"+"0"+x+"0"+y).setPosition((x*gif.cellWidth)-5, 525 + (y*gif.cellHeight)).setWidth(15).setCaptionLabel("-").setId(x);
           gui.cp5.getController("minus"+"0"+x+"0"+y).setVisible(false);
           gui.cp5.getController("minus"+"0"+x+"0"+y).moveTo("Ani Easing");
@@ -322,13 +346,13 @@ class Controller {
     }
     gui.Ani.setInterval(gif.aniMatrixTiming);
     gui.Ani.setGrid(gif.keyFrames, gif.layerVars);
-    gui.layerlock = true;
+    gui.layerLock = true;
     updateMatrixLayerGUI(0);
-    gui.layerlock = false;
+    gui.layerLock = false;
   }
 
   void updateMatrixLayerGUI(int get) {
-    if (gui.layerlock == true) {
+    if (gui.layerLock == true) {
       for (int f = 0; f < gif.keyFrames; f++) {
         for (int v = 0; v < gif.layerVars; v++) {
           gui.Ani.set(f, v, gif.layerAniStart.get(get)[f][v]);
@@ -338,7 +362,7 @@ class Controller {
   }
 
   void updateLayerGUI(int array, int get) {
-    if (gui.layerlock == true) {
+    if (gui.layerLock == true) {
       gui.gear0.remove();
       gui.gear1.remove();
       gui.gear2.remove();
@@ -385,7 +409,7 @@ class Controller {
       }
       gui.density.setValue(arraySelect(array, get).density);
       gui.layerID = get;
-      gui.layerlock = false;
+      gui.layerLock = false;
     }
   }
 
@@ -445,7 +469,7 @@ class Controller {
       layerActive.add(layerKeyFrames.get(f));
       //println(layerKeyFrames.size(), f);
     }
-    gui.layerlock = true;
+    gui.layerLock = true;
     updateLayerGUI(0, int(gui.layerSwitch.getValue()));
   }
 }

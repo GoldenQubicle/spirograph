@@ -2,7 +2,8 @@ class GUI extends PApplet { //<>//
   PApplet parent;
   ControlP5 cp5;
   int layerID;
-  boolean layerlock = false;
+  boolean layerLock = false;
+  boolean guiLock = false;
   Matrix Ani;
   ColorWheel colorBackground, colorStroke, colorFill;
   Toggle stroke, fill, drawMode, keyFrameAll, keyFrameFWD;
@@ -67,7 +68,7 @@ class GUI extends PApplet { //<>//
     gifLength = cp5.addSlider("ms").setPosition(10, 40).setRange(1000, 10000).setGroup("ng").setCaptionLabel("Duration (ms)");
     gifKeyFrames = cp5.addSlider("i").setPosition(10, 55).setRange(2, 20).setNumberOfTickMarks(19).snapToTickMarks(true).setGroup("ng").setCaptionLabel("Key Frames");
     gifSave = cp5.addButton("gifSave").setPosition(90, 80).setGroup("ng").setCaptionLabel("Save").setId(3);
-    fileName = cp5.addTextfield("fileName").setPosition(10, 80).setGroup("ng").setSize(75, 20).setText(controller.fileio.fileName);
+    fileName = cp5.addTextfield("fileName").setPosition(10, 80).setGroup("ng").setSize(75, 20).setText(controller.fileio.fileName); 
     // layer controls
     layerNew = cp5.addButton("layerNew").setPosition(rPanex + 75, rPaneyMenu).setCaptionLabel("New Layer").setId(4).moveTo("global");
     layerCopy = cp5.addButton("layerCopy").setPosition(rPanex + 75, rPaneyMenu+25).setCaptionLabel("Copy Layer").setId(5).moveTo("global");
@@ -98,6 +99,12 @@ class GUI extends PApplet { //<>//
           if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
             controller.menuGifLayer(theEvent.getController().getId());
           }
+          if (theEvent.getController().getName().equals("gifSettings")) {
+            guiLock = true;
+          }
+          if (theEvent.getController().getName().equals("gifSave")) {
+            guiLock = false;
+          }
         }
       }
       );
@@ -115,6 +122,14 @@ class GUI extends PApplet { //<>//
     ly = cp5.addSlider("LY").setPosition(rPanex, 115).setSize(200, 10).setRange(0, 200).setCaptionLabel("Line Height").moveTo("global"); 
     sw = cp5.addSlider("SW").setPosition(rPanex, 130).setSize(200, 10).setRange(0, 200).setCaptionLabel("Stroke Weight").moveTo("global");    
     blendMode = cp5.addScrollableList("blendMode").setPosition(rPanex, 80).setWidth(70).setType(ScrollableList.DROPDOWN).setCaptionLabel("blendMode").setOpen(false).addItems(blendModes).moveTo("global");
+    blendMode.addCallback(new CallbackListener() {
+      public void controlEvent(CallbackEvent theEvent) {
+        if (theEvent.getAction()==ControlP5.ACTIVE) {
+          blendMode.bringToFront();
+        }
+      }
+    }
+    );
     cp5.getController("as").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("af").getCaptionLabel().align(CENTER, CENTER);
     cp5.getController("LX").getCaptionLabel().align(CENTER, CENTER);
@@ -137,15 +152,14 @@ class GUI extends PApplet { //<>//
     gear1 = cp5.addSlider2D("G1").setMinMax(-256, -256, 256, 256).setPosition(posx+155, posy).setCaptionLabel("Radius Gear 1").setSize(size2d, size2d).moveTo("global");//.setValue(layers.get(id).gear1.RX, layers.get(id).gear1.RY);
     gear2 = cp5.addSlider2D("G2").setMinMax(-256, -256, 256, 256).setPosition(posx+(155*2), posy).setCaptionLabel("Radius Gear 2").setSize(size2d, size2d).moveTo("global");//.setValue(layers.get(id).gear2.RX, layers.get(id).gear2.RY);
     gear3 = cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(posx+(155*3), posy).setCaptionLabel("Radius Gear 3").setSize(size2d, size2d).moveTo("global");//.setValue(layers.get(id).gear3.RX, layers.get(id).gear3.RY);    
-
-    g0x = cp5.addTextfield("G0x").setPosition(posx+15, posy+165).setSize(30, 15).setText(nf(gear0.getArrayValue(0))).moveTo("global").setCaptionLabel("x  ");
-    g0y = cp5.addTextfield("G0y").setPosition(posx+70, posy+165).setSize(30, 15).setText(nf(gear0.getArrayValue(1))).moveTo("global").setCaptionLabel("y  ");
-    g1x = cp5.addTextfield("G1x").setPosition(posx+15+155, posy+165).setSize(30, 15).setText(nf(gear1.getArrayValue(0))).moveTo("global").setCaptionLabel("x  ");
-    g1y = cp5.addTextfield("G1y").setPosition(posx+70+155, posy+165).setSize(30, 15).setText(nf(gear1.getArrayValue(1))).moveTo("global").setCaptionLabel("y  ");
-    g2x = cp5.addTextfield("G2x").setPosition(posx+15+310, posy+165).setSize(30, 15).setText(nf(gear2.getArrayValue(0))).moveTo("global").setCaptionLabel("x  ");
-    g2y = cp5.addTextfield("G2y").setPosition(posx+70+310, posy+165).setSize(30, 15).setText(nf(gear2.getArrayValue(1))).moveTo("global").setCaptionLabel("y  ");
-    g3x = cp5.addTextfield("G3x").setPosition(posx+15+465, posy+165).setSize(30, 15).setText(nf(gear3.getArrayValue(0))).moveTo("global").setCaptionLabel("x  ");
-    g3y = cp5.addTextfield("G3y").setPosition(posx+70+465, posy+165).setSize(30, 15).setText(nf(gear3.getArrayValue(1))).moveTo("global").setCaptionLabel("y  ");
+    g0x = cp5.addTextfield("G0x").setPosition(posx+15, posy+165).setSize(30, 15).setText(nf(gear0.getArrayValue(0))).moveTo("global").setCaptionLabel("x  ").setAutoClear(false);
+    g0y = cp5.addTextfield("G0y").setPosition(posx+70, posy+165).setSize(30, 15).setText(nf(gear0.getArrayValue(1))).moveTo("global").setCaptionLabel("y  ").setAutoClear(false);
+    g1x = cp5.addTextfield("G1x").setPosition(posx+15+155, posy+165).setSize(30, 15).setText(nfc(gear1.getArrayValue(0),0)).moveTo("global").setCaptionLabel("x  ").setAutoClear(false);
+    g1y = cp5.addTextfield("G1y").setPosition(posx+70+155, posy+165).setSize(30, 15).setText(nfc(gear1.getArrayValue(1),0)).moveTo("global").setCaptionLabel("y  ").setAutoClear(false);
+    g2x = cp5.addTextfield("G2x").setPosition(posx+15+310, posy+165).setSize(30, 15).setText(nfc(gear2.getArrayValue(0),0)).moveTo("global").setCaptionLabel("x  ").setAutoClear(false);
+    g2y = cp5.addTextfield("G2y").setPosition(posx+70+310, posy+165).setSize(30, 15).setText(nfc(gear2.getArrayValue(1),0)).moveTo("global").setCaptionLabel("y  ").setAutoClear(false);
+    g3x = cp5.addTextfield("G3x").setPosition(posx+15+465, posy+165).setSize(30, 15).setText(nfc(gear3.getArrayValue(0),0)).moveTo("global").setCaptionLabel("x  ").setAutoClear(false);
+    g3y = cp5.addTextfield("G3y").setPosition(posx+70+465, posy+165).setSize(30, 15).setText(nfc(gear3.getArrayValue(1),0)).moveTo("global").setCaptionLabel("y  ").setAutoClear(false);
     cp5.getController("G0x").getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, CENTER);
     cp5.getController("G0y").getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, CENTER);
     cp5.getController("G1x").getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, CENTER);
@@ -229,7 +243,7 @@ class GUI extends PApplet { //<>//
         if (theEvent.getAction()==ControlP5.ACTION_CLICK) {
           for (int f = 0; f < gif.keyFrames; f++) {
             for (int v = 0; v < gif.layerVars; v++) {
-              if (Ani.get(f, v) == true && layerlock == false) {
+              if (Ani.get(f, v) == true && layerLock == false) {
                 gif.layerAniStart.get(int(layerSwitch.getValue()))[f][v] = true;
               } else {
                 gif.layerAniStart.get(int(layerSwitch.getValue()))[f][v] = false;
@@ -244,7 +258,7 @@ class GUI extends PApplet { //<>//
     for (int x = 0; x< gif.keyFrames; x++) {
       for (int y = 0; y < gif.layerVars; y++) {
         Easing = cp5.addScrollableList("Easing"+"0"+x+"0"+y).setPosition(10 + (x*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(gif.cellWidth).setHeight(100).setBarHeight(gif.cellHeight).setType(ScrollableList.DROPDOWN).close(); 
-        Easing.addItems(EasingNames);
+        Easing.addItems(EasingNames);     
         cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false);
         cp5.getController("Easing"+"0"+x+"0"+y).moveTo("Ani Easing");
         Increase = cp5.addButton("add"+"0"+x+"0"+y).setPosition((10+gif.cellWidth) + (x*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(15).setCaptionLabel("+").setId(x);
@@ -263,11 +277,11 @@ class GUI extends PApplet { //<>//
       gif.tabToggle();
     }
     for (RadioButton R : trigSwitch) {
-      if (theEvent.isFrom(R) && layerlock == false) {
+      if (theEvent.isFrom(R) && layerLock == false) {
         layerActive.get(layerID).trig.set(R.getName(), int(R.getValue()));
       }
     }
-    if (theEvent.isFrom(densityRanges) && layerlock == false) {
+    if (theEvent.isFrom(densityRanges) && layerLock == false) {
       densityRangeMax = densityRanges.getValue()* 10000;
       densityRangeMin = densityRangeMax - 10000;
       density.setRange(densityRangeMin, densityRangeMax);
@@ -286,13 +300,14 @@ class GUI extends PApplet { //<>//
       }
     }
     for (int x = 0; x < gif.keyFrames; x++) {
-      for (int y = 0; y < gif.layerVars; y++) {
-        if (theEvent.getController().getName().equals("Easing"+"0"+x+"0"+y)) {
-          gif.layerAniEasing.get(int(layerSwitch.getValue()))[x][y] = int(theEvent.getController().getValue());
+      for (int y = 0; y < gif.layerVars; y++) {        
+        if (theEvent.getController().getName().equals("Easing"+"0"+x+"0"+y)) { 
+          theEvent.getController().bringToFront();
+          gif.layerAniEasing.get(int(layerSwitch.getValue()))[x][y] = int(theEvent.getController().getValue());        
         }
         if (theEvent.getController().getName().equals("add"+"0"+x+"0"+y)) {   
           gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y] += int(theEvent.getController().getValue());
-          int interval =   gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y]  - x; 
+          int interval =   gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y] - x; 
           gif.layerAniInt.get(int(layerSwitch.getValue()))[x][y] = interval;
           cp5.getController("Easing"+"0"+x+"0"+y).setWidth(gif.cellWidth + interval*gif.cellWidth);
           theEvent.getController().setPosition( ((10+gif.cellWidth) + (x*gif.cellWidth) + ((interval)*gif.cellWidth)), 525 + (y*gif.cellHeight));
@@ -324,7 +339,7 @@ class GUI extends PApplet { //<>//
     }
 
     // layer controls start here
-    if (layerlock == false) {
+    if (layerLock == false) {
       // set selection of keyFrames worked upon
       float range = 0; 
       float start = 0;
@@ -349,12 +364,12 @@ class GUI extends PApplet { //<>//
       for (int g = 0; g < 4; g++) {   
         if (theEvent.getController().getName().equals("G" + g + "x")) {
           layerActive.get(layerID).gears[g].rX = float(theEvent.getController().getStringValue());
-          layerlock = true;
+          layerLock = true;
           controller.updateLayerGUI(0, layerID);
         }
         if (theEvent.getController().getName().equals("G" + g + "y")) {
           layerActive.get(layerID).gears[g].rY = float(theEvent.getController().getStringValue());
-          layerlock = true;
+          layerLock = true;
           controller.updateLayerGUI(0, layerID);
         }
         if (theEvent.getController().getName().equals("G" + g)) {
@@ -491,7 +506,7 @@ class GUI extends PApplet { //<>//
       }
       if (theEvent.getController().equals(layerSwitch)) {
         int set = int(layerSwitch.getValue());
-        layerlock = true;
+        layerLock = true;
         controller.updateMatrixLayerGUI(set);
         controller.updateLayerGUI(0, set);
         controller.updateAniGUI(2, set);
@@ -506,43 +521,52 @@ class GUI extends PApplet { //<>//
   }
 
   void keyPressed() {
-    if (key==' ') {     
-      if (play == false) {
-        cp5.get(Matrix.class, "Matrix").play();
-        cp5.get(Matrix.class, "Matrix").trigger(0);
-        play = true;
-      } else {
-        cp5.get(Matrix.class, "Matrix").pause();
-        play = false;
+    if (guiLock == false) {
+      //if(key == '1'){
+      //  play = true;
+      //   cp5.get(Matrix.class, "Matrix").trigger(0);   
+        
+      //   println("check");
+      //}
+      
+      if (key==' ') {     
+        if (play == false) {
+          cp5.get(Matrix.class, "Matrix").play();
+          cp5.get(Matrix.class, "Matrix").trigger(0);
+          play = true;
+        } else {
+          cp5.get(Matrix.class, "Matrix").pause();
+          play = false;
+        }
       }
-    }
-    if (key == 'q') { 
-      gif.triggerArray();
-      cp5.get(Matrix.class, "Matrix").stop();
-      if (play == true) {
+      if (key == 'q') { 
         gif.triggerArray();
-        cp5.get(Matrix.class, "Matrix").play();
+        cp5.get(Matrix.class, "Matrix").stop();
+        if (play == true) {
+          gif.triggerArray();
+          cp5.get(Matrix.class, "Matrix").play();
+        }
       }
-    }
-    if (key == 'r') {
-      play = true;
-      render = true;
-      gif.renderStart = millis();
-      gif.aniStart(0);
-    }
-    if (key == 'k') {
-      play = true;
-      renderKeyFrames = true;
-      gif.renderStart = millis();
-      gif.aniStart(0);
-    }
-    if (key == 'p') {
-      if (playback == true) {
-        playback = false;
-      } else {
-        playback = true;
+      if (key == 'r') {
+        play = true;
+        render = true;
+        gif.renderStart = millis();
+        gif.aniStart(0);
       }
-      gif.renderStart = millis();
+      if (key == 'k') {
+        play = true;
+        renderKeyFrames = true;
+        gif.renderStart = millis();
+        gif.aniStart(0);
+      }
+      if (key == 'p') {
+        if (playback == true) {
+          playback = false;
+        } else {
+          playback = true;
+        }
+        gif.renderStart = millis();
+      }
     }
   }
 

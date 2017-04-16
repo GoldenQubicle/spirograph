@@ -1,24 +1,25 @@
 /* //<>//
-must have
+must have 
+
  
- - keylock during input filename
- - copy layer, also copies ani
+ should have 
+ - background color to aniMatrix
+ - radial color 
+ - density to aniMatrix
+ 
+ DONE
+ - additional gear controls : lockXY, resetTo0 // DONE w text input
  - multiple layer key editting - DONE
  - multiple layer ani x consequetive ani - CHECKED & DONE
  - color transitions - DONE
  - line mode - DONE
- 
- should have
- - additional gear controls : lockXY, resetTo0 // DONE w text input
- - radial color 
- - better gui
- - fire individual triggers 
+ - copy layer, also copy keyFrames & anis - DONE!
+ - gui lock during settings menu - DONE!
+ - bring to front callbacks on scrollable lists - DONE!
  
  nice to have 
- possibly add background color to aniMatrix
- possibly figure out how to put toggles (e.g. stroke, fill) to use with keyframes
- possibly add density to aniMatrix
  possibly insert new keyFrame rather than append, i.e. 1old-1insert-2insert-2old-3insert-4insert
+ fire individual triggers, complicated when there're overlapping ani, i.e. individual trigger and subsequent ani does not take into account preceding & overlapping ani
  
  known bugs
  - controls freeze when toggling the gear trigs completely off
@@ -74,11 +75,11 @@ Controller controller;
 GUI gui;
 Animation gif;
 Display preview;
-Layer layer_1, layer_2;
+Layer layer_1;
 ArrayList<Layer> layerActive =  new ArrayList();
 ArrayList<Layer> layerKeyFrames = new ArrayList();
 ArrayList<Layer> layerAnimate =  new ArrayList();
-boolean play, update, spheres3d, render, renderKeyFrames, playback, next;
+boolean play, update, render, renderKeyFrames, playback, next;
 int Width = 512;
 int Height = 512;
 color cBackground;
@@ -96,10 +97,6 @@ void setup() {
   layer_1.name = "Layer 1";
   layer_1.id = 1;
   layerActive.add(layer_1);
-  //layer_2 = new Layer(150);
-  //layer_2.name = "Layer 2";
-  //layer_2.id = 2;
-  //layerActive.add(layer_2);  
   surface.setTitle("Preview");
   surface.setResizable(true);
   cam = new PeasyCam(this, 512);
@@ -115,7 +112,6 @@ void setup() {
   cBackground = color(128, 128, 128);
   play = false;
   update = false;
-  //spheres3d = false;
   render = false;
   renderKeyFrames = false;
   playback = false;
@@ -164,23 +160,5 @@ void timer(float ms) {
       gif.fTemp = 0;
     }
     next = false;
-  }
-}
-
-void keyPressed() {
-  if (key==' ') {     
-    if (play == false) {
-      gui.cp5.get(Matrix.class, "Matrix").play();
-      play = true;
-    } else {
-      gui.cp5.get(Matrix.class, "Matrix").pause();
-      play = false;
-    }
-  }
-  if (key == 'q') {
-    gui.cp5.get(Matrix.class, "Matrix").stop();
-    if (play == true) {
-      gui.cp5.get(Matrix.class, "Matrix").play();
-    }
   }
 }
