@@ -37,7 +37,7 @@ class GUI extends PApplet { //<>//
   }
 
   public void settings() {
-    size(860, 980);
+    size(860, 1000);
   } 
 
   public void setup() {
@@ -154,12 +154,12 @@ class GUI extends PApplet { //<>//
     gear3 = cp5.addSlider2D("G3").setMinMax(-256, -256, 256, 256).setPosition(posx+(155*3), posy).setCaptionLabel("Radius Gear 3").setSize(size2d, size2d).moveTo("global");//.setValue(layers.get(id).gear3.RX, layers.get(id).gear3.RY);    
     g0x = cp5.addTextfield("G0x").setPosition(posx+15, posy+165).setSize(30, 15).setText(nf(gear0.getArrayValue(0))).moveTo("global").setCaptionLabel("x  ").setAutoClear(false);
     g0y = cp5.addTextfield("G0y").setPosition(posx+70, posy+165).setSize(30, 15).setText(nf(gear0.getArrayValue(1))).moveTo("global").setCaptionLabel("y  ").setAutoClear(false);
-    g1x = cp5.addTextfield("G1x").setPosition(posx+15+155, posy+165).setSize(30, 15).setText(nfc(gear1.getArrayValue(0),0)).moveTo("global").setCaptionLabel("x  ").setAutoClear(false);
-    g1y = cp5.addTextfield("G1y").setPosition(posx+70+155, posy+165).setSize(30, 15).setText(nfc(gear1.getArrayValue(1),0)).moveTo("global").setCaptionLabel("y  ").setAutoClear(false);
-    g2x = cp5.addTextfield("G2x").setPosition(posx+15+310, posy+165).setSize(30, 15).setText(nfc(gear2.getArrayValue(0),0)).moveTo("global").setCaptionLabel("x  ").setAutoClear(false);
-    g2y = cp5.addTextfield("G2y").setPosition(posx+70+310, posy+165).setSize(30, 15).setText(nfc(gear2.getArrayValue(1),0)).moveTo("global").setCaptionLabel("y  ").setAutoClear(false);
-    g3x = cp5.addTextfield("G3x").setPosition(posx+15+465, posy+165).setSize(30, 15).setText(nfc(gear3.getArrayValue(0),0)).moveTo("global").setCaptionLabel("x  ").setAutoClear(false);
-    g3y = cp5.addTextfield("G3y").setPosition(posx+70+465, posy+165).setSize(30, 15).setText(nfc(gear3.getArrayValue(1),0)).moveTo("global").setCaptionLabel("y  ").setAutoClear(false);
+    g1x = cp5.addTextfield("G1x").setPosition(posx+15+155, posy+165).setSize(30, 15).setText(nfc(gear1.getArrayValue(0), 0)).moveTo("global").setCaptionLabel("x  ").setAutoClear(false);
+    g1y = cp5.addTextfield("G1y").setPosition(posx+70+155, posy+165).setSize(30, 15).setText(nfc(gear1.getArrayValue(1), 0)).moveTo("global").setCaptionLabel("y  ").setAutoClear(false);
+    g2x = cp5.addTextfield("G2x").setPosition(posx+15+310, posy+165).setSize(30, 15).setText(nfc(gear2.getArrayValue(0), 0)).moveTo("global").setCaptionLabel("x  ").setAutoClear(false);
+    g2y = cp5.addTextfield("G2y").setPosition(posx+70+310, posy+165).setSize(30, 15).setText(nfc(gear2.getArrayValue(1), 0)).moveTo("global").setCaptionLabel("y  ").setAutoClear(false);
+    g3x = cp5.addTextfield("G3x").setPosition(posx+15+465, posy+165).setSize(30, 15).setText(nfc(gear3.getArrayValue(0), 0)).moveTo("global").setCaptionLabel("x  ").setAutoClear(false);
+    g3y = cp5.addTextfield("G3y").setPosition(posx+70+465, posy+165).setSize(30, 15).setText(nfc(gear3.getArrayValue(1), 0)).moveTo("global").setCaptionLabel("y  ").setAutoClear(false);
     cp5.getController("G0x").getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, CENTER);
     cp5.getController("G0y").getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, CENTER);
     cp5.getController("G1x").getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, CENTER);
@@ -233,7 +233,7 @@ class GUI extends PApplet { //<>//
     cp5.getWindow().setPositionOfTabs(10, 480);
     //  labels
     for (int i = 0; i < labelsAniMatrix.length; i++) {
-      Label =  cp5.addTextlabel("Label" + i).setPosition(gif.matrixWidth + 10, 530 + (gif.cellHeight*i)).setText(labelsAniMatrix[i]).moveTo("global");
+      Label =  cp5.addTextlabel("Label" + i).setPosition(gif.matrixWidth + 10, 530 + (gif.cellHeight*i)).setText(labelsAniMatrix[i]).moveTo("global");   
     }
     // actual matrix    
     Ani = cp5.addMatrix("Matrix").setPosition(3, 525).setSize(gif.matrixWidth, gif.matrixHeight).setGap(2, 2).setMode(ControlP5.MULTIPLES)
@@ -257,10 +257,10 @@ class GUI extends PApplet { //<>//
     //easing tab
     for (int x = 0; x< gif.keyFrames; x++) {
       for (int y = 0; y < gif.layerVars; y++) {
-        Easing = cp5.addScrollableList("Easing"+"0"+x+"0"+y).setPosition(10 + (x*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(gif.cellWidth).setHeight(100).setBarHeight(gif.cellHeight).setType(ScrollableList.DROPDOWN).close(); 
+        Easing = cp5.addScrollableList("Easing"+"0"+x+"0"+y).setPosition(10 + (x*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(gif.cellWidth).setHeight(75).setBarHeight(gif.cellHeight).setType(ScrollableList.DROPDOWN).close(); 
         Easing.addItems(EasingNames);     
         cp5.getController("Easing"+"0"+x+"0"+y).setVisible(false);
-        cp5.getController("Easing"+"0"+x+"0"+y).moveTo("Ani Easing");
+        cp5.getController("Easing"+"0"+x+"0"+y).moveTo("Ani Easing"); 
         Increase = cp5.addButton("add"+"0"+x+"0"+y).setPosition((10+gif.cellWidth) + (x*gif.cellWidth), 525 + (y*gif.cellHeight)).setWidth(15).setCaptionLabel("+").setId(x);
         Decrease = cp5.addButton("minus"+"0"+x+"0"+y).setPosition((x*gif.cellWidth)-5, 525 + (y*gif.cellHeight)).setWidth(15).setCaptionLabel("-").setId(x);
         cp5.getController("minus"+"0"+x+"0"+y).setVisible(false);
@@ -300,10 +300,10 @@ class GUI extends PApplet { //<>//
       }
     }
     for (int x = 0; x < gif.keyFrames; x++) {
-      for (int y = 0; y < gif.layerVars; y++) {        
+      for (int y = 0; y < gif.layerVars; y++) {                     
         if (theEvent.getController().getName().equals("Easing"+"0"+x+"0"+y)) { 
           theEvent.getController().bringToFront();
-          gif.layerAniEasing.get(int(layerSwitch.getValue()))[x][y] = int(theEvent.getController().getValue());        
+          gif.layerAniEasing.get(int(layerSwitch.getValue()))[x][y] = int(theEvent.getController().getValue());
         }
         if (theEvent.getController().getName().equals("add"+"0"+x+"0"+y)) {   
           gif.layerAniEnd.get(int(layerSwitch.getValue()))[x][y] += int(theEvent.getController().getValue());
@@ -521,14 +521,7 @@ class GUI extends PApplet { //<>//
   }
 
   void keyPressed() {
-    if (guiLock == false) {
-      //if(key == '1'){
-      //  play = true;
-      //   cp5.get(Matrix.class, "Matrix").trigger(0);   
-        
-      //   println("check");
-      //}
-      
+    if (guiLock == false) {    
       if (key==' ') {     
         if (play == false) {
           cp5.get(Matrix.class, "Matrix").play();

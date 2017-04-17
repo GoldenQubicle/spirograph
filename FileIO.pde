@@ -1,6 +1,6 @@
 class FileIO {
-  String path = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\";
-  //String path = "C:\\GQ\\Spirograph_vb1\\data\\"; // path for compiled app
+  //String path = "C:\\Users\\Erik\\Documents\\Processing\\sprgphv2\\data\\";
+  String path = "C:\\GQ\\Spirograph_vb1\\data\\"; // path for compiled app
   String fileName = "default";
   JSONObject global, layer, gears, keyFrame, aniValues, aniMatrix;
   JSONArray lkf;
