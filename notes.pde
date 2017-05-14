@@ -4,9 +4,11 @@ additional features
 - background color to aniMatrix
 - radial color 
 - density to aniMatrix
+- connect gear to aniMatrix
 - flexible render, i.e. only changed frames
 - save frames in seperate folders
 - load frames PImage array upon json load
+- render seperate layers, i.e. background layer playback png, foreground realtime
  
 KNOW BUGS
 - controls freeze when toggling the gear trigs completely off
